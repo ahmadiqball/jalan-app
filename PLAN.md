@@ -123,11 +123,13 @@ middleware/auth.ts   # redirect to /masuk when !authed
 - ✅ **Ringkasan** (spend card + category minis + warnings + day grid + next/recent/packing rail) · **Hari** (days-rail, activity rows, inline add form, empty state, day-money + outfit rail) · **Anggaran** (version bar, donut summary, editable category table with bars/expand/delete, add-category, locked notice, loose warning, compare matrix) · **Pengeluaran** (grouped derived+manual, log form, derived not deletable) · **Barang** (summary, groups, custom checkbox, Wajib/shop-link, add form) · **Outfit** (header strip, cards with 4 slots + scope picker, add/remove) · **Anggota** (rows with role select/owner pill/pending, invite form, split note).
 - ✅ Typecheck clean + full production build (`nuxt build`) green — all components/Reka primitives compile & resolve. (In-browser visual pass pending.)
 
-### Phase 4 — Overlays & flows
-- Activity sheet (520px drawer, inline-edit save-on-change, resolved outfit, delete).
-- Edit-trip sheet (440px; linked start-date/day-count; reduce-days confirm warning).
-- New-trip flow (creates draft + generated days + default budget → Hari tab).
-- Toast (bottom-center, 2200ms). **Add Escape-to-close** (recommended in handoff).
+### Phase 4 — Overlays & flows  ✅ DONE
+- ✅ core-dialog (Reka Dialog wrapper: right-drawer + center-modal variants, scrim, escape-to-close/focus-trap free).
+- ✅ overlay-activity-sheet (520px; inline-edit save-on-change for all fields; resolved outfit; delete) — mounted in trip page.
+- ✅ overlay-edit-trip (440px; cover/motif pickers; linked start-date/day-count with live range; reduce-days warning) — mounted in trip page.
+- ✅ overlay-new-trip (center modal; createTrip → generated days + default budget → Hari) — mounted in default layout.
+- ✅ Toast already wired (2200ms). Escape-to-close comes free via Reka.
+- ✅ Typecheck + production build green. (No headless browser in sandbox → in-browser visual pass pending.)
 
 ### Phase 5 — Secondary screens
 - Template (copy starter → new trip → Hari), Arsip (read-only list), Share (`/share/[id]`, cover band + itinerary, **no** costs/emails/edit), Landing page.

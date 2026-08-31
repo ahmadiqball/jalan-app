@@ -27,6 +27,8 @@ useHead(() => ({ title: (trip.value?.name ?? 'Trip') + ' · Jalan' }))
       <div class="max-w-[1400px] w-full mx-auto p-[24px_20px_60px] md:p-[24px_32px_60px]">
         <component :is="tabComp" :key="tab" :trip="trip" />
       </div>
+      <OverlayActivitySheet :trip="trip" />
+      <OverlayEditTrip :trip="trip" />
     </div>
     <div v-else class="flex-1 flex items-center justify-center p-16 text-muted">
       Trip tidak ditemukan.
