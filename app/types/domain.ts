@@ -1,0 +1,139 @@
+// Domain model for Jalan. Ported from the prototype state shape.
+
+/** Budget categories that carry an allocation line. */
+export const CATEGORIES = [
+  'Makan & minum',
+  'Transport',
+  'Tiket & atraksi',
+  'Penginapan',
+  'Lain',
+] as const
+export type Category = (typeof CATEGORIES)[number]
+
+/** Activity categories include the budget categories plus "Santai" (maps to Lain). */
+export type ActivityCategory = Category | 'Santai' | 'Tempat'
+
+export type TripStatus = 'live' | 'plan' | 'draft'
+
+/** Motif keys drive the decorative cover art. */
+export type MotifKey =
+  | 'pantai'
+  | 'sawah'
+  | 'gunung'
+  | 'kota'
+  | 'pulau'
+  | 'kuil'
+  | 'gurun'
+  | 'luar'
+
+export interface Activity {
+  id: string
+  /** "HH.MM" (dot separator) or "" */
+  time: string
+  /** duration in minutes */
+  dur: number
+  title: string
+  cat: string
+  place: string
+  cost: number
+  note: string
+}
+
+export interface Day {
+  /** short label e.g. "Sen, 14 Sep" */
+  date: string
+  /** long label e.g. "Senin, 14 September" */
+  long: string
+  title: string
+  /** free-text legacy outfit note (kept for parity; outfitSets is canonical) */
+  outfit: string
+  acts: Activity[]
+}
+
+export interface Budget {
+  id: string
+  name: string
+  note: string
+  /** per-category rupiah allocation */
+  alloc: Record<string, number>
+}
+
+/** scope: "day:<index>" | "act:<id>" */
+export interface OutfitSet {
+  id: string
+  scope: string
+  top: string
+  bottom: string
+  shoes: string
+  other: string
+}
+
+export interface ManualExpense {
+  id: string
+  title: string
+  cat: string
+  dayIdx: number
+  amount: number
+  note: string
+}
+
+export interface PackItem {
+  id: string
+  label: string
+  req: boolean
+  done: boolean
+  url?: string
+}
+
+export interface PackGroup {
+  name: string
+  items: PackItem[]
+}
+
+export type MemberRole = 'Pemilik' | 'Bisa ubah' | 'Hanya lihat'
+export type MemberStatus = 'aktif' | 'menunggu'
+
+export interface Member {
+  id: string
+  name: string
+  email: string
+  role: MemberRole
+  status: MemberStatus
+}
+
+export interface Trip {
+  id: string
+  name: string
+  place: string
+  /** motif key */
+  mat: string
+  /** cover image path, may be "" */
+  cover: string
+  /** display range string e.g. "12–15 Sep" */
+  dates: string
+  status: TripStatus
+  people: number
+  /** legacy flat plan figure; allocation total supersedes it when present */
+  plan: number
+  /** ISO start date, used to regenerate day labels */
+  startIso?: string
+  days: Day[]
+  activeBudget: string
+  budgets: Budget[]
+  outfitSets: OutfitSet[]
+  manual: ManualExpense[]
+  packing: PackGroup[]
+  members: Member[]
+}
+
+/** A computed expense line (derived from an activity cost, or a manual entry). */
+export interface ExpenseLine {
+  id: string
+  title: string
+  cat: string
+  dayIdx: number
+  amount: number
+  derived: boolean
+  time: string
+  dayLabel: string
+}

@@ -22,6 +22,8 @@
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.127",
     "@nuxt/fonts": "^0.14.0",
-    "@unocss/nuxt": "^66.8.1"
+    "@unocss/nuxt": "^66.8.1",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.3.11"
   }
 }

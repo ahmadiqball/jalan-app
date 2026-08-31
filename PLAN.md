@@ -101,9 +101,12 @@ middleware/auth.ts   # redirect to /masuk when !authed
 - A local settings hook re-appends an `allowBuilds:` placeholder block to `pnpm-workspace.yaml` on edits — harmless (unknown key, ignored by pnpm); leave it.
 - `@nuxt/fonts` needs network at dev/build to fetch Google fonts; this sandbox blocks the provider APIs so fonts fall back to system here. Works on a networked machine.
 
-### Phase 1 — Domain & state
-- `types/domain.ts`, `stores/trips.ts` + `patchTrip`, `utils/seed.ts` (Sumba Timur=live, Ubud, Bromo, Bali Selatan).
-- `composables/useDerived.ts`, `useMoney.ts`, `useToast.ts`. Persistence wiring.
+### Phase 1 — Domain & state  ✅ DONE
+- ✅ `app/types/domain.ts` (Trip/Day/Activity/Budget/OutfitSet/ManualExpense/PackGroup/Member/ExpenseLine + CATEGORIES).
+- ✅ `app/utils/{format,categories,seed,derive}.ts` — money/date/time formatters, tone/icon maps, full seed trips (Sumba live, Ubud, Bromo, Bali), and pure derive fns (expenseLines, budgetSummary, categoryRows, donutStops, looseCategories, packingProgress, outfit resolution, scopeOptions, tripWarnings, buildDays).
+- ✅ `app/stores/{trips,ui,session}.ts` — trips (patchTrip immutable + mutation helpers, persisted), ui (selection/overlays/toast, not persisted), session (auth stub, persisted authed/user).
+- ✅ `app/composables/{use-money,use-toast,use-derived}.ts`.
+- ✅ Typechecks clean (vue-tsc); SSR 200 with derived data wired. Note: pinned `typescript@5` (vue-tsc incompatible with the TS 7 native port).
 
 ### Phase 2 — Chrome, auth stub, home
 - Top bar, layouts, `middleware/auth.ts`, login screen (validation: email non-empty + `@`, password ≥4; guest bypass).
