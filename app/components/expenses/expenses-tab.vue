@@ -42,7 +42,7 @@ function removeLine(id: string) {
 
 <template>
   <div class="flex flex-wrap gap-5">
-    <div class="flex-1 min-w-[560px] flex flex-col gap-4">
+    <div class="flex-1 min-w-0 flex flex-col gap-4">
       <div v-for="g in groups" :key="g.idx" class="card p-[16px_20px]">
         <div class="flex items-center justify-between pb-2 border-b border-sand-100">
           <span class="text-[14px] font-700">{{ g.label }}</span>
@@ -73,7 +73,7 @@ function removeLine(id: string) {
       <div v-if="!groups.length" class="card p-8 text-muted text-[14px]">Belum ada pengeluaran. Catat lewat form di samping.</div>
     </div>
 
-    <div class="w-[340px] shrink-0 flex flex-col gap-4">
+    <div class="w-full lg:w-[340px] lg:shrink-0 flex flex-col gap-4">
       <div class="card p-[18px]">
         <div class="font-display text-[17px] font-600">Catat pengeluaran</div>
         <div class="flex flex-col gap-3 mt-3">

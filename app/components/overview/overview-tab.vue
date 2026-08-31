@@ -18,7 +18,7 @@ const recent = computed(() => lines.value.slice().sort((a, b) => b.dayIdx - a.da
 <template>
   <div class="flex flex-wrap gap-5">
     <!-- main -->
-    <div class="flex-1 min-w-[560px] flex flex-col gap-5">
+    <div class="flex-1 min-w-0 flex flex-col gap-5">
       <div class="card p-[20px_22px]">
         <div class="flex items-start justify-between">
           <div class="eyebrow">Terpakai sampai hari ini</div>
@@ -71,7 +71,7 @@ const recent = computed(() => lines.value.slice().sort((a, b) => b.dayIdx - a.da
     </div>
 
     <!-- rail -->
-    <div class="w-[340px] shrink-0 flex flex-col gap-4">
+    <div class="w-full lg:w-[340px] lg:shrink-0 flex flex-col gap-4">
       <div class="card p-[18px]">
         <div class="font-display text-[17px] font-600">Berikutnya</div>
         <div v-if="nextAct" class="mt-2">

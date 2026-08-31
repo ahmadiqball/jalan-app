@@ -96,7 +96,8 @@ function versionTotal(b: Trip['budgets'][number]) {
     </div>
 
     <!-- category table -->
-    <div class="card p-[16px_22px]">
+    <div class="card p-[16px_22px] overflow-x-auto">
+      <div class="min-w-[560px]">
       <div class="flex items-center gap-3 pb-2 border-b border-sand-line">
         <span class="eyebrow flex-1">Kategori dan baris</span>
         <span class="eyebrow w-[120px] text-right">Terpakai</span>
@@ -111,6 +112,7 @@ function versionTotal(b: Trip['budgets'][number]) {
         <input v-model="newCatName" placeholder="Kategori sendiri, mis. Oleh-oleh" class="flex-1 bg-transparent outline-none text-[14px]" @keydown.enter="addCategory">
         <input v-model="newCatAmount" placeholder="0" class="w-[110px] text-right money text-[14px] bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[7px] outline-none focus:border-teal-600" @keydown.enter="addCategory">
         <CoreButton variant="teal" class="!px-[16px] !py-[8px] !text-[13px]" @click="addCategory">Tambah</CoreButton>
+      </div>
       </div>
     </div>
 

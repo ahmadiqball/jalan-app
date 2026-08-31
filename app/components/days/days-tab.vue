@@ -71,7 +71,7 @@ function onSave(act: Parameters<typeof trips.addActivity>[2]) {
       <DaysEmpty v-else-if="!ui.showActForm" @add="ui.showActForm = true" />
     </div>
 
-    <div class="w-[300px] shrink-0 flex flex-col gap-4">
+    <div class="w-full md:w-[300px] md:shrink-0 flex flex-col gap-4">
       <div class="card p-[18px]">
         <div class="eyebrow">Uang hari ini</div>
         <div class="flex items-baseline justify-between mt-2">

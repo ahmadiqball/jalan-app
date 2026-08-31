@@ -50,7 +50,7 @@ function open(tab: string) {
 <template>
   <div class="bg-white border border-sand-line rounded-hero flex flex-wrap overflow-hidden shadow-card">
     <!-- media -->
-    <div class="w-[392px] flex-[1_0_340px] min-h-[300px] relative">
+    <div class="w-full sm:w-[392px] sm:flex-[1_0_340px] min-h-[220px] sm:min-h-[300px] relative">
       <CoreCover :mat="trip.mat" :photo="trip.cover" :photo-size="184" :photo-border="7">
         <template #badge>
           <span class="bg-white rounded-pill px-[13px] py-[7px] text-[12px] font-700 text-teal-700">
@@ -61,7 +61,7 @@ function open(tab: string) {
     </div>
 
     <!-- content -->
-    <div class="flex-1 min-w-[440px] p-[26px_28px] flex flex-col gap-[18px]">
+    <div class="flex-1 min-w-0 p-[26px_28px] flex flex-col gap-[18px]">
       <div class="flex justify-between items-start gap-5">
         <div>
           <div class="flex gap-[9px] items-center">

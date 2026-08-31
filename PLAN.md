@@ -138,7 +138,10 @@ middleware/auth.ts   # redirect to /masuk when !authed
 - ✅ Landing: nav, hero + screenshot, 6 feature cards, screenshot collage, CTA band, footer.
 - ✅ Typecheck + build green; landing/share/masuk SSR 200, no errors.
 
-### Phase 6 — Responsive (new design)
+### Phase 6 — Responsive (new design)  ✅ DONE
+Implemented: top-bar mobile menu (hamburger + overlay nav); two-column tabs (overview/expenses/members) stack via `min-w-0` main + `w-full lg:w-[340px]` rail; hero media stacks on mobile; day rail becomes horizontal scroller below `md`; budget category table + compare matrix scroll in `overflow-x-auto`; drawers cap at 96vw. Typecheck + build green.
+
+Original notes:
 Per-screen mobile/tablet transforms:
 - **Top bar:** hide search, collapse nav to a menu; keep wordmark + primary action.
 - **Two-column tabs** (Ringkasan/Anggaran/Pengeluaran/Anggota): stack; right rail moves below main.

@@ -26,7 +26,7 @@ function invite() {
 
 <template>
   <div class="flex flex-wrap gap-5">
-    <div class="flex-1 min-w-[520px] flex flex-col gap-4">
+    <div class="flex-1 min-w-0 flex flex-col gap-4">
       <div>
         <div class="font-display text-[24px] font-600">Anggota trip</div>
         <div class="text-[13.5px] text-muted mt-[3px]">
@@ -39,7 +39,7 @@ function invite() {
       </div>
     </div>
 
-    <div class="w-[340px] shrink-0 flex flex-col gap-4">
+    <div class="w-full lg:w-[340px] lg:shrink-0 flex flex-col gap-4">
       <div class="card p-[18px]">
         <div class="font-display text-[17px] font-600">Undang orang</div>
         <div class="flex flex-col gap-3 mt-3">
