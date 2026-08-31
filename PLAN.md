@@ -131,8 +131,12 @@ middleware/auth.ts   # redirect to /masuk when !authed
 - ✅ Toast already wired (2200ms). Escape-to-close comes free via Reka.
 - ✅ Typecheck + production build green. (No headless browser in sandbox → in-browser visual pass pending.)
 
-### Phase 5 — Secondary screens
-- Template (copy starter → new trip → Hari), Arsip (read-only list), Share (`/share/[id]`, cover band + itinerary, **no** costs/emails/edit), Landing page.
+### Phase 5 — Secondary screens  ✅ DONE
+- ✅ Template: starter grid, "Pakai template" → createTrip → Hari.
+- ✅ Arsip: recap table (name/dates/plan/spent/diff) linking to trips.
+- ✅ Share `/share/[id]`: public read-only — cover band + itinerary, no costs/emails/edit, copy-link toast.
+- ✅ Landing: nav, hero + screenshot, 6 feature cards, screenshot collage, CTA band, footer.
+- ✅ Typecheck + build green; landing/share/masuk SSR 200, no errors.
 
 ### Phase 6 — Responsive (new design)
 Per-screen mobile/tablet transforms:

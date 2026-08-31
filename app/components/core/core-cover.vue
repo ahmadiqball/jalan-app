@@ -55,7 +55,7 @@ const m = computed(() => matDef(props.mat))
       }"
     />
     <div
-      v-else
+      v-else-if="photoSize > 0"
       class="relative z-[2] rounded-full bg-white/70 flex items-center justify-center text-teal-700"
       :style="{ width: photoSize + 'px', height: photoSize + 'px' }"
     >
