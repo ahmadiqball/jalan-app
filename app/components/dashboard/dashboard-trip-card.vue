@@ -1,0 +1,50 @@
+<script setup lang="ts">
+import type { Trip } from '~/types/domain'
+import { rp } from '~/utils/format'
+
+const props = defineProps<{ trip: Trip }>()
+
+const actCount = computed(() => props.trip.days.reduce((n, d) => n + d.acts.length, 0))
+const packAll = computed(() => (props.trip.packing || []).flatMap((g) => g.items))
+const packCopy = computed(() =>
+  packAll.value.length ? `Barang ${packAll.value.filter((i) => i.done).length}/${packAll.value.length}` : 'Belum ada barang',
+)
+const badge = computed(() => {
+  const map = { live: ['Sedang jalan', '#0A4F55'], plan: ['Rencana', '#33474C'], draft: ['Draf', '#6C7C7D'] } as const
+  return map[props.trip.status]
+})
+</script>
+
+<template>
+  <NuxtLink
+    :to="`/trip/${trip.id}/overview`"
+    class="group bg-white border border-sand-line rounded-[24px] overflow-hidden cursor-pointer block shadow-[0_14px_30px_-24px_rgba(16,38,43,.35)] transition-all hover:-translate-y-[2px] hover:shadow-[0_20px_38px_-22px_rgba(16,38,43,.45)]"
+  >
+    <div class="h-[132px] relative">
+      <CoreCover :mat="trip.mat" :photo="trip.cover" :photo-size="104" :photo-border="6" :photo-offset="30">
+        <template #badge>
+          <span class="bg-white rounded-pill px-[11px] py-[6px] text-[11px] font-700" :style="{ color: badge[1] }">
+            {{ badge[0] }}
+          </span>
+        </template>
+      </CoreCover>
+    </div>
+    <div class="p-[40px_20px_20px] flex flex-col gap-3 text-center">
+      <div>
+        <div class="font-display text-[20px] font-600">{{ trip.name }}</div>
+        <div class="text-[13px] text-muted mt-1">{{ trip.place }}</div>
+      </div>
+      <div class="flex justify-center gap-2 text-[12px] font-600">
+        <span class="bg-paper rounded-pill px-3 py-[6px] text-ink-2 money">{{ trip.dates }}</span>
+        <span class="bg-paper rounded-pill px-3 py-[6px] text-ink-2">{{ actCount }} aktivitas</span>
+      </div>
+      <div class="border-t border-sand-line pt-[13px] flex justify-between items-center">
+        <div class="text-left">
+          <div class="eyebrow">Rencana</div>
+          <div class="money text-[17px] font-600 mt-[2px]">{{ rp(trip.plan) }}</div>
+        </div>
+        <div class="text-[12px] text-muted money text-right">{{ packCopy }}</div>
+      </div>
+    </div>
+  </NuxtLink>
+</template>

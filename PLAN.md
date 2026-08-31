@@ -108,9 +108,13 @@ middleware/auth.ts   # redirect to /masuk when !authed
 - ✅ `app/composables/{use-money,use-toast,use-derived}.ts`.
 - ✅ Typechecks clean (vue-tsc); SSR 200 with derived data wired. Note: pinned `typescript@5` (vue-tsc incompatible with the TS 7 native port).
 
-### Phase 2 — Chrome, auth stub, home
-- Top bar, layouts, `middleware/auth.ts`, login screen (validation: email non-empty + `@`, password ≥4; guest bypass).
-- Beranda: greeting, filter chips (Semua/Sedang jalan/Rencana/Draf), live hero card, trip grid, status pills.
+### Phase 2 — Chrome, auth stub, home  ✅ DONE
+- ✅ Core primitives: core-button, core-input, core-status-pill, core-avatar, core-bar, core-logo, core-motif, core-cover, core-toast (+ utils/motifs.ts).
+- ✅ layout-top-bar, layouts/{default,blank}, app.vue → NuxtLayout.
+- ✅ middleware/auth.global.ts (client-side guard; public: /, /masuk, /share/*). Login screen (validation + guest bypass), persisted sign-in.
+- ✅ Beranda: greeting, dashboard-filter-chips, dashboard-hero (stats/progress/next-activity), dashboard-trip-card grid + new-trip card.
+- ✅ Landing/template/arsip placeholders (fleshed out in Phase 5).
+- ✅ Typechecks clean; /, /masuk, /beranda, /template, /arsip all SSR 200, no runtime errors.
 
 ### Phase 3 — Trip detail + 7 tabs (bulk of the work)
 - Trip header band + tab bar (active = teal underline + weight 700).
