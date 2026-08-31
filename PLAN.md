@@ -116,9 +116,12 @@ middleware/auth.ts   # redirect to /masuk when !authed
 - ✅ Landing/template/arsip placeholders (fleshed out in Phase 5).
 - ✅ Typechecks clean; /, /masuk, /beranda, /template, /arsip all SSR 200, no runtime errors.
 
-### Phase 3 — Trip detail + 7 tabs (bulk of the work)
-- Trip header band + tab bar (active = teal underline + weight 700).
-- **Ringkasan** · **Hari** (day rail, timeline, inline add form, empty-day state, outfit card) · **Anggaran** (version chips, locked state, category table with bars/expand, add-category, loose-lines warning, compare matrix) · **Pengeluaran** (derived+manual union) · **Logistik** (groups, custom checkbox, Wajib tag, shop link) · **Outfit** (4 slots, scope picker dropdown, resolution rule) · **Anggota** (roles, owner pill, invite form).
+### Phase 3 — Trip detail + 7 tabs (bulk of the work)  ✅ DONE
+- ✅ `pages/trip/[id]/[tab].vue` (dynamic tab via `<component :is>`; ClientOnly wrap to avoid persisted/SSR hydration mismatch) + `[id]/index.vue` redirect to overview.
+- ✅ layout-trip-header (back, cover thumb→edit, status/type/budget/people chips, action row) + layout-tab-bar (teal underline active).
+- ✅ Core: core-select (Reka Select), core-checkbox (Reka Checkbox).
+- ✅ **Ringkasan** (spend card + category minis + warnings + day grid + next/recent/packing rail) · **Hari** (days-rail, activity rows, inline add form, empty state, day-money + outfit rail) · **Anggaran** (version bar, donut summary, editable category table with bars/expand/delete, add-category, locked notice, loose warning, compare matrix) · **Pengeluaran** (grouped derived+manual, log form, derived not deletable) · **Barang** (summary, groups, custom checkbox, Wajib/shop-link, add form) · **Outfit** (header strip, cards with 4 slots + scope picker, add/remove) · **Anggota** (rows with role select/owner pill/pending, invite form, split note).
+- ✅ Typecheck clean + full production build (`nuxt build`) green — all components/Reka primitives compile & resolve. (In-browser visual pass pending.)
 
 ### Phase 4 — Overlays & flows
 - Activity sheet (520px drawer, inline-edit save-on-change, resolved outfit, delete).
