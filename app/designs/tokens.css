@@ -1,0 +1,47 @@
+/* Design tokens mirrored as CSS custom properties.
+   Use these inside Reka UI primitives / places where Uno utilities are awkward.
+   Source of truth for utility classes is uno.config.ts theme. */
+:root {
+  /* color */
+  --ink: #10262b;
+  --ink-2: #33474c;
+  --muted: #6c7c7d;
+  --teal-700: #0a4f55;
+  --teal-600: #0e6e76;
+  --teal-100: #deeeec;
+  --teal-deep: #cfe3e1;
+  --teal-soft: #c8e2de;
+  --teal-soft-2: #8fc2be;
+  --paper: #fbfaf5;
+  --sand-100: #f1eee1;
+  --sand-line: #ede9da;
+  --sand-line-2: #e4decb;
+  --sand-line-3: #d8d0bb;
+  --warn-bg: #fce3d3;
+  --warn-fg: #c85a28;
+  --warn-fg-2: #8a6314;
+  --primary: #c85a28; /* terracotta = primary action */
+  --primary-hover: #ae4c22;
+  --brand-orange: #f0713a;
+  --brand-green: #2f6b54;
+  --peach-bg: #f6e2ce;
+  --peach-fg: #9c4718;
+  --scrim: rgba(16, 38, 43, 0.34);
+
+  /* radii */
+  --r-cb: 6px;
+  --r-xs: 11px;
+  --r-banner: 12px;
+  --r-field: 14px;
+  --r-card: 18px;
+  --r-hero: 26px;
+  --r-pill: 999px;
+
+  /* shadow */
+  --sh-card: 0 18px 40px -28px rgba(16, 38, 43, 0.3);
+  --sh-lift: 0 24px 44px -32px rgba(16, 38, 43, 0.55);
+  --sh-drop: 0 22px 40px -22px rgba(16, 38, 43, 0.28);
+  --sh-drawer: -20px 0 60px -20px rgba(16, 38, 43, 0.4);
+  --sh-sheet: -30px 0 70px -30px rgba(16, 38, 43, 0.5);
+  --sh-avatar: 0 12px 24px -14px rgba(16, 38, 43, 0.35);
+}

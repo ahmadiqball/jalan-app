@@ -1,0 +1,8 @@
+onlyBuiltDependencies:
+  - esbuild
+  - vue-demi
+  - '@parcel/watcher'
+  - better-sqlite3
+# pnpm 11 runs a deps-status check before `run` scripts and fails it on
+# ignored build scripts; our builds are approved above, so skip the pre-run check.
+verifyDepsBeforeRun: false
