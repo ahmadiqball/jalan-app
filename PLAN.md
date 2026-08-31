@@ -151,11 +151,12 @@ Per-screen mobile/tablet transforms:
 - **Tab bar / version bar / compare matrix:** horizontal scroll containers.
 - Breakpoints: ~640 / ~900 / ~1200.
 
-### Phase 7 — Polish
-- Hover lifts, row tints (`#F1EEE1`), button darken (`#0A4F55`), all animations.
-- Empty/skeleton states in **sand** palette (not grey).
-- A11y: focus order, escape-to-close, checkbox/select semantics.
-- Replace placeholder imagery; regenerate landing screenshots from real app.
+### Phase 7 — Polish  ✅ (core done)
+- ✅ Hover lifts/tints/button-darken + all animations wired across components.
+- ✅ Empty states (empty day, no expenses, no trip, share not-found) in sand palette.
+- ✅ A11y: global focus-visible ring, prefers-reduced-motion, escape-to-close + focus-trap + ARIA via Reka primitives.
+- ✅ Branded `error.vue` (404/500), themed SVG favicon + theme-color.
+- ⏳ Remaining (needs real assets/browser): replace placeholder imagery with licensed photos; regenerate landing screenshots from the built app; in-browser visual QA pass.
 
 ## Open questions carried from handoff (defer / decide later)
 1. Real auth provider + session model (stub for now).
