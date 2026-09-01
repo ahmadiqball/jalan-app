@@ -16,6 +16,10 @@ function signOut() {
   session.signOut()
   navigateTo('/masuk')
 }
+async function openNewTrip() {
+  if (route.path !== '/beranda') await navigateTo('/beranda')
+  ui.showNewTrip = true
+}
 </script>
 
 <template>
@@ -49,7 +53,7 @@ function signOut() {
         <i class="i-lucide-search text-[15px]" />
         Cari trip atau tempat
       </div>
-      <CoreButton variant="primary" class="!px-[14px] sm:!px-[18px] !py-[10px] !text-[14px]" @click="ui.showNewTrip = true">
+      <CoreButton variant="primary" class="!px-[14px] sm:!px-[18px] !py-[10px] !text-[14px]" @click="openNewTrip">
         <i class="i-lucide-plus" />
         <span class="hidden sm:inline">Trip baru</span>
       </CoreButton>

@@ -24,9 +24,6 @@ const bars = computed(() => {
 const pctCopy = computed(() => Math.round(budget.value.pct) + '%')
 const paceCopy = computed(() => (budget.value.over ? 'Sudah lewat rencana' : 'Masih di dalam rencana'))
 const perHead = computed(() => rp(budget.value.perPerson))
-const packReqCopy = computed(() =>
-  packing.value.reqLeft > 0 ? `${packing.value.reqLeft} wajib belum dicentang` : 'Semua wajib sudah dicentang',
-)
 
 // next activity of the current day
 const nextAct = computed(() => {
@@ -61,7 +58,7 @@ function open(tab: string) {
     </div>
 
     <!-- content -->
-    <div class="flex-1 min-w-0 p-[26px_28px] flex flex-col gap-[18px]">
+    <div class="flex-1 min-w-0 p-[24px_26px] flex flex-col gap-4">
       <div class="flex justify-between items-start gap-5">
         <div>
           <div class="flex gap-[9px] items-center">
@@ -79,47 +76,50 @@ function open(tab: string) {
         </div>
       </div>
 
-      <div class="flex gap-[14px] flex-wrap">
-        <div class="flex-[1_1_190px] min-w-[190px] bg-paper rounded-card p-[16px_18px]">
-          <div class="eyebrow">Terpakai</div>
-          <div class="money text-[26px] font-600 mt-[6px]" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</div>
-          <div class="text-[13px] text-ink-2 mt-1 money">dari {{ rp(budget.plan) }}</div>
+      <!-- budget: figure + bar together -->
+      <div class="bg-paper rounded-card p-[16px_18px]">
+        <div class="flex items-baseline justify-between gap-3 flex-wrap">
+          <div class="flex items-baseline gap-2">
+            <span class="eyebrow">Terpakai</span>
+            <span class="money text-[26px] font-600" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</span>
+            <span class="text-[13px] text-muted money">/ {{ rp(budget.plan) }}</span>
+          </div>
+          <span class="money text-[13px] text-muted">{{ pctCopy }}</span>
         </div>
-        <div class="flex-[1_1_190px] min-w-[190px] bg-paper rounded-card p-[16px_18px]">
-          <div class="eyebrow">Per orang</div>
-          <div class="money text-[26px] font-600 mt-[6px]">{{ perHead }}</div>
-          <div class="text-[13px] text-ink-2 mt-1">{{ trip.people }} orang</div>
-        </div>
-        <div class="flex-[1_1_190px] min-w-[190px] bg-paper rounded-card p-[16px_18px]">
-          <div class="eyebrow">Barang</div>
-          <div class="money text-[26px] font-600 mt-[6px]">{{ packing.done }} / {{ packing.total }}</div>
-          <div class="text-[13px] text-ink-2 mt-1">{{ packReqCopy }}</div>
-        </div>
-      </div>
-
-      <div class="flex flex-col gap-2">
-        <div class="h-3 rounded-pill bg-sand-100 overflow-hidden flex">
+        <div class="h-[10px] rounded-pill bg-sand-100 overflow-hidden flex mt-[10px]">
           <div style="background:#F0713A" :style="{ width: bars.a + '%' }" />
           <div style="background:#C85A28" :style="{ width: bars.b + '%' }" />
         </div>
-        <div class="flex justify-between text-[13px] text-muted">
-          <span>{{ paceCopy }}</span>
-          <span class="money">{{ pctCopy }}</span>
+        <div class="text-[12.5px] text-muted mt-[6px]">{{ paceCopy }}</div>
+      </div>
+
+      <!-- compact secondary stats -->
+      <div class="flex gap-3 flex-wrap">
+        <div class="flex-1 min-w-[150px] bg-paper rounded-field px-[14px] py-[11px] flex items-center justify-between gap-2">
+          <span class="eyebrow">Per orang</span>
+          <span class="money text-[15px] font-600">{{ perHead }}</span>
+        </div>
+        <div class="flex-1 min-w-[150px] bg-paper rounded-field px-[14px] py-[11px] flex items-center justify-between gap-2">
+          <span class="eyebrow">Barang</span>
+          <span class="money text-[15px] font-600">{{ packing.done }} / {{ packing.total }}</span>
         </div>
       </div>
 
-      <div class="mt-auto border-t border-sand-line pt-4 flex items-center gap-4 flex-wrap">
-        <div class="w-[42px] h-[42px] shrink-0 rounded-full bg-warn-bg flex items-center justify-center text-warn-fg">
-          <i class="i-lucide-clock text-[20px]" />
+      <!-- next activity on its own line -->
+      <div class="mt-auto border-t border-sand-line pt-4 flex items-center gap-3">
+        <div class="w-[40px] h-[40px] shrink-0 rounded-full bg-warn-bg flex items-center justify-center text-warn-fg">
+          <i class="i-lucide-clock text-[19px]" />
         </div>
         <div class="flex-1 min-w-0">
           <div class="text-[15px] font-600 truncate">{{ nextActCopy }}</div>
-          <div class="text-[13px] text-muted mt-[2px] money">{{ nextActSub }}</div>
+          <div class="text-[13px] text-muted mt-[1px] money">{{ nextActSub }}</div>
         </div>
-        <div class="flex gap-[10px]">
-          <CoreButton variant="primary" class="!px-[20px] !py-[11px] !text-[14px]" @click="open('expenses')">Catat pengeluaran</CoreButton>
-          <CoreButton variant="teal" class="!bg-teal-100 !text-teal-700 !px-[20px] !py-[11px] !text-[14px] hover:!bg-teal-deep" @click="open('overview')">Buka trip</CoreButton>
-        </div>
+      </div>
+
+      <!-- buttons on their own line -->
+      <div class="flex gap-[10px] flex-wrap">
+        <CoreButton variant="primary" class="flex-1 min-w-[160px] !py-[12px] !text-[14px]" @click="open('expenses')">Catat pengeluaran</CoreButton>
+        <CoreButton variant="teal" class="flex-1 min-w-[130px] !bg-teal-100 !text-teal-700 !py-[12px] !text-[14px] hover:!bg-teal-deep" @click="open('overview')">Buka trip</CoreButton>
       </div>
     </div>
   </div>

@@ -26,7 +26,7 @@ export default defineConfig({
       paper: '#FBFAF5',
       sand: { 100: '#F1EEE1', line: '#EDE9DA', line2: '#E4DECB', line3: '#D8D0BB' },
       warn: { bg: '#FCE3D3', fg: '#C85A28', fg2: '#8A6314' },
-      brand: { orange: '#F0713A', green: '#2F6B54' },
+      brand: { orange: '#F0713A', green: '#2F6B54', amber: '#D98F3B' },
       peach: { bg: '#F6E2CE', fg: '#9C4718' },
     },
     fontFamily: {

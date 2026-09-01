@@ -54,9 +54,13 @@ const listCount = computed(() => `${cards.value.length} trip`)
         </button>
       </div>
 
+      <DashboardTemplates />
+
       <template #fallback>
         <div class="card p-8 text-muted">Memuat trip…</div>
       </template>
     </ClientOnly>
+
+    <OverlayNewTrip />
   </div>
 </template>

@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#E9E0D4; font-family:'Plus Jakarta Sans',system-ui,sans-serif; color:#241C16; -webkit-font-smoothing:antialiased; }
+  a { color:#B8492A; text-decoration:none; }
+  a:hover { color:#8A3419; text-decoration:underline; }
+  * { box-sizing:border-box; }
+</style>
+</helmet>
+
+<section style="padding:56px 64px 40px;display:flex;flex-direction:column;gap:46px">
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:940px">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6C7C7D">Turn 4 · arah ringan diperdalam · set aset + layar lengkap</div>
+    <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1.08;color:#10262B">Set aset dan lima layar sisanya</div>
+    <div style="font-size:15px;line-height:1.6;color:#33474C;text-wrap:pretty">Aset dulu: delapan mat destinasi dan dua puluh ikon garis — semuanya bentuk datar, sekali gambar, dipakai ulang (§5). Lalu layar 3, 5, 6, 7–8, dan 9 dalam bahasa yang sama seperti <a href="#3a">3a</a>. Lihat <a href="#4a">4a</a> lembar aset, <a href="#4b">4b</a> hari, <a href="#4c">4c</a> anggaran, <a href="#4d">4d</a> pengeluaran, <a href="#4e">4e</a> barang &amp; outfit, <a href="#4f">4f</a> tautan bagikan.</div>
+  </div>
+
+  <div id="4a" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#0E6E76;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px">4a</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Lembar aset</div>
+      <div style="font-size:14px;color:#6C7C7D">8 mat · 20 ikon · anatomi kartu. Batas atas pipeline aset.</div>
+    </div>
+
+    <div style="width:1440px;background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:28px 30px;display:flex;flex-direction:column;gap:26px;box-shadow:0 30px 70px -46px rgba(16,38,43,.5)">
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#10262B">Mat destinasi · 8</div>
+          <div style="font-size:13px;color:#6C7C7D">Dipilih otomatis dari destinasi, bisa diganti manual</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+
+          <div style="border-radius:18px;overflow:hidden;border:1px solid #EDE9DA">
+            <div style="height:112px;background:#DEEEEC;position:relative">
+              <div style="position:absolute;left:24px;top:16px;width:34px;height:34px;border-radius:50%;background:#F6E6CC;z-index:1"></div>
+              <div style="position:absolute;left:-30px;bottom:26px;width:220px;height:74px;border-radius:110px 110px 0 0;background:#BEDCD8"></div>
+              <div style="position:absolute;right:-40px;bottom:26px;width:200px;height:80px;border-radius:100px 100px 0 0;background:#A9CFCA"></div>
+              <div style="position:absolute;left:0;right:0;bottom:0;height:26px;background:#8FC2BE"></div>
+            </div>
+            <div style="padding:11px 14px;display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:600;color:#10262B">Pantai</span><span style="color:#6C7C7D;font-family:'IBM Plex Mono',monospace">01</span></div>
+          </div>
+
+          <div style="border-radius:18px;overflow:hidden;border:1px solid #EDE9DA">
+            <div style="height:112px;background:#F6E6CC;position:relative">
+              <div style="position:absolute;right:26px;top:18px;width:32px;height:32px;border-radius:50%;background:#FCE3D3"></div>
+              <div style="position:absolute;left:-16px;bottom:0;width:210px;height:88px;background:#EBD3A6;clip-path:polygon(0 100%,0 58%,30% 6%,56% 60%,100% 22%,100% 100%)"></div>
+              <div style="position:absolute;right:-24px;bottom:0;width:180px;height:64px;background:#DFC08A;clip-path:polygon(0 100%,0 52%,38% 12%,72% 54%,100% 26%,100% 100%)"></div>
+            </div>
+            <div style="padding:11px 14px;display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:600;color:#10262B">Gunung</span><span style="color:#6C7C7D;font-family:'IBM Plex Mono',monospace">02</span></div>
+          </div>
+
+          <div style="border-radius:18px;overflow:hidden;border:1px solid #EDE9DA">
+            <div style="height:112px;background:#FCE3D3;position:relative">
+              <div style="position:absolute;left:22px;top:18px;width:30px;height:30px;border-radius:50%;background:#F6E6CC"></div>
+              <div style="position:absolute;left:18px;bottom:0;display:flex;align-items:flex-end;gap:7px">
+                <span style="width:22px;height:46px;border-radius:5px 5px 0 0;background:#F4C9AE"></span>
+                <span style="width:26px;height:70px;border-radius:5px 5px 0 0;background:#EFB894"></span>
+                <span style="width:18px;height:36px;border-radius:5px 5px 0 0;background:#F4C9AE"></span>
+              </div>
+              <div style="position:absolute;right:16px;bottom:0;display:flex;align-items:flex-end;gap:7px">
+                <span style="width:20px;height:40px;border-radius:5px 5px 0 0;background:#F4C9AE"></span>
+                <span style="width:28px;height:62px;border-radius:5px 5px 0 0;background:#EFB894"></span>
+              </div>
+            </div>
+            <div style="padding:11px 14px;display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:600;color:#10262B">Kota</span><span style="color:#6C7C7D;font-family:'IBM Plex Mono',monospace">03</span></div>
+          </div>
+
+          <div style="border-radius:18px;overflow:hidden;border:1px solid #EDE9DA">
+            <div style="height:112px;background:#DCEEE4;position:relative">
+              <div style="position:absolute;left:26px;top:18px;width:32px;height:32px;border-radius:50%;background:#F6E6CC"></div>
+              <div style="position:absolute;left:0;right:0;bottom:0;height:82px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:0 0 10px">
+                <div style="height:14px;background:#C2E0CE;border-radius:0 999px 999px 0;width:78%"></div>
+                <div style="height:14px;background:#AED3BC;border-radius:0 999px 999px 0;width:92%"></div>
+                <div style="height:14px;background:#9CC4AE;border-radius:0 999px 999px 0;width:70%"></div>
+              </div>
+            </div>
+            <div style="padding:11px 14px;display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:600;color:#10262B">Sawah</span><span style="color:#6C7C7D;font-family:'IBM Plex Mono',monospace">04</span></div>
+          </div>
+
+          <div style="border-radius:18px;overflow:hidden;border:1px solid #EDE9DA">
+            <div style="height:112px;background:#DEEEEC;position:relative">
+              <div style="position:absolute;left:0;right:0;bottom:0;height:52px;background:#A8CFD6"></div>
+              <div style="position:absolute;left:-20px;bottom:44px;width:190px;height:60px;background:#C7E2E6;clip-path:polygon(0 100%,0 50%,34% 10%,68% 56%,100% 30%,100% 100%)"></div>
+              <div style="position:absolute;right:24px;bottom:14px;width:64px;height:14px;border-radius:999px;background:#DEEEEC;opacity:.75"></div>
+              <div style="position:absolute;right:44px;bottom:34px;width:34px;height:8px;border-radius:999px;background:#DEEEEC;opacity:.55"></div>
+            </div>
+            <div style="padding:11px 14px;display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:600;color:#10262B">Danau</span><span style="color:#6C7C7D;font-family:'IBM Plex Mono',monospace">05</span></div>
+          </div>
+
+          <div style="border-radius:18px;overflow:hidden;border:1px solid #EDE9DA">
+            <div style="height:112px;background:#F1EEE1;position:relative">
+              <div style="position:absolute;left:0;right:0;bottom:0;height:56px;background:#DDD6C0"></div>
+              <div style="position:absolute;left:0;right:0;bottom:26px;height:6px;display:flex;gap:16px;padding:0 14px">
+                <span style="flex:1;background:#F1EEE1;border-radius:999px"></span><span style="flex:1;background:#F1EEE1;border-radius:999px"></span><span style="flex:1;background:#F1EEE1;border-radius:999px"></span>
+              </div>
+              <div style="position:absolute;left:20px;bottom:60px;width:46px;height:26px;border-radius:8px;background:#C9C2AE"></div>
+              <div style="position:absolute;right:26px;bottom:60px;width:34px;height:34px;border-radius:50%;background:#F6E6CC"></div>
+            </div>
+            <div style="padding:11px 14px;display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:600;color:#10262B">Jalan raya</span><span style="color:#6C7C7D;font-family:'IBM Plex Mono',monospace">06</span></div>
+          </div>
+
+          <div style="border-radius:18px;overflow:hidden;border:1px solid #EDE9DA">
+            <div style="height:112px;background:#DEEEEC;position:relative">
+              <div style="position:absolute;left:0;right:0;bottom:0;height:38px;background:#A9CFCA"></div>
+              <div style="position:absolute;left:22px;bottom:30px;width:150px;height:26px;border-radius:80px 80px 0 0;background:#F6E6CC"></div>
+              <div style="position:absolute;right:16px;bottom:26px;width:44px;height:12px;border-radius:24px 24px 0 0;background:#EBD3A6"></div>
+              <div style="position:absolute;left:66px;bottom:52px;width:8px;height:36px;border-radius:6px;background:#9CC4AE;transform:rotate(8deg)"></div>
+              <div style="position:absolute;left:44px;bottom:82px;width:34px;height:16px;border-radius:999px 999px 0 0;background:#7FB295;transform:rotate(-16deg)"></div>
+              <div style="position:absolute;left:70px;bottom:84px;width:34px;height:16px;border-radius:999px 999px 0 0;background:#7FB295;transform:rotate(18deg)"></div>
+              <div style="position:absolute;left:26px;top:14px;width:26px;height:26px;border-radius:50%;background:#FCE3D3"></div>
+            </div>
+            <div style="padding:11px 14px;display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:600;color:#10262B">Pulau</span><span style="color:#6C7C7D;font-family:'IBM Plex Mono',monospace">07</span></div>
+          </div>
+
+          <div style="border-radius:18px;overflow:hidden;border:1px solid #EDE9DA">
+            <div style="height:112px;background:#DCEEE4;position:relative;display:flex;align-items:flex-end;justify-content:center;gap:10px;padding-bottom:0">
+              <div style="width:44px;height:64px;border-radius:22px 22px 0 0;background:#AED3BC"></div>
+              <div style="width:56px;height:86px;border-radius:28px 28px 0 0;background:#7FB295"></div>
+              <div style="width:40px;height:56px;border-radius:20px 20px 0 0;background:#9CC4AE"></div>
+              <div style="position:absolute;left:22px;top:18px;width:28px;height:28px;border-radius:50%;background:#F6E6CC"></div>
+            </div>
+            <div style="padding:11px 14px;display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:600;color:#10262B">Hutan</span><span style="color:#6C7C7D;font-family:'IBM Plex Mono',monospace">08</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;border-top:1px solid #EDE9DA;padding-top:24px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#10262B">Ikon garis · 20</div>
+          <div style="font-size:13px;color:#6C7C7D">Stroke 1.8 · 24px grid · jenis aktivitas, kategori anggaran, dan barang</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:12px">
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 002 2v9M7 3v7M10 3v7"></path><path d="M17 3c-1.7 0-3 1.6-3 4.5S15.3 12 17 12v9"></path></svg><span style="font-size:11px;color:#33474C">Makan</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l1.6-4.8A2 2 0 016.5 7h11a2 2 0 011.9 1.2L21 13"></path><rect x="3" y="13" width="18" height="5" rx="1.6"></rect><circle cx="7.5" cy="19" r="1.4"></circle><circle cx="16.5" cy="19" r="1.4"></circle></svg><span style="font-size:11px;color:#33474C">Mobil</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l1.8-5.4A2 2 0 016.7 8h10.6a2 2 0 011.9 1.6L21 15"></path><path d="M2 15h20l-1.5 4H3.5L2 15z"></path></svg><span style="font-size:11px;color:#33474C">Kapal</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 19l-1 2 4-1 3-9 4-2.5-1.5-3L14 7 4.5 5 3 7l6 4-1 4-3 1 1 3z"></path></svg><span style="font-size:11px;color:#33474C">Pesawat</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6"></path><path d="M3 18v2M21 18v2M3 14h18"></path><circle cx="7.5" cy="7" r="2"></circle></svg><span style="font-size:11px;color:#33474C">Penginapan</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-1 10H5L4 9z"></path><path d="M9 9V7a3 3 0 016 0v2"></path><path d="M4 13h16"></path></svg><span style="font-size:11px;color:#33474C">Tiket</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v10M9.5 9.5c0-1.4 1.2-2 2.5-2s2.5.6 2.5 2-1 1.8-2.5 2.3-2.5 1-2.5 2.2 1.2 2 2.5 2 2.5-.6 2.5-2"></path></svg><span style="font-size:11px;color:#33474C">Uang</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 12H5L6 8z"></path><path d="M9 8a3 3 0 016 0"></path></svg><span style="font-size:11px;color:#33474C">Barang</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4L3 7l2 3 3-1.5V21h8V8.5L19 10l2-3-5-3-2 2h-4L8 4z"></path></svg><span style="font-size:11px;color:#33474C">Outfit</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg><span style="font-size:11px;color:#33474C">Tempat</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg><span style="font-size:11px;color:#33474C">Waktu</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"></circle><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"></path><path d="M16 5.2A3.2 3.2 0 0117 11"></path><path d="M18 14.6c2 .9 3.4 2.8 3.4 5.4"></path></svg><span style="font-size:11px;color:#33474C">Orang</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M6 6l1.4 1.4M16.6 16.6L18 18M18 6l-1.4 1.4M7.4 16.6L6 18"></path></svg><span style="font-size:11px;color:#33474C">Santai</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 19l6.5-11 4 6.2 2.4-3.4L22 19H2z"></path><path d="M8.5 8l1.6 2.6"></path></svg><span style="font-size:11px;color:#33474C">Trekking</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"></path><circle cx="12" cy="13" r="3.2"></circle></svg><span style="font-size:11px;color:#33474C">Foto</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"></rect><path d="M3 10h18"></path><circle cx="17" cy="14.5" r="1.4"></circle></svg><span style="font-size:11px;color:#33474C">Dompet</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.6 4.9L18 9.5l-4.4 1.6L12 16l-1.6-4.9L6 9.5l4.4-1.6L12 3z"></path><path d="M18 16l.8 2.2L21 19l-2.2.8L18 22l-.8-2.2L15 19l2.2-.8L18 16z"></path></svg><span style="font-size:11px;color:#33474C">Kurasi</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"></path></svg><span style="font-size:11px;color:#33474C">Daftar</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M8.5 12.5l2.5 2.5 4.5-5"></path></svg><span style="font-size:11px;color:#33474C">Centang</span></div>
+          <div style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E6E76" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V7a2 2 0 012-2h7l2 2h3a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2z"></path><path d="M9 13h6"></path></svg><span style="font-size:11px;color:#33474C">Trip</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:20px;border-top:1px solid #EDE9DA;padding-top:24px">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#10262B">Anatomi kartu trip</div>
+          <div style="display:flex;gap:16px">
+            <div style="width:250px;flex:0 0 250px;background:#fff;border:1px solid #EDE9DA;border-radius:22px;overflow:hidden">
+              <div style="height:104px;background:#DEEEEC;position:relative;display:flex;align-items:flex-end;justify-content:center">
+                <div style="position:absolute;left:20px;top:16px;width:30px;height:30px;border-radius:50%;background:#F6E6CC"></div>
+                <div style="position:absolute;left:-30px;bottom:0;width:200px;height:80px;border-radius:100px 100px 0 0;background:#BEDCD8"></div>
+                <div style="position:relative;width:86px;height:86px;border-radius:50%;overflow:hidden;border:5px solid #fff;transform:translateY(26px);box-shadow:0 10px 20px -12px rgba(16,38,43,.45);background-image:url('assets/cover-sumba.png');background-size:cover;background-position:center 60%"></div>
+              </div>
+              <div style="padding:34px 16px 16px;text-align:center;display:flex;flex-direction:column;gap:9px">
+                <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:#10262B">Dengan foto</div>
+                <div style="font-size:12px;color:#6C7C7D">Medali foto + mat pantai</div>
+              </div>
+            </div>
+            <div style="width:250px;flex:0 0 250px;background:#fff;border:1px solid #EDE9DA;border-radius:22px;overflow:hidden">
+              <div style="height:104px;background:#DEEEEC;position:relative;display:flex;align-items:flex-end;justify-content:center">
+                <div style="position:absolute;left:20px;top:16px;width:30px;height:30px;border-radius:50%;background:#F6E6CC"></div>
+                <div style="position:absolute;left:-30px;bottom:0;width:200px;height:80px;border-radius:100px 100px 0 0;background:#BEDCD8"></div>
+                <div style="position:relative;width:86px;height:86px;border-radius:50%;background:#fff;border:5px solid #fff;transform:translateY(26px);box-shadow:0 10px 20px -12px rgba(16,38,43,.45);display:flex;align-items:center;justify-content:center">
+                  <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#0E6E76" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg>
+                </div>
+              </div>
+              <div style="padding:34px 16px 16px;text-align:center;display:flex;flex-direction:column;gap:9px">
+                <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:#10262B">Tanpa foto</div>
+                <div style="font-size:12px;color:#6C7C7D">Ikon jenis tempat menggantikan · layout tetap utuh</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="width:520px;flex:0 0 520px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#10262B">Status uang · satu keluarga hangat</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="background:#FBFAF5;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:14px"><div style="width:120px;flex:0 0 120px;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="width:46%;height:8px;background:#3E8C6E"></div></div><div style="font-size:13px;color:#33474C">Aman · hijau kalem, tanpa lencana</div></div>
+            <div style="background:#FBFAF5;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:14px"><div style="width:120px;flex:0 0 120px;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="width:84%;height:8px;background:#D98F3B"></div></div><div style="font-size:13px;color:#33474C">Mendekati batas &gt;80% · amber, tetap tenang</div></div>
+            <div style="background:#FBFAF5;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:14px"><div style="width:120px;flex:0 0 120px;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex"><div style="width:82%;background:#F0713A"></div><div style="width:18%;background:#C85A28"></div></div><div style="font-size:13px;color:#33474C">Lewat · coral, angka jadi bobot 600</div></div>
+            <div style="background:#FBFAF5;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:14px"><div style="width:120px;flex:0 0 120px;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="width:100%;height:8px;background:#C9C2AE"></div></div><div style="font-size:13px;color:#33474C">Terpakai penuh · clay netral, selesai bukan bahaya</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="4b" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#0E6E76;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px">4b</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Layar 3 · Hari</div>
+      <div style="font-size:14px;color:#6C7C7D">Perencana. Form aktivitas dengan biaya opsional selalu terlihat.</div>
+    </div>
+
+    <div style="width:1440px;background:#FBFAF5;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -46px rgba(16,38,43,.45);display:flex;flex-direction:column">
+      <div style="height:64px;flex:0 0 64px;padding:0 30px;display:flex;align-items:center;gap:16px;background:#fff;border-bottom:1px solid #EDE9DA">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:28px;height:28px;border-radius:9px;background:#0E6E76;position:relative;overflow:hidden">
+            <div style="position:absolute;left:5px;top:5px;width:7px;height:7px;border-radius:50%;background:#F6E6CC"></div>
+            <div style="position:absolute;left:-2px;bottom:7px;width:20px;height:11px;border-radius:11px 11px 0 0;background:#3E8C6E"></div>
+            <div style="position:absolute;left:6px;bottom:0;width:24px;height:7px;border-radius:9px 9px 0 0;background:#F0713A"></div>
+          </div>
+          <div style="font-size:14px;color:#6C7C7D">Sumba Timur <span style="color:#C4B29E">/</span> <span style="color:#10262B;font-weight:600">Hari 3</span></div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600">
+          <span style="background:#fff;border:1px solid #E4DECB;border-radius:999px;padding:8px 14px;color:#33474C">Ubah urutan</span>
+          <span style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:8px 14px">Duplikat hari</span>
+          <span style="background:#F0713A;color:#fff;border-radius:999px;padding:9px 16px;font-weight:700">+ Tambah aktivitas</span>
+        </div>
+      </div>
+
+      <div style="padding:22px 30px 26px;display:flex;gap:20px">
+        <div style="width:206px;flex:0 0 206px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6C7C7D;padding:0 4px">Hari</div>
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:14px;padding:11px 13px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12.5px;color:#6C7C7D">Sab, 12 Sep</div><div style="font-size:13.5px;color:#10262B;margin-top:2px">Tiba &amp; Waingapu</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6C7C7D">820rb</span></div>
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:14px;padding:11px 13px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12.5px;color:#6C7C7D">Min, 13 Sep</div><div style="font-size:13.5px;color:#10262B;margin-top:2px">Bukit Wairinding</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6C7C7D">1,1jt</span></div>
+          <div style="background:#0E6E76;border-radius:14px;padding:11px 13px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 10px 20px -12px rgba(14,110,118,.8)"><div><div style="font-size:12.5px;color:#CFE3E1">Sen, 14 Sep</div><div style="font-size:13.5px;color:#fff;font-weight:700;margin-top:2px">Tanggedu &amp; Gili</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;font-weight:600">1,59jt</span></div>
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:14px;padding:11px 13px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12.5px;color:#6C7C7D">Sel, 15 Sep</div><div style="font-size:13.5px;color:#10262B;margin-top:2px">Pulang</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6C7C7D">—</span></div>
+          <div style="border:1px dashed #D8D0BB;border-radius:14px;padding:11px;text-align:center;font-size:13px;color:#6C7C7D">+ Tambah hari</div>
+          <div style="margin-top:8px;background:#DEEEEC;border-radius:14px;padding:13px;font-size:12px;line-height:1.55;color:#0A4F55">Geser aktivitas antar hari dengan tarik-lepas; nilai per hari dan anggaran ikut menyesuaikan.</div>
+        </div>
+
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end">
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;letter-spacing:-.02em;color:#10262B">Senin, 14 September</div>
+              <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px;font-family:'IBM Plex Mono',monospace">4 aktivitas · 1.590.000 masuk anggaran · 1 tanpa biaya</div>
+            </div>
+            <div style="display:flex;gap:8px;font-size:12.5px;font-weight:600">
+              <span style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:8px 13px">Semua</span>
+              <span style="background:#fff;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:8px 13px">Berbiaya</span>
+              <span style="background:#fff;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:8px 13px">Belum ada jam</span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:15px 17px;display:flex;gap:15px;align-items:center">
+              <div style="width:16px;flex:0 0 16px;display:flex;flex-direction:column;gap:3px;align-items:center;color:#C4B29E"><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span></div>
+              <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#F6E6CC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#9A6417" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 002 2v9M7 3v7M10 3v7"></path><path d="M17 3c-1.7 0-3 1.6-3 4.5S15.3 12 17 12v9"></path></svg></div>
+              <div style="width:52px;flex:0 0 52px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#33474C">07.30</div>
+              <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600;color:#10262B">Sarapan di Warung Ibu Nur</div><div style="font-size:13px;color:#6C7C7D;margin-top:2px">Makan &amp; minum · Waingapu, Sumba Timur</div></div>
+              <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#10262B">25.000</div><div style="font-size:11.5px;color:#6C7C7D">per orang</div></div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:15px 17px;display:flex;gap:15px;align-items:flex-start">
+              <div style="width:16px;flex:0 0 16px;display:flex;flex-direction:column;gap:3px;align-items:center;padding-top:16px"><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span></div>
+              <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#DCEEE4;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#2F6B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg></div>
+              <div style="width:52px;flex:0 0 52px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#33474C;padding-top:12px">10.00</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:600;color:#10262B">Air Terjun Tanggedu</div>
+                <div style="font-size:13px;color:#6C7C7D;margin-top:2px">Tiket &amp; atraksi · ojek 40 menit dari jalan utama, jalan kaki 15 menit terakhir</div>
+                <div style="display:flex;gap:7px;margin-top:10px;font-size:11.5px;font-weight:600">
+                  <span style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:999px;padding:5px 10px;color:#33474C">Outfit terisi</span>
+                  <span style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:999px;padding:5px 10px;color:#33474C">Catatan · sandal gunung</span>
+                  <span style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:999px;padding:5px 10px;color:#33474C">3 orang</span>
+                </div>
+              </div>
+              <div style="text-align:right;padding-top:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#10262B">150.000</div><div style="font-size:11.5px;color:#6C7C7D">3 orang</div></div>
+            </div>
+
+            <div style="background:#fff;border:2px solid #0E6E76;border-radius:18px;padding:16px 17px;display:flex;flex-direction:column;gap:14px;box-shadow:0 16px 30px -24px rgba(14,110,118,.9)">
+              <div style="display:flex;gap:15px;align-items:center">
+                <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#DEEEEC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#0A4F55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l1.8-5.4A2 2 0 016.7 8h10.6a2 2 0 011.9 1.6L21 15"></path><path d="M2 15h20l-1.5 4H3.5L2 15z"></path></svg></div>
+                <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:700;color:#10262B">Aktivitas baru</div><div style="font-size:13px;color:#6C7C7D;margin-top:2px">Isi jam dan judul; biaya opsional dan tidak pernah wajib</div></div>
+                <div style="font-size:12.5px;color:#6C7C7D">Senin, 14 Sep</div>
+              </div>
+              <div style="display:flex;gap:12px">
+                <div style="width:110px;flex:0 0 110px"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Jam</div><div style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#10262B">15.00</div></div>
+                <div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Judul</div><div style="background:#FBFAF5;border:1.5px solid #0E6E76;border-radius:12px;padding:11px 13px;font-size:14px;color:#10262B">Kapal ke Gili Trawangan</div></div>
+                <div style="width:190px;flex:0 0 190px"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Jenis</div><div style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:14px;color:#10262B;display:flex;justify-content:space-between">Transit <span style="color:#6C7C7D">▾</span></div></div>
+                <div style="width:170px;flex:0 0 170px"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Biaya <span style="color:#6C7C7D;font-weight:400">opsional</span></div><div style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#10262B">350.000</div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center">
+                <div style="flex:1;background:#DEEEEC;border-radius:12px;padding:11px 13px;display:flex;gap:10px;align-items:center"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span><span style="font-size:13px;color:#0A4F55">Biaya masuk ke <strong style="font-weight:700">Transport</strong> begitu disimpan — kategori jadi 78% terpakai</span></div>
+                <div style="background:#0E6E76;color:#fff;border-radius:999px;padding:11px 22px;font-size:14px;font-weight:700">Simpan</div>
+                <div style="color:#6C7C7D;font-size:13.5px;font-weight:600">Batal</div>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:15px 17px;display:flex;gap:15px;align-items:center">
+              <div style="width:16px;flex:0 0 16px;display:flex;flex-direction:column;gap:3px;align-items:center"><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span><span style="width:4px;height:4px;border-radius:50%;background:#D8D0BB"></span></div>
+              <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#FCE3D3;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#C85A28" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M6 6l1.4 1.4M16.6 16.6L18 18M18 6l-1.4 1.4M7.4 16.6L6 18"></path></svg></div>
+              <div style="width:52px;flex:0 0 52px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#33474C">19.30</div>
+              <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600;color:#10262B">Jalan sore di pantai Walakiri</div><div style="font-size:13px;color:#6C7C7D;margin-top:2px">Santai · tanpa biaya</div></div>
+              <div style="font-size:13.5px;color:#6C7C7D">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:300px;flex:0 0 300px;display:flex;flex-direction:column;gap:14px">
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;overflow:hidden">
+            <div style="height:96px;background:#DEEEEC;position:relative">
+              <div style="position:absolute;left:20px;top:16px;width:28px;height:28px;border-radius:50%;background:#F6E6CC"></div>
+              <div style="position:absolute;left:-30px;bottom:20px;width:200px;height:78px;border-radius:100px 100px 0 0;background:#BEDCD8"></div>
+              <div style="position:absolute;left:0;right:0;bottom:0;height:20px;background:#8FC2BE"></div>
+            </div>
+            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:9px">
+              <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Outfit hari ini</div>
+              <div style="font-size:13px;color:#33474C;line-height:1.5">Kaos linen, celana pendek cepat kering, sandal gunung. Tag: santai basah.</div>
+              <div style="font-size:12.5px;font-weight:600;color:#0A4F55">Ubah outfit</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:11px">
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Uang hari ini</div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#33474C">Terhitung</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">1.590.000</span></div>
+            <div style="height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex"><div style="width:74%;background:#F0713A"></div><div style="width:26%;background:#C85A28"></div></div>
+            <div style="font-size:12px;color:#6C7C7D;line-height:1.5">Hari termahal dari empat hari. Kapal menyumbang 22% total trip.</div>
+          </div>
+          <div style="background:#F6E6CC;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:13px;font-weight:700;color:#9A6417">Belum ada jam</div>
+            <div style="font-size:12.5px;color:#7A5A22;line-height:1.5">Satu aktivitas tanpa jam: “Cari oleh-oleh tenun”. Aktivitas tanpa jam turun ke akhir hari.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="4c" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#0E6E76;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px">4c</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Layar 5 · Anggaran</div>
+      <div style="font-size:14px;color:#6C7C7D">Baris turunan vs manual dibedakan di level baris, bukan hanya kategori.</div>
+    </div>
+
+    <div style="width:1440px;background:#FBFAF5;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -46px rgba(16,38,43,.45);padding:24px 30px 28px;display:flex;gap:20px">
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <div>
+            <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;letter-spacing:-.02em;color:#10262B">Anggaran · Sumba Timur</div>
+            <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px">5 kategori · 22 baris, 16 di antaranya turunan dari aktivitas</div>
+          </div>
+          <div style="display:flex;gap:9px;font-size:13px;font-weight:600">
+            <span style="background:#fff;border:1px solid #E4DECB;border-radius:999px;padding:9px 14px;color:#33474C">Tambah kategori</span>
+            <span style="background:#F0713A;color:#fff;border-radius:999px;padding:9px 16px;font-weight:700">Tambah baris manual</span>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:20px;align-items:center">
+            <div style="width:132px;height:132px;flex:0 0 132px;border-radius:50%;background:conic-gradient(#F0713A 0 36%, #D98F3B 36% 64%, #3E8C6E 64% 82%, #C9C2AE 82% 100%);display:flex;align-items:center;justify-content:center">
+              <div style="width:88px;height:88px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#10262B">3,51jt</div>
+                <div style="font-size:11px;color:#6C7C7D">terpakai</div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:10px;align-items:baseline"><div style="font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600;color:#C85A28;letter-spacing:-.02em">Rp 3.510.000</div><div style="font-size:13.5px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace">/ Rp 3.100.000</div></div>
+              <div style="height:12px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex"><div style="width:88%;background:#F0713A"></div><div style="width:12%;background:#C85A28"></div></div>
+              <div style="display:flex;gap:18px;font-size:12.5px;color:#33474C">
+                <span style="display:flex;gap:7px;align-items:center"><span style="width:10px;height:10px;border-radius:3px;background:#F0713A"></span>Makan 36%</span>
+                <span style="display:flex;gap:7px;align-items:center"><span style="width:10px;height:10px;border-radius:3px;background:#D98F3B"></span>Transport 28%</span>
+                <span style="display:flex;gap:7px;align-items:center"><span style="width:10px;height:10px;border-radius:3px;background:#3E8C6E"></span>Tiket 18%</span>
+                <span style="display:flex;gap:7px;align-items:center"><span style="width:10px;height:10px;border-radius:3px;background:#C9C2AE"></span>Penginapan 18%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;overflow:hidden">
+          <div style="padding:14px 18px;display:flex;gap:16px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D;border-bottom:1px solid #EDE9DA">
+            <span style="flex:1">Kategori dan baris</span><span style="width:120px;text-align:right">Terpakai</span><span style="width:120px;text-align:right">Dialokasikan</span><span style="width:96px">Progres</span>
+          </div>
+
+          <div style="padding:15px 18px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F4F1E6">
+            <span style="flex:1;display:flex;gap:12px;align-items:center;min-width:0"><span style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#F6E6CC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#9A6417" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 002 2v9M7 3v7M10 3v7"></path><path d="M17 3c-1.7 0-3 1.6-3 4.5S15.3 12 17 12v9"></path></svg></span><span style="font-size:15px;font-weight:600;color:#10262B">Makan &amp; minum</span></span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14.5px;font-weight:600;color:#C85A28">1.240.000</span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">1.000.000</span>
+            <span style="width:96px"><span style="display:block;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><span style="display:block;height:8px;width:100%;background:#F0713A"></span></span></span>
+          </div>
+          <div style="padding:11px 18px 11px 64px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F4F1E6;background:#FDFCF7">
+            <span style="flex:1;display:flex;gap:10px;align-items:center;font-size:13.5px;color:#33474C"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span>Sarapan di Warung Ibu Nur · Hari 3</span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#10262B">75.000</span>
+            <span style="width:120px;text-align:right;font-size:12px;color:#6C7C7D">dari aktivitas</span>
+            <span style="width:96px"></span>
+          </div>
+          <div style="padding:11px 18px 11px 64px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F4F1E6;background:#FDFCF7">
+            <span style="flex:1;display:flex;gap:10px;align-items:center;font-size:13.5px;color:#33474C"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span>Makan malam ikan bakar · Hari 2</span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#10262B">315.000</span>
+            <span style="width:120px;text-align:right;font-size:12px;color:#6C7C7D">dari aktivitas</span>
+            <span style="width:96px"></span>
+          </div>
+          <div style="padding:11px 18px 11px 64px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F4F1E6">
+            <span style="flex:1;display:flex;gap:10px;align-items:center;font-size:13.5px;color:#33474C"><span style="width:10px;height:10px;border-radius:3px;border:1.5px solid #C4B29E"></span>Kopi &amp; jajan pasar · manual</span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#10262B">350.000</span>
+            <span style="width:120px;text-align:right;font-size:12px;color:#6C7C7D">dicatat sendiri</span>
+            <span style="width:96px"></span>
+          </div>
+
+          <div style="padding:15px 18px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F4F1E6">
+            <span style="flex:1;display:flex;gap:12px;align-items:center;min-width:0"><span style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#DEEEEC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#0A4F55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l1.8-5.4A2 2 0 016.7 8h10.6a2 2 0 011.9 1.6L21 15"></path><path d="M2 15h20l-1.5 4H3.5L2 15z"></path></svg></span><span style="font-size:15px;font-weight:600;color:#10262B">Transport</span></span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14.5px;font-weight:600;color:#10262B">980.000</span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">1.250.000</span>
+            <span style="width:96px"><span style="display:block;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><span style="display:block;height:8px;width:78%;background:#D98F3B"></span></span></span>
+          </div>
+          <div style="padding:11px 18px 11px 64px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F4F1E6;background:#FDFCF7">
+            <span style="flex:1;display:flex;gap:10px;align-items:center;font-size:13.5px;color:#33474C"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span>Kapal ke Gili Trawangan · Hari 3</span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#10262B">350.000</span>
+            <span style="width:120px;text-align:right;font-size:12px;color:#0A4F55;font-weight:600">baru masuk</span>
+            <span style="width:96px"></span>
+          </div>
+
+          <div style="padding:15px 18px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F4F1E6">
+            <span style="flex:1;display:flex;gap:12px;align-items:center;min-width:0"><span style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#DCEEE4;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#2F6B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-1 10H5L4 9z"></path><path d="M9 9V7a3 3 0 016 0v2"></path></svg></span><span style="font-size:15px;font-weight:600;color:#10262B">Tiket &amp; atraksi</span></span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14.5px;font-weight:600;color:#C85A28">640.000</span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">500.000</span>
+            <span style="width:96px"><span style="display:block;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex"><span style="height:8px;width:78%;background:#F0713A"></span><span style="height:8px;width:22%;background:#C85A28"></span></span></span>
+          </div>
+
+          <div style="padding:15px 18px;display:flex;gap:16px;align-items:center">
+            <span style="flex:1;display:flex;gap:12px;align-items:center;min-width:0"><span style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#F1EEE1;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#6C7C7D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6"></path><path d="M3 18v2M21 18v2M3 14h18"></path></svg></span><span style="font-size:15px;color:#33474C">Penginapan</span></span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14.5px;color:#6C7C7D">650.000</span>
+            <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#6C7C7D">650.000</span>
+            <span style="width:96px"><span style="display:block;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><span style="display:block;height:8px;width:100%;background:#C9C2AE"></span></span></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:322px;flex:0 0 322px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Cara baris dibaca</div>
+          <div style="display:flex;gap:11px;align-items:flex-start"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700;font-size:15px">↳</span><span style="font-size:13px;color:#33474C;line-height:1.5">Turunan dari aktivitas. Diberi latar krem tipis dan indentasi; diubah dari layar Hari, bukan di sini.</span></div>
+          <div style="display:flex;gap:11px;align-items:flex-start"><span style="width:11px;height:11px;border-radius:3px;border:1.5px solid #C4B29E;margin-top:4px;flex:0 0 11px"></span><span style="font-size:13px;color:#33474C;line-height:1.5">Manual. Dicatat langsung di anggaran atau dari layar Pengeluaran.</span></div>
+        </div>
+
+        <div style="background:#F6E6CC;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:9px">
+          <div style="font-size:13.5px;font-weight:700;color:#9A6417">Alokasi lebih besar dari rencana</div>
+          <div style="font-size:13px;color:#7A5A22;line-height:1.55">Total alokasi kategori Rp 3.400.000, sedangkan rencana trip Rp 3.100.000. Ini diizinkan — Jalan hanya memberi tahu, tidak memblokir.</div>
+          <div style="font-size:12.5px;font-weight:700;color:#9A6417">Samakan dengan rencana</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Per orang</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#33474C">Rina</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">1.170.000</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#33474C">Dimas</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">1.170.000</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#33474C">Sari</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">1.170.000</span></div>
+          <div style="font-size:12px;color:#6C7C7D;line-height:1.5;border-top:1px solid #EDE9DA;padding-top:10px">Pembagian rata. Jalan tidak menghitung siapa berutang ke siapa.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="4d" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#0E6E76;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px">4d</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Layar 6 · Pengeluaran</div>
+      <div style="font-size:14px;color:#6C7C7D">Layar tercepat. Target di bawah lima detik — ponsel di sebelah kanan adalah kasus sebenarnya.</div>
+    </div>
+
+    <div style="display:flex;gap:26px;align-items:flex-start">
+      <div style="width:1020px;flex:0 0 1020px;background:#FBFAF5;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -46px rgba(16,38,43,.45);padding:24px 26px 28px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <div>
+            <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;letter-spacing:-.02em;color:#10262B">Pengeluaran</div>
+            <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px;font-family:'IBM Plex Mono',monospace">14 catatan · 3.510.000 total · hari ini 1.590.000</div>
+          </div>
+          <div style="display:flex;gap:9px;font-size:12.5px;font-weight:600">
+            <span style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:8px 13px">Semua hari</span>
+            <span style="background:#fff;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:8px 13px">Perlu difilekan · 1</span>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:2px solid #F0713A;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 18px 34px -26px rgba(240,113,58,.9)">
+          <div style="display:flex;gap:14px;align-items:flex-end">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:7px">Jumlah <span style="color:#C85A28">wajib</span></div>
+              <div style="background:#FBFAF5;border:1.5px solid #F0713A;border-radius:14px;padding:14px 16px;display:flex;align-items:baseline;gap:8px"><span style="font-size:15px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace">Rp</span><span style="font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600;color:#10262B;letter-spacing:-.02em">38.000</span></div>
+            </div>
+            <div style="width:420px;flex:0 0 420px">
+              <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:7px">Kategori <span style="color:#C85A28">wajib</span></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <span style="background:#F0713A;color:#fff;border-radius:999px;padding:10px 15px;font-size:13px;font-weight:700">Makan</span>
+                <span style="background:#FBFAF5;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:10px 15px;font-size:13px;font-weight:600">Transport</span>
+                <span style="background:#FBFAF5;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:10px 15px;font-size:13px;font-weight:600">Tiket</span>
+                <span style="background:#FBFAF5;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:10px 15px;font-size:13px;font-weight:600">Lain</span>
+              </div>
+            </div>
+            <div style="width:150px;flex:0 0 150px">
+              <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:7px">Tanggal</div>
+              <div style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:14px;padding:13px 15px;font-size:13.5px;color:#10262B">Hari ini</div>
+            </div>
+            <div style="background:#F0713A;color:#fff;border-radius:999px;padding:16px 30px;font-size:15px;font-weight:700;box-shadow:0 10px 22px -10px rgba(240,113,58,.8)">Catat</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="flex:1;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 14px;font-size:13.5px;color:#6C7C7D">Catatan (opsional) — mis. air mineral 2 botol di warung dekat pelabuhan</div>
+            <div style="font-size:12.5px;color:#6C7C7D">Enter untuk simpan · dua kolom pertama saja sudah cukup</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6C7C7D">Senin, 14 September</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#33474C">1.590.000</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+            <div style="width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:#DEEEEC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#0A4F55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l1.8-5.4A2 2 0 016.7 8h10.6a2 2 0 011.9 1.6L21 15"></path><path d="M2 15h20l-1.5 4H3.5L2 15z"></path></svg></div>
+            <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:600;color:#10262B;display:flex;gap:9px;align-items:center"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span>Kapal ke Gili Trawangan</div><div style="font-size:12.5px;color:#6C7C7D;margin-top:2px">Transport · dari aktivitas 15.00</div></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#10262B">350.000</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+            <div style="width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:#DCEEE4;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#2F6B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-1 10H5L4 9z"></path><path d="M9 9V7a3 3 0 016 0v2"></path></svg></div>
+            <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:600;color:#10262B;display:flex;gap:9px;align-items:center"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span>Air Terjun Tanggedu</div><div style="font-size:12.5px;color:#6C7C7D;margin-top:2px">Tiket &amp; atraksi · dari aktivitas 10.00</div></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#10262B">150.000</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+            <div style="width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:#F6E6CC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#9A6417" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 002 2v9M7 3v7M10 3v7"></path><path d="M17 3c-1.7 0-3 1.6-3 4.5S15.3 12 17 12v9"></path></svg></div>
+            <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:600;color:#10262B;display:flex;gap:9px;align-items:center"><span style="width:10px;height:10px;border-radius:3px;border:1.5px solid #C4B29E"></span>Kopi di pelabuhan</div><div style="font-size:12.5px;color:#6C7C7D;margin-top:2px">Makan &amp; minum · dicatat 14.42</div></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#10262B">24.000</div>
+          </div>
+
+          <div style="background:#F6E6CC;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+            <div style="width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#9A6417" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"></path></svg></div>
+            <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700;color:#9A6417">Ojek pagi ke jalan utama</div><div style="font-size:12.5px;color:#7A5A22;margin-top:2px">Belum ada kategori — kategori lama dihapus. Pilih kategori untuk memasukkan ke anggaran.</div></div>
+            <div style="display:flex;gap:10px;align-items:center"><span style="background:#fff;border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:700;color:#9A6417">Pilih kategori</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#9A6417">60.000</span></div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 4px 0">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6C7C7D">Minggu, 13 September</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#33474C">1.100.000</div>
+          </div>
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+            <div style="width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:#F6E6CC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#9A6417" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 002 2v9M7 3v7M10 3v7"></path><path d="M17 3c-1.7 0-3 1.6-3 4.5S15.3 12 17 12v9"></path></svg></div>
+            <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:600;color:#10262B;display:flex;gap:9px;align-items:center"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span>Makan malam ikan bakar</div><div style="font-size:12.5px;color:#6C7C7D;margin-top:2px">Makan &amp; minum · dari aktivitas 19.00</div></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#10262B">315.000</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:372px;flex:0 0 372px;display:flex;flex-direction:column;gap:14px">
+        <div style="width:372px;height:760px;border-radius:44px;background:#10262B;padding:12px;box-shadow:0 40px 80px -40px rgba(16,38,43,.6)">
+          <div style="width:100%;height:100%;border-radius:34px;overflow:hidden;background:#FBFAF5;display:flex;flex-direction:column">
+            <div style="padding:16px 22px 8px;display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:#10262B"><span style="font-family:'IBM Plex Mono',monospace">14.44</span><span style="width:18px;height:10px;border:1.5px solid #33474C;border-radius:3px"></span></div>
+            <div style="padding:8px 22px 0;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Catat cepat</div><div style="font-size:12.5px;color:#6C7C7D;margin-top:2px">Sumba Timur · hari 3</div></div>
+              <div style="background:#FCE3D3;color:#C85A28;border-radius:999px;padding:6px 11px;font-size:11.5px;font-weight:700;font-family:'IBM Plex Mono',monospace">{{ overShort }}</div>
+            </div>
+            <div style="padding:16px 22px 0">
+              <div style="background:#fff;border:2px solid #F0713A;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:17px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace">Rp</span><span style="font-family:'IBM Plex Mono',monospace;font-size:40px;font-weight:600;color:#10262B;letter-spacing:-.03em">38.000</span></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="background:#F0713A;color:#fff;border-radius:999px;padding:11px 16px;font-size:14px;font-weight:700">Makan</span>
+                  <span style="background:#FBFAF5;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:11px 16px;font-size:14px;font-weight:600">Transport</span>
+                  <span style="background:#FBFAF5;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:11px 16px;font-size:14px;font-weight:600">Tiket</span>
+                  <span style="background:#FBFAF5;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:11px 16px;font-size:14px;font-weight:600">Lain</span>
+                </div>
+                <div style="font-size:12.5px;color:#6C7C7D">Tanggal hari ini · catatan opsional</div>
+              </div>
+            </div>
+            <div style="padding:14px 22px 0;display:flex;flex-direction:column;gap:10px;flex:1;min-height:0">
+              <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6C7C7D"><span>Hari ini</span><span style="font-family:'IBM Plex Mono',monospace">1,59jt</span></div>
+              <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:14.5px;font-weight:600;color:#10262B">Kapal ke Gili</div><div style="font-size:12px;color:#6C7C7D;margin-top:2px">Transport · turunan</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">350.000</span></div>
+              <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:13px 15px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:14.5px;font-weight:600;color:#10262B">Kopi di pelabuhan</div><div style="font-size:12px;color:#6C7C7D;margin-top:2px">Makan · manual</div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">24.000</span></div>
+            </div>
+            <div style="padding:12px 22px 24px">
+              <div style="background:#F0713A;color:#fff;border-radius:22px;padding:19px;text-align:center;font-size:16px;font-weight:700;box-shadow:0 14px 26px -12px rgba(240,113,58,.8)">Catat 38.000 · Makan</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#DEEEEC;border-radius:18px;padding:16px;font-size:13px;line-height:1.55;color:#0A4F55">Momen kedua dari brief: satu tangan, di kapal, matahari terik. Angka besar, dua kolom wajib, tombol setinggi 60px di zona jempol, dan tidak ada tint di belakang angka.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="4e" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#0E6E76;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px">4e</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Layar 7 &amp; 8 · Barang bawaan dan outfit</div>
+      <div style="font-size:14px;color:#6C7C7D">Barang pakai ikon, wajib dibedakan. Outfit sengaja tipis.</div>
+    </div>
+
+    <div style="width:1440px;background:#FBFAF5;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -46px rgba(16,38,43,.45);padding:24px 30px 28px;display:flex;gap:20px">
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <div>
+            <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;letter-spacing:-.02em;color:#10262B">Barang bawaan</div>
+            <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px">Terisi otomatis dari templat Sumba 4 hari · 2 wajib belum dicentang</div>
+          </div>
+          <div style="display:flex;gap:9px;align-items:center;font-size:13px;font-weight:600">
+            <div style="width:150px;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="width:37%;height:8px;background:#3E8C6E"></div></div>
+            <span style="font-family:'IBM Plex Mono',monospace;color:#33474C">3 / 8</span>
+            <span style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:8px 14px">+ Tambah barang</span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Dokumen</div><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#6C7C7D">1 / 3</span></div>
+            <div style="display:flex;gap:12px;align-items:center;background:#FCE3D3;border-radius:14px;padding:12px 14px"><span style="width:20px;height:20px;border-radius:6px;border:2px solid #C85A28"></span><span style="flex:1;font-size:14px;font-weight:600;color:#10262B">KTP dan kartu vaksin</span><span style="font-size:11.5px;font-weight:700;color:#C85A28">Wajib</span></div>
+            <div style="display:flex;gap:12px;align-items:center;background:#FCE3D3;border-radius:14px;padding:12px 14px"><span style="width:20px;height:20px;border-radius:6px;border:2px solid #C85A28"></span><span style="flex:1;font-size:14px;font-weight:600;color:#10262B">Obat pribadi</span><span style="font-size:11.5px;font-weight:700;color:#C85A28">Wajib</span></div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 14px"><span style="width:20px;height:20px;border-radius:6px;background:#3E8C6E;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="flex:1;font-size:14px;color:#6C7C7D;text-decoration:line-through">Tiket kapal cetak</span></div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Pakaian</div><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#6C7C7D">1 / 3</span></div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 14px"><span style="width:20px;height:20px;border-radius:6px;border:2px solid #C4B29E"></span><span style="flex:1;font-size:14px;color:#10262B">Sandal gunung</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#6C7C7D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4L3 7l2 3 3-1.5V21h8V8.5L19 10l2-3-5-3-2 2h-4L8 4z"></path></svg></div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 14px"><span style="width:20px;height:20px;border-radius:6px;border:2px solid #C4B29E"></span><span style="flex:1;font-size:14px;color:#10262B">Jaket tipis anti angin</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#6C7C7D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4L3 7l2 3 3-1.5V21h8V8.5L19 10l2-3-5-3-2 2h-4L8 4z"></path></svg></div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 14px"><span style="width:20px;height:20px;border-radius:6px;background:#3E8C6E;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="flex:1;font-size:14px;color:#6C7C7D;text-decoration:line-through">Baju renang</span></div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Elektronik</div><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#6C7C7D">1 / 2</span></div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 14px"><span style="width:20px;height:20px;border-radius:6px;border:2px solid #C4B29E"></span><span style="flex:1;font-size:14px;color:#10262B">Powerbank 10.000 mAh</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#6C7C7D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="10" rx="2"></rect><path d="M20 11v2"></path></svg></div>
+            <div style="display:flex;gap:12px;align-items:center;padding:12px 14px"><span style="width:20px;height:20px;border-radius:6px;background:#3E8C6E;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="flex:1;font-size:14px;color:#6C7C7D;text-decoration:line-through">Kabel dan kepala charger</span></div>
+          </div>
+
+          <div style="border:1px dashed #D8D0BB;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px;justify-content:center">
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Tambah kategori sendiri</div>
+            <div style="font-size:13px;color:#6C7C7D;line-height:1.55">Mis. peralatan snorkeling, obat khusus, atau perlengkapan bayi. Kategori kosong tidak ditampilkan di ringkasan trip.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:392px;flex:0 0 392px;display:flex;flex-direction:column;gap:16px">
+        <div>
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;letter-spacing:-.02em;color:#10262B">Outfit per hari</div>
+          <div style="font-size:13px;color:#6C7C7D;margin-top:4px">Deskripsi, satu tag gaya, foto opsional</div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;overflow:hidden">
+          <div style="height:150px;background-image:url('assets/cover-sumba.png');background-size:cover;background-position:center 62%;position:relative">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,38,43,0) 40%,rgba(16,38,43,.6) 100%)"></div>
+            <div style="position:absolute;left:16px;bottom:14px;color:#fff"><div style="font-size:12px;opacity:.9">Hari 3 · Senin, 14 Sep</div><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-top:2px">Tanggedu &amp; Gili</div></div>
+          </div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;gap:8px"><span style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700">Santai basah</span><span style="background:#FBFAF5;border:1px solid #EDE9DA;color:#33474C;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600">Foto tersimpan</span></div>
+            <div style="font-size:13.5px;color:#33474C;line-height:1.55">Kaos linen putih, celana pendek cepat kering, sandal gunung. Bawa kaos ganti di tas kecil karena akan basah di air terjun.</div>
+            <div style="font-size:12.5px;font-weight:700;color:#0A4F55">Ubah</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:11px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:14.5px;font-weight:600;color:#10262B">Hari 4 · Selasa, 15 Sep</div><span style="font-size:12px;color:#6C7C7D">Pulang</span></div>
+          <div style="border:1px dashed #D8D0BB;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:7px;align-items:flex-start">
+            <div style="font-size:13.5px;color:#33474C">Belum diisi. Hari terakhir biasanya cukup satu set nyaman untuk perjalanan.</div>
+            <div style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:700">Tulis outfit</div>
+          </div>
+        </div>
+
+        <div style="background:#DEEEEC;border-radius:20px;padding:16px;font-size:13px;line-height:1.55;color:#0A4F55">Barang memakai ikon garis, bukan ilustrasi — daftar 30 barang dengan 30 gambar tidak terbaca dan tidak terbangun (§5).</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="4f" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#0E6E76;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px">4f</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Layar 9 · Tautan bagikan</div>
+      <div style="font-size:14px;color:#6C7C7D">Tanpa login. Satu-satunya hal yang dilihat orang non-pengguna, jadi dapat perlakuan sendiri.</div>
+    </div>
+
+    <div style="width:1440px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -46px rgba(16,38,43,.45);display:flex;flex-direction:column">
+      <div style="height:236px;position:relative;background-image:url('assets/cover-sumba.png');background-size:cover;background-position:center 56%">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,38,43,.42) 0%,rgba(16,38,43,.2) 40%,rgba(16,38,43,.78) 100%)"></div>
+        <div style="position:relative;height:100%;padding:24px 40px;display:flex;flex-direction:column;justify-content:space-between;color:#fff">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:28px;height:28px;border-radius:9px;background:#fff;position:relative;overflow:hidden">
+                <div style="position:absolute;left:5px;top:5px;width:7px;height:7px;border-radius:50%;background:#F6E6CC"></div>
+                <div style="position:absolute;left:-2px;bottom:7px;width:20px;height:11px;border-radius:11px 11px 0 0;background:#3E8C6E"></div>
+                <div style="position:absolute;left:6px;bottom:0;width:24px;height:7px;border-radius:9px 9px 0 0;background:#F0713A"></div>
+              </div>
+              <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600">Jalan</div>
+            </div>
+            <div style="display:flex;gap:10px;font-size:13px;font-weight:600;align-items:center">
+              <span style="background:rgba(255,255,255,.16);border-radius:999px;padding:8px 14px">Hanya baca</span>
+              <span style="background:#fff;color:#0A4F55;border-radius:999px;padding:9px 16px;font-weight:700">Buat trip sendiri</span>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;gap:9px;margin-bottom:10px">
+              <span style="background:rgba(255,255,255,.9);color:#10262B;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700">Pantai · 4 hari</span>
+              <span style="background:rgba(255,255,255,.16);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600">3 orang</span>
+            </div>
+            <div style="font-family:'Fraunces',serif;font-size:42px;font-weight:600;letter-spacing:-.03em;text-shadow:0 2px 18px rgba(16,38,43,.5)">Sumba Timur, empat hari</div>
+            <div style="font-size:15px;margin-top:6px;opacity:.95">12–15 September · Waingapu, Wairinding, Tanggedu, Walakiri</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:26px 40px 32px;display:flex;gap:26px">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;gap:14px">
+            <div style="flex:1;background:#FBFAF5;border-radius:18px;padding:16px 18px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Total per orang</div><div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#10262B;margin-top:5px">Rp 1.170.000</div></div>
+            <div style="flex:1;background:#FBFAF5;border-radius:18px;padding:16px 18px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Aktivitas</div><div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#10262B;margin-top:5px">17</div></div>
+            <div style="flex:1;background:#FBFAF5;border-radius:18px;padding:16px 18px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Termahal</div><div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;color:#10262B;margin-top:5px">Kapal 350rb</div></div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;gap:16px;align-items:flex-start">
+              <div style="width:96px;flex:0 0 96px;text-align:right;padding-top:2px"><div style="font-size:13px;font-weight:700;color:#10262B">Hari 3</div><div style="font-size:12.5px;color:#6C7C7D">Sen, 14 Sep</div></div>
+              <div style="width:2px;background:#EDE9DA;align-self:stretch;border-radius:2px;margin-top:6px"></div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:10px">
+                <div style="background:#FBFAF5;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+                  <span style="width:36px;height:36px;flex:0 0 36px;border-radius:11px;background:#F6E6CC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#9A6417" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 002 2v9M7 3v7M10 3v7"></path><path d="M17 3c-1.7 0-3 1.6-3 4.5S15.3 12 17 12v9"></path></svg></span>
+                  <span style="flex:1;min-width:0"><span style="display:block;font-size:14.5px;font-weight:600;color:#10262B">Sarapan di Warung Ibu Nur</span><span style="display:block;font-size:12.5px;color:#6C7C7D;margin-top:2px">07.30 · Waingapu</span></span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">25rb</span>
+                </div>
+                <div style="background:#FBFAF5;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+                  <span style="width:36px;height:36px;flex:0 0 36px;border-radius:11px;background:#DCEEE4;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#2F6B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg></span>
+                  <span style="flex:1;min-width:0"><span style="display:block;font-size:14.5px;font-weight:600;color:#10262B">Air Terjun Tanggedu</span><span style="display:block;font-size:12.5px;color:#6C7C7D;margin-top:2px">10.00 · ojek 40 menit dari jalan utama</span></span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">150rb</span>
+                </div>
+                <div style="background:#FBFAF5;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+                  <span style="width:36px;height:36px;flex:0 0 36px;border-radius:11px;background:#DEEEEC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#0A4F55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l1.8-5.4A2 2 0 016.7 8h10.6a2 2 0 011.9 1.6L21 15"></path><path d="M2 15h20l-1.5 4H3.5L2 15z"></path></svg></span>
+                  <span style="flex:1;min-width:0"><span style="display:block;font-size:14.5px;font-weight:600;color:#10262B">Kapal ke Gili Trawangan</span><span style="display:block;font-size:12.5px;color:#6C7C7D;margin-top:2px">15.00 · Pelabuhan Waingapu</span></span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">350rb</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:16px;align-items:flex-start">
+              <div style="width:96px;flex:0 0 96px;text-align:right;padding-top:2px"><div style="font-size:13px;font-weight:700;color:#10262B">Hari 4</div><div style="font-size:12.5px;color:#6C7C7D">Sel, 15 Sep</div></div>
+              <div style="width:2px;background:#EDE9DA;align-self:stretch;border-radius:2px;margin-top:6px"></div>
+              <div style="flex:1;min-width:0">
+                <div style="background:#FBFAF5;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+                  <span style="width:36px;height:36px;flex:0 0 36px;border-radius:11px;background:#F1EEE1;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#6C7C7D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 19l-1 2 4-1 3-9 4-2.5-1.5-3L14 7 4.5 5 3 7l6 4-1 4-3 1 1 3z"></path></svg></span>
+                  <span style="flex:1;min-width:0"><span style="display:block;font-size:14.5px;font-weight:600;color:#10262B">Terbang Waingapu – Denpasar</span><span style="display:block;font-size:12.5px;color:#6C7C7D;margin-top:2px">11.20 · sudah dibayar di muka</span></span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:352px;flex:0 0 352px;display:flex;flex-direction:column;gap:16px">
+          <div style="background:#0E6E76;border-radius:22px;padding:20px;color:#fff;display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600">Mau trip seperti ini?</div>
+            <div style="font-size:13.5px;color:#CFE3E1;line-height:1.55">Salin rencana ini jadi trip sendiri, ganti tanggalnya, dan anggarannya ikut terbawa.</div>
+            <div style="background:#fff;color:#0A4F55;border-radius:999px;padding:12px;text-align:center;font-size:14px;font-weight:700">Salin trip ini</div>
+            <div style="font-size:12px;color:#CFE3E1;text-align:center">Tanpa akun untuk melihat · gratis untuk menyalin</div>
+          </div>
+
+          <div style="background:#FBFAF5;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:13px">
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Anggaran ringkas</div>
+            <div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#33474C">Makan &amp; minum</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">1,24jt</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#33474C">Transport</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">980rb</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#33474C">Tiket &amp; atraksi</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">640rb</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#33474C">Penginapan</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">650rb</span></div>
+            <div style="border-top:1px solid #EDE9DA;padding-top:11px;display:flex;justify-content:space-between;font-size:14px"><span style="font-weight:700;color:#10262B">Total</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:#10262B">Rp 3.510.000</span></div>
+            <div style="font-size:12px;color:#6C7C7D;line-height:1.5">Nilai apa adanya dari trip yang sudah jalan, bukan estimasi.</div>
+          </div>
+
+          <div style="background:#FBFAF5;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:11px">
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">Barang yang dibawa</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;font-size:12px;font-weight:600">
+              <span style="background:#fff;border:1px solid #EDE9DA;border-radius:999px;padding:6px 11px;color:#33474C">Sandal gunung</span>
+              <span style="background:#fff;border:1px solid #EDE9DA;border-radius:999px;padding:6px 11px;color:#33474C">Powerbank</span>
+              <span style="background:#fff;border:1px solid #EDE9DA;border-radius:999px;padding:6px 11px;color:#33474C">Baju renang</span>
+              <span style="background:#fff;border:1px solid #EDE9DA;border-radius:999px;padding:6px 11px;color:#33474C">Obat pribadi</span>
+              <span style="background:#fff;border:1px solid #EDE9DA;border-radius:999px;padding:6px 11px;color:#33474C">Jaket tipis</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1000px;display:flex;flex-direction:column;gap:9px;color:#33474C;font-size:14px;line-height:1.65">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6C7C7D">Yang masih terbuka</div>
+    <div>Layar 4 · lembar detail aktivitas belum digambar — di desktop isinya sudah muncul sebagai panel kanan di <a href="#4b">4b</a>, jadi perlu diputuskan apakah versi ponselnya cukup bottom sheet dari kartu yang sama.</div>
+    <div>Keadaan kosong dan mode gelap belum termasuk di turn ini. Keduanya diminta brief §7 dan §4 — bilang saja mana yang mau lebih dulu.</div>
+  </div>
+</section>
+
+<section style="padding:16px 64px 40px;display:flex;flex-direction:column;gap:44px">
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:900px">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6C7C7D">Turn 3 · token dari prototipe kamu · lebih ringan</div>
+    <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1.08;color:#10262B">Jalan — beranda &amp; ringkasan, versi ringan</div>
+    <div style="font-size:15px;line-height:1.6;color:#33474C;text-wrap:pretty">Palet teal–coral–paper dan tiga huruf dari <code style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:#F1EEE1;padding:2px 6px;border-radius:6px">jalan-prototype.html</code>: Fraunces untuk judul, Plus Jakarta untuk isi, IBM Plex Mono untuk rupiah. Motif horizon dipakai sebagai mat pastel per jenis tempat — pantai, gunung, sawah, kota — jadi kartu terasa ilustratif tanpa perlu 20 gambar. Lihat <a href="#3a">3a</a> beranda dan <a href="#3b">3b</a> ringkasan.</div>
+  </div>
+
+  <div id="3a" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#0E6E76;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;letter-spacing:.04em">3a</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Beranda · 1440 × 1130</div>
+      <div style="font-size:14px;color:#6C7C7D">Nav atas, kartu bermat pastel, angka mono.</div>
+    </div>
+
+    <div style="width:1440px;height:1130px;border-radius:20px;overflow:hidden;background:#FBFAF5;box-shadow:0 40px 90px -40px rgba(16,38,43,.4);display:flex;flex-direction:column">
+
+      <div style="height:68px;flex:0 0 68px;padding:0 32px;display:flex;align-items:center;gap:26px;border-bottom:1px solid #EDE9DA;background:#fff">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:30px;height:30px;border-radius:9px;background:#0E6E76;position:relative;overflow:hidden">
+            <div style="position:absolute;left:5px;top:6px;width:8px;height:8px;border-radius:50%;background:#F6E6CC"></div>
+            <div style="position:absolute;left:-2px;bottom:8px;width:22px;height:12px;border-radius:12px 12px 0 0;background:#3E8C6E"></div>
+            <div style="position:absolute;left:6px;bottom:0;width:26px;height:8px;border-radius:10px 10px 0 0;background:#F0713A"></div>
+          </div>
+          <div style="font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#10262B">Jalan</div>
+        </div>
+        <div style="display:flex;gap:4px;font-size:14px;font-weight:600">
+          <div style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:8px 16px">Beranda</div>
+          <div style="color:#33474C;padding:8px 16px">Templat</div>
+          <div style="color:#33474C;padding:8px 16px">Anggaran</div>
+          <div style="color:#33474C;padding:8px 16px">Arsip</div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
+          <div style="width:250px;background:#FBFAF5;border:1px solid #E4DECB;border-radius:999px;padding:9px 16px;font-size:14px;color:#6C7C7D">Cari trip atau tempat</div>
+          <div style="background:#F0713A;color:#fff;border-radius:999px;padding:10px 20px;font-size:14px;font-weight:700;box-shadow:0 8px 18px -8px rgba(240,113,58,.7)">+ Trip baru</div>
+          <div style="width:36px;height:36px;border-radius:50%;background:#F6E6CC;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#33474C">RA</div>
+        </div>
+      </div>
+
+      <div style="flex:1;min-height:0;padding:26px 32px 0;display:flex;flex-direction:column;gap:20px;overflow:hidden">
+
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <div>
+            <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;letter-spacing:-.02em;color:#10262B">Halo, Rina</div>
+            <div style="font-size:15px;color:#33474C;margin-top:5px">Satu trip sedang jalan dan tiga rencana menunggu tanggal.</div>
+          </div>
+          <div style="display:flex;gap:10px;font-size:13px;font-weight:600">
+            <div style="background:#fff;border:1px solid #E4DECB;border-radius:999px;padding:9px 15px;color:#33474C">Semua</div>
+            <div style="background:#fff;border:1px solid #E4DECB;border-radius:999px;padding:9px 15px;color:#33474C">Sedang jalan</div>
+            <div style="background:#fff;border:1px solid #E4DECB;border-radius:999px;padding:9px 15px;color:#33474C">Rencana</div>
+          </div>
+        </div>
+
+        <div style="flex:none;background:#fff;border:1px solid #EDE9DA;border-radius:26px;display:flex;overflow:hidden;box-shadow:0 18px 40px -28px rgba(16,38,43,.3)">
+          <div style="width:392px;flex:0 0 392px;position:relative;background:#DEEEEC;overflow:hidden;display:flex;align-items:center;justify-content:center">
+            <div style="position:absolute;left:36px;top:34px;width:52px;height:52px;border-radius:50%;background:#F6E6CC"></div>
+            <div style="position:absolute;left:-40px;bottom:-30px;width:280px;height:150px;border-radius:150px 150px 0 0;background:#BEDCD8"></div>
+            <div style="position:absolute;right:-50px;bottom:-40px;width:250px;height:130px;border-radius:130px 130px 0 0;background:#A9CFCA"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;height:44px;background:#0E6E76;opacity:.14"></div>
+            <div style="position:relative;width:184px;height:184px;border-radius:50%;overflow:hidden;border:7px solid #fff;box-shadow:0 16px 34px -16px rgba(16,38,43,.45);background-image:url('assets/cover-sumba.png');background-size:cover;background-position:center 60%"></div>
+            <div style="position:absolute;top:22px;right:22px;background:#fff;border-radius:999px;padding:7px 13px;font-size:12px;font-weight:700;color:#0A4F55">Hari 3 dari 4</div>
+          </div>
+          <div style="flex:1;min-width:0;padding:26px 28px;display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+              <div>
+                <div style="display:flex;gap:9px;align-items:center">
+                  <div style="background:#DCEEE4;color:#2F6B54;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700">Sedang jalan</div>
+                  <div style="font-size:13px;color:#6C7C7D">Pantai · 3 orang</div>
+                </div>
+                <div style="font-family:'Fraunces',serif;font-size:30px;font-weight:600;letter-spacing:-.02em;color:#10262B;margin-top:9px">Sumba Timur</div>
+                <div style="font-size:14px;color:#33474C;margin-top:4px">Air Terjun Tanggedu, Sumba Timur · Sab 12 – Sel 15 Sep</div>
+              </div>
+              <div style="background:{{ funBg }};color:{{ funFg }};border-radius:999px;padding:9px 15px;font-size:13px;font-weight:700;white-space:nowrap;font-family:'IBM Plex Mono',monospace">{{ overCopy }}</div>
+            </div>
+
+            <div style="display:flex;gap:14px">
+              <div style="flex:1;background:#FBFAF5;border-radius:18px;padding:16px 18px">
+                <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Terpakai</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:600;color:#C85A28;margin-top:6px;letter-spacing:-.02em">Rp 3.510.000</div>
+                <div style="font-size:13px;color:#33474C;margin-top:4px;font-family:'IBM Plex Mono',monospace">dari Rp 3.100.000</div>
+              </div>
+              <div style="flex:1;background:#FBFAF5;border-radius:18px;padding:16px 18px">
+                <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Per orang</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:600;color:#10262B;margin-top:6px;letter-spacing:-.02em">Rp 1.170.000</div>
+                <div style="font-size:13px;color:#33474C;margin-top:4px">3 orang, sudah termasuk kapal</div>
+              </div>
+              <div style="flex:1;background:#FBFAF5;border-radius:18px;padding:16px 18px">
+                <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Barang</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:27px;font-weight:600;color:#10262B;margin-top:6px">3 / 8</div>
+                <div style="font-size:13px;color:#33474C;margin-top:4px">2 wajib belum dicentang</div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="height:12px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex"><div style="width:88%;background:#F0713A"></div><div style="width:12%;background:#C85A28"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:#6C7C7D"><span>Rencana habis di hari 3</span><span style="font-family:'IBM Plex Mono',monospace">113%</span></div>
+            </div>
+
+            <div style="margin-top:auto;border-top:1px solid #EDE9DA;padding-top:16px;display:flex;align-items:center;gap:16px">
+              <div style="width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:#FCE3D3;display:flex;align-items:center;justify-content:center">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#C85A28" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:600;color:#10262B">15.00 · Kapal ke Gili Trawangan</div>
+                <div style="font-size:13px;color:#6C7C7D;margin-top:2px;font-family:'IBM Plex Mono',monospace">350rb → Transport</div>
+              </div>
+              <div style="display:flex;gap:10px;font-size:14px;font-weight:700">
+                <div style="background:#F0713A;color:#fff;border-radius:999px;padding:11px 20px;box-shadow:0 8px 18px -8px rgba(240,113,58,.65)">{{ logCta }}</div>
+                <div style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:11px 20px">Buka trip</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#10262B">Rencana berikutnya</div>
+          <div style="font-size:13px;color:#6C7C7D">Urut tanggal mulai</div>
+        </div>
+
+        <div style="flex:none;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px">
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:24px;overflow:hidden;box-shadow:0 14px 30px -24px rgba(16,38,43,.35)">
+            <div style="height:132px;background:#DCEEE4;position:relative;display:flex;align-items:flex-end;justify-content:center">
+              <div style="position:absolute;left:26px;top:22px;width:38px;height:38px;border-radius:50%;background:#F6E6CC"></div>
+              <div style="position:absolute;left:-30px;bottom:0;width:200px;height:74px;border-radius:0;background:#C2E0CE;clip-path:polygon(0 100%,0 46%,26% 22%,54% 52%,78% 30%,100% 58%,100% 100%)"></div>
+              <div style="position:absolute;right:-24px;bottom:0;width:180px;height:56px;background:#AED3BC;clip-path:polygon(0 100%,0 60%,34% 26%,68% 58%,100% 34%,100% 100%)"></div>
+              <div style="position:relative;width:104px;height:104px;border-radius:50%;overflow:hidden;border:6px solid #fff;transform:translateY(30px);box-shadow:0 12px 24px -14px rgba(16,38,43,.45);background-image:url('assets/cover-ubud.png');background-size:cover;background-position:center"></div>
+              <div style="position:absolute;top:16px;right:16px;background:#fff;border-radius:999px;padding:6px 11px;font-size:11px;font-weight:700;color:#2F6B54">12 hari lagi</div>
+            </div>
+            <div style="padding:40px 20px 20px;display:flex;flex-direction:column;gap:12px;text-align:center">
+              <div>
+                <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#10262B">Ubud &amp; Tegallalang</div>
+                <div style="font-size:13px;color:#6C7C7D;margin-top:4px">Sawah · Tegallalang, Gianyar</div>
+              </div>
+              <div style="display:flex;justify-content:center;gap:8px;font-size:12px;font-weight:600">
+                <span style="background:#FBFAF5;border-radius:999px;padding:6px 12px;color:#33474C;font-family:'IBM Plex Mono',monospace">26–28 Sep</span>
+                <span style="background:#FBFAF5;border-radius:999px;padding:6px 12px;color:#33474C">14 aktivitas</span>
+              </div>
+              <div style="border-top:1px solid #EDE9DA;padding-top:13px;display:flex;justify-content:space-between;align-items:center">
+                <div style="text-align:left"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Rencana</div><div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#10262B;margin-top:2px">Rp 1.850.000</div></div>
+                <div style="font-size:12px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace;text-align:right">Barang 4/12</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:24px;overflow:hidden;box-shadow:0 14px 30px -24px rgba(16,38,43,.35)">
+            <div style="height:132px;background:#F6E6CC;position:relative;display:flex;align-items:flex-end;justify-content:center">
+              <div style="position:absolute;left:26px;top:22px;width:38px;height:38px;border-radius:50%;background:#FCE3D3"></div>
+              <div style="position:absolute;left:-20px;bottom:0;width:220px;height:82px;background:#EBD3A6;clip-path:polygon(0 100%,0 62%,30% 12%,58% 62%,100% 26%,100% 100%)"></div>
+              <div style="position:absolute;right:-30px;bottom:0;width:190px;height:60px;background:#DFC08A;clip-path:polygon(0 100%,0 54%,40% 18%,74% 56%,100% 30%,100% 100%)"></div>
+              <div style="position:relative;width:104px;height:104px;border-radius:50%;overflow:hidden;border:6px solid #fff;transform:translateY(30px);box-shadow:0 12px 24px -14px rgba(16,38,43,.45);background-image:url('assets/cover-bromo.png');background-size:cover;background-position:center 58%"></div>
+              <div style="position:absolute;top:16px;right:16px;background:#fff;border-radius:999px;padding:6px 11px;font-size:11px;font-weight:700;color:#9A6417">20 hari lagi</div>
+            </div>
+            <div style="padding:40px 20px 20px;display:flex;flex-direction:column;gap:12px;text-align:center">
+              <div>
+                <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#10262B">Bromo Sunrise</div>
+                <div style="font-size:13px;color:#6C7C7D;margin-top:4px">Gunung · Cemoro Lawang, Probolinggo</div>
+              </div>
+              <div style="display:flex;justify-content:center;gap:8px;font-size:12px;font-weight:600">
+                <span style="background:#FBFAF5;border-radius:999px;padding:6px 12px;color:#33474C;font-family:'IBM Plex Mono',monospace">4–8 Okt</span>
+                <span style="background:#FBFAF5;border-radius:999px;padding:6px 12px;color:#33474C">Dari templat</span>
+              </div>
+              <div style="border-top:1px solid #EDE9DA;padding-top:13px;display:flex;justify-content:space-between;align-items:center">
+                <div style="text-align:left"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Rencana</div><div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#10262B;margin-top:2px">Rp 4.600.000</div></div>
+                <div style="font-size:12px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace;text-align:right">Barang 0/16</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:24px;overflow:hidden;box-shadow:0 14px 30px -24px rgba(16,38,43,.35)">
+            <div style="height:132px;background:#FCE3D3;position:relative;display:flex;align-items:flex-end;justify-content:center">
+              <div style="position:absolute;left:26px;top:22px;width:38px;height:38px;border-radius:50%;background:#F6E6CC"></div>
+              <div style="position:absolute;left:16px;bottom:0;display:flex;align-items:flex-end;gap:7px">
+                <span style="width:22px;height:44px;border-radius:5px 5px 0 0;background:#F4C9AE"></span>
+                <span style="width:26px;height:64px;border-radius:5px 5px 0 0;background:#EFB894"></span>
+                <span style="width:18px;height:34px;border-radius:5px 5px 0 0;background:#F4C9AE"></span>
+              </div>
+              <div style="position:absolute;right:14px;bottom:0;display:flex;align-items:flex-end;gap:7px">
+                <span style="width:20px;height:38px;border-radius:5px 5px 0 0;background:#F4C9AE"></span>
+                <span style="width:28px;height:58px;border-radius:5px 5px 0 0;background:#EFB894"></span>
+              </div>
+              <div style="position:relative;width:104px;height:104px;border-radius:50%;overflow:hidden;border:6px solid #fff;transform:translateY(30px);box-shadow:0 12px 24px -14px rgba(16,38,43,.45);background-image:url('assets/cover-kota.png');background-size:cover;background-position:center"></div>
+              <div style="position:absolute;top:16px;right:16px;background:#fff;border-radius:999px;padding:6px 11px;font-size:11px;font-weight:700;color:#C85A28">Draf</div>
+            </div>
+            <div style="padding:40px 20px 20px;display:flex;flex-direction:column;gap:12px;text-align:center">
+              <div>
+                <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#10262B">Bali Selatan</div>
+                <div style="font-size:13px;color:#6C7C7D;margin-top:4px">Kota · Seminyak &amp; Uluwatu, Badung</div>
+              </div>
+              <div style="display:flex;justify-content:center;gap:8px;font-size:12px;font-weight:600">
+                <span style="background:#FBFAF5;border-radius:999px;padding:6px 12px;color:#33474C;font-family:'IBM Plex Mono',monospace">21–24 Nov</span>
+                <span style="background:#FBFAF5;border-radius:999px;padding:6px 12px;color:#33474C">Tanggal belum pasti</span>
+              </div>
+              <div style="border-top:1px solid #EDE9DA;padding-top:13px;display:flex;justify-content:space-between;align-items:center">
+                <div style="text-align:left"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Rencana</div><div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:#10262B;margin-top:2px">Rp 2.700.000</div></div>
+                <div style="font-size:12px;color:#6C7C7D;text-align:right">Lanjutkan</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:none;margin-top:auto;margin-bottom:24px;background:#0E6E76;border-radius:22px;padding:20px 24px;display:flex;align-items:center;gap:24px;color:#fff">
+          <div style="min-width:0">
+            <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600">Rak templat kurasi</div>
+            <div style="font-size:13.5px;color:#CFE3E1;margin-top:4px">18 trip Indonesia, anggaran dan daftar barang sudah terisi. Ganti tanggal, langsung jalan.</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:9px;font-size:13px;font-weight:600">
+            <span style="background:rgba(255,255,255,.14);border-radius:999px;padding:9px 14px">Sumba 4 hari</span>
+            <span style="background:rgba(255,255,255,.14);border-radius:999px;padding:9px 14px">Bromo–Ijen 5 hari</span>
+            <span style="background:rgba(255,255,255,.14);border-radius:999px;padding:9px 14px">Ubud hemat 3 hari</span>
+            <span style="background:#fff;color:#0A4F55;border-radius:999px;padding:9px 16px;font-weight:700">Lihat semua</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="3b" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#0E6E76;color:#fff;font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;letter-spacing:.04em">3b</div>
+      <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:#10262B">Ringkasan trip · 1440 × 1120</div>
+      <div style="font-size:14px;color:#6C7C7D">Hari sebagai pil bergulir, turunan ditandai panah teal.</div>
+    </div>
+
+    <div style="width:1440px;height:1120px;border-radius:20px;overflow:hidden;background:#FBFAF5;box-shadow:0 40px 90px -40px rgba(16,38,43,.4);display:flex;flex-direction:column">
+
+      <div style="height:64px;flex:0 0 64px;padding:0 30px;display:flex;align-items:center;gap:16px;background:#fff;border-bottom:1px solid #EDE9DA">
+        <div style="width:34px;height:34px;border-radius:50%;background:#FBFAF5;border:1px solid #E4DECB;display:flex;align-items:center;justify-content:center">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#33474C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+        </div>
+        <div style="font-size:14px;color:#6C7C7D">Trip saya <span style="color:#C4B29E">/</span> <span style="color:#10262B;font-weight:600">Sumba Timur</span></div>
+        <div style="margin-left:auto;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600">
+          <span style="background:#F6E6CC;color:#9A6417;border-radius:999px;padding:8px 13px">Tersimpan di perangkat</span>
+          <span style="background:#fff;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:8px 14px">Bagikan tautan</span>
+          <span style="background:#F0713A;color:#fff;border-radius:999px;padding:9px 16px;font-weight:700;box-shadow:0 8px 18px -8px rgba(240,113,58,.6)">{{ logCta }}</span>
+        </div>
+      </div>
+
+      <div style="padding:22px 30px 0">
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:24px;padding:18px;display:flex;gap:22px;align-items:center;box-shadow:0 16px 36px -30px rgba(16,38,43,.4)">
+          <div style="width:196px;height:132px;flex:0 0 196px;border-radius:18px;overflow:hidden;background-image:url('assets/cover-sumba.png');background-size:cover;background-position:center 60%"></div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;gap:9px;align-items:center">
+              <span style="background:#DCEEE4;color:#2F6B54;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700">Hari 3 dari 4</span>
+              <span style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700">Pantai</span>
+              <span style="font-size:13px;color:#6C7C7D">3 orang</span>
+            </div>
+            <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;letter-spacing:-.02em;color:#10262B;margin-top:9px">Sumba Timur</div>
+            <div style="font-size:14px;color:#33474C;margin-top:4px">Sabtu, 12 September – Selasa, 15 September · Air Terjun Tanggedu, Sumba Timur</div>
+          </div>
+          <div style="width:300px;flex:0 0 300px;background:#FBFAF5;border-radius:18px;padding:16px 18px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Terpakai</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:#C85A28;margin-top:5px;letter-spacing:-.02em">Rp 3.510.000</div>
+                <div style="font-size:12.5px;color:#33474C;margin-top:3px;font-family:'IBM Plex Mono',monospace">rencana Rp 3.100.000</div>
+              </div>
+              <div style="background:{{ funBg }};color:{{ funFg }};border-radius:999px;padding:6px 11px;font-size:11.5px;font-weight:700;font-family:'IBM Plex Mono',monospace;white-space:nowrap">{{ overShort }}</div>
+            </div>
+            <div style="height:10px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex;margin-top:12px"><div style="width:88%;background:#F0713A"></div><div style="width:12%;background:#C85A28"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:18px 30px 0;display:flex;gap:10px;align-items:center">
+        <div style="background:#fff;border:1px solid #E4DECB;border-radius:999px;padding:10px 16px;display:flex;gap:10px;align-items:baseline"><span style="font-size:13px;color:#33474C;font-weight:600">Sab 12</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6C7C7D">820rb</span></div>
+        <div style="background:#fff;border:1px solid #E4DECB;border-radius:999px;padding:10px 16px;display:flex;gap:10px;align-items:baseline"><span style="font-size:13px;color:#33474C;font-weight:600">Min 13</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6C7C7D">1,1jt</span></div>
+        <div style="background:#0E6E76;border-radius:999px;padding:10px 18px;display:flex;gap:10px;align-items:baseline;box-shadow:0 10px 20px -10px rgba(14,110,118,.7)"><span style="font-size:13px;color:#fff;font-weight:700">Sen 14</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#CFE3E1">1,59jt</span></div>
+        <div style="background:#fff;border:1px solid #E4DECB;border-radius:999px;padding:10px 16px;display:flex;gap:10px;align-items:baseline"><span style="font-size:13px;color:#33474C;font-weight:600">Sel 15</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6C7C7D">—</span></div>
+        <div style="border:1px dashed #D8D0BB;border-radius:999px;padding:10px 16px;font-size:13px;color:#6C7C7D">+ Tambah hari</div>
+        <div style="margin-left:auto;font-size:12.5px;color:#6C7C7D">Trip panjang: baris ini bergulir, nilai per hari tetap ikut</div>
+      </div>
+
+      <div style="flex:1;min-height:0;padding:20px 30px 26px;display:flex;gap:20px">
+
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end">
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#10262B">Senin, 14 September</div>
+              <div style="font-size:13px;color:#6C7C7D;margin-top:3px;font-family:'IBM Plex Mono',monospace">4 aktivitas · 1.590.000 masuk anggaran</div>
+            </div>
+            <div style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700">+ Tambah aktivitas</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:15px 17px;display:flex;gap:15px;align-items:center">
+            <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#F6E6CC;display:flex;align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#9A6417" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v7a2 2 0 002 2v9M7 3v7M10 3v7"></path><path d="M17 3c-1.7 0-3 1.6-3 4.5S15.3 12 17 12v9"></path></svg>
+            </div>
+            <div style="width:52px;flex:0 0 52px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#33474C">07.30</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:15px;font-weight:600;color:#10262B">Sarapan di Warung Ibu Nur</div>
+              <div style="font-size:13px;color:#6C7C7D;margin-top:2px">Makan &amp; minum · Waingapu</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#10262B">25.000</div><div style="font-size:11.5px;color:#6C7C7D;margin-top:2px">per orang</div></div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:15px 17px;display:flex;gap:15px;align-items:flex-start">
+            <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#DCEEE4;display:flex;align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#2F6B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg>
+            </div>
+            <div style="width:52px;flex:0 0 52px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#33474C;padding-top:12px">10.00</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:15px;font-weight:600;color:#10262B">Air Terjun Tanggedu</div>
+              <div style="font-size:13px;color:#6C7C7D;margin-top:2px">Tiket &amp; atraksi · ojek 40 menit dari jalan utama</div>
+              <div style="display:flex;gap:7px;margin-top:10px;font-size:11.5px;font-weight:600">
+                <span style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:999px;padding:5px 10px;color:#33474C">Outfit terisi</span>
+                <span style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:999px;padding:5px 10px;color:#33474C">Catatan · sandal gunung</span>
+              </div>
+            </div>
+            <div style="text-align:right;padding-top:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#10262B">150.000</div><div style="font-size:11.5px;color:#6C7C7D;margin-top:2px">3 orang</div></div>
+          </div>
+
+          <div style="background:#fff;border:2px solid #0E6E76;border-radius:18px;padding:15px 17px;display:flex;gap:15px;align-items:flex-start;box-shadow:0 14px 28px -22px rgba(14,110,118,.9)">
+            <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#DEEEEC;display:flex;align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#0A4F55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l1.8-5.4A2 2 0 016.7 8h10.6a2 2 0 011.9 1.6L21 15"></path><path d="M2 15h20l-1.5 4H3.5L2 15z"></path></svg>
+            </div>
+            <div style="width:52px;flex:0 0 52px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:700;color:#10262B;padding-top:12px">15.00</div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;gap:9px;align-items:center">
+                <div style="font-size:15px;font-weight:700;color:#10262B">Kapal ke Gili Trawangan</div>
+                <div style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:700">Baru ditambahkan</div>
+              </div>
+              <div style="font-size:13px;color:#6C7C7D;margin-top:2px">Transit · Pelabuhan Waingapu</div>
+              <div style="margin-top:10px;background:#DEEEEC;border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center">
+                <span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700;font-size:14px">↳</span>
+                <span style="font-size:13px;color:#0A4F55">Masuk ke <strong style="font-weight:700">Transport</strong> — kategori itu jadi 78% terpakai</span>
+              </div>
+            </div>
+            <div style="text-align:right;padding-top:10px"><div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;color:#10262B">350.000</div><div style="font-size:11.5px;color:#6C7C7D;margin-top:2px">3 orang</div></div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:15px 17px;display:flex;gap:15px;align-items:center">
+            <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;background:#FCE3D3;display:flex;align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#C85A28" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M6 6l1.4 1.4M16.6 16.6L18 18M18 6l-1.4 1.4M7.4 16.6L6 18"></path></svg>
+            </div>
+            <div style="width:52px;flex:0 0 52px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#33474C">19.30</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:15px;font-weight:600;color:#10262B">Jalan sore di pantai Walakiri</div>
+              <div style="font-size:13px;color:#6C7C7D;margin-top:2px">Santai · tanpa biaya</div>
+            </div>
+            <div style="font-size:13.5px;color:#6C7C7D">—</div>
+          </div>
+
+          <div style="border:1px dashed #D8D0BB;border-radius:18px;padding:14px 17px;display:flex;justify-content:space-between;align-items:center;font-size:13.5px;color:#6C7C7D">
+            <span>Tambah aktivitas ke Senin, 14 September</span><span style="font-weight:600;color:#33474C">Biaya opsional</span>
+          </div>
+        </div>
+
+        <div style="width:352px;flex:0 0 352px;display:flex;flex-direction:column;gap:14px;min-height:0">
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:#10262B">Anggaran</div>
+              <div style="background:{{ funBg }};color:{{ funFg }};border-radius:999px;padding:5px 11px;font-size:11.5px;font-weight:700;font-family:'IBM Plex Mono',monospace">{{ overShort }}</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:13px">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#33474C">Makan &amp; minum</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">1,24jt / 1,0jt</span></div>
+                <div style="height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex"><div style="width:82%;background:#F0713A"></div><div style="width:18%;background:#C85A28"></div></div>
+                <div style="display:flex;gap:14px;font-size:11.5px;color:#6C7C7D"><span style="display:flex;gap:5px"><span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">↳</span>aktivitas 890rb</span><span style="display:flex;gap:5px"><span style="width:9px;height:9px;border-radius:3px;border:1.5px solid #C4B29E;margin-top:3px"></span>manual 350rb</span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#33474C">Transport</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">980rb / 1,25jt</span></div>
+                <div style="height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="width:78%;height:8px;background:#D98F3B"></div></div>
+                <div style="font-size:11.5px;color:#6C7C7D;display:flex;gap:5px"><span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">↳</span>aktivitas 980rb · 4 baris</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#33474C">Tiket &amp; atraksi</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#10262B">640rb / 500rb</span></div>
+                <div style="height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex"><div style="width:78%;background:#F0713A"></div><div style="width:22%;background:#C85A28"></div></div>
+                <div style="font-size:11.5px;color:#6C7C7D;display:flex;gap:5px"><span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">↳</span>aktivitas 640rb · 3 baris</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#6C7C7D">Penginapan</span><span style="font-family:'IBM Plex Mono',monospace;color:#6C7C7D">650rb / 650rb</span></div>
+                <div style="height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="width:100%;height:8px;background:#C9C2AE"></div></div>
+                <div style="font-size:11.5px;color:#6C7C7D">Terpakai penuh · dibayar di muka</div>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid #EDE9DA;padding-top:11px;display:flex;justify-content:space-between;font-size:11.5px;color:#6C7C7D">
+              <span style="display:flex;gap:5px"><span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">↳</span>baris turunan dari aktivitas</span>
+              <span style="font-weight:600;color:#0A4F55">Buka anggaran</span>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:#10262B">Pengeluaran terakhir</div>
+              <div style="font-size:12px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace">14</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="display:flex;gap:8px;color:#33474C"><span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">↳</span>Kapal ke Gili Trawangan</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600">350.000</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="display:flex;gap:8px;color:#33474C"><span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">↳</span>Air Terjun Tanggedu</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600">150.000</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;background:#F6E6CC;border-radius:12px;padding:9px 11px;color:#9A6417"><span>Ojek pagi · belum ada kategori</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:700">60.000</span></div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:#10262B">Barang bawaan</div>
+              <div style="font-size:12px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace">3 / 8</div>
+            </div>
+            <div style="height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="width:37%;height:8px;background:#3E8C6E"></div></div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;font-size:11.5px;font-weight:600">
+              <span style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:999px;padding:6px 11px;color:#33474C">Sandal gunung</span>
+              <span style="background:#FBFAF5;border:1px solid #EDE9DA;border-radius:999px;padding:6px 11px;color:#33474C">Powerbank</span>
+              <span style="background:#FCE3D3;border-radius:999px;padding:6px 11px;color:#C85A28">Wajib · KTP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1000px;display:flex;flex-direction:column;gap:9px;color:#33474C;font-size:14px;line-height:1.65">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6C7C7D">Cara arah ini tetap patuh brief</div>
+    <div><strong style="color:#10262B;font-weight:700">Ilustrasi terbatas.</strong> Mat pastel + bentuk horizon per jenis tempat (pantai, sawah, gunung, kota) — empat latar, bukan 20 gambar. Foto masuk sebagai medali bulat, jadi kartu tetap utuh kalau foto belum ada.</div>
+    <div><strong style="color:#10262B;font-weight:700">Angka tetap tenang.</strong> Semua rupiah pakai IBM Plex Mono di atas putih atau paper; coral hanya untuk status lewat anggaran dan satu tombol utama; teal untuk penanda turunan <span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span>.</div>
+  </div>
+</section>
+
+<section style="padding:16px 64px 110px;display:flex;flex-direction:column;gap:44px">
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:900px">
+    <div style="font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#9C8874">Turn 2 · desktop-first · arah A “warm object”</div>
+    <div style="font-size:38px;font-weight:500;letter-spacing:-.025em;line-height:1.1">Jalan — Beranda trip &amp; Ringkasan trip</div>
+    <div style="font-size:15px;line-height:1.6;color:#6E5C4E;text-wrap:pretty">Ukuran kerja 1440. Dua layar penuh: <a href="#2a">2a</a> beranda trip, <a href="#2b">2b</a> ringkasan trip — plus jawaban desain untuk §10.3, garis anggaran turunan. Sampul memakai foto yang kamu kirim; kategori memakai tint permukaan, angka selalu di atas putih-hangat (§4 aturan 1). Gradien hanya di latar beranda (§4 aturan 2).</div>
+  </div>
+
+  <div id="2a" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#241C16;color:#F7EDDF;font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;letter-spacing:.04em">2a</div>
+      <div style="font-size:22px;font-weight:500">Beranda trip · 1440 × 940</div>
+      <div style="font-size:14px;color:#6E5C4E">Trip yang sedang jalan naik jadi objek utama; sisanya rak.</div>
+    </div>
+
+    <div style="width:1440px;height:940px;border-radius:16px;overflow:hidden;background:#FCF7F0;box-shadow:0 40px 90px -40px rgba(36,28,22,.45);display:flex">
+
+      <div style="width:248px;flex:0 0 248px;background:#F3E8D9;border-right:1px solid rgba(36,28,22,.07);padding:26px 20px;display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:30px;height:30px;border-radius:9px;background:#241C16;color:#F7EDDF;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700">J</div>
+          <div style="font-size:19px;font-weight:600;letter-spacing:-.02em">Jalan</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:14px">
+          <div style="background:#FFFCF7;border-radius:10px;padding:10px 12px;font-weight:600;display:flex;justify-content:space-between;box-shadow:0 2px 8px -4px rgba(36,28,22,.2)"><span>Beranda</span><span style="color:#9C8874;font-weight:500;font-variant-numeric:tabular-nums">4</span></div>
+          <div style="padding:10px 12px;color:#6E5C4E;display:flex;justify-content:space-between"><span>Templat kurasi</span><span style="color:#9C8874;font-variant-numeric:tabular-nums">18</span></div>
+          <div style="padding:10px 12px;color:#6E5C4E">Arsip</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9C8874">Sedang jalan</div>
+          <div style="background:#FFFCF7;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:9px">
+            <div style="font-size:14px;font-weight:600">Sumba Timur</div>
+            <div style="font-size:12px;color:#6E5C4E;font-variant-numeric:tabular-nums">Hari 3 dari 4 · 3 orang</div>
+            <div style="height:5px;border-radius:99px;background:#E7D8C2;overflow:hidden;display:flex"><div style="width:88%;background:#B8492A"></div><div style="width:12%;background:#8A3419"></div></div>
+            <div style="font-size:12px;font-weight:600;color:#B8492A;font-variant-numeric:tabular-nums">{{ overShort }}</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9C8874">Rencana berikut</div>
+          <div style="display:flex;flex-direction:column;gap:2px;font-size:13px;color:#6E5C4E">
+            <div style="display:flex;justify-content:space-between;padding:7px 2px"><span>Ubud &amp; Tegallalang</span><span style="font-variant-numeric:tabular-nums;color:#9C8874">26 Sep</span></div>
+            <div style="display:flex;justify-content:space-between;padding:7px 2px"><span>Bromo Sunrise</span><span style="font-variant-numeric:tabular-nums;color:#9C8874">4 Okt</span></div>
+            <div style="display:flex;justify-content:space-between;padding:7px 2px"><span>Bali Selatan</span><span style="font-variant-numeric:tabular-nums;color:#9C8874">21 Nov</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px">
+          <div style="background:#FBEFE0;border-radius:12px;padding:12px;font-size:12px;line-height:1.5;color:#6E5C4E">Data trip tersimpan di perangkat ini. Sinkron otomatis belum ada di v1.</div>
+          <div style="display:flex;gap:10px;align-items:center;font-size:14px">
+            <div style="width:30px;height:30px;border-radius:50%;background:#DFCBB2;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#5A4636">RA</div>
+            <div style="min-width:0"><div style="font-weight:500">Rina A.</div><div style="font-size:12px;color:#9C8874">Bendahara · 3 trip</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:0;position:relative;display:flex;flex-direction:column">
+        <div style="position:absolute;inset:0;background:radial-gradient(70% 55% at 8% -6%, #FBE0BE 0%, rgba(251,224,190,0) 62%), radial-gradient(60% 50% at 92% 0%, #F6D6CD 0%, rgba(246,214,205,0) 60%), radial-gradient(50% 40% at 60% 100%, #F4E3CB 0%, rgba(244,227,203,0) 70%), #FCF7F0"></div>
+
+        <div style="position:relative;padding:24px 34px 0;display:flex;justify-content:space-between;align-items:center;gap:20px">
+          <div>
+            <div style="font-size:26px;font-weight:500;letter-spacing:-.02em">Trip saya</div>
+            <div style="font-size:14px;color:#6E5C4E;margin-top:3px">1 sedang jalan · 3 rencana · total anggaran Rp 12.250.000</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div style="background:rgba(255,252,247,.9);border:1px solid rgba(36,28,22,.09);border-radius:11px;padding:10px 14px;font-size:14px;color:#9C8874;width:230px">Cari trip atau tempat</div>
+            <div style="background:rgba(255,252,247,.9);border:1px solid rgba(36,28,22,.09);border-radius:11px;padding:10px 14px;font-size:14px;font-weight:500">Terakhir diubah</div>
+            <div style="background:#241C16;color:#F7EDDF;border-radius:11px;padding:11px 18px;font-size:14px;font-weight:600;box-shadow:0 10px 22px -12px rgba(36,28,22,.6)">Tambah trip</div>
+          </div>
+        </div>
+
+        <div style="position:relative;padding:22px 34px 0">
+          <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.07);border-radius:20px;overflow:hidden;display:flex;box-shadow:0 20px 44px -26px rgba(36,28,22,.35)">
+            <div style="width:452px;flex:0 0 452px;position:relative;background-image:url('assets/cover-sumba.png');background-size:cover;background-position:center 62%">
+              <div style="position:absolute;inset:0;background:linear-gradient(105deg, rgba(36,28,22,.62) 0%, rgba(36,28,22,.18) 62%, rgba(36,28,22,0) 100%)"></div>
+              <div style="position:relative;height:100%;padding:22px;display:flex;flex-direction:column;justify-content:space-between;color:#FFF9F0">
+                <div style="display:flex;gap:8px">
+                  <div style="background:rgba(255,249,240,.94);color:#241C16;font-size:12px;font-weight:600;padding:6px 10px;border-radius:8px">Hari 3 dari 4</div>
+                  <div style="background:rgba(36,28,22,.55);font-size:12px;font-weight:500;padding:6px 10px;border-radius:8px;backdrop-filter:blur(3px)">Sedang jalan</div>
+                </div>
+                <div>
+                  <div style="font-size:30px;font-weight:600;letter-spacing:-.025em;text-shadow:0 1px 14px rgba(36,28,22,.45)">Sumba Timur</div>
+                  <div style="font-size:14px;margin-top:5px;opacity:.94">Air Terjun Tanggedu, Sumba Timur · Sab 12 – Sel 15 September</div>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:0;padding:22px 24px;display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+                <div>
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9C8874">Terpakai sampai hari ini</div>
+                  <div style="font-size:34px;font-weight:500;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:4px;color:#B8492A">Rp 3.510.000</div>
+                  <div style="font-size:14px;color:#6E5C4E;margin-top:4px;font-variant-numeric:tabular-nums">dari rencana Rp 3.100.000 · 3 orang · Rp 1.170.000/orang</div>
+                </div>
+                <div style="background:{{ toneBg }};color:{{ toneFg }};font-size:13px;font-weight:600;padding:8px 12px;border-radius:10px;font-variant-numeric:tabular-nums;white-space:nowrap">{{ overCopy }}</div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="height:10px;border-radius:99px;background:#E7D8C2;overflow:hidden;display:flex"><div style="width:88%;background:#B8492A"></div><div style="width:12%;background:#8A3419"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:#6E5C4E"><span>Rencana terpakai penuh di hari 3</span><span style="font-variant-numeric:tabular-nums">113%</span></div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+                <div style="background:#F7EFE3;border-radius:14px;padding:12px"><div style="font-size:12px;color:#6E5C4E">Makan &amp; minum</div><div style="font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;margin-top:3px">1,24jt</div><div style="height:4px;border-radius:99px;background:#E7D8C2;margin-top:8px;overflow:hidden"><div style="width:100%;height:4px;background:#B8492A"></div></div></div>
+                <div style="background:#F7EFE3;border-radius:14px;padding:12px"><div style="font-size:12px;color:#6E5C4E">Transport</div><div style="font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;margin-top:3px">980rb</div><div style="height:4px;border-radius:99px;background:#E7D8C2;margin-top:8px;overflow:hidden"><div style="width:78%;height:4px;background:#D89A3C"></div></div></div>
+                <div style="background:#F7EFE3;border-radius:14px;padding:12px"><div style="font-size:12px;color:#6E5C4E">Tiket &amp; atraksi</div><div style="font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;margin-top:3px">640rb</div><div style="height:4px;border-radius:99px;background:#E7D8C2;margin-top:8px;overflow:hidden"><div style="width:100%;height:4px;background:#B8492A"></div></div></div>
+              </div>
+
+              <div style="border-top:1px solid rgba(36,28,22,.08);padding-top:14px;display:flex;gap:18px;align-items:center">
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9C8874">Berikutnya hari ini</div>
+                  <div style="font-size:15px;margin-top:4px">15.00 · Kapal ke Gili Trawangan</div>
+                  <div style="font-size:13px;color:#6E5C4E;margin-top:2px;font-variant-numeric:tabular-nums">Transit · 350rb masuk Transport</div>
+                </div>
+                <div style="display:flex;gap:9px">
+                  <div style="background:#241C16;color:#F7EDDF;border-radius:11px;padding:12px 16px;font-size:14px;font-weight:600">{{ logCta }}</div>
+                  <div style="background:#F3E8D9;border-radius:11px;padding:12px 16px;font-size:14px;font-weight:500">Buka trip</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:relative;padding:26px 34px 0;display:flex;flex-direction:column;gap:12px;min-height:0">
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9C8874">Rencana berikutnya</div>
+            <div style="font-size:13px;color:#6E5C4E">Urut berdasarkan tanggal mulai</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+
+            <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.07);border-radius:18px;overflow:hidden;box-shadow:0 12px 28px -20px rgba(36,28,22,.3)">
+              <div style="height:118px;background-image:url('assets/cover-ubud.png');background-size:cover;background-position:center;position:relative">
+                <div style="position:absolute;top:10px;left:10px;background:rgba(255,249,240,.94);font-size:11px;font-weight:600;padding:5px 9px;border-radius:7px">12 hari lagi</div>
+              </div>
+              <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
+                <div>
+                  <div style="font-size:18px;font-weight:500;letter-spacing:-.01em">Ubud &amp; Tegallalang</div>
+                  <div style="font-size:13px;color:#6E5C4E;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">26–28 Sep · Tegallalang, Gianyar</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                  <div><div style="font-size:11px;font-weight:600;color:#9C8874;letter-spacing:.08em;text-transform:uppercase">Rencana</div><div style="font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;margin-top:2px">Rp 1.850.000</div></div>
+                  <div style="font-size:13px;color:#6E5C4E;text-align:right;font-variant-numeric:tabular-nums">14 aktivitas<br>3 hari</div>
+                </div>
+                <div style="height:5px;border-radius:99px;background:#E7D8C2"></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:#6E5C4E"><span>Belum ada pengeluaran</span><span style="font-variant-numeric:tabular-nums">Barang 4/12</span></div>
+              </div>
+            </div>
+
+            <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.07);border-radius:18px;overflow:hidden;box-shadow:0 12px 28px -20px rgba(36,28,22,.3)">
+              <div style="height:118px;background-image:url('assets/cover-bromo.png');background-size:cover;background-position:center 60%;position:relative">
+                <div style="position:absolute;top:10px;left:10px;background:rgba(255,249,240,.94);font-size:11px;font-weight:600;padding:5px 9px;border-radius:7px">20 hari lagi</div>
+              </div>
+              <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
+                <div>
+                  <div style="font-size:18px;font-weight:500;letter-spacing:-.01em">Bromo Sunrise</div>
+                  <div style="font-size:13px;color:#6E5C4E;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">4–8 Okt · Cemoro Lawang, Probolinggo</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                  <div><div style="font-size:11px;font-weight:600;color:#9C8874;letter-spacing:.08em;text-transform:uppercase">Rencana</div><div style="font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;margin-top:2px">Rp 4.600.000</div></div>
+                  <div style="font-size:13px;color:#6E5C4E;text-align:right;font-variant-numeric:tabular-nums">22 aktivitas<br>5 hari</div>
+                </div>
+                <div style="height:5px;border-radius:99px;background:#E7D8C2"></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:#6E5C4E"><span>Dari templat kurasi</span><span style="font-variant-numeric:tabular-nums">Barang 0/16</span></div>
+              </div>
+            </div>
+
+            <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.07);border-radius:18px;overflow:hidden;box-shadow:0 12px 28px -20px rgba(36,28,22,.3)">
+              <div style="height:118px;background-image:url('assets/cover-kota.png');background-size:cover;background-position:center;position:relative">
+                <div style="position:absolute;top:10px;left:10px;background:rgba(255,249,240,.94);font-size:11px;font-weight:600;padding:5px 9px;border-radius:7px">Draf</div>
+              </div>
+              <div style="padding:14px 16px 16px;display:flex;flex-direction:column;gap:11px">
+                <div>
+                  <div style="font-size:18px;font-weight:500;letter-spacing:-.01em">Bali Selatan</div>
+                  <div style="font-size:13px;color:#6E5C4E;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">21–24 Nov · Seminyak &amp; Uluwatu, Badung</div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                  <div><div style="font-size:11px;font-weight:600;color:#9C8874;letter-spacing:.08em;text-transform:uppercase">Rencana</div><div style="font-size:17px;font-weight:500;font-variant-numeric:tabular-nums;margin-top:2px">Rp 2.700.000</div></div>
+                  <div style="font-size:13px;color:#6E5C4E;text-align:right;font-variant-numeric:tabular-nums">6 aktivitas<br>4 hari</div>
+                </div>
+                <div style="height:5px;border-radius:99px;background:#E7D8C2"></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:#6E5C4E"><span>Tanggal belum pasti</span><span>Lanjutkan</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:relative;margin-top:auto;padding:22px 34px 26px">
+          <div style="background:#F3E8D9;border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:22px">
+            <div style="min-width:0">
+              <div style="font-size:15px;font-weight:600">Rak templat kurasi</div>
+              <div style="font-size:13px;color:#6E5C4E;margin-top:3px">18 trip Indonesia dengan anggaran dan daftar barang sudah terisi — tinggal ganti tanggal.</div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:9px;font-size:13px;font-weight:500">
+              <span style="background:#FFFCF7;border-radius:10px;padding:9px 13px">Sumba 4 hari</span>
+              <span style="background:#FFFCF7;border-radius:10px;padding:9px 13px">Bromo–Ijen 5 hari</span>
+              <span style="background:#FFFCF7;border-radius:10px;padding:9px 13px">Ubud hemat 3 hari</span>
+              <span style="background:#241C16;color:#F7EDDF;border-radius:10px;padding:9px 13px;font-weight:600">Lihat semua</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="2b" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;gap:14px;align-items:baseline">
+      <div style="background:#241C16;color:#F7EDDF;font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;letter-spacing:.04em">2b</div>
+      <div style="font-size:22px;font-weight:500">Ringkasan trip · 1440 × 980</div>
+      <div style="font-size:14px;color:#6E5C4E">Hari, uang, dan barang dalam satu layar — tanpa pindah tab.</div>
+    </div>
+
+    <div style="width:1440px;height:980px;border-radius:16px;overflow:hidden;background:#FCF7F0;box-shadow:0 40px 90px -40px rgba(36,28,22,.45);display:flex;flex-direction:column">
+
+      <div style="height:52px;flex:0 0 52px;border-bottom:1px solid rgba(36,28,22,.08);display:flex;align-items:center;padding:0 26px;gap:16px;background:#FFFCF7">
+        <div style="display:flex;align-items:center;gap:9px;font-size:14px;color:#6E5C4E"><span style="width:24px;height:24px;border-radius:7px;background:#241C16;color:#F7EDDF;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">J</span><span>Trip saya</span><span style="color:#C4B29E">/</span><span style="color:#241C16;font-weight:600">Sumba Timur</span></div>
+        <div style="margin-left:auto;display:flex;gap:8px;font-size:13px;font-weight:500;align-items:center">
+          <span style="background:#FBEFE0;color:#7A5A22;border-radius:9px;padding:7px 11px">Tersimpan di perangkat</span>
+          <span style="border:1px solid rgba(36,28,22,.12);border-radius:9px;padding:7px 12px">Bagikan tautan</span>
+          <span style="background:#241C16;color:#F7EDDF;border-radius:9px;padding:7px 12px;font-weight:600">{{ logCta }}</span>
+        </div>
+      </div>
+
+      <div style="height:216px;flex:0 0 216px;position:relative;background-image:url('assets/cover-sumba.png');background-size:cover;background-position:center 58%">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(36,28,22,.5) 0%, rgba(36,28,22,.22) 45%, rgba(36,28,22,.72) 100%)"></div>
+        <div style="position:relative;height:100%;padding:22px 30px;display:flex;flex-direction:column;justify-content:space-between;color:#FFF9F0">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div style="display:flex;gap:8px">
+              <div style="background:rgba(255,249,240,.94);color:#241C16;font-size:12px;font-weight:600;padding:6px 10px;border-radius:8px">Hari 3 dari 4</div>
+              <div style="background:rgba(36,28,22,.5);font-size:12px;font-weight:500;padding:6px 10px;border-radius:8px">Sedang jalan</div>
+            </div>
+            <div style="font-size:13px;opacity:.9">Sampul: pantai · ganti</div>
+          </div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:26px">
+            <div>
+              <div style="font-size:36px;font-weight:600;letter-spacing:-.03em;text-shadow:0 2px 16px rgba(36,28,22,.5)">Sumba Timur</div>
+              <div style="font-size:15px;margin-top:6px;opacity:.95">Sabtu, 12 September – Selasa, 15 September · 3 orang · Air Terjun Tanggedu, Sumba Timur</div>
+            </div>
+            <div style="display:flex;gap:26px;text-align:right">
+              <div><div style="font-size:12px;opacity:.85;font-weight:500">Rencana</div><div style="font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px">Rp 3.100.000</div></div>
+              <div><div style="font-size:12px;opacity:.85;font-weight:500">Terpakai</div><div style="font-size:20px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px">Rp 3.510.000</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:1;min-height:0;display:flex">
+
+        <div style="width:196px;flex:0 0 196px;border-right:1px solid rgba(36,28,22,.08);padding:20px 16px;display:flex;flex-direction:column;gap:8px;background:#FAF3EA">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9C8874;padding:0 4px 4px">Hari</div>
+          <div style="border-radius:12px;padding:11px 12px;background:#F3E8D9;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;color:#6E5C4E">Sab, 12 Sep</div><div style="font-size:13px;margin-top:2px">Tiba &amp; Waingapu</div></div>
+            <div style="font-size:12px;color:#6E5C4E;font-variant-numeric:tabular-nums">820rb</div>
+          </div>
+          <div style="border-radius:12px;padding:11px 12px;background:#F3E8D9;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;color:#6E5C4E">Min, 13 Sep</div><div style="font-size:13px;margin-top:2px">Bukit Wairinding</div></div>
+            <div style="font-size:12px;color:#6E5C4E;font-variant-numeric:tabular-nums">1,1jt</div>
+          </div>
+          <div style="border-radius:12px;padding:11px 12px;background:#241C16;color:#F7EDDF;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 18px -10px rgba(36,28,22,.6)">
+            <div><div style="font-size:13px;opacity:.75">Sen, 14 Sep</div><div style="font-size:13px;margin-top:2px;font-weight:600">Tanggedu &amp; Gili</div></div>
+            <div style="font-size:12px;font-variant-numeric:tabular-nums;font-weight:600">1,59jt</div>
+          </div>
+          <div style="border-radius:12px;padding:11px 12px;background:#F3E8D9;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;color:#6E5C4E">Sel, 15 Sep</div><div style="font-size:13px;margin-top:2px">Pulang</div></div>
+            <div style="font-size:12px;color:#9C8874;font-variant-numeric:tabular-nums">—</div>
+          </div>
+          <div style="border-radius:12px;padding:11px 12px;border:1px dashed rgba(36,28,22,.2);color:#6E5C4E;font-size:13px;text-align:center;margin-top:2px">Tambah hari</div>
+          <div style="margin-top:auto;background:#FBEFE0;border-radius:12px;padding:12px;font-size:12px;line-height:1.5;color:#6E5C4E">Trip 10 hari? Kolom ini menggulir; nilai per hari tetap terlihat.</div>
+        </div>
+
+        <div style="flex:1;min-width:0;padding:20px 24px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end">
+            <div>
+              <div style="font-size:20px;font-weight:500;letter-spacing:-.015em">Senin, 14 September</div>
+              <div style="font-size:13px;color:#6E5C4E;margin-top:3px;font-variant-numeric:tabular-nums">4 aktivitas · 1.590.000 terhitung ke anggaran · 1 tanpa biaya</div>
+            </div>
+            <div style="display:flex;gap:8px;font-size:13px;font-weight:500">
+              <span style="border:1px solid rgba(36,28,22,.12);border-radius:9px;padding:8px 12px">Ubah urutan</span>
+              <span style="background:#F3E8D9;border-radius:9px;padding:8px 12px">Tambah aktivitas</span>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+
+            <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.08);border-radius:14px;padding:14px 16px;display:flex;gap:16px;align-items:flex-start">
+              <div style="width:52px;flex:0 0 52px;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;padding-top:1px">07.30</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:500">Sarapan di Warung Ibu Nur</div>
+                <div style="font-size:13px;color:#6E5C4E;margin-top:3px">Makan &amp; minum · Waingapu, Sumba Timur</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums">25.000</div>
+                <div style="font-size:12px;color:#9C8874;margin-top:2px">per orang</div>
+              </div>
+            </div>
+
+            <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.08);border-radius:14px;padding:14px 16px;display:flex;gap:16px;align-items:flex-start">
+              <div style="width:52px;flex:0 0 52px;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;padding-top:1px">10.00</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:500">Air Terjun Tanggedu</div>
+                <div style="font-size:13px;color:#6E5C4E;margin-top:3px">Tiket &amp; atraksi · butuh ojek 40 menit dari jalan utama</div>
+                <div style="margin-top:9px;display:flex;gap:7px;font-size:12px;font-weight:500">
+                  <span style="background:#F3E8D9;border-radius:7px;padding:5px 9px">Outfit hari ini terisi</span>
+                  <span style="background:#F3E8D9;border-radius:7px;padding:5px 9px">Catatan · bawa sandal gunung</span>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:15px;font-weight:500;font-variant-numeric:tabular-nums">150.000</div>
+                <div style="font-size:12px;color:#9C8874;margin-top:2px">3 orang</div>
+              </div>
+            </div>
+
+            <div style="background:#FFFCF7;border:1.5px solid #E4B892;border-radius:14px;padding:14px 16px;display:flex;gap:16px;align-items:flex-start;box-shadow:0 10px 24px -18px rgba(36,28,22,.4)">
+              <div style="width:52px;flex:0 0 52px;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;padding-top:1px">15.00</div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;gap:9px;align-items:center">
+                  <div style="font-size:15px;font-weight:600">Kapal ke Gili Trawangan</div>
+                  <div style="background:#F3E8D9;color:#7A5A22;font-size:11px;font-weight:600;padding:4px 8px;border-radius:6px">Baru ditambahkan</div>
+                </div>
+                <div style="font-size:13px;color:#6E5C4E;margin-top:3px">Transit · Pelabuhan Waingapu</div>
+                <div style="margin-top:10px;background:#FBEFE0;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px">
+                  <div style="width:16px;height:16px;flex:0 0 16px;border-radius:5px;border:1.5px solid #B8492A;display:flex;align-items:center;justify-content:center;color:#B8492A;font-size:11px;font-weight:700">↳</div>
+                  <div style="font-size:13px;color:#5A4636">Biaya ini masuk ke <strong style="font-weight:600">Transport</strong> — anggaran kategori jadi 78% terpakai</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:17px;font-weight:600;font-variant-numeric:tabular-nums">350.000</div>
+                <div style="font-size:12px;color:#9C8874;margin-top:2px">3 orang</div>
+              </div>
+            </div>
+
+            <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.08);border-radius:14px;padding:14px 16px;display:flex;gap:16px;align-items:flex-start">
+              <div style="width:52px;flex:0 0 52px;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;padding-top:1px">19.30</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:500">Jalan sore di pantai Walakiri</div>
+                <div style="font-size:13px;color:#6E5C4E;margin-top:3px">Santai · tanpa biaya</div>
+              </div>
+              <div style="text-align:right;font-size:14px;color:#9C8874">—</div>
+            </div>
+
+            <div style="border:1px dashed rgba(36,28,22,.18);border-radius:14px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#6E5C4E">
+              <span>Tambah aktivitas ke Senin, 14 September</span>
+              <span style="font-weight:600;color:#241C16">Biaya opsional</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:364px;flex:0 0 364px;border-left:1px solid rgba(36,28,22,.08);background:#FAF3EA;padding:18px;display:flex;flex-direction:column;gap:12px;overflow:hidden">
+
+          <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.08);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:13px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:15px;font-weight:600">Anggaran</div>
+              <div style="background:{{ toneBg }};color:{{ toneFg }};font-size:12px;font-weight:600;padding:5px 9px;border-radius:8px;font-variant-numeric:tabular-nums">{{ overCopy }}</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span>Makan &amp; minum</span><span style="font-weight:600;font-variant-numeric:tabular-nums">1,24jt / 1,0jt</span></div>
+                <div style="height:7px;border-radius:99px;background:#E7D8C2;overflow:hidden;display:flex"><div style="width:82%;background:#B8492A"></div><div style="width:18%;background:#8A3419"></div></div>
+                <div style="display:flex;gap:14px;font-size:12px;color:#6E5C4E;padding-left:2px">
+                  <span style="display:flex;gap:5px;align-items:center"><span style="color:#B8492A;font-weight:700">↳</span>dari aktivitas 890rb</span>
+                  <span style="display:flex;gap:5px;align-items:center"><span style="width:9px;height:9px;border-radius:3px;border:1.5px solid #C4B29E;display:inline-block"></span>manual 350rb</span>
+                </div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span>Transport</span><span style="font-weight:600;font-variant-numeric:tabular-nums">980rb / 1,25jt</span></div>
+                <div style="height:7px;border-radius:99px;background:#E7D8C2;overflow:hidden"><div style="width:78%;height:7px;background:#D89A3C"></div></div>
+                <div style="display:flex;gap:14px;font-size:12px;color:#6E5C4E;padding-left:2px"><span style="display:flex;gap:5px;align-items:center"><span style="color:#B8492A;font-weight:700">↳</span>dari aktivitas 980rb · 4 baris</span></div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span>Tiket &amp; atraksi</span><span style="font-weight:600;font-variant-numeric:tabular-nums">640rb / 500rb</span></div>
+                <div style="height:7px;border-radius:99px;background:#E7D8C2;overflow:hidden;display:flex"><div style="width:78%;background:#B8492A"></div><div style="width:22%;background:#8A3419"></div></div>
+                <div style="display:flex;gap:14px;font-size:12px;color:#6E5C4E;padding-left:2px"><span style="display:flex;gap:5px;align-items:center"><span style="color:#B8492A;font-weight:700">↳</span>dari aktivitas 640rb · 3 baris</span></div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#6E5C4E">Penginapan</span><span style="font-weight:500;font-variant-numeric:tabular-nums;color:#6E5C4E">650rb / 650rb</span></div>
+                <div style="height:7px;border-radius:99px;background:#E7D8C2;overflow:hidden"><div style="width:100%;height:7px;background:#B5A390"></div></div>
+                <div style="font-size:12px;color:#9C8874;padding-left:2px">Terpakai penuh · dibayar di muka</div>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid rgba(36,28,22,.08);padding-top:11px;display:flex;justify-content:space-between;font-size:12px;color:#6E5C4E">
+              <span style="display:flex;gap:5px;align-items:center"><span style="color:#B8492A;font-weight:700">↳</span>= baris turunan dari aktivitas</span>
+              <span>Buka anggaran</span>
+            </div>
+          </div>
+
+          <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.08);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:15px;font-weight:600">Pengeluaran terakhir</div>
+              <div style="font-size:12px;color:#6E5C4E;font-variant-numeric:tabular-nums">14 catatan</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px"><span style="display:flex;gap:8px;align-items:center"><span style="color:#B8492A;font-weight:700">↳</span>Kapal ke Gili Trawangan</span><span style="font-weight:600;font-variant-numeric:tabular-nums">350.000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px"><span style="display:flex;gap:8px;align-items:center"><span style="color:#B8492A;font-weight:700">↳</span>Air Terjun Tanggedu</span><span style="font-weight:600;font-variant-numeric:tabular-nums">150.000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#7A5A22;background:#FBEFE0;border-radius:9px;padding:8px 10px;margin-top:1px"><span>Ojek pagi · belum ada kategori</span><span style="font-weight:600;font-variant-numeric:tabular-nums">60.000</span></div>
+            </div>
+          </div>
+
+          <div style="background:#FFFCF7;border:1px solid rgba(36,28,22,.08);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-size:15px;font-weight:600">Barang bawaan</div>
+              <div style="font-size:12px;color:#6E5C4E;font-variant-numeric:tabular-nums">3 / 8</div>
+            </div>
+            <div style="height:7px;border-radius:99px;background:#E7D8C2;overflow:hidden"><div style="width:37%;height:7px;background:#D89A3C"></div></div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;font-size:12px;font-weight:500">
+              <span style="background:#F3E8D9;border-radius:7px;padding:6px 10px;color:#6E5C4E">Sandal gunung</span>
+              <span style="background:#F3E8D9;border-radius:7px;padding:6px 10px;color:#6E5C4E">Powerbank</span>
+              <span style="background:#FBEFE0;border-radius:7px;padding:6px 10px;color:#7A5A22">Wajib · KTP</span>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1000px;display:flex;flex-direction:column;gap:9px;color:#6E5C4E;font-size:14px;line-height:1.65">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9C8874">Keputusan yang dibuat di sini</div>
+    <div><strong style="color:#241C16;font-weight:600">§10.3 garis turunan.</strong> Tanda <span style="color:#B8492A;font-weight:700">↳</span> plus baris keterangan “dari aktivitas”, bukan tint atau indent — tetap terbaca di matahari dan tetap jelas saat baris manual dan turunan bercampur dalam satu kategori.</div>
+    <div><strong style="color:#241C16;font-weight:600">§10.2 strip hari.</strong> Di desktop hari jadi kolom kiri yang menggulir, jadi trip 10 hari tidak memaksa layout berubah; nilai rupiah per hari ikut terlihat.</div>
+    <div><strong style="color:#241C16;font-weight:600">§4.</strong> Foto hanya sebagai sampul dengan scrim gelap; semua angka duduk di putih-hangat. Gradien hanya di latar beranda. Status lewat anggaran memakai terracotta, kategori terpakai penuh memakai clay netral.</div>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;overBudget&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Status&quot;},&quot;logCta&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Catat pengeluaran&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Copy&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const over = this.props.overBudget ?? true;
+    return {
+      logCta: this.props.logCta ?? "Catat pengeluaran",
+      overCopy: over ? "Lewat 410rb dari rencana" : "Sisa 290rb dari rencana",
+      overShort: over ? "Lewat 410rb" : "Sisa 290rb",
+      toneBg: over ? "#F7DED2" : "#F3E8D9",
+      toneFg: over ? "#8A3419" : "#7A5A22",
+      funBg: over ? "#FCE3D3" : "#DCEEE4",
+      funFg: over ? "#C85A28" : "#2F6B54"
+    };
+  }
+}
+</script>
+</body>
+</html>

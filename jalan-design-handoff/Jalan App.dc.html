@@ -1,0 +1,2415 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#FBFAF5; font-family:'Plus Jakarta Sans',system-ui,sans-serif; color:#10262B; -webkit-font-smoothing:antialiased; }
+  * { box-sizing:border-box; }
+  a { color:#0E6E76; text-decoration:none; }
+  a:hover { color:#0A4F55; text-decoration:underline; }
+  input, textarea, button { font-family:inherit; }
+  input:focus, textarea:focus { outline:2px solid #0E6E76; outline-offset:1px; }
+  @keyframes riseIn { from { opacity:0; transform:translateY(10px) } to { opacity:1; transform:translateY(0) } }
+  @keyframes sheetIn { from { opacity:0; transform:translateX(26px) } to { opacity:1; transform:translateX(0) } }
+  @keyframes toastIn { from { opacity:0; transform:translateY(14px) } to { opacity:1; transform:translateY(0) } }
+  @keyframes slideOverIn { from { transform:translateX(34px); opacity:.4 } to { transform:translateX(0); opacity:1 } }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="120" rx="20" fill="#0E6E76"></rect><circle cx="47" cy="45" r="8" fill="#F1EEE1"></circle><path d="M30 78c0-12 10-20 20-20s20 8 20 20z" fill="#2F6B54"></path><rect x="46" y="80" width="46" height="10" rx="5" fill="#F0713A"></rect></svg>
+</template>
+
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#FBFAF5">
+
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;display:flex;flex-wrap:wrap;min-height:100vh">
+    <div style="flex:1 1 480px;position:relative;overflow:hidden;background:#DEEEEC;display:flex;flex-direction:column;justify-content:space-between;padding:44px 48px;min-height:420px">
+      <div style="position:absolute;left:54px;top:56px;width:104px;height:104px;border-radius:50%;background:#F1EEE1"></div>
+      <div style="position:absolute;left:-90px;bottom:-70px;width:520px;height:300px;border-radius:300px 300px 0 0;background:#C8E2DE"></div>
+      <div style="position:absolute;right:-120px;bottom:-90px;width:460px;height:250px;border-radius:250px 250px 0 0;background:#8FC2BE"></div>
+      <div style="position:absolute;right:52px;top:44px;transform:rotate(24deg)">{{ loginPlane }}</div>
+      <div style="position:absolute;left:150px;top:34px">{{ loginBalloon }}</div>
+      <div style="position:absolute;right:96px;bottom:56px">{{ loginShip }}</div>
+      <div style="position:absolute;left:20px;bottom:96px">{{ loginPalm }}</div>
+      <div style="position:absolute;right:14px;bottom:14px">{{ loginPagoda }}</div>
+      <div style="position:absolute;right:212px;top:34px">{{ loginCompass }}</div>
+      <div style="position:relative;display:flex;align-items:center;gap:11px">
+        <div style="width:34px;height:34px;border-radius:10px;background:#0E6E76;position:relative;overflow:hidden">
+          <div style="position:absolute;left:6px;top:7px;width:9px;height:9px;border-radius:50%;background:#F1EEE1"></div>
+          <div style="position:absolute;left:-2px;bottom:9px;width:25px;height:14px;border-radius:14px 14px 0 0;background:#2F6B54"></div>
+          <div style="position:absolute;left:7px;bottom:0;width:29px;height:9px;border-radius:11px 11px 0 0;background:#F0713A"></div>
+        </div>
+        <div style="font-family:'Fraunces',serif;font-size:23px;font-weight:600;color:#10262B">Jalan</div>
+      </div>
+      <div style="position:relative;max-width:420px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'Fraunces',serif;font-size:40px;line-height:1.12;font-weight:600;letter-spacing:-.02em;color:#10262B;text-wrap:pretty">Rencana jalan, anggaran, dan barang di satu tempat.</div>
+        <div style="font-size:15.5px;line-height:1.55;color:#33474C;max-width:360px">Catat pengeluaran sambil jalan, biar tahu sisa anggaran sebelum hari terakhir.</div>
+      </div>
+      <div style="position:relative;display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;font-weight:700;color:#0A4F55">
+        <span style="background:#fff;border-radius:999px;padding:8px 14px">6 trip tersimpan</span>
+        <span style="background:#fff;border-radius:999px;padding:8px 14px">Anggaran per kategori</span>
+        <span style="background:#fff;border-radius:999px;padding:8px 14px">Daftar barang otomatis</span>
+      </div>
+    </div>
+
+    <div style="flex:1 1 420px;display:flex;align-items:center;justify-content:center;padding:48px 32px;background:#FBFAF5">
+      <div style="width:100%;max-width:376px;display:flex;flex-direction:column;gap:22px;animation:riseIn .3s ease both">
+        <div>
+          <div style="font-family:'Fraunces',serif;font-size:30px;font-weight:600;letter-spacing:-.02em">Masuk</div>
+          <div style="font-size:14.5px;color:#33474C;margin-top:6px">Lanjutkan trip yang sedang jalan.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Email</span>
+            <input type="email" value="{{ email }}" onChange="{{ onEmail }}" onKeyDown="{{ onLoginKey }}" placeholder="nama@email.com" style="border:1px solid #E4DECB;background:#fff;border-radius:14px;padding:13px 15px;font-size:15px;color:#10262B" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px">
+            <span style="display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Sandi<a href="#" style="font-size:12px;font-weight:600;letter-spacing:0;text-transform:none">Lupa sandi?</a></span>
+            <input type="password" value="{{ pw }}" onChange="{{ onPw }}" onKeyDown="{{ onLoginKey }}" placeholder="Minimal 4 karakter" style="border:1px solid #E4DECB;background:#fff;border-radius:14px;padding:13px 15px;font-size:15px;color:#10262B" />
+          </label>
+          <sc-if value="{{ loginErr }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FCE3D3;color:#C85A28;border-radius:12px;padding:10px 14px;font-size:13px;font-weight:600">{{ loginErr }}</div>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div onClick="{{ signIn }}" style="background:#C85A28;color:#fff;border-radius:999px;padding:14px;text-align:center;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 18px -10px rgba(16,38,43,.28)" style-hover="background:#C85A28">Masuk</div>
+          <div onClick="{{ signInDemo }}" style="background:#fff;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:13px;text-align:center;font-size:14px;font-weight:700;cursor:pointer" style-hover="border-color:#0E6E76;color:#0A4F55">Coba tanpa akun</div>
+        </div>
+        <div style="border-top:1px solid #EDE9DA;padding-top:16px;font-size:13.5px;color:#6C7C7D">Belum punya akun? <a href="#" style="font-weight:600">Daftar gratis</a></div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
+  <div style="height:68px;flex:0 0 68px;background:#fff;border-bottom:1px solid #EDE9DA;display:flex;align-items:center;gap:26px;padding:0 32px;position:sticky;top:0;z-index:40">
+    <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:10px;cursor:pointer">
+      <div style="width:30px;height:30px;border-radius:9px;background:#0E6E76;position:relative;overflow:hidden">
+        <div style="position:absolute;left:5px;top:6px;width:8px;height:8px;border-radius:50%;background:#F1EEE1"></div>
+        <div style="position:absolute;left:-2px;bottom:8px;width:22px;height:12px;border-radius:12px 12px 0 0;background:#2F6B54"></div>
+        <div style="position:absolute;left:6px;bottom:0;width:26px;height:8px;border-radius:10px 10px 0 0;background:#F0713A"></div>
+      </div>
+      <div style="font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:#10262B">Jalan</div>
+    </div>
+    <div style="display:flex;gap:4px;font-size:14px;font-weight:600">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="3">
+        <div onClick="{{ n.go }}" style="border-radius:999px;padding:8px 16px;cursor:pointer;background:{{ n.bg }};color:{{ n.fg }}">{{ n.label }}</div>
+      </sc-for>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
+      <div style="width:230px;background:#FBFAF5;border:1px solid #E4DECB;border-radius:999px;padding:9px 16px;font-size:13.5px;color:#6C7C7D">Cari trip atau tempat</div>
+      <div onClick="{{ openNewTrip }}" style="background:#C85A28;color:#fff;border-radius:999px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 14px -8px rgba(16,38,43,.26)">+ Trip baru</div>
+      <div onClick="{{ signOut }}" title="Keluar" style="width:36px;height:36px;border-radius:50%;background:#F1EEE1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#33474C;cursor:pointer" style-hover="background:#EDE9DA">RA</div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div style="flex:1;padding:30px 32px 60px;display:flex;flex-direction:column;gap:22px;max-width:1400px;width:100%;margin:0 auto;animation:riseIn .3s ease both">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end">
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:34px;font-weight:600;letter-spacing:-.02em">Halo, Rina</div>
+        <div style="font-size:15px;color:#33474C;margin-top:5px">{{ homeSub }}</div>
+      </div>
+      <div style="display:flex;gap:9px;font-size:13px;font-weight:600">
+        <sc-for list="{{ homeFilters }}" as="f" hint-placeholder-count="3">
+          <div onClick="{{ f.go }}" style="border-radius:999px;padding:9px 15px;cursor:pointer;background:{{ f.bg }};color:{{ f.fg }};border:1px solid {{ f.bd }}">{{ f.label }}</div>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ hasLive }}" hint-placeholder-val="{{ true }}">
+    <div style="background:#fff;border:1px solid #EDE9DA;border-radius:26px;display:flex;flex-wrap:wrap;overflow:hidden;box-shadow:0 18px 40px -28px rgba(16,38,43,.3)">
+      <div style="width:392px;flex:1 0 340px;min-height:300px;position:relative;background:#DEEEEC;display:flex;align-items:center;justify-content:center;padding:48px 0;overflow:hidden">
+        <div style="position:absolute;left:36px;top:34px;width:52px;height:52px;border-radius:50%;background:#F1EEE1"></div>
+        <div style="position:absolute;left:-40px;bottom:-30px;width:280px;height:150px;border-radius:150px 150px 0 0;background:#C8E2DE"></div>
+        <div style="position:absolute;right:-50px;bottom:-40px;width:250px;height:130px;border-radius:130px 130px 0 0;background:#8FC2BE"></div>
+        <div style="position:absolute;right:16px;bottom:14px">{{ heroMotif }}</div>
+        <div style="position:relative;z-index:2;flex:0 0 auto;width:184px;height:184px;border-radius:50%;overflow:hidden;border:7px solid #fff;box-shadow:0 16px 34px -16px rgba(16,38,43,.45);background-size:cover;background-position:center 60%;background-image:{{ live.coverUrl }}"></div>
+        <div style="position:absolute;top:22px;right:22px;background:#fff;border-radius:999px;padding:7px 13px;font-size:12px;font-weight:700;color:#0A4F55">{{ live.dayLabel }}</div>
+      </div>
+      <div style="flex:1;min-width:440px;padding:26px 28px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
+          <div>
+            <div style="display:flex;gap:9px;align-items:center">
+              <div style="background:#DEEEEC;color:#2F6B54;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700">Sedang jalan</div>
+              <div style="font-size:13px;color:#6C7C7D">{{ live.typeLabel }}</div>
+            </div>
+            <div style="font-family:'Fraunces',serif;font-size:30px;font-weight:600;letter-spacing:-.02em;margin-top:9px">{{ live.name }}</div>
+            <div style="font-size:14px;color:#33474C;margin-top:4px">{{ live.sub }}</div>
+          </div>
+          <div style="border-radius:999px;padding:9px 15px;font-size:13px;font-weight:700;white-space:nowrap;font-family:'IBM Plex Mono',monospace;background:{{ statusBg }};color:{{ statusFg }}">{{ statusCopy }}</div>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <div style="flex:1 1 210px;min-width:210px;background:#FBFAF5;border-radius:18px;padding:16px 18px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Terpakai</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;margin-top:6px;letter-spacing:-.02em;white-space:nowrap;color:{{ statusFg }}">{{ spentRp }}</div>
+            <div style="font-size:13px;color:#33474C;margin-top:4px;font-family:'IBM Plex Mono',monospace">dari {{ planRp }}</div>
+          </div>
+          <div style="flex:1 1 210px;min-width:210px;background:#FBFAF5;border-radius:18px;padding:16px 18px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Per orang</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;margin-top:6px;letter-spacing:-.02em;white-space:nowrap">{{ perHeadRp }}</div>
+            <div style="font-size:13px;color:#33474C;margin-top:4px">{{ live.peopleLabel }}</div>
+          </div>
+          <div style="flex:1 1 210px;min-width:210px;background:#FBFAF5;border-radius:18px;padding:16px 18px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Barang</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;margin-top:6px;white-space:nowrap">{{ packCount }}</div>
+            <div style="font-size:13px;color:#33474C;margin-top:4px">{{ packReqCopy }}</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="height:12px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex">
+            <div style="background:#F0713A;width:{{ barA }}%"></div>
+            <div style="background:#C85A28;width:{{ barB }}%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:#6C7C7D"><span>{{ paceCopy }}</span><span style="font-family:'IBM Plex Mono',monospace">{{ pctCopy }}</span></div>
+        </div>
+        <div style="margin-top:auto;border-top:1px solid #EDE9DA;padding-top:16px;display:flex;align-items:center;gap:16px">
+          <div style="width:42px;height:42px;flex:0 0 42px;border-radius:50%;background:#FCE3D3;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#C85A28" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:600">{{ nextActCopy }}</div>
+            <div style="font-size:13px;color:#6C7C7D;margin-top:2px;font-family:'IBM Plex Mono',monospace">{{ nextActSub }}</div>
+          </div>
+          <div style="display:flex;gap:10px;font-size:14px;font-weight:700">
+            <div onClick="{{ goLogExpense }}" style="background:#C85A28;color:#fff;border-radius:999px;padding:11px 20px;cursor:pointer;box-shadow:0 6px 14px -8px rgba(16,38,43,.24)">Catat pengeluaran</div>
+            <div onClick="{{ openLive }}" style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:11px 20px;cursor:pointer">Buka trip</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:4px">
+      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:600">{{ listHeading }}</div>
+      <div style="font-size:13px;color:#6C7C7D">{{ listCount }}</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px">
+      <sc-for list="{{ cards }}" as="t" hint-placeholder-count="3">
+        <div onClick="{{ t.open }}" style="background:#fff;border:1px solid #EDE9DA;border-radius:24px;overflow:hidden;cursor:pointer;box-shadow:0 14px 30px -24px rgba(16,38,43,.35)" style-hover="box-shadow:0 20px 38px -22px rgba(16,38,43,.45);transform:translateY(-2px)">
+          <div style="height:132px;position:relative;display:flex;align-items:flex-end;justify-content:center;background:{{ t.matBg }}">
+            <div style="position:absolute;inset:0;overflow:hidden;border-radius:24px 24px 0 0">
+              <div style="position:absolute;left:26px;top:22px;width:38px;height:38px;border-radius:50%;background:{{ t.matSun }}"></div>
+              <div style="position:absolute;left:-30px;bottom:0;width:210px;height:80px;background:{{ t.matA }};border-radius:{{ t.matRadius }};clip-path:{{ t.matClip }}"></div>
+              <div style="position:absolute;right:-26px;bottom:0;width:180px;height:58px;background:{{ t.matB }};border-radius:{{ t.matRadius }};clip-path:{{ t.matClip }}"></div>
+              <div style="position:absolute;right:10px;bottom:10px">{{ t.motif }}</div>
+            </div>
+            <div style="position:relative;z-index:3;width:104px;height:104px;border-radius:50%;overflow:hidden;border:6px solid #fff;transform:translateY(30px);box-shadow:0 12px 24px -14px rgba(16,38,43,.45);background-size:cover;background-position:center;background-image:{{ t.coverUrl }};background-color:#fff;display:flex;align-items:center;justify-content:center">
+              <sc-if value="{{ t.noCover }}" hint-placeholder-val="{{ false }}">
+                <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#0E6E76" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg>
+              </sc-if>
+            </div>
+            <div style="position:absolute;top:16px;right:16px;background:#fff;border-radius:999px;padding:6px 11px;font-size:11px;font-weight:700;color:{{ t.badgeFg }}">{{ t.badge }}</div>
+          </div>
+          <div style="padding:40px 20px 20px;display:flex;flex-direction:column;gap:12px;text-align:center">
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:600">{{ t.name }}</div>
+              <div style="font-size:13px;color:#6C7C7D;margin-top:4px">{{ t.sub }}</div>
+            </div>
+            <div style="display:flex;justify-content:center;gap:8px;font-size:12px;font-weight:600">
+              <span style="background:#FBFAF5;border-radius:999px;padding:6px 12px;color:#33474C;font-family:'IBM Plex Mono',monospace">{{ t.dates }}</span>
+              <span style="background:#FBFAF5;border-radius:999px;padding:6px 12px;color:#33474C">{{ t.actCopy }}</span>
+            </div>
+            <div style="border-top:1px solid #EDE9DA;padding-top:13px;display:flex;justify-content:space-between;align-items:center">
+              <div style="text-align:left"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Rencana</div><div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;margin-top:2px">{{ t.planRp }}</div></div>
+              <div style="font-size:12px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace;text-align:right">{{ t.packCopy }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      <div onClick="{{ openNewTrip }}" style="border:1px dashed #D8D0BB;border-radius:24px;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;color:#6C7C7D" style-hover="border-color:#0E6E76;color:#0A4F55">
+        <div style="width:46px;height:46px;border-radius:50%;background:#DEEEEC;display:flex;align-items:center;justify-content:center;font-size:22px;color:#0A4F55">+</div>
+        <div style="font-size:14px;font-weight:600">Trip baru</div>
+        <div style="font-size:12.5px;max-width:200px;text-align:center;line-height:1.5">Mulai kosong atau ambil dari template kurasi</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isTemplates }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 32px 60px;display:flex;flex-direction:column;gap:20px;max-width:1400px;width:100%;margin:0 auto;animation:riseIn .3s ease both">
+    <div>
+      <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;letter-spacing:-.02em">Template kurasi</div>
+      <div style="font-size:15px;color:#33474C;margin-top:5px">Rencana lengkap dengan anggaran dan daftar barang. Ganti tanggal, langsung jalan.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px">
+      <sc-for list="{{ templates }}" as="tp" hint-placeholder-count="6">
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
+          <div style="height:104px;position:relative;overflow:hidden;background:{{ tp.matBg }}">
+            <div style="position:absolute;left:22px;top:18px;width:32px;height:32px;border-radius:50%;background:{{ tp.matSun }}"></div>
+            <div style="position:absolute;left:-24px;bottom:0;width:200px;height:70px;background:{{ tp.matA }};border-radius:{{ tp.matRadius }};clip-path:{{ tp.matClip }}"></div>
+            <div style="position:absolute;right:-24px;bottom:0;width:170px;height:52px;background:{{ tp.matB }};border-radius:{{ tp.matRadius }};clip-path:{{ tp.matClip }}"></div>
+            <div style="position:absolute;right:12px;bottom:8px">{{ tp.motif }}</div>
+          </div>
+          <div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:11px;flex:1">
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600">{{ tp.name }}</div>
+              <div style="font-size:13px;color:#6C7C7D;margin-top:3px">{{ tp.sub }}</div>
+            </div>
+            <div style="display:flex;gap:7px;font-size:12px;font-weight:600">
+              <span style="background:#FBFAF5;border-radius:999px;padding:6px 11px;color:#33474C;font-family:'IBM Plex Mono',monospace">{{ tp.days }} hari</span>
+              <span style="background:#FBFAF5;border-radius:999px;padding:6px 11px;color:#33474C;font-family:'IBM Plex Mono',monospace">{{ tp.planRp }}</span>
+            </div>
+            <div onClick="{{ tp.use }}" style="margin-top:auto;background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:11px;text-align:center;font-size:13.5px;font-weight:700;cursor:pointer">Pakai template</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isArchive }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;padding:30px 32px 60px;display:flex;flex-direction:column;gap:18px;max-width:1400px;width:100%;margin:0 auto;animation:riseIn .3s ease both">
+    <div>
+      <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;letter-spacing:-.02em">Arsip</div>
+      <div style="font-size:15px;color:#33474C;margin-top:5px">Trip yang sudah selesai, dengan angka apa adanya untuk memperkirakan trip berikutnya.</div>
+    </div>
+    <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;overflow:hidden">
+      <div style="padding:14px 20px;display:flex;gap:16px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D;border-bottom:1px solid #EDE9DA">
+        <span style="flex:1;min-width:180px">Trip</span><span style="width:120px">Tanggal</span><span style="width:120px;text-align:right">Rencana</span><span style="width:120px;text-align:right">Terpakai</span><span style="width:110px;text-align:right">Selisih</span>
+      </div>
+      <sc-for list="{{ archive }}" as="a" hint-placeholder-count="3">
+        <div style="padding:15px 20px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F1EEE1">
+          <span style="flex:1;min-width:180px;display:flex;gap:12px;align-items:center">
+            <span style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:{{ a.matBg }}"></span>
+            <span style="font-size:15px;font-weight:600">{{ a.name }}</span>
+          </span>
+          <span style="width:120px;font-size:13px;color:#6C7C7D">{{ a.dates }}</span>
+          <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#33474C">{{ a.planRp }}</span>
+          <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600">{{ a.spentRp }}</span>
+          <span style="width:110px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:{{ a.diffFg }}">{{ a.diff }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isTrip }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;display:flex;flex-direction:column;animation:riseIn .3s ease both">
+
+    <div style="background:#fff;border-bottom:1px solid #EDE9DA;position:sticky;top:68px;z-index:30">
+      <div style="max-width:1400px;margin:0 auto;padding:18px 32px 0;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start">
+        <div onClick="{{ goHome }}" style="width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:#FBFAF5;border:1px solid #E4DECB;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:4px">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#33474C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+        </div>
+        <div onClick="{{ openEditTrip }}" style="width:78px;height:78px;flex:0 0 78px;border-radius:20px;overflow:hidden;position:relative;cursor:pointer;background-size:cover;background-position:center 58%;background-image:{{ trip.coverUrl }};background-color:{{ trip.matBg }}">
+          <div style="position:absolute;right:5px;bottom:5px;width:24px;height:24px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px -4px rgba(16,38,43,.5)">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#0A4F55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L20 8l-4-4L4 16z"></path></svg>
+          </div>
+        </div>
+        <div style="flex:1;min-width:380px">
+          <div style="display:flex;flex-wrap:wrap;gap:9px;align-items:center;white-space:nowrap">
+            <span style="background:{{ trip.statusChipBg }};color:{{ trip.statusChipFg }};border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700">{{ trip.statusLabel }}</span>
+            <span style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700">{{ trip.typeLabel }}</span>
+            <span onClick="{{ goBudget }}" style="border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;cursor:pointer;background:{{ budgetChipBg }};color:{{ budgetChipFg }}">{{ budgetChipCopy }}</span>
+            <span style="font-size:13px;color:#6C7C7D">{{ trip.peopleLabel }}</span>
+          </div>
+          <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:600;letter-spacing:-.02em;margin-top:7px">{{ trip.name }}</div>
+          <div style="font-size:13.5px;color:#33474C;margin-top:3px">{{ trip.sub }}</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;margin-top:4px">
+          <span onClick="{{ openEditTrip }}" style="display:flex;gap:6px;align-items:center;background:#fff;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:8px 14px;cursor:pointer" style-hover="border-color:#0E6E76;color:#0A4F55">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L20 8l-4-4L4 16z"></path></svg>
+            Ubah detail
+          </span>
+          <span style="background:#F1EEE1;color:#8A6314;border-radius:999px;padding:8px 13px">Tersimpan di perangkat</span>
+          <span onClick="{{ openShare }}" style="background:#fff;border:1px solid #E4DECB;color:#33474C;border-radius:999px;padding:8px 14px;cursor:pointer">Bagikan tautan</span>
+          <span onClick="{{ goLogExpense }}" style="background:#C85A28;color:#fff;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer">Catat pengeluaran</span>
+        </div>
+      </div>
+      <div style="max-width:1400px;margin:0 auto;padding:14px 32px 0;display:flex;flex-wrap:wrap;gap:2px">
+        <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="6">
+          <div onClick="{{ tb.go }}" style="padding:11px 16px 13px;font-size:14px;cursor:pointer;border-bottom:2.5px solid {{ tb.bd }};color:{{ tb.fg }};font-weight:{{ tb.weight }}">{{ tb.label }}</div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="max-width:1400px;width:100%;margin:0 auto;padding:24px 32px 60px">
+
+      <sc-if value="{{ tabOverview }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+        <div style="flex:1;min-width:560px;display:flex;flex-direction:column;gap:16px">
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Terpakai sampai hari ini</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:34px;font-weight:600;letter-spacing:-.03em;margin-top:5px;color:{{ statusFg }}">{{ spentRp }}</div>
+                <div style="font-size:13.5px;color:#33474C;margin-top:4px;font-family:'IBM Plex Mono',monospace">dari rencana {{ planRp }} · {{ perHeadRp }} per orang</div>
+              </div>
+              <div style="border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;font-family:'IBM Plex Mono',monospace;background:{{ statusBg }};color:{{ statusFg }}">{{ statusCopy }}</div>
+            </div>
+            <div style="height:12px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex">
+              <div style="background:#F0713A;width:{{ barA }}%"></div>
+              <div style="background:#C85A28;width:{{ barB }}%"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+              <sc-for list="{{ cats }}" as="c" hint-placeholder-count="4">
+                <div onClick="{{ goBudget }}" style="background:#FBFAF5;border-radius:16px;padding:14px;cursor:pointer">
+                  <div style="font-size:12px;color:#6C7C7D">{{ c.name }}</div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;margin-top:4px">{{ c.spentShort }}</div>
+                  <div style="height:5px;border-radius:999px;background:#F1EEE1;margin-top:9px;overflow:hidden"><div style="height:5px;background:{{ c.barColor }};width:{{ c.pct }}%"></div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600">Hari</div>
+              <div onClick="{{ goDays }}" style="font-size:13px;font-weight:700;color:#0A4F55;cursor:pointer">Buka perencana</div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <sc-for list="{{ days }}" as="d" hint-placeholder-count="4">
+                <div onClick="{{ d.open }}" style="border-radius:16px;padding:12px 15px;cursor:pointer;min-width:150px;background:{{ d.bg }};border:1px solid {{ d.bd }}">
+                  <div style="font-size:12px;color:{{ d.subFg }}">{{ d.dateLabel }}</div>
+                  <div style="font-size:14px;font-weight:600;margin-top:3px;color:{{ d.fg }}">{{ d.title }}</div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;margin-top:5px;color:{{ d.subFg }}">{{ d.totalShort }} · {{ d.actCount }} aktivitas</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:352px;flex:1 0 320px;max-width:100%;display:flex;flex-direction:column;gap:14px">
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">Berikutnya</div>
+            <div style="font-size:15px;font-weight:600">{{ nextActCopy }}</div>
+            <div style="font-size:13px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace">{{ nextActSub }}</div>
+            <div onClick="{{ goDays }}" style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer">Lihat hari ini</div>
+          </div>
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">Pengeluaran terakhir</div>
+              <div onClick="{{ goExpenses }}" style="font-size:12.5px;font-weight:700;color:#0A4F55;cursor:pointer">Semua</div>
+            </div>
+            <sc-for list="{{ recent }}" as="e" hint-placeholder-count="3">
+              <div style="display:flex;justify-content:space-between;font-size:13px;gap:10px">
+                <span style="display:flex;gap:8px;color:#33474C;min-width:0"><span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">{{ e.mark }}</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ e.title }}</span></span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;white-space:nowrap">{{ e.amountRp }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">Barang bawaan</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#6C7C7D">{{ packCount }}</div>
+            </div>
+            <div style="height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="height:8px;background:#2F6B54;width:{{ packPct }}%"></div></div>
+            <div onClick="{{ goPacking }}" style="font-size:12.5px;font-weight:700;color:#0A4F55;cursor:pointer">{{ packReqCopy }}</div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabDays }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+        <div style="width:212px;flex:0 0 212px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6C7C7D;padding:0 4px 2px">Hari</div>
+          <sc-for list="{{ days }}" as="d" hint-placeholder-count="4">
+            <div onClick="{{ d.open }}" style="border-radius:14px;padding:11px 13px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:{{ d.bg }};border:1px solid {{ d.bd }}">
+              <div style="min-width:0"><div style="font-size:12.5px;color:{{ d.subFg }}">{{ d.dateLabel }}</div><div style="font-size:13.5px;margin-top:2px;color:{{ d.fg }};font-weight:{{ d.weight }}">{{ d.title }}</div></div>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:{{ d.subFg }}">{{ d.totalShort }}</span>
+            </div>
+          </sc-for>
+          <div onClick="{{ addDay }}" style="border:1px dashed #D8D0BB;border-radius:14px;padding:11px;text-align:center;font-size:13px;color:#6C7C7D;cursor:pointer">+ Tambah hari</div>
+        </div>
+
+        <div style="flex:1;min-width:560px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-end">
+            <div style="min-width:280px">
+              <div style="font-family:'Fraunces',serif;font-size:25px;font-weight:600;letter-spacing:-.02em">{{ day.longLabel }}</div>
+              <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px;font-family:'IBM Plex Mono',monospace">{{ day.summary }}</div>
+            </div>
+            <div onClick="{{ toggleActForm }}" style="background:#C85A28;color:#fff;border-radius:999px;padding:10px 17px;font-size:13.5px;font-weight:700;cursor:pointer">+ Tambah aktivitas</div>
+          </div>
+
+          <sc-if value="{{ showActForm }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#fff;border:2px solid #0E6E76;border-radius:18px;padding:16px 17px;display:flex;flex-direction:column;gap:14px;animation:riseIn .2s ease both">
+            <div style="display:flex;gap:12px">
+              <div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Judul</div><input value="{{ naTitle }}" onChange="{{ onNaTitle }}" placeholder="mis. Kapal ke Gili Trawangan" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:14px;color:#10262B"></div>
+              <div style="width:200px;flex:0 0 200px"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Jenis</div>
+                <select value="{{ naCat }}" onChange="{{ onNaCat }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:14px;color:#10262B;appearance:none">
+                  <option value="Makan &amp; minum">Makan &amp; minum</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Tiket &amp; atraksi">Tiket &amp; atraksi</option>
+                  <option value="Penginapan">Penginapan</option>
+                  <option value="Santai">Santai</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <div style="width:104px;flex:0 0 104px"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Jam</div><input type="time" value="{{ naTime }}" onChange="{{ onNaTime }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#10262B"></div>
+              <div style="width:190px;flex:0 0 190px"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Durasi</div>
+                <select value="{{ naDur }}" onChange="{{ onNaDur }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:14px;color:#10262B;appearance:none">
+                  <option value="0">Tanpa durasi</option>
+                  <option value="30">30 menit</option>
+                  <option value="45">45 menit</option>
+                  <option value="60">1 jam</option>
+                  <option value="90">1 jam 30 menit</option>
+                  <option value="120">2 jam</option>
+                  <option value="150">2 jam 30 menit</option>
+                  <option value="180">3 jam</option>
+                  <option value="210">3 jam 30 menit</option>
+                  <option value="240">4 jam</option>
+                  <option value="300">5 jam</option>
+                  <option value="360">6 jam</option>
+                  <option value="480">8 jam</option>
+                </select>
+              </div>
+              <div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Biaya <span style="color:#6C7C7D;font-weight:400">opsional</span></div><input value="{{ naCost }}" onChange="{{ onNaCost }}" placeholder="350000" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#10262B"></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div style="flex:1;background:#DEEEEC;border-radius:12px;padding:11px 13px;display:flex;gap:10px;align-items:center"><span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span><span style="font-size:13px;color:#0A4F55">{{ actFormHint }}</span></div>
+              <div onClick="{{ saveActivity }}" style="background:#0E6E76;color:#fff;border-radius:999px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer">Simpan</div>
+              <div onClick="{{ toggleActForm }}" style="color:#6C7C7D;font-size:13.5px;font-weight:600;cursor:pointer">Batal</div>
+            </div>
+          </div>
+          </sc-if>
+
+          <sc-for list="{{ dayActs }}" as="a" hint-placeholder-count="4">
+            <div onClick="{{ a.open }}" style="background:#fff;border:1px solid {{ a.bd }};border-radius:18px;padding:15px 17px;display:flex;gap:15px;align-items:center;cursor:pointer" style-hover="border-color:#0E6E76">
+              <div style="width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:{{ a.iconBg }}">
+                <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="{{ a.iconFg }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.iconPath }}"></path></svg>
+              </div>
+              <div style="width:52px;flex:0 0 52px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#33474C">{{ a.time }}</div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:600">{{ a.title }}</div>
+                <div style="font-size:13px;color:#6C7C7D;margin-top:2px">{{ a.meta }}</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">{{ a.costCopy }}</div>
+                <div style="font-size:11.5px;color:#6C7C7D;margin-top:2px">{{ a.costSub }}</div>
+              </div>
+            </div>
+          </sc-for>
+
+          <sc-if value="{{ dayEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px dashed #D8D0BB;border-radius:18px;padding:36px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+            <div style="width:52px;height:52px;border-radius:50%;background:#DEEEEC;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0A4F55" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12z"></path><circle cx="12" cy="9" r="2.4"></circle></svg></div>
+            <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600">Hari ini masih kosong</div>
+            <div style="font-size:13.5px;color:#6C7C7D;max-width:340px;line-height:1.55">Tambah aktivitas pertama. Biaya bisa diisi nanti.</div>
+            <div onClick="{{ toggleActForm }}" style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:10px 18px;font-size:13.5px;font-weight:700;cursor:pointer">+ Tambah aktivitas</div>
+          </div>
+          </sc-if>
+        </div>
+
+        <div style="width:300px;flex:1 0 280px;max-width:100%;display:flex;flex-direction:column;gap:14px">
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:11px">
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">Uang hari ini</div>
+            <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#33474C">Terhitung</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600">{{ day.totalRp }}</span></div>
+            <div style="height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="height:8px;background:#F0713A;width:{{ day.sharePct }}%"></div></div>
+            <div style="font-size:12px;color:#6C7C7D;line-height:1.5">{{ day.shareCopy }}</div>
+          </div>
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px">
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">Outfit hari ini</div>
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ day.outfitItems }}" as="oi" hint-placeholder-count="3">
+                <div style="display:flex;gap:10px;align-items:center">
+                  <div style="width:30px;height:30px;flex:0 0 30px;border-radius:10px;background:#DEEEEC;display:flex;align-items:center;justify-content:center">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#0A4F55" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="{{ oi.icon }}"></path></svg>
+                  </div>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#6C7C7D">{{ oi.label }}</div>
+                    <div style="font-size:13px;color:#10262B;line-height:1.4">{{ oi.value }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ day.outfitEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px;color:#6C7C7D;line-height:1.55">Belum diisi untuk hari ini</div>
+            </sc-if>
+            <div onClick="{{ goOutfit }}" style="font-size:12.5px;font-weight:700;color:#0A4F55;cursor:pointer">Ubah outfit</div>
+          </div>
+          <div style="background:#DEEEEC;border-radius:20px;padding:16px;font-size:12.5px;line-height:1.55;color:#0A4F55">Tanda <span style="font-family:'IBM Plex Mono',monospace;font-weight:700">↳</span> berarti baris itu datang dari aktivitas.</div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabBudget }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+        <div style="flex:1;min-width:560px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6C7C7D;margin-right:4px">Versi rencana</div>
+            <sc-for list="{{ budgetVersions }}" as="v" hint-placeholder-count="2">
+              <div onClick="{{ v.pick }}" style="border-radius:16px;padding:11px 15px;cursor:pointer;min-width:212px;background:{{ v.bg }};border:1px solid {{ v.bd }}">
+                <div style="display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;justify-content:space-between">
+                  <span style="font-size:14px;font-weight:600;color:{{ v.fg }};white-space:nowrap">{{ v.name }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:{{ v.fg }};white-space:nowrap">{{ v.totalCopy }}</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:2px 10px;justify-content:space-between;margin-top:5px">
+                  <span style="font-size:11.5px;font-weight:600;color:{{ v.subFg }};white-space:nowrap">{{ v.badge }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:{{ v.subFg }};white-space:nowrap">{{ v.diffCopy }}</span>
+                </div>
+              </div>
+            </sc-for>
+            <div onClick="{{ addBudgetVersion }}" style="border:1px dashed #D8D0BB;border-radius:16px;padding:12px 15px;font-size:13px;font-weight:600;color:#6C7C7D;cursor:pointer">+ Versi baru</div>
+          </div>
+
+          <sc-if value="{{ budgetLocked }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#F1EEE1;border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:center">
+            <div style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#fff;display:flex;align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8A6314" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8.5 11V8a3.5 3.5 0 017 0v3"></path></svg>
+            </div>
+            <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:#8A6314">Anggaran terkunci sejak trip mulai</div><div style="font-size:12.5px;color:#8A6314;margin-top:2px">Versi <strong style="font-weight:700">{{ activeBudgetName }}</strong> dipakai berangkat · total {{ allocTotalRp }}. Pengeluaran tetap bisa dicatat.</div></div>
+          </div>
+          </sc-if>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:20px;display:flex;gap:22px;align-items:center">
+            <div style="width:132px;height:132px;flex:0 0 132px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:{{ donut }}">
+              <div style="width:88px;height:88px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600">{{ spentShort }}</div>
+                <div style="font-size:11px;color:#6C7C7D">terpakai</div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:11px">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+                <sc-if value="{{ budgetOpen }}" hint-placeholder-val="{{ true }}">
+                  <input value="{{ activeBudgetName }}" onChange="{{ onBudgetName }}" placeholder="Nama versi anggaran" style="width:230px;background:#FBFAF5;border:1px solid #E4DECB;border-radius:11px;padding:8px 12px;font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:#10262B">
+                </sc-if>
+                <sc-if value="{{ budgetLocked }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#10262B">{{ activeBudgetName }}</span>
+                </sc-if>
+                <span style="font-size:11.5px;font-weight:700;color:#6C7C7D;letter-spacing:.06em;text-transform:uppercase">{{ lockCopy }}</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:600;letter-spacing:-.02em;color:{{ statusFg }};white-space:nowrap">{{ spentRp }}</div>
+                <div style="font-size:13.5px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace;white-space:nowrap">/ {{ planRp }}</div>
+              </div>
+              <div style="height:12px;border-radius:999px;background:#F1EEE1;overflow:hidden;display:flex">
+                <div style="background:#F0713A;width:{{ barA }}%"></div>
+                <div style="background:#C85A28;width:{{ barB }}%"></div>
+              </div>
+              <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:#33474C">
+                <sc-for list="{{ cats }}" as="c" hint-placeholder-count="4">
+                  <span style="display:flex;gap:7px;align-items:center"><span style="width:10px;height:10px;border-radius:3px;background:{{ c.segColor }}"></span>{{ c.name }} {{ c.sharePct }}%</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;overflow:hidden">
+            <div style="padding:14px 18px;display:flex;gap:16px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D;border-bottom:1px solid #EDE9DA">
+              <span style="flex:1">Kategori dan baris</span><span style="width:120px;text-align:right">Terpakai</span><span style="width:130px;text-align:right">Alokasi · {{ activeBudgetName }}</span><span style="width:96px">Progres</span><span style="width:30px;flex:0 0 30px"></span>
+            </div>
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="4">
+              <div>
+                <div onClick="{{ c.toggle }}" style="padding:15px 18px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F1EEE1;cursor:pointer">
+                  <span style="flex:1;display:flex;gap:12px;align-items:center;min-width:0">
+                    <span style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:{{ c.iconBg }}">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="{{ c.iconFg }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ c.iconPath }}"></path></svg>
+                    </span>
+                    <span style="font-size:15px;font-weight:600">{{ c.name }}</span>
+                    <span style="font-size:12px;color:#6C7C7D">{{ c.lineCopy }}</span>
+                  </span>
+                  <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14.5px;font-weight:600;color:{{ c.spentFg }}">{{ c.spentRp }}</span>
+                  <span style="width:130px;display:flex;justify-content:flex-end">
+                    <sc-if value="{{ budgetLocked }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">{{ c.allocRp }}</span>
+                    </sc-if>
+                    <sc-if value="{{ budgetOpen }}" hint-placeholder-val="{{ true }}">
+                      <input value="{{ c.allocInput }}" onChange="{{ c.onAlloc }}" onClick="{{ stop }}" placeholder="0" style="width:120px;text-align:right;background:#FBFAF5;border:1px solid #E4DECB;border-radius:10px;padding:7px 10px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#10262B">
+                    </sc-if>
+                  </span>
+                  <span style="width:96px"><span style="display:block;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><span style="display:block;height:8px;background:{{ c.barColor }};width:{{ c.pct }}%"></span></span></span>
+                  <span style="width:30px;flex:0 0 30px;display:flex;justify-content:flex-end">
+                    <sc-if value="{{ c.canDelete }}" hint-placeholder-val="{{ false }}">
+                      <span onClick="{{ c.remove }}" title="Hapus kategori" style="width:30px;height:30px;border-radius:50%;background:#FBFAF5;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6C7C7D;font-size:15px;line-height:1">×</span>
+                    </sc-if>
+                  </span>
+                </div>
+                <sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+                  <sc-for list="{{ c.lines }}" as="l" hint-placeholder-count="2">
+                    <div style="padding:11px 18px 11px 64px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F1EEE1;background:{{ l.rowBg }}">
+                      <span style="flex:1;display:flex;gap:10px;align-items:center;font-size:13.5px;color:#33474C;min-width:0">
+                        <span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">{{ l.mark }}</span>
+                        <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ l.title }}</span>
+                      </span>
+                      <span style="width:120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px">{{ l.amountRp }}</span>
+                      <span style="width:130px;text-align:right;font-size:12px;color:#6C7C7D">{{ l.origin }}</span>
+                      <span style="width:96px"></span>
+                      <span style="width:30px;flex:0 0 30px"></span>
+                    </div>
+                  </sc-for>
+                </sc-if>
+              </div>
+            </sc-for>
+
+            <sc-if value="{{ budgetOpen }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:14px 18px;display:flex;gap:16px;align-items:center;background:#FBFAF5">
+              <span style="flex:1;display:flex;gap:12px;align-items:center;min-width:0">
+                <span style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;border:1px dashed #D8D0BB;display:flex;align-items:center;justify-content:center;color:#6C7C7D;font-size:16px">+</span>
+                <input value="{{ newCatName }}" onChange="{{ onNewCatName }}" placeholder="Kategori sendiri, mis. Oleh-oleh" style="flex:1;min-width:0;background:#fff;border:1px solid #E4DECB;border-radius:10px;padding:9px 12px;font-size:13.5px;color:#10262B">
+              </span>
+              <span style="width:120px;text-align:right;font-size:12px;color:#6C7C7D">belum terpakai</span>
+              <span style="width:130px;display:flex;justify-content:flex-end">
+                <input value="{{ newCatAmount }}" onChange="{{ onNewCatAmount }}" placeholder="0" style="width:120px;text-align:right;background:#fff;border:1px solid #E4DECB;border-radius:10px;padding:8px 10px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#10262B">
+              </span>
+              <span style="width:126px;flex:0 0 126px;display:flex;justify-content:flex-end">
+                <span onClick="{{ addCategory }}" style="height:34px;padding:0 18px;display:flex;align-items:center;background:#DEEEEC;color:#0A4F55;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">Tambah</span>
+              </span>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ hasLoose }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:13px 18px;background:#F1EEE1;font-size:12.5px;color:#8A6314;display:flex;gap:9px;align-items:center">
+              <span style="font-family:'IBM Plex Mono',monospace;font-weight:700">!</span>{{ looseCopy }}. Tambahkan kategori itu kembali, atau pindahkan barisnya di layar Pengeluaran.
+            </div>
+            </sc-if>
+          </div>
+        </div>
+
+        <div style="width:100%;background:#fff;border:1px solid #EDE9DA;border-radius:20px;overflow:hidden">
+          <div style="padding:16px 18px 14px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:baseline;border-bottom:1px solid #EDE9DA">
+            <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600">Bandingkan versi per kategori</div>
+          </div>
+          <div style="padding:12px 18px;display:flex;gap:16px;align-items:flex-end;border-bottom:1px solid #EDE9DA">
+            <span style="flex:1;min-width:150px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Kategori</span>
+            <span style="width:120px;flex:0 0 120px;text-align:right;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Terpakai</span>
+            <sc-for list="{{ matrixVersions }}" as="mv" hint-placeholder-count="2">
+              <span onClick="{{ mv.pick }}" style="width:140px;flex:0 0 140px;text-align:right;cursor:pointer;border-radius:10px;padding:7px 9px;background:{{ mv.headBg }}">
+                <span style="display:block;font-size:13.5px;font-weight:700;color:{{ mv.headFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ mv.name }}</span>
+                <span style="display:block;font-size:11px;color:#6C7C7D;margin-top:2px">{{ mv.badge }}</span>
+              </span>
+            </sc-for>
+          </div>
+          <sc-for list="{{ matrixRows }}" as="mr" hint-placeholder-count="4">
+            <div style="padding:12px 18px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #F1EEE1">
+              <span style="flex:1;min-width:150px;display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600;min-width:0">
+                <span style="width:10px;height:10px;flex:0 0 10px;border-radius:3px;background:{{ mr.segColor }}"></span>
+                <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ mr.name }}</span>
+              </span>
+              <span style="width:120px;flex:0 0 120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#6C7C7D">{{ mr.spentRp }}</span>
+              <sc-for list="{{ mr.vals }}" as="mvl" hint-placeholder-count="2">
+                <span style="width:140px;flex:0 0 140px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14px;color:{{ mvl.fg }};font-weight:{{ mvl.weight }}">{{ mvl.copy }}</span>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="padding:14px 18px;display:flex;gap:16px;align-items:center;background:#FBFAF5">
+            <span style="flex:1;min-width:150px;font-size:14px;font-weight:700">Total versi</span>
+            <span style="width:120px;flex:0 0 120px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:{{ statusFg }}">{{ spentRp }}</span>
+            <sc-for list="{{ matrixVersions }}" as="mv" hint-placeholder-count="2">
+              <span style="width:140px;flex:0 0 140px;text-align:right">
+                <span style="display:block;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700">{{ mv.totalRp }}</span>
+                <span style="display:block;font-family:'IBM Plex Mono',monospace;font-size:11.5px;margin-top:2px;color:{{ mv.diffFg }}">{{ mv.diffCopy }}</span>
+              </span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabExpenses }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+        <div style="flex:1;min-width:560px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-end">
+            <div style="min-width:280px">
+              <div style="font-family:'Fraunces',serif;font-size:25px;font-weight:600;letter-spacing:-.02em">Pengeluaran</div>
+              <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px;font-family:'IBM Plex Mono',monospace">{{ expSummary }}</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:2px solid #F0713A;border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 14px 26px -20px rgba(16,38,43,.3)">
+            <div style="display:flex;gap:14px;align-items:flex-end">
+              <div style="width:250px;flex:0 0 250px">
+                <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:7px">Jumlah <span style="color:#C85A28">wajib</span></div>
+                <div style="background:#FBFAF5;border:1.5px solid #F0713A;border-radius:14px;height:56px;padding:0 16px;display:flex;align-items:center;gap:8px">
+                  <span style="font-size:15px;color:#6C7C7D;font-family:'IBM Plex Mono',monospace">Rp</span>
+                  <input value="{{ amount }}" onChange="{{ onAmount }}" placeholder="0" style="flex:1;min-width:0;border:none;background:transparent;font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:#10262B;letter-spacing:-.02em;padding:0">
+                </div>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:7px">Kategori <span style="color:#C85A28">wajib</span></div>
+                <div style="position:relative">
+                  <select value="{{ cat }}" onChange="{{ onCat }}" style="width:100%;background:#FBFAF5;border:1.5px solid #F0713A;border-radius:14px;height:56px;padding:0 40px 0 15px;font-size:15px;font-weight:600;color:#10262B;appearance:none;cursor:pointer">
+                    <option value="Makan &amp; minum">Makan &amp; minum</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Tiket &amp; atraksi">Tiket &amp; atraksi</option>
+                    <option value="Penginapan">Penginapan</option>
+                    <option value="Lain">Lain</option>
+                  </select>
+                  <span style="position:absolute;right:15px;top:50%;transform:translateY(-50%);pointer-events:none;color:#C85A28;font-size:11px">▾</span>
+                </div>
+              </div>
+              <div onClick="{{ logExpense }}" style="background:#C85A28;color:#fff;border-radius:999px;padding:16px 30px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 8px 18px -10px rgba(16,38,43,.28)">Catat</div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <input value="{{ note }}" onChange="{{ onNote }}" placeholder="Catatan (opsional), mis. air mineral 2 botol" style="flex:1;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 14px;font-size:13.5px;color:#10262B">
+            </div>
+          </div>
+
+          <sc-for list="{{ expGroups }}" as="g" hint-placeholder-count="2">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px">
+                <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6C7C7D">{{ g.label }}</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#33474C">{{ g.totalRp }}</div>
+              </div>
+              <sc-for list="{{ g.items }}" as="e" hint-placeholder-count="3">
+                <div style="border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center;background:{{ e.rowBg }};border:1px solid {{ e.rowBd }}">
+                  <div style="width:38px;height:38px;flex:0 0 38px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:{{ e.iconBg }}">
+                    <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="{{ e.iconFg }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ e.iconPath }}"></path></svg>
+                  </div>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:14.5px;font-weight:600;display:flex;gap:9px;align-items:center"><span style="color:#0E6E76;font-weight:700;font-family:'IBM Plex Mono',monospace">{{ e.mark }}</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ e.title }}</span></div>
+                    <div style="font-size:12.5px;color:#6C7C7D;margin-top:2px">{{ e.meta }}</div>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">{{ e.amountRp }}</div>
+                  <div onClick="{{ e.remove }}" style="width:28px;height:28px;border-radius:50%;background:#FBFAF5;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6C7C7D;font-size:14px">×</div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="width:232px;flex:0 1 232px;max-width:100%;display:flex;flex-direction:column;gap:10px">
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:9px">
+            <div style="font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Sisa anggaran</div>
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;justify-content:space-between;gap:8px;font-size:11.5px"><span style="color:#6C7C7D;line-height:1.35">{{ c.name }}</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:{{ c.spentFg }};white-space:nowrap">{{ c.leftCopy }}</span></div>
+                <div style="height:4px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="height:4px;background:{{ c.barColor }};width:{{ c.pct }}%"></div></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabPacking }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="background:#F1EEE1;border-radius:18px;padding:16px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <div style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#E4DECB;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:700;color:#8A6314">!</div>
+          <div style="flex:1;min-width:240px">
+            <div style="font-size:13.5px;font-weight:700;color:#8A6314">{{ packWarnTitle }}</div>
+            <div style="font-size:12.5px;color:#8A6314;line-height:1.5;margin-top:2px">{{ packWarnCopy }}</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-end">
+            <div style="min-width:280px">
+              <div style="font-family:'Fraunces',serif;font-size:25px;font-weight:600;letter-spacing:-.02em">Barang bawaan</div>
+              <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px">{{ packSub }}</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600">
+              <div style="width:150px;height:8px;border-radius:999px;background:#F1EEE1;overflow:hidden"><div style="height:8px;background:#2F6B54;width:{{ packPct }}%"></div></div>
+              <span style="font-family:'IBM Plex Mono',monospace;color:#33474C">{{ packCount }}</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;align-items:start">
+            <sc-for list="{{ packGroups }}" as="g" hint-placeholder-count="3">
+              <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">{{ g.name }}</div>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#6C7C7D">{{ g.count }}</span>
+                </div>
+                <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+                  <div onClick="{{ it.toggle }}" style="display:flex;gap:12px;align-items:center;border-radius:14px;padding:11px 13px;cursor:pointer;background:{{ it.rowBg }}">
+                    <span style="width:20px;height:20px;flex:0 0 20px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:2px solid {{ it.boxBd }};background:{{ it.boxBg }}">
+                      <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+                      </sc-if>
+                    </span>
+                    <span style="flex:1;min-width:0;font-size:14px;font-weight:{{ it.weight }};color:{{ it.fg }};text-decoration:{{ it.deco }}">{{ it.label }}</span>
+                    <sc-if value="{{ it.hasUrl }}" hint-placeholder-val="{{ false }}">
+                      <a href="{{ it.url }}" target="_blank" rel="noreferrer" onClick="{{ stop }}" style="display:flex;gap:5px;align-items:center;font-size:11.5px;font-weight:700;color:#0A4F55;background:#DEEEEC;border-radius:999px;padding:5px 10px;text-decoration:none;white-space:nowrap">Beli
+                        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#0A4F55" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"></path></svg>
+                      </a>
+                    </sc-if>
+                    <sc-if value="{{ it.req }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size:11.5px;font-weight:700;color:#C85A28;white-space:nowrap">Wajib</span>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+            <div style="border:1px dashed #D8D0BB;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">Tambah barang</div>
+              <input value="{{ newItem }}" onChange="{{ onNewItem }}" placeholder="mis. peralatan snorkeling" style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:13.5px;color:#10262B">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#33474C;margin-bottom:6px">Kategori</div>
+                <div style="position:relative">
+                  <select value="{{ newItemCat }}" onChange="{{ onNewItemCat }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 34px 11px 13px;font-size:13.5px;color:#10262B;appearance:none;cursor:pointer">
+                    <option value="Dokumen">Dokumen</option>
+                    <option value="Pakaian">Pakaian</option>
+                    <option value="Toiletri">Toiletri</option>
+                    <option value="Perlengkapan">Perlengkapan</option>
+                    <option value="Lain-lain">Lain-lain</option>
+                  </select>
+                  <span style="position:absolute;right:13px;top:50%;transform:translateY(-50%);pointer-events:none;color:#6C7C7D;font-size:10px">▾</span>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#33474C;margin-bottom:6px">Penanda</div>
+                <div style="display:flex;gap:8px">
+                  <div onClick="{{ pickReq }}" style="flex:1;text-align:center;border-radius:999px;padding:9px;font-size:12.5px;cursor:pointer;background:{{ reqBg }};color:{{ reqFg }};border:1px solid {{ reqBd }};font-weight:{{ reqWeight }}">Wajib</div>
+                  <div onClick="{{ pickOpt }}" style="flex:1;text-align:center;border-radius:999px;padding:9px;font-size:12.5px;cursor:pointer;background:{{ optBg }};color:{{ optFg }};border:1px solid {{ optBd }};font-weight:{{ optWeight }}">Opsional</div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#33474C;margin-bottom:6px">Tautan beli <span style="color:#6C7C7D;font-weight:400">opsional</span></div>
+                <input value="{{ newItemUrl }}" onChange="{{ onNewItemUrl }}" placeholder="tokopedia.com/…" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:13px;color:#10262B">
+              </div>
+              <div onClick="{{ addItem }}" style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:11px;text-align:center;font-size:13.5px;font-weight:700;cursor:pointer">{{ addItemCopy }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabOutfit }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="background:#DEEEEC;border-radius:18px;padding:16px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <div style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#C8E2DE;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:700;color:#0A4F55">i</div>
+          <div style="flex:1;min-width:240px;font-size:12.5px;line-height:1.5;color:#0A4F55">Outfit yang sudah diisi ikut muncul di kartu aktivitas hari itu.</div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:flex-end">
+          <div style="min-width:280px">
+            <div style="font-family:'Fraunces',serif;font-size:25px;font-weight:600;letter-spacing:-.02em">Outfit</div>
+            <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px">Pasang tiap set ke satu hari atau satu aktivitas lewat kolom Untuk.</div>
+          </div>
+          <div onClick="{{ addOutfitSet }}" style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:11px 20px;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap">+ Set outfit</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;align-items:start">
+          <sc-for list="{{ outfitCards }}" as="o" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+                <span style="border-radius:999px;padding:5px 11px;font-size:11px;font-weight:700;letter-spacing:.04em;background:{{ o.kindBg }};color:{{ o.kindFg }}">{{ o.kind }}</span>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <span style="font-size:11.5px;font-weight:700;white-space:nowrap;color:{{ o.tagFg }}">{{ o.tag }}</span>
+                  <div onClick="{{ o.remove }}" style="width:26px;height:26px;border-radius:50%;background:#FBFAF5;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6C7C7D;font-size:14px">×</div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6C7C7D;margin-bottom:6px">Untuk</div>
+                <div style="position:relative">
+                  <div onClick="{{ o.toggleScope }}" style="display:flex;gap:10px;align-items:center;justify-content:space-between;background:#FBFAF5;border:1px solid {{ o.pickBd }};border-radius:12px;padding:11px 13px;cursor:pointer">
+                    <span style="min-width:0;font-size:13.5px;font-weight:600;color:#10262B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ o.scopeLabel }}</span>
+                    <span style="color:#6C7C7D;font-size:10px">▾</span>
+                  </div>
+                  <sc-if value="{{ o.scopeOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;left:0;right:0;top:100%;margin-top:6px;z-index:20;background:#fff;border:1px solid #E4DECB;border-radius:14px;padding:6px;box-shadow:0 22px 40px -22px rgba(16,38,43,.45);max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:2px">
+                    <sc-for list="{{ o.options }}" as="so" hint-placeholder-count="5">
+                      <div onClick="{{ so.pick }}" style="border-radius:10px;padding:9px 11px;font-size:13px;cursor:pointer;background:{{ so.bg }};color:{{ so.fg }};font-weight:{{ so.weight }};padding-left:{{ so.indent }}px">{{ so.label }}</div>
+                    </sc-for>
+                  </div>
+                  </sc-if>
+                </div>
+              </div>
+              <sc-for list="{{ o.slots }}" as="sl" hint-placeholder-count="4">
+                <div style="display:flex;gap:11px;align-items:center">
+                  <div style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#DEEEEC;display:flex;align-items:center;justify-content:center">
+                    <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#0A4F55" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="{{ sl.icon }}"></path></svg>
+                  </div>
+                  <input value="{{ sl.value }}" onChange="{{ sl.onChange }}" placeholder="{{ sl.placeholder }}" style="flex:1;min-width:0;background:#FBFAF5;border:1px solid #E4DECB;border-radius:11px;padding:9px 12px;font-size:13px;color:#33474C">
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabMembers }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+        <div style="flex:1;min-width:520px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:flex-end">
+            <div style="min-width:260px">
+              <div style="font-family:'Fraunces',serif;font-size:25px;font-weight:600;letter-spacing:-.02em">Anggota trip</div>
+              <div style="font-size:13.5px;color:#6C7C7D;margin-top:4px">{{ memberSummary }}</div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#0A4F55">{{ memberCount }} orang · biaya dibagi otomatis</div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:8px 18px;display:flex;flex-direction:column">
+            <sc-for list="{{ members }}" as="mb" hint-placeholder-count="3">
+              <div style="padding:14px 0;border-bottom:1px solid #F1EEE1;display:flex;gap:13px;align-items:center;flex-wrap:wrap">
+                <div style="width:40px;height:40px;flex:0 0 40px;border-radius:50%;background:{{ mb.avBg }};color:{{ mb.avFg }};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">{{ mb.initials }}</div>
+                <div style="flex:1;min-width:150px">
+                  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                    <span style="font-size:14.5px;font-weight:600">{{ mb.name }}</span>
+                    <span style="border-radius:999px;padding:3px 9px;font-size:10.5px;font-weight:700;background:{{ mb.statusBg }};color:{{ mb.statusFg }}">{{ mb.statusLabel }}</span>
+                  </div>
+                  <div style="font-size:12.5px;color:#6C7C7D;margin-top:2px">{{ mb.email }}</div>
+                </div>
+                <sc-if value="{{ mb.canEdit }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;gap:8px;align-items:center">
+                  <select value="{{ mb.role }}" onChange="{{ mb.onRole }}" style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:11px;padding:8px 11px;font-size:12.5px;font-weight:600;color:#33474C;appearance:none">
+                    <sc-for list="{{ roleOptions }}" as="ro" hint-placeholder-count="3">
+                      <option value="{{ ro }}">{{ ro }}</option>
+                    </sc-for>
+                  </select>
+                  <sc-if value="{{ mb.pending }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ mb.resend }}" style="font-size:12.5px;font-weight:700;color:#0A4F55;cursor:pointer;white-space:nowrap">Kirim ulang</div>
+                  </sc-if>
+                  <div onClick="{{ mb.remove }}" style="width:28px;height:28px;border-radius:50%;background:#FBFAF5;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6C7C7D;font-size:14px">×</div>
+                </div>
+                </sc-if>
+                <sc-if value="{{ mb.isOwner }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:700">Pemilik</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="width:330px;flex:1 0 300px;max-width:100%;display:flex;flex-direction:column;gap:14px">
+          <div style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">Undang orang</div>
+            <input value="{{ mvEmail }}" onChange="{{ onMvEmail }}" placeholder="email@contoh.com" style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:13.5px;color:#33474C">
+            <select value="{{ mvRole }}" onChange="{{ onMvRole }}" style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:600;color:#33474C;appearance:none">
+              <sc-for list="{{ roleOptions }}" as="ro" hint-placeholder-count="3">
+                <option value="{{ ro }}">{{ ro }}</option>
+              </sc-for>
+            </select>
+            <div onClick="{{ invite }}" style="background:#C85A28;color:#fff;border-radius:999px;padding:12px;text-align:center;font-size:14px;font-weight:700;cursor:pointer">Kirim undangan</div>
+            <div onClick="{{ copyInvite }}" style="text-align:center;font-size:12.5px;font-weight:700;color:#0A4F55;cursor:pointer">Salin tautan undangan</div>
+          </div>
+          <div style="background:#DEEEEC;border-radius:20px;padding:16px;font-size:12.5px;line-height:1.55;color:#0A4F55">Anggota <span style="font-weight:700">Bisa ubah</span> boleh menambah aktivitas dan pengeluaran. <span style="font-weight:700">Hanya lihat</span> cuma membaca rencana.</div>
+          <div onClick="{{ openShare }}" style="background:#fff;border:1px solid #EDE9DA;border-radius:20px;padding:16px;display:flex;gap:11px;align-items:center;cursor:pointer">
+            <div style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#F1EEE1;display:flex;align-items:center;justify-content:center">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8A6314" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1 M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"></path></svg>
+            </div>
+            <div style="flex:1;min-width:0;font-size:12.5px;line-height:1.5;color:#33474C">Lihat versi hanya-baca yang dilihat orang yang diundang</div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isShare }}" hint-placeholder-val="{{ false }}">
+  <div style="flex:1;display:flex;flex-direction:column;animation:riseIn .3s ease both">
+    <div style="height:236px;position:relative;background-size:cover;background-position:center 56%;background-image:{{ trip.coverUrl }};background-color:{{ trip.matBg }}">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,38,43,.42) 0%,rgba(16,38,43,.2) 40%,rgba(16,38,43,.78) 100%)"></div>
+      <div style="position:relative;height:100%;max-width:1240px;margin:0 auto;padding:24px 32px;display:flex;flex-direction:column;justify-content:space-between;color:#fff">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:28px;height:28px;border-radius:9px;background:#fff;position:relative;overflow:hidden">
+              <div style="position:absolute;left:5px;top:5px;width:7px;height:7px;border-radius:50%;background:#F1EEE1"></div>
+              <div style="position:absolute;left:-2px;bottom:7px;width:20px;height:11px;border-radius:11px 11px 0 0;background:#2F6B54"></div>
+              <div style="position:absolute;left:6px;bottom:0;width:24px;height:7px;border-radius:9px 9px 0 0;background:#F0713A"></div>
+            </div>
+            <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600">Jalan</div>
+          </div>
+          <div style="display:flex;gap:10px;font-size:13px;font-weight:600;align-items:center">
+            <span style="background:rgba(255,255,255,.16);border-radius:999px;padding:8px 14px">Hanya baca</span>
+            <span onClick="{{ closeShare }}" style="background:#fff;color:#0A4F55;border-radius:999px;padding:9px 16px;font-weight:700;cursor:pointer">Kembali ke aplikasi</span>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;gap:9px;margin-bottom:10px">
+            <span style="background:rgba(255,255,255,.9);color:#10262B;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700">{{ trip.typeLabel }} · {{ trip.dayCount }} hari</span>
+            <span style="background:rgba(255,255,255,.16);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600">{{ trip.peopleLabel }}</span>
+          </div>
+          <div style="font-family:'Fraunces',serif;font-size:40px;font-weight:600;letter-spacing:-.03em;text-shadow:0 2px 18px rgba(16,38,43,.5)">{{ trip.name }}</div>
+          <div style="font-size:15px;margin-top:6px;opacity:.95">{{ trip.sub }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width:1240px;width:100%;margin:0 auto;padding:26px 32px 60px;display:flex;flex-wrap:wrap;gap:26px;align-items:flex-start">
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;gap:14px">
+          <div style="flex:1;background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:16px 18px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Total per orang</div><div style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;margin-top:5px">{{ perHeadRp }}</div></div>
+          <div style="flex:1;background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:16px 18px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Aktivitas</div><div style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;margin-top:5px">{{ actTotal }}</div></div>
+          <div style="flex:1;background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:16px 18px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Termahal</div><div style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;margin-top:5px">{{ priciest }}</div></div>
+        </div>
+
+        <sc-for list="{{ shareDays }}" as="d" hint-placeholder-count="3">
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="width:96px;flex:0 0 96px;text-align:right;padding-top:2px"><div style="font-size:13px;font-weight:700">{{ d.title }}</div><div style="font-size:12.5px;color:#6C7C7D">{{ d.dateLabel }}</div></div>
+            <div style="width:2px;background:#EDE9DA;align-self:stretch;border-radius:2px;margin-top:6px"></div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ d.acts }}" as="a" hint-placeholder-count="3">
+                <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center">
+                  <span style="width:36px;height:36px;flex:0 0 36px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:{{ a.iconBg }}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="{{ a.iconFg }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ a.iconPath }}"></path></svg>
+                  </span>
+                  <span style="flex:1;min-width:0"><span style="display:block;font-size:14.5px;font-weight:600">{{ a.title }}</span><span style="display:block;font-size:12.5px;color:#6C7C7D;margin-top:2px">{{ a.shareMeta }}</span></span>
+                  <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#33474C">{{ a.costShort }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="width:352px;flex:1 0 320px;max-width:100%;display:flex;flex-direction:column;gap:16px">
+        <div style="background:#0E6E76;border-radius:22px;padding:20px;color:#fff;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:600">Mau trip seperti ini?</div>
+          <div style="font-size:13.5px;color:#CFE3E1;line-height:1.55">Salin rencana ini jadi trip sendiri, ganti tanggalnya, dan anggarannya ikut terbawa.</div>
+          <div onClick="{{ copyShared }}" style="background:#fff;color:#0A4F55;border-radius:999px;padding:12px;text-align:center;font-size:14px;font-weight:700;cursor:pointer">Salin trip ini</div>
+          <div style="font-size:12px;color:#CFE3E1;text-align:center">Tanpa akun untuk melihat · gratis untuk menyalin</div>
+        </div>
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:600">Anggaran ringkas</div>
+          <sc-for list="{{ cats }}" as="c" hint-placeholder-count="4">
+            <div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#33474C">{{ c.name }}</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600">{{ c.spentShort }}</span></div>
+          </sc-for>
+          <div style="border-top:1px solid #EDE9DA;padding-top:11px;display:flex;justify-content:space-between;font-size:14px"><span style="font-weight:700">Total</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:700">{{ spentRp }}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ activity }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeActivity }}" style="position:fixed;inset:0;background:rgba(16,38,43,.34);z-index:60;display:flex;justify-content:flex-end">
+    <div onClick="{{ stop }}" style="width:520px;height:100%;background:#FBFAF5;box-shadow:-20px 0 60px -20px rgba(16,38,43,.4);display:flex;flex-direction:column;animation:sheetIn .22s ease both;overflow:auto">
+      <div style="padding:22px 26px 0;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6C7C7D">Detail aktivitas</div>
+        <div onClick="{{ closeActivity }}" style="width:32px;height:32px;border-radius:50%;background:#fff;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#33474C;font-size:16px">×</div>
+      </div>
+      <div style="padding:18px 26px 26px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div style="width:52px;height:52px;flex:0 0 52px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:{{ activity.iconBg }}">
+            <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="{{ activity.iconFg }}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ activity.iconPath }}"></path></svg>
+          </div>
+          <div style="min-width:0;flex:1">
+            <input value="{{ activity.title }}" onChange="{{ onActTitle }}" style="width:100%;background:transparent;border:none;border-bottom:1px dashed #D8D0BB;font-family:'Fraunces',serif;font-size:23px;font-weight:600;letter-spacing:-.02em;color:#10262B;padding:2px 0 5px">
+            <div style="font-size:13px;color:#6C7C7D;margin-top:5px;font-family:'IBM Plex Mono',monospace">{{ activity.timeRange }} · {{ activity.dayLabel }}</div>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Waktu dan jenis</div>
+          <div style="display:flex;gap:10px">
+            <div style="width:110px;flex:0 0 110px"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Jam</div><input type="time" value="{{ activity.timeInput }}" onChange="{{ onActTime }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#10262B"></div>
+            <div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Durasi</div>
+              <select value="{{ activity.dur }}" onChange="{{ onActDur }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:10px 12px;font-size:14px;color:#10262B;appearance:none">
+                <option value="0">Tanpa durasi</option>
+                  <option value="30">30 menit</option>
+                  <option value="45">45 menit</option>
+                  <option value="60">1 jam</option>
+                  <option value="90">1 jam 30 menit</option>
+                  <option value="120">2 jam</option>
+                  <option value="150">2 jam 30 menit</option>
+                  <option value="180">3 jam</option>
+                  <option value="210">3 jam 30 menit</option>
+                  <option value="240">4 jam</option>
+                  <option value="300">5 jam</option>
+                  <option value="360">6 jam</option>
+                  <option value="480">8 jam</option>
+              </select>
+            </div>
+          </div>
+          <div><div style="font-size:11.5px;font-weight:600;color:#33474C;margin-bottom:6px">Jenis</div>
+            <select value="{{ activity.cat }}" onChange="{{ onActCat }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:10px 12px;font-size:14px;color:#10262B;appearance:none">
+              <option value="Makan &amp; minum">Makan &amp; minum</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Tiket &amp; atraksi">Tiket &amp; atraksi</option>
+                  <option value="Penginapan">Penginapan</option>
+                  <option value="Santai">Santai</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:14px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Biaya <span style="font-weight:400;text-transform:none;letter-spacing:0">opsional</span></div>
+              <div style="margin-top:6px;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:9px 13px;display:flex;align-items:baseline;gap:8px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#6C7C7D">Rp</span>
+                <input value="{{ activity.costInput }}" onChange="{{ onActCost }}" placeholder="0" style="flex:1;min-width:0;border:none;background:transparent;font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:#10262B;padding:2px 0">
+              </div>
+            </div>
+            <div style="font-size:12.5px;color:#6C7C7D;text-align:right;max-width:150px;line-height:1.5">{{ activity.costSub }}</div>
+          </div>
+          <div style="background:#DEEEEC;border-radius:12px;padding:11px 13px;display:flex;gap:10px;align-items:center">
+            <span style="font-family:'IBM Plex Mono',monospace;color:#0E6E76;font-weight:700">↳</span>
+            <span style="font-size:13px;color:#0A4F55">{{ activity.derivedCopy }}</span>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Tempat dan catatan</div>
+          <input value="{{ activity.place }}" onChange="{{ onActPlace }}" placeholder="Tempat, mis. Pelabuhan Waingapu" style="background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:14px;color:#33474C">
+          <textarea value="{{ activity.note }}" onChange="{{ onActNote }}" placeholder="Catatan, mis. bawa sandal gunung" style="min-height:84px;resize:vertical;background:#FBFAF5;border:1px solid #E4DECB;border-radius:14px;padding:12px 13px;font-size:13.5px;color:#33474C;line-height:1.55"></textarea>
+        </div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:10px;align-items:center;justify-content:space-between">
+            <div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6C7C7D">Outfit aktivitas ini</div>
+            <span style="border-radius:999px;padding:4px 10px;font-size:11px;font-weight:700;white-space:nowrap;background:{{ activity.outfitTagBg }};color:{{ activity.outfitTagFg }}">{{ activity.outfitSourceTag }}</span>
+          </div>
+
+          <sc-if value="{{ activity.outfitOwn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ activity.outfitSlots }}" as="sl" hint-placeholder-count="4">
+              <div style="display:flex;gap:10px;align-items:center">
+                <div style="width:32px;height:32px;flex:0 0 32px;border-radius:10px;background:#DEEEEC;display:flex;align-items:center;justify-content:center">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#0A4F55" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="{{ sl.icon }}"></path></svg>
+                </div>
+                <input value="{{ sl.value }}" onChange="{{ sl.onChange }}" placeholder="{{ sl.placeholder }}" style="flex:1;min-width:0;background:#FBFAF5;border:1px solid #E4DECB;border-radius:11px;padding:9px 12px;font-size:13.5px;color:#33474C">
+              </div>
+            </sc-for>
+            <div onClick="{{ activity.removeOutfit }}" style="align-self:flex-start;font-size:12.5px;font-weight:700;color:#C85A28;cursor:pointer">Hapus, ikut outfit hari ini</div>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ activity.outfitFallback }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ activity.outfitDayItems }}" as="oi" hint-placeholder-count="3">
+                <div style="display:flex;gap:10px;align-items:center">
+                  <div style="width:32px;height:32px;flex:0 0 32px;border-radius:10px;background:#F1EEE1;display:flex;align-items:center;justify-content:center">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#6C7C7D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="{{ oi.icon }}"></path></svg>
+                  </div>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#6C7C7D">{{ oi.label }}</div>
+                    <div style="font-size:13.5px;color:#33474C;line-height:1.4">{{ oi.value }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ activity.outfitDayEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px;color:#6C7C7D;line-height:1.55">Outfit hari ini belum diisi.</div>
+            </sc-if>
+            <div onClick="{{ activity.addOutfit }}" style="align-self:flex-start;background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer">+ Atur outfit khusus aktivitas</div>
+          </div>
+          </sc-if>
+        </div>
+
+        <div style="display:flex;gap:10px">
+          <div onClick="{{ closeActivity }}" style="flex:1;background:#0E6E76;color:#fff;border-radius:999px;padding:13px;text-align:center;font-size:14px;font-weight:700;cursor:pointer">Selesai</div>
+          <div onClick="{{ deleteActivity }}" style="background:#FCE3D3;color:#C85A28;border-radius:999px;padding:13px 20px;font-size:14px;font-weight:700;cursor:pointer">Hapus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ editOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeEditTrip }}" style="position:fixed;inset:0;background:rgba(16,38,43,.34);z-index:75;display:flex;justify-content:flex-end">
+    <div onClick="{{ stop }}" style="width:440px;max-width:100%;height:100%;background:#FBFAF5;border-left:1px solid #EDE9DA;box-shadow:-30px 0 70px -30px rgba(16,38,43,.5);display:flex;flex-direction:column;animation:slideOverIn .24s ease both">
+      <div style="padding:20px 22px;border-bottom:1px solid #EDE9DA;background:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div>
+          <div style="font-family:'Fraunces',serif;font-size:21px;font-weight:600;letter-spacing:-.02em">Ubah detail trip</div>
+          <div style="font-size:12.5px;color:#6C7C7D;margin-top:2px">Nama, tanggal, dan gambar kartu</div>
+        </div>
+        <div onClick="{{ closeEditTrip }}" style="width:32px;height:32px;border-radius:50%;background:#FBFAF5;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#33474C;font-size:16px">×</div>
+      </div>
+
+      <div style="flex:1;overflow:auto;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+        <div style="height:132px;border-radius:18px;overflow:hidden;position:relative;background-size:cover;background-position:center 58%;background-image:{{ etCoverUrl }};background-color:#DEEEEC;display:flex;align-items:flex-end;padding:14px">
+          <sc-if value="{{ etCoverEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:#0A4F55">Belum ada gambar</div>
+          </sc-if>
+          <div style="position:relative;font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#fff;text-shadow:0 2px 12px rgba(16,38,43,.6)">{{ etName }}</div>
+        </div>
+
+        <div><div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Nama trip</div><input value="{{ etName }}" onChange="{{ onEtName }}" placeholder="mis. Sumba Timur" style="width:100%;background:#fff;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:14px;color:#10262B"></div>
+        <div><div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Destinasi</div><input value="{{ etPlace }}" onChange="{{ onEtPlace }}" placeholder="mis. Waingapu, Sumba Timur" style="width:100%;background:#fff;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-size:14px;color:#10262B"></div>
+
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:15px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:11px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Mulai</div>
+              <input type="date" value="{{ etStart }}" onChange="{{ onEtStart }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#10262B">
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Akhir</div>
+              <input type="date" value="{{ etEndInput }}" onChange="{{ onEtEnd }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#10262B">
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+            <div style="width:160px;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:5px 7px;display:flex;align-items:center;justify-content:space-between">
+              <div onClick="{{ etLenMinus }}" style="width:28px;height:28px;border-radius:9px;background:#fff;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#33474C">−</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600">{{ etLen }} hari</div>
+              <div onClick="{{ etLenPlus }}" style="width:28px;height:28px;border-radius:9px;background:#fff;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#33474C">+</div>
+            </div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#0A4F55;text-align:right;flex:1;min-width:120px">{{ etRangeCopy }}</div>
+          </div>
+          <sc-if value="{{ etDayWarn }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FCE3D3;color:#C85A28;border-radius:12px;padding:10px 12px;font-size:12.5px;font-weight:600;line-height:1.5">{{ etDayCopy }}</div>
+          </sc-if>
+        </div>
+
+        <div>
+          <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:8px">Gambar trip</div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap">
+            <sc-for list="{{ etCoverChoices }}" as="cv" hint-placeholder-count="5">
+              <div onClick="{{ cv.pick }}" style="width:86px;cursor:pointer;display:flex;flex-direction:column;gap:5px">
+                <div style="height:56px;border-radius:13px;border:2px solid {{ cv.bd }};background:#fff;background-size:cover;background-position:center 58%;background-image:{{ cv.thumb }};display:flex;align-items:center;justify-content:center;overflow:hidden">
+                  <sc-if value="{{ cv.empty }}" hint-placeholder-val="{{ false }}">
+                    <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="#6C7C7D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4"></path></svg>
+                  </sc-if>
+                </div>
+                <div style="font-size:11px;font-weight:600;text-align:center;color:{{ cv.fg }}">{{ cv.label }}</div>
+              </div>
+            </sc-for>
+            <label style="width:86px;cursor:pointer;display:flex;flex-direction:column;gap:5px">
+              <div style="height:56px;border-radius:13px;border:2px dashed #D8D0BB;display:flex;align-items:center;justify-content:center;color:#6C7C7D;font-size:19px">+</div>
+              <div style="font-size:11px;font-weight:600;text-align:center;color:#6C7C7D">Unggah</div>
+              <input type="file" accept="image/*" onChange="{{ onEtCoverFile }}" style="display:none">
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:8px">Jenis tempat</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+            <sc-for list="{{ etMatChoices }}" as="m" hint-placeholder-count="8">
+              <div onClick="{{ m.pick }}" style="border-radius:13px;overflow:hidden;cursor:pointer;border:2px solid {{ m.bd }}">
+                <div style="height:40px;position:relative;overflow:hidden;background:{{ m.matBg }}">
+                  <div style="position:absolute;left:7px;top:6px;width:12px;height:12px;border-radius:50%;background:{{ m.matSun }}"></div>
+                  <div style="position:absolute;left:-10px;bottom:0;width:90px;height:26px;background:{{ m.matA }};border-radius:{{ m.matRadius }};clip-path:{{ m.matClip }}"></div>
+                </div>
+                <div style="background:#fff;padding:6px;text-align:center;font-size:11px;font-weight:600;color:{{ m.fg }}">{{ m.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:16px 22px;border-top:1px solid #EDE9DA;background:#fff;display:flex;gap:10px;align-items:center">
+        <div onClick="{{ saveEditTrip }}" style="flex:1;background:#0E6E76;color:#fff;border-radius:999px;padding:13px;text-align:center;font-size:14.5px;font-weight:700;cursor:pointer">Simpan perubahan</div>
+        <div onClick="{{ closeEditTrip }}" style="color:#6C7C7D;font-size:13.5px;font-weight:600;cursor:pointer;padding:0 6px">Batal</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showNewTrip }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeNewTrip }}" style="position:fixed;inset:0;background:rgba(16,38,43,.34);z-index:70;display:flex;align-items:center;justify-content:center">
+    <div onClick="{{ stop }}" style="width:560px;background:#FBFAF5;border-radius:26px;padding:26px;display:flex;flex-direction:column;gap:16px;box-shadow:0 40px 90px -30px rgba(16,38,43,.5);animation:riseIn .22s ease both">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:600;letter-spacing:-.02em">Trip baru</div>
+        <div onClick="{{ closeNewTrip }}" style="width:32px;height:32px;border-radius:50%;background:#fff;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#33474C;font-size:16px">×</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div><div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Nama trip</div><input value="{{ ntName }}" onChange="{{ onNtName }}" placeholder="mis. Sumba Timur" style="width:100%;background:#fff;border:1px solid #E4DECB;border-radius:12px;padding:12px 14px;font-size:14px;color:#10262B"></div>
+        <div><div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Destinasi</div><input value="{{ ntPlace }}" onChange="{{ onNtPlace }}" placeholder="mis. Waingapu, Sumba Timur" style="width:100%;background:#fff;border:1px solid #E4DECB;border-radius:12px;padding:12px 14px;font-size:14px;color:#10262B"></div>
+        <div style="background:#fff;border:1px solid #EDE9DA;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:13px">
+          <div style="display:flex;gap:12px;align-items:flex-end">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Tanggal mulai</div>
+              <input type="date" value="{{ ntStart }}" onChange="{{ onNtStart }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#10262B">
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Tanggal akhir</div>
+              <input type="date" value="{{ ntEndInput }}" onChange="{{ onNtEnd }}" style="width:100%;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:11px 13px;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#10262B">
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:6px">Durasi</div>
+            <div style="width:170px;background:#FBFAF5;border:1px solid #E4DECB;border-radius:12px;padding:6px 8px;display:flex;align-items:center;justify-content:space-between">
+              <div onClick="{{ ntLenMinus }}" style="width:30px;height:30px;border-radius:9px;background:#fff;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#33474C">−</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">{{ ntLen }} hari</div>
+              <div onClick="{{ ntLenPlus }}" style="width:30px;height:30px;border-radius:9px;background:#fff;border:1px solid #EDE9DA;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#33474C">+</div>
+            </div>
+          </div>
+          <div style="border-top:1px solid #EDE9DA;padding-top:11px;display:flex;justify-content:space-between;gap:12px;font-size:12.5px">
+            <span style="color:#6C7C7D">Berakhir {{ ntEndLabel }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:#0A4F55">{{ ntRangeCopy }}</span>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;gap:8px;align-items:baseline;margin-bottom:8px">
+            <div style="font-size:11.5px;font-weight:700;color:#33474C">Gambar trip</div>
+            <div style="font-size:11.5px;color:#6C7C7D">opsional, bisa diubah nanti</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <sc-for list="{{ ntCoverChoices }}" as="cv" hint-placeholder-count="5">
+              <div onClick="{{ cv.pick }}" style="width:92px;cursor:pointer;display:flex;flex-direction:column;gap:5px">
+                <div style="height:60px;border-radius:14px;border:2px solid {{ cv.bd }};background:#fff;background-size:cover;background-position:center 58%;background-image:{{ cv.thumb }};display:flex;align-items:center;justify-content:center;overflow:hidden">
+                  <sc-if value="{{ cv.empty }}" hint-placeholder-val="{{ false }}">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#6C7C7D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z M4 15l5-5 4 4 3-3 4 4"></path></svg>
+                  </sc-if>
+                </div>
+                <div style="font-size:11px;font-weight:600;text-align:center;color:{{ cv.fg }}">{{ cv.label }}</div>
+              </div>
+            </sc-for>
+            <label style="width:92px;cursor:pointer;display:flex;flex-direction:column;gap:5px">
+              <div style="height:60px;border-radius:14px;border:2px dashed #D8D0BB;display:flex;align-items:center;justify-content:center;color:#6C7C7D;font-size:20px">+</div>
+              <div style="font-size:11px;font-weight:600;text-align:center;color:#6C7C7D">Unggah</div>
+              <input type="file" accept="image/*" onChange="{{ onNtCoverFile }}" style="display:none">
+            </label>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11.5px;font-weight:700;color:#33474C;margin-bottom:8px">Jenis tempat <span style="color:#6C7C7D;font-weight:400">menentukan mat kartu</span></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <sc-for list="{{ matChoices }}" as="m" hint-placeholder-count="8">
+              <div onClick="{{ m.pick }}" style="border-radius:16px;overflow:hidden;cursor:pointer;border:2px solid {{ m.bd }}">
+                <div style="height:52px;position:relative;overflow:hidden;background:{{ m.matBg }}">
+                  <div style="position:absolute;left:10px;top:8px;width:16px;height:16px;border-radius:50%;background:{{ m.matSun }}"></div>
+                  <div style="position:absolute;left:-14px;bottom:0;width:110px;height:34px;background:{{ m.matA }};border-radius:{{ m.matRadius }};clip-path:{{ m.matClip }}"></div>
+                  <div style="position:absolute;right:6px;bottom:4px">{{ m.motif }}</div>
+                </div>
+                <div style="background:#fff;padding:8px;text-align:center;font-size:12px;font-weight:600;color:{{ m.fg }}">{{ m.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div onClick="{{ createTrip }}" style="flex:1;background:#C85A28;color:#fff;border-radius:999px;padding:14px;text-align:center;font-size:15px;font-weight:700;cursor:pointer">Buat trip</div>
+        <div onClick="{{ goTemplates }}" style="background:#DEEEEC;color:#0A4F55;border-radius:999px;padding:14px 20px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap">Pakai template</div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#10262B;color:#fff;border-radius:999px;padding:13px 22px;font-size:14px;font-weight:600;z-index:80;box-shadow:0 20px 40px -18px rgba(16,38,43,.6);animation:toastIn .2s ease both;display:flex;gap:10px;align-items:center">
+    <span style="font-family:'IBM Plex Mono',monospace;color:#8FC2BE;font-weight:700">✓</span>{{ toast }}
+  </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:980}}">
+const ICONS = {
+  "Makan & minum": "M7 3v7a2 2 0 002 2v9M7 3v7M10 3v7M17 3c-1.7 0-3 1.6-3 4.5S15.3 12 17 12v9",
+  "Transport": "M3 15l1.8-5.4A2 2 0 016.7 8h10.6a2 2 0 011.9 1.6L21 15M2 15h20l-1.5 4H3.5L2 15z",
+  "Tiket & atraksi": "M4 9h16l-1 10H5L4 9zM9 9V7a3 3 0 016 0v2",
+  "Penginapan": "M3 18v-6a2 2 0 012-2h14a2 2 0 012 2v6M3 18v2M21 18v2M3 14h18",
+  "Lain": "M4 6h16M4 12h16M4 18h10",
+  "Santai": "M12 8a4 4 0 100 8 4 4 0 000-8M12 3v2M12 19v2M3 12h2M19 12h2M6 6l1.4 1.4M16.6 16.6L18 18M18 6l-1.4 1.4M7.4 16.6L6 18",
+  "Tempat": "M12 21s7-7.4 7-12a7 7 0 10-14 0c0 4.6 7 12 7 12zM12 11.4a2.4 2.4 0 100-4.8 2.4 2.4 0 000 4.8z"
+};
+const TONE = {
+  "Makan & minum": ["#F1EEE1", "#8A6314"],
+  "Transport": ["#DEEEEC", "#0A4F55"],
+  "Tiket & atraksi": ["#DEEEEC", "#2F6B54"],
+  "Penginapan": ["#F1EEE1", "#6C7C7D"],
+  "Lain": ["#FCE3D3", "#C85A28"],
+  "Santai": ["#FCE3D3", "#C85A28"],
+  "Tempat": ["#DEEEEC", "#2F6B54"]
+};
+const MATS = {
+  pantai: { bg: "#DEEEEC", a: "#C8E2DE", b: "#8FC2BE", sun: "#F1EEE1", radius: "110px 110px 0 0", clip: "none", label: "Pantai", motif: "palm" },
+  gunung: { bg: "#F1EEE1", a: "#E4DECB", b: "#D8D0BB", sun: "#FCE3D3", radius: "0", clip: "polygon(0 100%,0 58%,30% 6%,56% 60%,100% 22%,100% 100%)", label: "Gunung", motif: "mountain" },
+  sawah: { bg: "#DEEEEC", a: "#C8E2DE", b: "#8FC2BE", sun: "#F1EEE1", radius: "0 999px 999px 0", clip: "none", label: "Sawah", motif: "candi" },
+  kota: { bg: "#FCE3D3", a: "#FCE3D3", b: "#FCE3D3", sun: "#F1EEE1", radius: "8px 8px 0 0", clip: "polygon(0 100%,0 44%,18% 44%,18% 20%,40% 20%,40% 56%,64% 56%,64% 30%,86% 30%,86% 62%,100% 62%,100% 100%)", label: "Kota", motif: "camera" },
+  pulau: { bg: "#DEEEEC", a: "#8FC2BE", b: "#8FC2BE", sun: "#FCE3D3", radius: "160px 160px 0 0", clip: "none", label: "Pulau", motif: "ship" },
+  kuil: { bg: "#F1EEE1", a: "#D8D0BB", b: "#C4B29E", sun: "#F1EEE1", radius: "0", clip: "polygon(0 100%,14% 54%,28% 100%,46% 40%,62% 100%,78% 58%,100% 100%)", label: "Kuil", motif: "pagoda" },
+  luar: { bg: "#F1EEE1", a: "#E4DECB", b: "#D8D0BB", sun: "#FCE3D3", radius: "6px 6px 0 0", clip: "polygon(0 100%,0 62%,20% 62%,20% 34%,36% 34%,36% 68%,58% 68%,58% 26%,76% 26%,76% 70%,100% 70%,100% 100%)", label: "Luar negeri", motif: "eiffel" },
+  gurun: { bg: "#FCE3D3", a: "#E4DECB", b: "#C85A28", sun: "#F1EEE1", radius: "999px 999px 0 0", clip: "none", label: "Gurun", motif: "cactus" }
+};
+const MOTIFS = {
+  plane: [{ d: "M50 6c5 0 8 9 8 21v6l32 21v10l-32-10v20l12 10v8l-20-6-20 6v-8l12-10v-20l-32 10v-10l32-21v-6c0-12 3-21 8-21z" }],
+  ship: [{ d: "M46 8h5v58h-5z" }, { d: "M53 14l22 44H53z", o: .85 }, { d: "M44 26L24 58h20z", o: .68 }, { d: "M8 62h84l-12 24H20z" }],
+  palm: [{ d: "M45 92c1-25 4-40 13-55l7 4c-9 14-12 28-13 51z" },
+    { d: "M64 38c-13-10-28-7-34 3 11-5 22-3 31 3z", o: .9 },
+    { d: "M63 37c-4-15-17-23-30-21 12 4 21 11 25 23z", o: .7 },
+    { d: "M66 37c9-13 24-16 34-9-12-1-21 3-29 12z", o: .88 },
+    { d: "M67 40c14-4 26 3 30 15-9-9-19-12-29-9z", o: .66 },
+    { d: "M61 33c2-13 12-21 22-22-9 5-16 12-18 23z", o: .55 }],
+  mountain: [{ d: "M4 88l32-58 16 28 12-20 32 50z" }, { d: "M36 30l11 20-11 6-9-9z", o: .45 }],
+  pagoda: [{ d: "M50 6l28 16H22z" }, { d: "M44 22h12v10H44z", o: .8 }, { d: "M50 30l32 18H18z" },
+    { d: "M42 48h16v12H42z", o: .8 }, { d: "M50 58l38 20H12z" }, { d: "M38 78h24v14H38z", o: .9 }],
+  eiffel: [{ d: "M48 4h4v10h-4z", o: .8 },
+    { d: "M50 12c0 18 6 42 23 78h-10c-9-31-13-50-13-60 0 10-4 29-13 60H27c17-36 23-60 23-78z" },
+    { d: "M33 56h34v6H33z", o: .75 }, { d: "M26 76h48v6H26z", o: .75 }],
+  torii: [{ d: "M10 24h80l-5 9H15z" }, { d: "M18 39h64v7H18z", o: .88 }, { d: "M25 33h9v59h-9z" }, { d: "M66 33h9v59h-9z" }],
+  balloon: [{ d: "M50 6c17 0 28 14 28 29 0 15-14 27-28 42-14-15-28-27-28-42 0-15 11-29 28-29z" },
+    { d: "M44 78h12l-2 14H46z", o: .85 }, { d: "M40 76h20v4H40z", o: .55 }],
+  lighthouse: [{ d: "M39 28h22l7 62H32z" }, { d: "M34 46h32v7H34z", o: .5 },
+    { d: "M42 13h16v13H42z", o: .9 }, { d: "M46 5h8v7h-8z", o: .7 }, { d: "M10 90h80v6H10z", o: .45 }],
+  compass: [{ d: "M50 4a46 46 0 100 92 46 46 0 100-92zm0 9a37 37 0 110 74 37 37 0 110-74z", o: .8 },
+    { d: "M50 22l10 28 28 10-28 10-10 28-10-28-28-10 28-10z" }],
+  camera: [{ d: "M10 30h20l6-9h28l6 9h20v52H10z" },
+    { d: "M50 38a18 18 0 100 36 18 18 0 100-36z", o: .45 }, { d: "M50 48a8 8 0 100 16 8 8 0 100-16z", o: .8 }],
+  suitcase: [{ d: "M16 34h68v54H16z" }, { d: "M39 20h22v14h-8v-7h-6v7h-8z", o: .9 },
+    { d: "M38 34h6v54h-6z", o: .4 }, { d: "M56 34h6v54h-6z", o: .4 }],
+  waves: [{ d: "M4 34c9-10 19-10 28 0s19 10 28 0 19-10 28 0l-6 8c-7-8-13-8-20 0s-21 10-30 0-13-8-20 0z", o: .85 },
+    { d: "M4 34c9-10 19-10 28 0s19 10 28 0 19-10 28 0l-6 8c-7-8-13-8-20 0s-21 10-30 0-13-8-20 0z", o: .6, t: "translate(0 20)" },
+    { d: "M4 34c9-10 19-10 28 0s19 10 28 0 19-10 28 0l-6 8c-7-8-13-8-20 0s-21 10-30 0-13-8-20 0z", o: .4, t: "translate(0 40)" }],
+  cactus: [{ d: "M43 32h14v58H43z" }, { d: "M22 46h9v19c0 7 5 9 12 9v9c-14 0-21-7-21-18z", o: .9 },
+    { d: "M69 38h9v26c0 11-7 18-21 18v-9c8 0 12-3 12-9z", o: .72 }],
+  candi: [{ d: "M50 8l11 17H39z" }, { d: "M42 25h16v11H42z", o: .88 }, { d: "M32 36h36v11H32z" },
+    { d: "M23 47h54v13H23z", o: .84 }, { d: "M14 60h72v15H14z" }, { d: "M6 75h88v17H6z", o: .9 }]
+};
+const CATS = ["Makan & minum", "Transport", "Tiket & atraksi", "Penginapan", "Lain"];
+const SEG_PALETTE = ["#F0713A", "#0E6E76", "#D98F3B", "#2F6B54", "#C4B29E", "#8FC2BE", "#C85A28", "#8A6314"];
+const PALETTE_TONE = [["#DEEEEC", "#0A4F55"], ["#DEEEEC", "#2F6B54"], ["#F1EEE1", "#8A6314"], ["#FCE3D3", "#C85A28"], ["#F1EEE1", "#6C7C7D"]];
+function tone(name) { if (TONE[name]) return TONE[name]; let n = 0; for (const ch of name) n += ch.charCodeAt(0); return PALETTE_TONE[n % PALETTE_TONE.length]; }
+function iconFor(name) { return ICONS[name] || ICONS.Lain; }
+const SHORT_CAT = { "Makan & minum": "Makan", "Transport": "Transport", "Tiket & atraksi": "Tiket", "Lain": "Lain" };
+const OF_SLOTS = [["top", "Atasan", "kaos linen putih"], ["bottom", "Bawahan", "celana cepat kering"], ["shoes", "Alas kaki", "sandal gunung"], ["other", "Lainnya", "topi lebar, dry bag"]];
+const OF_ICON = {
+  top: "M9 4 5 6v4h2v10h10V10h2V6l-4-2a3 3 0 0 1-6 0z",
+  bottom: "M7 3h10l1 18h-4.5L12 12l-1.5 9H6z M7.5 8h9",
+  shoes: "M6.5 4.5c-1.6 2.4-1.6 7-1 11 .3 2.3 1.6 3.5 4 3.5h1c2.4 0 3.7-1.2 4-3.5.6-4 .6-8.6-1-11z M8 9l8 2.5 M8 11.5l8-2.5",
+  other: "M8 8V6a4 4 0 0 1 8 0v2 M5 8h14l-1.2 12H6.2z"
+};
+function ofText(o) { if (!o) return ""; return OF_SLOTS.map(([k]) => (o[k] || "").trim()).filter(Boolean).join(" · "); }
+const COVERS = [["assets/photo-sumba.jpg", "Pantai"], ["assets/photo-ubud.jpg", "Sawah"], ["assets/photo-bromo.jpg", "Gunung"], ["assets/photo-kota.jpg", "Kota"]];
+const SEED_START = { t1: "2026-09-12", t2: "2026-09-26", t3: "2026-10-04", t4: "2026-11-21" };
+const ROLES = ["Pemilik", "Bisa ubah", "Hanya lihat"];
+const SEED_MEMBERS = {
+  t1: [
+    { id: "u1", name: "Rina Kartika", email: "rina@jalan.id", role: "Pemilik", status: "aktif" },
+    { id: "u2", name: "Dimas Prayoga", email: "dimas@mail.com", role: "Bisa ubah", status: "aktif" },
+    { id: "u3", name: "Ayu Larasati", email: "ayu@mail.com", role: "Hanya lihat", status: "menunggu" }
+  ],
+  t2: [
+    { id: "u1", name: "Rina Kartika", email: "rina@jalan.id", role: "Pemilik", status: "aktif" },
+    { id: "u4", name: "Sari Hapsari", email: "sari@mail.com", role: "Bisa ubah", status: "aktif" }
+  ]
+};
+function seedMembers(id) {
+  return (SEED_MEMBERS[id] || [{ id: "u1", name: "Rina Kartika", email: "rina@jalan.id", role: "Pemilik", status: "aktif" }]).map(m => Object.assign({}, m));
+}
+function initials(name) { return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase(); }
+function ofItems(o) {
+  return OF_SLOTS.map(([k, label]) => ({ label, icon: OF_ICON[k], value: ((o && o[k]) || "").trim() })).filter(x => x.value);
+}
+
+const DOW = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+const DOW_LONG = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const MON = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+const MON_LONG = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+function addDays(iso, n) { const d = new Date(iso + "T00:00:00"); d.setDate(d.getDate() + n); return d; }
+function isoDate(d) {
+  const m = String(d.getMonth() + 1).padStart(2, "0"), day = String(d.getDate()).padStart(2, "0");
+  return d.getFullYear() + "-" + m + "-" + day;
+}
+function shortDate(d) { return DOW[d.getDay()] + ", " + d.getDate() + " " + MON[d.getMonth()]; }
+function longDate(d) { return DOW_LONG[d.getDay()] + ", " + d.getDate() + " " + MON_LONG[d.getMonth()]; }
+function rangeLabel(iso, len) {
+  if (!iso) return "belum diatur";
+  const a = addDays(iso, 0), b = addDays(iso, len - 1);
+  return a.getMonth() === b.getMonth()
+    ? a.getDate() + "–" + b.getDate() + " " + MON[b.getMonth()]
+    : a.getDate() + " " + MON[a.getMonth()] + " – " + b.getDate() + " " + MON[b.getMonth()];
+}
+function buildDays(iso, len) {
+  const out = [];
+  for (let i = 0; i < len; i++) {
+    const d = iso ? addDays(iso, i) : null;
+    out.push({
+      date: d ? shortDate(d) : "Hari " + (i + 1),
+      long: d ? longDate(d) : "Hari " + (i + 1),
+      title: i === 0 ? "Tiba" : (i === len - 1 && len > 1 ? "Pulang" : "Belum diberi nama"),
+      outfit: "", acts: []
+    });
+  }
+  return out;
+}
+
+function toMin(t) { if (!t) return null; const p = t.replace(".", ":").split(":"); return parseInt(p[0], 10) * 60 + parseInt(p[1] || "0", 10); }
+function fromMin(m) { const v = ((m % 1440) + 1440) % 1440; return String(Math.floor(v / 60)).padStart(2, "0") + "." + String(v % 60).padStart(2, "0"); }
+function toInput(t) { return t ? t.replace(".", ":") : ""; }
+const DUR_STEPS = [0, 30, 45, 60, 90, 120, 150, 180, 210, 240, 300, 360, 480];
+function nearestDur(m) { return DUR_STEPS.includes(m) ? m : DUR_STEPS.reduce((a, b) => Math.abs(b - m) < Math.abs(a - m) ? b : a, 0); }
+function durLabel(m) {
+  if (!m) return "Tanpa durasi";
+  if (m < 60) return m + " menit";
+  const h2 = Math.floor(m / 60), r = m % 60;
+  return h2 + " jam" + (r ? " " + r + " menit" : "");
+}
+function timeRange(t, d) {
+  if (!t) return "belum ada jam";
+  const s = toMin(t);
+  return d ? t + "–" + fromMin(s + d) : t;
+}
+
+function rp(n) { return "Rp " + Math.round(n).toLocaleString("id-ID"); }
+function shortRp(n) {
+  if (!n) return "0";
+  if (n >= 1000000) { const v = (n / 1000000).toFixed(2).replace(/0$/, "").replace(/\.$/, ""); return v.replace(".", ",") + "jt"; }
+  return Math.round(n / 1000) + "rb";
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      authed: false, email: "rina@jalan.id", pw: "", loginErr: "",
+      route: "home", tab: "overview", tripId: "t1", dayIdx: 2,
+      activityId: null, showNewTrip: false, showActForm: false, homeFilter: "Semua",
+      amount: "", cat: "Makan & minum", note: "",
+      na: { time: "", title: "", cost: "", cat: "Transport", dur: 60 },
+      newItem: "", openScope: null, newItemCat: "Lain-lain", newItemReq: false, newItemUrl: "", outfitMode: "day", openCat: "Makan & minum", toast: null, seq: 100, newCat: { name: "", amount: "" },
+      nt: { name: "", place: "", start: "", len: 4, mat: "pantai", cover: "" },
+      et: null, mv: { email: "", role: "Bisa ubah" },
+      trips: [
+        { id: "t1", name: "Sumba Timur", place: "Air Terjun Tanggedu, Sumba Timur", mat: "pantai", cover: "assets/photo-sumba.jpg", dates: "12–15 Sep", status: "live", people: 3, plan: 3100000,
+          days: [
+            { date: "Sab, 12 Sep", long: "Sabtu, 12 September", title: "Tiba & Waingapu", outfit: "Kaos katun, celana panjang tipis, sepatu ringan untuk jalan kota.",
+              acts: [
+                { id: "a1", dur: 60, time: "13.40", title: "Tiba di Bandara Umbu Mehang Kunda", cat: "Transport", place: "Waingapu, Sumba Timur", cost: 0, note: "Sewa mobil sudah dibooking, jemput di pintu keluar." },
+                { id: "a2", dur: 30, time: "16.00", title: "Check-in penginapan Waingapu", cat: "Penginapan", place: "Waingapu, Sumba Timur", cost: 650000, note: "Dibayar di muka lewat transfer." },
+                { id: "a3", dur: 90, time: "19.00", title: "Makan malam ikan bakar", cat: "Makan & minum", place: "Pasar Matawai, Waingapu", cost: 170000, note: "" }
+              ] },
+            { date: "Min, 13 Sep", long: "Minggu, 13 September", title: "Bukit Wairinding", outfit: "Kemeja linen lengan panjang untuk matahari, topi lebar, sandal.",
+              acts: [
+                { id: "a4", dur: 120, time: "05.30", title: "Sunrise di Bukit Wairinding", cat: "Tiket & atraksi", place: "Wairinding, Sumba Timur", cost: 150000, note: "Bawa uang kecil untuk parkir dan anak-anak setempat." },
+                { id: "a5", dur: 45, time: "09.00", title: "Sarapan kopi Sumba", cat: "Makan & minum", place: "Waingapu", cost: 95000, note: "" },
+                { id: "a6", dur: 90, time: "15.00", title: "Kampung adat Prailiu", cat: "Tiket & atraksi", place: "Prailiu, Waingapu", cost: 200000, note: "Sopan: minta izin sebelum memfoto rumah adat." },
+                { id: "a7", dur: 90, time: "19.30", title: "Makan malam di penginapan", cat: "Makan & minum", place: "Waingapu", cost: 210000, note: "" }
+              ] },
+            { date: "Sen, 14 Sep", long: "Senin, 14 September", title: "Tanggedu & Gili", outfit: "Kaos linen putih, celana pendek cepat kering, sandal gunung. Bawa kaos ganti karena akan basah.",
+              acts: [
+                { id: "a8", dur: 45, time: "07.30", title: "Sarapan di Warung Ibu Nur", cat: "Makan & minum", place: "Waingapu, Sumba Timur", cost: 75000, note: "" },
+                { id: "a9", dur: 180, time: "10.00", title: "Air Terjun Tanggedu", cat: "Tiket & atraksi", place: "Tanggedu, Sumba Timur", cost: 150000, note: "Ojek 40 menit dari jalan utama, jalan kaki 15 menit terakhir." },
+                { id: "a10", dur: 150, time: "15.00", title: "Kapal ke Gili Trawangan", cat: "Transport", place: "Pelabuhan Waingapu", cost: 350000, note: "Naik 30 menit sebelum jadwal, tiket dicek di dermaga." },
+                { id: "a11", dur: 60, time: "19.30", title: "Jalan sore di pantai Walakiri", cat: "Santai", place: "Walakiri, Sumba Timur", cost: 0, note: "Pohon bakau paling bagus saat matahari turun." }
+              ] },
+            { date: "Sel, 15 Sep", long: "Selasa, 15 September", title: "Pulang", outfit: "",
+              acts: [
+                { id: "a12", dur: 0, time: "11.20", title: "Terbang Waingapu – Denpasar", cat: "Transport", place: "Bandara Umbu Mehang Kunda", cost: 0, note: "Sudah dibayar di muka." }
+              ] }
+          ],
+          activeBudget: "t1-hemat",
+          budgets: [
+            { id: "t1-hemat", name: "Hemat", note: "Versi yang dipakai saat berangkat", alloc: { "Makan & minum": 800000, "Transport": 1100000, "Tiket & atraksi": 400000, "Penginapan": 650000, "Lain": 150000 } },
+            { id: "t1-nyaman", name: "Nyaman", note: "Kalau kapal privat diambil", alloc: { "Makan & minum": 1000000, "Transport": 1600000, "Tiket & atraksi": 600000, "Penginapan": 900000, "Lain": 300000 } }
+          ],
+          outfitSets: [
+            { id: "o1", scope: "day:0", top: "Kaos katun", bottom: "Celana panjang tipis", shoes: "Sepatu ringan", other: "" },
+            { id: "o2", scope: "day:1", top: "Kemeja linen lengan panjang", bottom: "Celana chino tipis", shoes: "Sandal", other: "Topi lebar" },
+            { id: "o3", scope: "act:a9", top: "Kaos linen putih", bottom: "Celana pendek cepat kering", shoes: "Sandal gunung", other: "Kaos ganti, dry bag" }
+          ],
+          manual: [
+            { id: "m1", title: "Kopi di pelabuhan", cat: "Makan & minum", dayIdx: 2, amount: 24000, note: "" },
+            { id: "m2", title: "Air mineral & snack", cat: "Makan & minum", dayIdx: 2, amount: 38000, note: "" },
+            { id: "m3", title: "Ojek pagi ke jalan utama", cat: "Lain", dayIdx: 2, amount: 60000, note: "" },
+            { id: "m4", title: "Oleh-oleh tenun kecil", cat: "Lain", dayIdx: 1, amount: 185000, note: "" }
+          ],
+          packing: [
+            { name: "Dokumen", items: [ { id: "p1", label: "KTP dan kartu vaksin", req: true, done: false }, { id: "p2", label: "Obat pribadi", req: true, done: false, url: "https://www.halodoc.com/kategori/obat-obatan" }, { id: "p3", label: "Tiket kapal cetak", req: false, done: true } ] },
+            { name: "Pakaian", items: [ { id: "p4", label: "Sandal gunung", req: false, done: false, url: "https://www.tokopedia.com/search?q=sandal+gunung" }, { id: "p5", label: "Jaket tipis anti angin", req: false, done: false, url: "https://www.tokopedia.com/search?q=jaket+anti+angin" }, { id: "p6", label: "Baju renang", req: false, done: true } ] },
+            { name: "Elektronik", items: [ { id: "p7", label: "Powerbank 10.000 mAh", req: false, done: false }, { id: "p8", label: "Kabel dan kepala charger", req: false, done: true } ] }
+          ] },
+        { id: "t2", name: "Ubud & Tegallalang", place: "Tegallalang, Gianyar", mat: "sawah", cover: "assets/photo-ubud.jpg", dates: "26–28 Sep", status: "plan", people: 2, plan: 1850000,
+          days: [
+            { date: "Sab, 26 Sep", long: "Sabtu, 26 September", title: "Tiba & Ubud pusat", outfit: "",
+              acts: [ { id: "b1", dur: 30, time: "12.00", title: "Check-in guesthouse Ubud", cat: "Penginapan", place: "Ubud, Gianyar", cost: 520000, note: "" }, { id: "b2", dur: 90, time: "18.30", title: "Makan malam di Jalan Suweta", cat: "Makan & minum", place: "Ubud", cost: 180000, note: "" } ] },
+            { date: "Min, 27 Sep", long: "Minggu, 27 September", title: "Terasering Tegallalang", outfit: "",
+              acts: [ { id: "b3", dur: 120, time: "07.00", title: "Jalan pagi di terasering", cat: "Tiket & atraksi", place: "Tegallalang, Gianyar", cost: 90000, note: "" }, { id: "b4", dur: 60, time: "13.00", title: "Makan siang warung lokal", cat: "Makan & minum", place: "Tegallalang", cost: 120000, note: "" } ] },
+            { date: "Sen, 28 Sep", long: "Senin, 28 September", title: "Pulang", outfit: "", acts: [] }
+          ],
+          activeBudget: "t2-awal",
+          budgets: [ { id: "t2-awal", name: "Rencana awal", note: "", alloc: { "Makan & minum": 600000, "Transport": 400000, "Tiket & atraksi": 250000, "Penginapan": 550000, "Lain": 100000 } } ],
+          manual: [],
+          packing: [ { name: "Dokumen", items: [ { id: "q1", label: "KTP", req: true, done: false } ] }, { name: "Pakaian", items: [ { id: "q2", label: "Sarung untuk pura", req: false, done: false }, { id: "q3", label: "Jas hujan tipis", req: false, done: false } ] } ] },
+        { id: "t3", name: "Bromo Sunrise", place: "Cemoro Lawang, Probolinggo", mat: "gunung", cover: "assets/photo-bromo.jpg", dates: "4–8 Okt", status: "plan", people: 4, plan: 4600000,
+          days: [
+            { date: "Sab, 4 Okt", long: "Sabtu, 4 Oktober", title: "Perjalanan ke Cemoro Lawang", outfit: "",
+              acts: [ { id: "c1", dur: 480, time: "20.00", title: "Kereta malam Surabaya – Probolinggo", cat: "Transport", place: "Stasiun Gubeng", cost: 320000, note: "" } ] },
+            { date: "Min, 5 Okt", long: "Minggu, 5 Oktober", title: "Sunrise Penanjakan", outfit: "",
+              acts: [ { id: "c2", dur: 240, time: "03.00", title: "Jeep ke Penanjakan", cat: "Transport", place: "Cemoro Lawang", cost: 700000, note: "" }, { id: "c3", dur: 120, time: "09.00", title: "Kawah Bromo", cat: "Tiket & atraksi", place: "Taman Nasional Bromo", cost: 440000, note: "" } ] }
+          ],
+          activeBudget: "t3-jeep",
+          budgets: [
+            { id: "t3-jeep", name: "Jeep berbagi", note: "Jeep dibagi 4 orang", alloc: { "Makan & minum": 900000, "Transport": 2000000, "Tiket & atraksi": 900000, "Penginapan": 700000, "Lain": 100000 } },
+            { id: "t3-privat", name: "Jeep privat", note: "Lebih lega, lebih mahal", alloc: { "Makan & minum": 900000, "Transport": 2900000, "Tiket & atraksi": 900000, "Penginapan": 1100000, "Lain": 200000 } }
+          ],
+          manual: [], packing: [ { name: "Pakaian", items: [ { id: "r1", label: "Jaket tebal", req: true, done: false }, { id: "r2", label: "Sarung tangan", req: false, done: false }, { id: "r3", label: "Masker debu", req: true, done: false } ] } ] },
+        { id: "t4", name: "Bali Selatan", place: "Seminyak & Uluwatu, Badung", mat: "kota", cover: "assets/photo-kota.jpg", dates: "21–24 Nov", status: "draft", people: 2, plan: 2700000,
+          days: [ { date: "Sab, 21 Nov", long: "Sabtu, 21 November", title: "Belum dijadwalkan", outfit: "", acts: [] } ],
+          activeBudget: "t4-awal",
+          budgets: [ { id: "t4-awal", name: "Rencana awal", note: "", alloc: { "Makan & minum": 800000, "Transport": 600000, "Tiket & atraksi": 400000, "Penginapan": 800000, "Lain": 100000 } } ],
+          manual: [], packing: [] }
+      ]
+    };
+  }
+
+  trip() { return this.state.trips.find(t => t.id === this.state.tripId) || this.state.trips[0]; }
+
+  motifEl(kind, size, color, opacity) {
+    const parts = MOTIFS[kind] || MOTIFS.compass;
+    return React.createElement("svg", { viewBox: "0 0 100 100", width: size, height: size, fill: color, style: { opacity: opacity, display: "block" } },
+      parts.map((p, i) => React.createElement("path", { key: i, d: p.d, fillOpacity: p.o == null ? 1 : p.o, transform: p.t })));
+  }
+
+  set(patch) { this.setState(patch); }
+  flash(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: null }), 2200);
+  }
+  patchTrip(id, fn) {
+    this.setState(s => ({ trips: s.trips.map(t => t.id === id ? fn(JSON.parse(JSON.stringify(t))) : t) }));
+  }
+
+  editAct(field, value) {
+    const id = this.state.activityId;
+    this.patchTrip(this.state.tripId, t => {
+      t.days.forEach(d => d.acts.forEach(a => { if (a.id === id) a[field] = value; }));
+      return t;
+    });
+  }
+
+  lines(trip) {
+    const out = [];
+    trip.days.forEach((d, di) => d.acts.forEach(a => {
+      if (a.cost > 0) out.push({ id: a.id, title: a.title, cat: a.cat === "Santai" ? "Lain" : a.cat, dayIdx: di, amount: a.cost, derived: true, time: a.time, dayLabel: d.date });
+    }));
+    (trip.manual || []).forEach(m => out.push({ id: m.id, title: m.title, cat: m.cat, dayIdx: m.dayIdx, amount: m.amount, derived: false, time: "", dayLabel: (trip.days[m.dayIdx] || {}).date || "" }));
+    return out;
+  }
+
+  renderVals() {
+    const s = this.state, trip = this.trip(), lines = this.lines(trip);
+    const budgets = trip.budgets || [];
+    const activeB = budgets.find(b => b.id === trip.activeBudget) || budgets[0] || { name: "Rencana awal", alloc: {} };
+    const alloc = activeB.alloc || {};
+    const allocTotal = Object.values(alloc).reduce((n, v) => n + v, 0);
+    const budgetLocked = trip.status === "live";
+    const spent = lines.reduce((n, l) => n + l.amount, 0);
+    const plan = allocTotal || trip.plan || 0;
+    const over = spent > plan;
+    const pct = plan ? spent / plan * 100 : 0;
+    const statusFg = over ? "#C85A28" : "#2F6B54";
+    const statusBg = over ? "#FCE3D3" : "#DEEEEC";
+    const diff = Math.abs(spent - plan);
+    const statusCopy = plan === 0 ? "Rencana belum diisi" : (over ? "Lewat " + shortRp(diff) : "Sisa " + shortRp(diff));
+
+    const catNames = Object.keys(alloc).length ? Object.keys(alloc) : CATS;
+    const catRows = catNames.map((name, ci) => {
+      const ls = lines.filter(l => l.cat === name);
+      const cs = ls.reduce((n, l) => n + l.amount, 0);
+      const catAlloc = alloc[name] || 0;
+      const cpct = catAlloc ? Math.min(100, cs / catAlloc * 100) : (cs ? 100 : 0);
+      const cover = cs > catAlloc && catAlloc > 0;
+      return {
+        name, spentRp: rp(cs), spentShort: shortRp(cs), allocRp: rp(catAlloc), allocInput: catAlloc ? String(catAlloc) : "", pct: cpct,
+        sharePct: spent ? Math.round(cs / spent * 100) : 0,
+        barColor: cover ? "#F0713A" : (cpct >= 80 ? "#D98F3B" : (cpct >= 99 ? "#C4B29E" : "#2F6B54")),
+        spentFg: cover ? "#C85A28" : "#10262B",
+        leftCopy: catAlloc ? (cover ? "lewat " + shortRp(cs - catAlloc) : "sisa " + shortRp(catAlloc - cs)) : "tanpa alokasi",
+        onAlloc: e => { const v = parseInt(e.target.value.replace(/[^0-9]/g, "") || "0", 10); this.patchTrip(trip.id, t => { const b = t.budgets.find(x => x.id === t.activeBudget) || t.budgets[0]; b.alloc[name] = v; return t; }); },
+        segColor: SEG_PALETTE[ci % SEG_PALETTE.length],
+        iconBg: tone(name)[0], iconFg: tone(name)[1], iconPath: iconFor(name),
+        canDelete: !budgetLocked && cs === 0,
+        remove: e => { e.stopPropagation(); this.patchTrip(trip.id, t => { const b = t.budgets.find(x => x.id === t.activeBudget) || t.budgets[0]; delete b.alloc[name]; return t; }); this.flash("Kategori " + name + " dihapus"); },
+        lineCopy: ls.length + " baris",
+        open: s.openCat === name,
+        toggle: () => this.set({ openCat: s.openCat === name ? null : name }),
+        lines: ls.slice().sort((a, b) => b.amount - a.amount).map(l => ({
+          title: l.title + (l.dayLabel ? " · " + l.dayLabel : ""),
+          amountRp: rp(l.amount),
+          mark: l.derived ? "↳" : "□",
+          origin: l.derived ? "dari aktivitas" : "dicatat sendiri",
+          rowBg: l.derived ? "#FBFAF5" : "#fff"
+        })),
+        cs
+      };
+    });
+
+    const donutStops = [];
+    let acc = 0;
+    catRows.forEach(c => {
+      const share = spent ? c.cs / spent * 100 : 0;
+      if (share <= 0) return;
+      donutStops.push(c.segColor + " " + acc.toFixed(1) + "% " + (acc + share).toFixed(1) + "%");
+      acc += share;
+    });
+    if (acc < 100) donutStops.push("#F1EEE1 " + acc.toFixed(1) + "% 100%");
+
+    const oSets = trip.outfitSets || [];
+    const scopeDef = trip.days.reduce((acc, d, i) => acc
+      .concat([{ value: "day:" + i, label: "Hari " + (i + 1) + " · " + (d.title || d.date) }])
+      .concat((d.acts || []).slice().sort((a, b) => (a.time || "99").localeCompare(b.time || "99"))
+        .map(a => ({ value: "act:" + a.id, label: "  ↳ " + (a.time || "") + " " + a.title }))), []);
+    const oFind = sc => oSets.find(x => x.scope === sc);
+    const oDayText = i => {
+      const dset = ofText(oFind("day:" + i));
+      if (dset) return dset;
+      const hit = (((trip.days[i] || {}).acts) || []).map(a => ofText(oFind("act:" + a.id))).find(Boolean);
+      return hit || "";
+    };
+    const oDaySet = i => {
+      const dset = oFind("day:" + i);
+      if (ofText(dset)) return dset;
+      return (((trip.days[i] || {}).acts) || []).map(a => oFind("act:" + a.id)).find(o => ofText(o)) || null;
+    };
+    const et = s.et || { name: "", place: "", start: "", len: 1, cover: "", mat: trip.mat };
+    const setEt = patch => this.setState(st => ({ et: Object.assign({}, st.et, patch) }));
+    const coverChoices = (cur, pick) => [["", "Tanpa gambar"]].concat(COVERS).map(([url, label]) => ({
+      label, url, thumb: url ? "url('" + url + "')" : "none", empty: !url, on: cur === url,
+      bd: cur === url ? "#0E6E76" : "#EDE9DA", fg: cur === url ? "#0A4F55" : "#6C7C7D",
+      pick: () => pick(url)
+    }));
+    const memberList = trip.members || seedMembers(trip.id);
+    const patchMembers = fn => this.patchTrip(trip.id, t => {
+      t.members = fn(t.members || seedMembers(t.id));
+      t.people = Math.max(1, t.members.length);
+      return t;
+    });
+    const dayIdx = Math.min(s.dayIdx, Math.max(0, trip.days.length - 1));
+    const day = trip.days[dayIdx] || { date: "", long: "Belum ada hari", title: "", acts: [], outfit: "" };
+    const dayTotal = (day.acts || []).reduce((n, a) => n + a.cost, 0) + (trip.manual || []).filter(m => m.dayIdx === dayIdx).reduce((n, m) => n + m.amount, 0);
+
+    const mkAct = (a, di, d) => {
+      const tn = tone(a.cat);
+      return {
+        time: a.time || "-", title: a.title,
+        meta: a.cat + (a.dur ? " · " + durLabel(a.dur) : "") + (a.place ? " · " + a.place : ""),
+        shareMeta: timeRange(a.time, a.dur) + (a.place ? " · " + a.place : ""),
+        costCopy: a.cost ? rp(a.cost) : "-",
+        costShort: a.cost ? shortRp(a.cost) : "-",
+        costSub: a.cost ? trip.people + " orang" : "tanpa biaya",
+        iconBg: tn[0], iconFg: tn[1], iconPath: iconFor(a.cat),
+        bd: a.id === s.activityId ? "#0E6E76" : "#EDE9DA",
+        open: () => this.set({ activityId: a.id, dayIdx: di })
+      };
+    };
+
+    const days = trip.days.map((d, i) => {
+      const tot = d.acts.reduce((n, a) => n + a.cost, 0);
+      const on = i === dayIdx;
+      return {
+        dateLabel: d.date, title: d.title || "Belum diberi nama", actCount: d.acts.length,
+        totalShort: tot ? shortRp(tot) : "-",
+        bg: on ? "#0E6E76" : "#fff", bd: on ? "#0E6E76" : "#EDE9DA",
+        fg: on ? "#fff" : "#10262B", subFg: on ? "#CFE3E1" : "#6C7C7D",
+        weight: on ? "700" : "500",
+        open: () => this.set({ dayIdx: i, tab: "days", route: "trip" })
+      };
+    });
+
+    const groupsMap = {};
+    lines.forEach(l => {
+      const key = l.dayIdx;
+      if (!groupsMap[key]) groupsMap[key] = { idx: key, label: (trip.days[key] || {}).long || "Tanpa hari", total: 0, items: [] };
+      groupsMap[key].total += l.amount;
+      groupsMap[key].items.push(l);
+    });
+    const expGroups = Object.values(groupsMap).sort((a, b) => b.idx - a.idx).map(g => ({
+      label: g.label, totalRp: rp(g.total),
+      items: g.items.map(l => {
+        const tn = tone(l.cat);
+        const pending = !l.derived && l.cat === "Lain";
+        return {
+          title: l.title, amountRp: rp(l.amount), mark: l.derived ? "↳" : "□",
+          meta: l.cat + (l.derived ? " · dari aktivitas " + l.time : " · dicatat manual"),
+          iconBg: pending ? "#fff" : tn[0], iconFg: tn[1], iconPath: iconFor(l.cat),
+          rowBg: pending ? "#F1EEE1" : "#fff", rowBd: pending ? "#F1EEE1" : "#EDE9DA",
+          remove: l.derived ? (e) => { e.stopPropagation(); this.flash("Baris turunan diubah dari layar Hari"); }
+            : (e) => { e.stopPropagation(); this.patchTrip(trip.id, t => { t.manual = t.manual.filter(m => m.id !== l.id); return t; }); this.flash("Pengeluaran dihapus"); }
+        };
+      })
+    }));
+
+    const packAll = (trip.packing || []).flatMap(g => g.items);
+    const packDone = packAll.filter(i => i.done).length;
+    const packReqLeft = packAll.filter(i => i.req && !i.done).length;
+
+    const act = (() => {
+      if (!s.activityId) return null;
+      for (let di = 0; di < trip.days.length; di++) {
+        const found = trip.days[di].acts.find(a => a.id === s.activityId);
+        if (found) {
+          const tn = tone(found.cat);
+          const catName = found.cat === "Santai" ? "Lain" : found.cat;
+          const catAlloc = alloc[catName] || 0;
+          const catSpent = lines.filter(l => l.cat === catName).reduce((n, l) => n + l.amount, 0);
+          const own = oFind("act:" + found.id);
+          const fallback = oDaySet(di);
+          return {
+            outfitOwn: !!own,
+            outfitFallback: !own,
+            outfitSourceTag: own ? "Khusus aktivitas" : (ofText(fallback) ? "Ikut outfit hari ini" : "Belum diisi"),
+            outfitTagBg: own ? "#F1EEE1" : (ofText(fallback) ? "#DEEEEC" : "#F1EEE1"),
+            outfitTagFg: own ? "#8A6314" : (ofText(fallback) ? "#0A4F55" : "#6C7C7D"),
+            outfitDayItems: ofItems(fallback),
+            outfitDayEmpty: !ofItems(fallback).length,
+            outfitSlots: OF_SLOTS.map(([k, label, ph]) => ({
+              label, placeholder: label + ", mis. " + ph, icon: OF_ICON[k], value: (own && own[k]) || "",
+              onChange: e => {
+                const v = e.target.value;
+                this.patchTrip(trip.id, t => {
+                  const set = (t.outfitSets || []).find(x => x.scope === "act:" + found.id);
+                  if (set) set[k] = v;
+                  return t;
+                });
+              }
+            })),
+            addOutfit: () => {
+              const id = "o" + (s.seq + 1);
+              const base = fallback || {};
+              this.patchTrip(trip.id, t => {
+                t.outfitSets = (t.outfitSets || []).concat([{ id, scope: "act:" + found.id, top: base.top || "", bottom: base.bottom || "", shoes: base.shoes || "", other: base.other || "" }]);
+                return t;
+              });
+              this.setState(st => ({ seq: st.seq + 1 }));
+              this.flash(ofText(fallback) ? "Disalin dari outfit hari ini, silakan ubah" : "Set outfit aktivitas dibuat");
+            },
+            removeOutfit: () => {
+              this.patchTrip(trip.id, t => { t.outfitSets = (t.outfitSets || []).filter(x => x.scope !== "act:" + found.id); return t; });
+              this.flash("Aktivitas ini ikut outfit hari ini lagi");
+            },
+            title: found.title, time: found.time || "belum ada jam", dayLabel: trip.days[di].long,
+            timeRange: timeRange(found.time, found.dur), timeInput: toInput(found.time),
+            dur: String(nearestDur(found.dur || 0)), costInput: found.cost ? String(found.cost) : "",
+            cat: found.cat, costRp: found.cost ? rp(found.cost) : "Tanpa biaya",
+            costSub: found.cost ? trip.people + " orang · " + rp(found.cost / trip.people) + " per orang" : "Aktivitas ini tidak masuk anggaran",
+            derivedCopy: found.cost
+              ? "Masuk ke " + catName + ", " + (catAlloc ? "kategori itu " + Math.round(catSpent / catAlloc * 100) + "% terpakai" : "kategori itu belum punya alokasi")
+              : "Tidak ada baris anggaran dari aktivitas ini",
+            place: found.place || "Belum ada tempat",
+            note: found.note || "",
+            outfitCopy: ofText(oFind("act:" + found.id)) || oDayText(di) || "Outfit hari ini belum diisi",
+            iconBg: tn[0], iconFg: tn[1], iconPath: iconFor(found.cat)
+          };
+        }
+      }
+      return null;
+    })();
+
+    const sortedDayActs = (day.acts || []).slice().sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
+    const nextAct = sortedDayActs.find(a => a.cost > 0) || sortedDayActs[0] || null;
+
+    const navDef = [["home", "Beranda"], ["templates", "Template"], ["archive", "Arsip"]];
+    const tabDef = [["overview", "Ringkasan"], ["days", "Hari"], ["budget", "Anggaran"], ["expenses", "Pengeluaran"], ["packing", "Barang"], ["outfit", "Outfit"], ["members", "Anggota"]];
+    const filterDef = ["Semua", "Sedang jalan", "Rencana"];
+
+    const live = s.trips.find(t => t.status === "live");
+    const liveLines = live ? this.lines(live) : [];
+    const cardTrips = s.trips.filter(t => {
+      if (s.homeFilter === "Sedang jalan") return t.status === "live";
+      if (s.homeFilter === "Rencana") return t.status !== "live";
+      return t.id !== (live || {}).id;
+    });
+
+    const matChoice = k => {
+      const m = MATS[k];
+      return {
+        label: m.label, matBg: m.bg, matA: m.a, matB: m.b, matSun: m.sun, matRadius: m.radius, matClip: m.clip,
+        motif: this.motifEl(m.motif, 32, "#fff", .7),
+        bd: s.nt.mat === k ? "#0E6E76" : "#EDE9DA", fg: s.nt.mat === k ? "#0A4F55" : "#33474C",
+        pick: () => this.set({ nt: Object.assign({}, s.nt, { mat: k }) })
+      };
+    };
+
+    const templateDefs = [
+      { name: "Sumba 4 hari", sub: "Waingapu, Wairinding, Tanggedu", mat: "pantai", days: 4, plan: 3100000 },
+      { name: "Bromo–Ijen 5 hari", sub: "Cemoro Lawang & Banyuwangi", mat: "gunung", days: 5, plan: 4600000 },
+      { name: "Ubud hemat 3 hari", sub: "Tegallalang & Ubud pusat", mat: "sawah", days: 3, plan: 1850000 },
+      { name: "Bali Selatan 4 hari", sub: "Seminyak, Uluwatu, Canggu", mat: "kota", days: 4, plan: 2700000 },
+      { name: "Labuan Bajo 4 hari", sub: "Padar, Kelor, Kanawa", mat: "pulau", days: 4, plan: 5200000 },
+      { name: "Dieng 3 hari", sub: "Sikunir & Telaga Warna", mat: "gunung", days: 3, plan: 1600000 },
+      { name: "Borobudur & Prambanan", sub: "Magelang & Sleman", mat: "kuil", days: 3, plan: 1900000 },
+      { name: "Bangkok–Ayutthaya 5 hari", sub: "Kuil kota lama & pasar malam", mat: "luar", days: 5, plan: 7400000 }
+    ];
+
+    const useTemplate = (tp) => {
+      const id = "t" + (s.seq + 1);
+      const days = buildDays(s.nt.start, tp.days);
+      this.setState(st => ({
+        seq: st.seq + 1, showNewTrip: false, route: "trip", tab: "days", tripId: id, dayIdx: 0, openCat: "Makan & minum",
+        trips: st.trips.concat([{ id, name: tp.name, place: tp.sub, mat: tp.mat, cover: "", startIso: s.nt.start, members: seedMembers(""), dates: rangeLabel(s.nt.start, tp.days), status: "draft", people: 2, plan: tp.plan, days,
+          activeBudget: id + "-awal",
+          budgets: [ { id: id + "-awal", name: "Rencana awal", note: "Dari template " + tp.name, alloc: { "Makan & minum": Math.round(tp.plan * .32), "Transport": Math.round(tp.plan * .34), "Tiket & atraksi": Math.round(tp.plan * .14), "Penginapan": Math.round(tp.plan * .18), "Lain": Math.round(tp.plan * .02) } } ],
+          manual: [], packing: [{ name: "Dokumen", items: [{ id: id + "-p1", label: "KTP", req: true, done: false }] }] }])
+      }));
+      this.flash("Template " + tp.name + " dipakai");
+    };
+
+    return {
+      heroMotif: this.motifEl((MATS[(trip && trip.mat) || "pantai"] || MATS.pantai).motif, 132, "#fff", .5),
+      loginPlane: this.motifEl("plane", 118, "#fff", .5),
+      loginBalloon: this.motifEl("balloon", 86, "#F1EEE1", .95),
+      loginShip: this.motifEl("ship", 108, "#0E6E76", .16),
+      loginPalm: this.motifEl("palm", 128, "#2F6B54", .2),
+      loginPagoda: this.motifEl("pagoda", 92, "#0E6E76", .12),
+      loginCompass: this.motifEl("compass", 62, "#fff", .55),
+      isLogin: !s.authed,
+      isApp: s.authed && s.route !== "share", isHome: s.authed && s.route === "home", isTemplates: s.authed && s.route === "templates",
+      isArchive: s.authed && s.route === "archive", isTrip: s.authed && s.route === "trip", isShare: s.route === "share",
+      email: s.email, pw: s.pw, loginErr: s.loginErr,
+      onEmail: e => this.set({ email: e.target.value, loginErr: "" }),
+      onPw: e => this.set({ pw: e.target.value, loginErr: "" }),
+      signIn: () => {
+        if (!/.+@.+\..+/.test(s.email.trim())) { this.set({ loginErr: "Email belum benar" }); return; }
+        if (s.pw.length < 4) { this.set({ loginErr: "Sandi minimal 4 karakter" }); return; }
+        this.set({ authed: true, route: "home", pw: "" });
+        this.flash("Selamat jalan lagi, Rina");
+      },
+      signInDemo: () => { this.set({ authed: true, route: "home", pw: "" }); this.flash("Masuk sebagai tamu"); },
+      onLoginKey: e => { if (e.key === "Enter") { const ok = /.+@.+\..+/.test(s.email.trim()) && s.pw.length >= 4; if (ok) { this.set({ authed: true, route: "home", pw: "" }); this.flash("Selamat jalan lagi, Rina"); } else { this.set({ loginErr: "Lengkapi email dan sandi" }); } } },
+      signOut: () => this.set({ authed: false, route: "home", pw: "", email: "rina@jalan.id" }),
+      tabOverview: s.route === "trip" && s.tab === "overview",
+      tabDays: s.route === "trip" && s.tab === "days",
+      tabBudget: s.route === "trip" && s.tab === "budget",
+      tabExpenses: s.route === "trip" && s.tab === "expenses",
+      tabPacking: s.route === "trip" && s.tab === "packing",
+      tabOutfit: s.route === "trip" && s.tab === "outfit",
+
+      navItems: navDef.map(([k, label]) => ({
+        label, bg: s.route === k ? "#DEEEEC" : "transparent", fg: s.route === k ? "#0A4F55" : "#33474C",
+        go: () => this.set({ route: k, activityId: null })
+      })),
+      homeFilters: filterDef.map(label => ({
+        label, bg: s.homeFilter === label ? "#DEEEEC" : "#fff",
+        fg: s.homeFilter === label ? "#0A4F55" : "#33474C",
+        bd: s.homeFilter === label ? "#DEEEEC" : "#E4DECB",
+        go: () => this.set({ homeFilter: label })
+      })),
+      tabs: tabDef.map(([k, label]) => ({
+        label, bd: s.tab === k ? "#0E6E76" : "transparent",
+        fg: s.tab === k ? "#0A4F55" : "#6C7C7D", weight: s.tab === k ? "700" : "500",
+        go: () => this.set({ tab: k, activityId: null })
+      })),
+
+      homeSub: live ? "Satu trip sedang jalan dan " + (s.trips.length - 1) + " rencana menunggu tanggal." : s.trips.length + " trip tersimpan.",
+      hasLive: !!live && s.homeFilter !== "Rencana",
+      listHeading: s.homeFilter === "Sedang jalan" ? "Sedang jalan" : "Rencana berikutnya",
+      listCount: cardTrips.length + " trip",
+      live: live ? {
+        name: live.name, sub: live.place + " · " + live.dates,
+        typeLabel: MATS[live.mat].label + " · " + live.people + " orang",
+        peopleLabel: live.people + " orang",
+        dayLabel: "Hari " + Math.min(3, live.days.length) + " dari " + live.days.length,
+        coverUrl: live.cover ? "url('" + live.cover + "')" : "none"
+      } : {},
+
+      trip: {
+        name: trip.name, sub: trip.place + " · " + trip.dates,
+        typeLabel: MATS[trip.mat].label, peopleLabel: trip.people + " orang",
+        dayCount: trip.days.length,
+        coverUrl: trip.cover ? "url('" + trip.cover + "')" : "none",
+        matBg: MATS[trip.mat].bg,
+        statusLabel: trip.status === "live" ? "Sedang jalan" : (trip.status === "draft" ? "Draf" : "Rencana"),
+        statusChipBg: trip.status === "live" ? "#DEEEEC" : "#F1EEE1",
+        statusChipFg: trip.status === "live" ? "#2F6B54" : "#33474C"
+      },
+
+      cards: cardTrips.map(t => {
+        const m = MATS[t.mat], tl = this.lines(t), ts = tl.reduce((n, l) => n + l.amount, 0);
+        const packs = (t.packing || []).flatMap(g => g.items);
+        return {
+          name: t.name, sub: m.label + " · " + t.place, dates: t.dates,
+          planRp: rp(t.plan), actCopy: t.days.reduce((n, d) => n + d.acts.length, 0) + " aktivitas",
+          packCopy: packs.length ? "Barang " + packs.filter(i => i.done).length + "/" + packs.length : (ts ? "Terpakai " + shortRp(ts) : "Belum ada barang"),
+          badge: t.status === "draft" ? "Draf" : (t.status === "live" ? "Sedang jalan" : "Rencana"),
+          badgeFg: t.status === "draft" ? "#C85A28" : (t.status === "live" ? "#2F6B54" : "#0A4F55"),
+          matBg: m.bg, matA: m.a, matB: m.b, matSun: m.sun, matRadius: m.radius, matClip: m.clip,
+          motif: this.motifEl(m.motif, 78, "#fff", .62),
+          coverUrl: t.cover ? "url('" + t.cover + "')" : "none", noCover: !t.cover,
+          open: () => this.set({ route: "trip", tripId: t.id, tab: "overview", dayIdx: 0, activityId: null })
+        };
+      }),
+
+      templates: templateDefs.map(tp => {
+        const m = MATS[tp.mat];
+        return { name: tp.name, sub: tp.sub, days: tp.days, planRp: shortRp(tp.plan), matBg: m.bg, matA: m.a, matB: m.b, matSun: m.sun, matRadius: m.radius, matClip: m.clip, motif: this.motifEl(m.motif, 58, "#fff", .62), use: () => useTemplate(tp) };
+      }),
+
+      archive: [
+        { name: "Karimunjawa", dates: "3–6 Jul", planRp: rp(2800000), spentRp: rp(2610000), diff: "−190rb", diffFg: "#2F6B54", matBg: "#DEEEEC" },
+        { name: "Yogyakarta kota", dates: "18–20 Mei", planRp: rp(1500000), spentRp: rp(1740000), diff: "+240rb", diffFg: "#C85A28", matBg: "#FCE3D3" },
+        { name: "Kawah Ijen", dates: "8–11 Mar", planRp: rp(3200000), spentRp: rp(3120000), diff: "−80rb", diffFg: "#2F6B54", matBg: "#F1EEE1" }
+      ],
+
+      spentRp: rp(spent), spentShort: shortRp(spent), planRp: rp(plan),
+      perHeadRp: rp(trip.people ? spent / trip.people : spent),
+      statusCopy, statusBg, statusFg,
+      barA: over ? (plan / spent * 100) : Math.min(100, pct),
+      barB: over ? (100 - plan / spent * 100) : 0,
+      pctCopy: Math.round(pct) + "%",
+      paceCopy: over ? "Rencana sudah terlampaui" : "Masih di dalam rencana",
+      donut: "conic-gradient(" + donutStops.join(", ") + ")",
+      cats: catRows,
+      people: Array.from({ length: trip.people }, (_, i) => ({ name: ["Rina", "Dimas", "Sari", "Adit"][i] || "Orang " + (i + 1), amountRp: rp(trip.people ? spent / trip.people : spent) })),
+      allocTitle: budgetLocked ? "Anggaran terkunci sejak trip mulai" : "Versi ini masih bisa diubah",
+      allocCopy: budgetLocked
+        ? "Trip sudah berjalan, jadi semua versi anggaran dibekukan agar angka rencana tidak berubah di tengah jalan. Pengeluaran tetap bisa dicatat."
+        : "Ubah alokasi per kategori langsung di tabel. Semua versi bisa dibandingkan sebelum salah satunya dipakai berangkat.",
+      budgetLocked, budgetOpen: !budgetLocked,
+      newCatName: s.newCat.name, newCatAmount: s.newCat.amount,
+      onNewCatName: e => this.set({ newCat: Object.assign({}, s.newCat, { name: e.target.value }) }),
+      onNewCatAmount: e => this.set({ newCat: Object.assign({}, s.newCat, { amount: e.target.value.replace(/[^0-9]/g, "") }) }),
+      addCategory: () => {
+        const name = s.newCat.name.trim();
+        if (!name) { this.flash("Tulis nama kategorinya dulu"); return; }
+        if (catNames.includes(name)) { this.flash("Kategori itu sudah ada"); return; }
+        this.patchTrip(trip.id, t => { const b = t.budgets.find(x => x.id === t.activeBudget) || t.budgets[0]; b.alloc[name] = parseInt(s.newCat.amount || "0", 10); return t; });
+        this.set({ newCat: { name: "", amount: "" } });
+        this.flash("Kategori " + name + " ditambahkan");
+      },
+      looseCopy: (() => { const known = catRows.reduce((n, c) => n + c.cs, 0); const rest = spent - known; return rest > 0 ? rp(rest) + " tercatat di kategori yang sudah dihapus" : ""; })(),
+      hasLoose: (() => { const known = catRows.reduce((n, c) => n + c.cs, 0); return spent - known > 0; })(),
+      budgetChipCopy: activeB.name + (budgetLocked ? " · terkunci" : " · " + budgets.length + " versi"),
+      budgetChipBg: budgetLocked ? "#F1EEE1" : "#F1EEE1",
+      budgetChipFg: budgetLocked ? "#8A6314" : "#33474C",
+      activeBudgetName: activeB.name,
+      onBudgetName: e => { const v = e.target.value; this.patchTrip(trip.id, t => { const b = t.budgets.find(x => x.id === t.activeBudget) || t.budgets[0]; b.name = v; return t; }); },
+      activeBudgetNote: activeB.note || (budgetLocked ? "Dipakai saat berangkat" : "Belum dipakai berangkat"),
+      allocTotalRp: rp(allocTotal),
+      lockCopy: budgetLocked ? "Terkunci" : "Bisa diubah",
+      budgetVersions: budgets.map(b => {
+        const tot = Object.values(b.alloc || {}).reduce((n, v) => n + v, 0);
+        const on = b.id === activeB.id;
+        return {
+          name: b.name, totalCopy: shortRp(tot), totalRp: rp(tot),
+          diffCopy: spent > tot ? "lewat " + shortRp(spent - tot) : "sisa " + shortRp(tot - spent),
+          diffFg: spent > tot ? "#C85A28" : "#2F6B54",
+          badge: on ? (budgetLocked ? "Dipakai · terkunci" : "Dipakai") : "Alternatif",
+          bg: on ? "#0E6E76" : "#fff", fg: on ? "#fff" : "#10262B",
+          subFg: on ? "#CFE3E1" : "#6C7C7D", bd: on ? "#0E6E76" : "#E4DECB",
+          pick: () => this.patchTrip(trip.id, t => { t.activeBudget = b.id; return t; })
+        };
+      }),
+      matrixVersions: budgets.map(b => {
+        const tot = Object.values(b.alloc || {}).reduce((n, v) => n + v, 0);
+        const on = b.id === activeB.id;
+        return {
+          name: b.name, totalRp: rp(tot),
+          diffCopy: spent > tot ? "lewat " + shortRp(spent - tot) : "sisa " + shortRp(tot - spent),
+          diffFg: spent > tot ? "#C85A28" : "#2F6B54",
+          headBg: on ? "#DEEEEC" : "transparent", headFg: on ? "#0A4F55" : "#33474C",
+          badge: on ? (budgetLocked ? "dipakai · terkunci" : "dipakai") : "alternatif",
+          pick: () => this.patchTrip(trip.id, t => { t.activeBudget = b.id; return t; })
+        };
+      }),
+      matrixRows: (() => {
+        const names = [];
+        budgets.forEach(b => Object.keys(b.alloc || {}).forEach(n => { if (!names.includes(n)) names.push(n); }));
+        return names.map(name => {
+          const cs = lines.filter(l => l.cat === name).reduce((n, l) => n + l.amount, 0);
+          const vals = budgets.map(b => {
+            const v = (b.alloc || {})[name];
+            return {
+              copy: v === undefined ? "-" : rp(v),
+              fg: v === undefined ? "#C4B29E" : (cs > v && v > 0 ? "#C85A28" : "#10262B"),
+              weight: b.id === activeB.id ? "600" : "500"
+            };
+          });
+          return { name, spentRp: cs ? rp(cs) : "-", segColor: (catRows.find(c => c.name === name) || {}).segColor || tone(name)[1], vals };
+        });
+      })(),
+      addBudgetVersion: () => {
+        if (budgetLocked) { this.flash("Trip sudah mulai, anggaran terkunci"); return; }
+        const id = trip.id + "-v" + (s.seq + 1);
+        this.patchTrip(trip.id, t => {
+          const src = t.budgets.find(x => x.id === t.activeBudget) || t.budgets[0];
+          t.budgets.push({ id, name: "Versi " + (t.budgets.length + 1), note: "Salinan dari " + src.name, alloc: Object.assign({}, src.alloc) });
+          t.activeBudget = id;
+          return t;
+        });
+        this.setState(st => ({ seq: st.seq + 1 }));
+        this.flash("Versi anggaran baru dibuat");
+      },
+
+      days, day: {
+        longLabel: day.long, totalRp: rp(dayTotal),
+        summary: day.acts.length + " aktivitas · " + rp(dayTotal) + " masuk anggaran",
+        sharePct: spent ? Math.min(100, dayTotal / spent * 100) : 0,
+        shareCopy: spent ? Math.round(dayTotal / spent * 100) + "% dari total trip sampai sekarang" : "Belum ada pengeluaran di trip ini",
+        outfitCopy: oDayText(dayIdx) || "Belum diisi untuk hari ini",
+        outfitItems: ofItems(oDaySet(dayIdx)),
+        outfitEmpty: !ofItems(oDaySet(dayIdx)).length
+      },
+      dayActs: (day.acts || []).slice().sort((a, b) => (a.time || "99").localeCompare(b.time || "99")).map(a => mkAct(a, dayIdx, day)),
+      dayEmpty: (day.acts || []).length === 0,
+
+      nextActCopy: nextAct ? (nextAct.time ? nextAct.time + " · " : "") + nextAct.title : "Belum ada aktivitas berikutnya",
+      nextActSub: nextAct
+        ? (nextAct.cost ? shortRp(nextAct.cost) + " → " + (nextAct.cat === "Santai" ? "Lain" : nextAct.cat) : nextAct.cat + " · tanpa biaya")
+        : "Tambah aktivitas dari layar Hari",
+
+      recent: lines.slice().reverse().slice(0, 4).map(l => ({ title: l.title, amountRp: rp(l.amount), mark: l.derived ? "↳" : "□" })),
+      expSummary: lines.length + " catatan · " + rp(spent) + " total · hari ini " + rp(dayTotal),
+      expGroups,
+      amount: s.amount, note: s.note,
+      cat: s.cat,
+      onCat: e => this.set({ cat: e.target.value }),
+      onAmount: e => this.set({ amount: e.target.value.replace(/[^0-9]/g, "") }),
+      onNote: e => this.set({ note: e.target.value }),
+      logExpense: () => {
+        const v = parseInt(s.amount || "0", 10);
+        if (!v) { this.flash("Isi jumlahnya dulu"); return; }
+        const id = "m" + (s.seq + 1);
+        this.patchTrip(trip.id, t => { t.manual = [{ id, title: s.note || (SHORT_CAT[s.cat] || s.cat) + " " + shortRp(v), cat: s.cat, dayIdx: dayIdx, amount: v, note: s.note }].concat(t.manual || []); return t; });
+        this.setState(st => ({ seq: st.seq + 1, amount: "", note: "" }));
+        this.flash(rp(v) + " tercatat di " + s.cat);
+      },
+
+      packGroups: (trip.packing || []).map((g, gi) => ({
+        name: g.name, count: g.items.filter(i => i.done).length + " / " + g.items.length,
+        items: g.items.map((it, ii) => ({
+          label: it.label, done: it.done, req: it.req,
+          url: it.url || "", hasUrl: !!it.url,
+          rowBg: it.req && !it.done ? "#FCE3D3" : "transparent",
+          boxBd: it.done ? "#2F6B54" : (it.req ? "#C85A28" : "#C4B29E"),
+          boxBg: it.done ? "#2F6B54" : "transparent",
+          fg: it.done ? "#6C7C7D" : "#10262B",
+          deco: it.done ? "line-through" : "none",
+          weight: it.req && !it.done ? "600" : "500",
+          toggle: () => this.patchTrip(trip.id, t => { t.packing[gi].items[ii].done = !t.packing[gi].items[ii].done; return t; })
+        }))
+      })),
+      packCount: packDone + " / " + packAll.length,
+      packPct: packAll.length ? packDone / packAll.length * 100 : 0,
+      packSub: packAll.length ? "Terisi otomatis dari template trip · " + packReqLeft + " wajib belum dicentang" : "Belum ada barang di daftar ini",
+      packReqCopy: packReqLeft ? packReqLeft + " wajib belum dicentang" : "Semua wajib sudah aman",
+      packWarnTitle: packReqLeft ? packReqLeft + " barang wajib belum dicentang" : "Daftar wajib sudah lengkap",
+      packWarnCopy: packReqLeft ? "Barang wajib tetap ditandai sampai dicentang." : "Sisa barang bebas dicentang kapan saja sebelum berangkat.",
+      newItem: s.newItem,
+      onNewItem: e => this.set({ newItem: e.target.value }),
+      newItemCat: s.newItemCat,
+      onNewItemCat: e => this.set({ newItemCat: e.target.value }),
+      newItemUrl: s.newItemUrl,
+      onNewItemUrl: e => this.set({ newItemUrl: e.target.value }),
+      pickReq: () => this.set({ newItemReq: true }),
+      pickOpt: () => this.set({ newItemReq: false }),
+      reqBg: s.newItemReq ? "#FCE3D3" : "#FBFAF5", reqFg: s.newItemReq ? "#C85A28" : "#6C7C7D",
+      reqBd: s.newItemReq ? "#E4DECB" : "#E4DECB", reqWeight: s.newItemReq ? "700" : "500",
+      optBg: s.newItemReq ? "#FBFAF5" : "#DEEEEC", optFg: s.newItemReq ? "#6C7C7D" : "#0A4F55",
+      optBd: s.newItemReq ? "#E4DECB" : "#C8E2DE", optWeight: s.newItemReq ? "500" : "700",
+      addItemCopy: "Tambahkan ke " + s.newItemCat,
+      addItem: () => {
+        if (!s.newItem.trim()) { this.flash("Tulis nama barangnya dulu"); return; }
+        const id = "p" + (s.seq + 1);
+        const target = s.newItemCat;
+        let url = s.newItemUrl.trim();
+        if (url && !/^https?:\/\//.test(url)) url = "https://" + url;
+        this.patchTrip(trip.id, t => {
+          if (!(t.packing || []).some(x => x.name === target)) t.packing = (t.packing || []).concat([{ name: target, items: [] }]);
+          t.packing.find(x => x.name === target).items.push({ id, label: s.newItem.trim(), req: s.newItemReq, done: false, url });
+          return t;
+        });
+        this.setState(st => ({ seq: st.seq + 1, newItem: "", newItemUrl: "" }));
+        this.flash((s.newItemReq ? "Barang wajib" : "Barang") + " ditambahkan ke " + target);
+      },
+
+      outfitCards: oSets.map(o => {
+        const filled = !!ofText(o);
+        const isAct = o.scope.indexOf("act:") === 0;
+        const open = s.openScope === o.id;
+        const cur = scopeDef.find(x => x.value === o.scope);
+        return {
+          scope: o.scope,
+          scopeLabel: cur ? cur.label.replace("↳ ", "") : "Pilih hari atau aktivitas",
+          scopeOpen: open,
+          pickBd: open ? "#0E6E76" : "#E4DECB",
+          toggleScope: () => this.set({ openScope: open ? null : o.id }),
+          options: scopeDef.map(x => ({
+            label: x.label.replace("  ↳ ", ""), indent: x.value.indexOf("act:") === 0 ? 26 : 11,
+            bg: x.value === o.scope ? "#DEEEEC" : "transparent",
+            fg: x.value === o.scope ? "#0A4F55" : "#33474C",
+            weight: x.value === o.scope ? "700" : "500",
+            pick: () => { this.patchTrip(trip.id, t => { t.outfitSets.find(y => y.id === o.id).scope = x.value; return t; }); this.set({ openScope: null }); }
+          })),
+          kind: isAct ? "Aktivitas" : "Satu hari",
+          kindBg: isAct ? "#F1EEE1" : "#DEEEEC", kindFg: isAct ? "#8A6314" : "#0A4F55",
+          tag: filled ? "Sudah diisi" : "Belum diisi",
+          tagFg: filled ? "#2F6B54" : "#6C7C7D",
+          remove: () => { this.patchTrip(trip.id, t => { t.outfitSets = t.outfitSets.filter(x => x.id !== o.id); return t; }); this.flash("Set outfit dihapus"); },
+          slots: OF_SLOTS.map(([k, label, ph]) => ({
+            label, placeholder: label + ", mis. " + ph, icon: OF_ICON[k], value: o[k] || "",
+            onChange: e => { const v = e.target.value; this.patchTrip(trip.id, t => { t.outfitSets.find(x => x.id === o.id)[k] = v; return t; }); }
+          }))
+        };
+      }),
+      addOutfitSet: () => {
+        const used = oSets.map(o => o.scope);
+        const free = (scopeDef.find(o => used.indexOf(o.value) < 0) || scopeDef[0] || { value: "day:0" }).value;
+        const id = "o" + (s.seq + 1);
+        this.patchTrip(trip.id, t => { t.outfitSets = (t.outfitSets || []).concat([{ id, scope: free, top: "", bottom: "", shoes: "", other: "" }]); return t; });
+        this.setState(st => ({ seq: st.seq + 1, openScope: id }));
+      },
+
+      activity: act, onActNote: e => this.editAct("note", e.target.value),
+      closeActivity: () => this.set({ activityId: null }),
+      deleteActivity: () => { this.patchTrip(trip.id, t => { t.days.forEach(d => { d.acts = d.acts.filter(a => a.id !== s.activityId); }); return t; }); this.set({ activityId: null }); this.flash("Aktivitas dihapus"); },
+      stop: e => e.stopPropagation(),
+
+      showActForm: s.showActForm,
+      toggleActForm: () => this.set({ showActForm: !s.showActForm }),
+      naTime: toInput(s.na.time), naTitle: s.na.title, naCost: s.na.cost,
+      naCat: s.na.cat, naDur: String(s.na.dur),
+      onNaCat: e => this.set({ na: Object.assign({}, s.na, { cat: e.target.value }) }),
+      onNaDur: e => this.set({ na: Object.assign({}, s.na, { dur: parseInt(e.target.value, 10) }) }),
+      onActTitle: e => this.editAct("title", e.target.value),
+      onActTime: e => this.editAct("time", e.target.value ? e.target.value.replace(":", ".") : ""),
+      onActDur: e => this.editAct("dur", parseInt(e.target.value, 10)),
+      onActCat: e => this.editAct("cat", e.target.value),
+      onActCost: e => this.editAct("cost", parseInt(e.target.value.replace(/[^0-9]/g, "") || "0", 10)),
+      onActPlace: e => this.editAct("place", e.target.value),
+      onNaTime: e => this.set({ na: Object.assign({}, s.na, { time: e.target.value ? e.target.value.replace(":", ".") : "" }) }),
+      onNaTitle: e => this.set({ na: Object.assign({}, s.na, { title: e.target.value }) }),
+      onNaCost: e => this.set({ na: Object.assign({}, s.na, { cost: e.target.value.replace(/[^0-9]/g, "") }) }),
+      actFormHint: s.na.cost ? "Biaya " + rp(parseInt(s.na.cost, 10)) + " masuk ke " + (s.na.cat === "Santai" ? "Lain" : s.na.cat) + " begitu disimpan" : "Tanpa biaya, aktivitas ini tidak masuk anggaran",
+      saveActivity: () => {
+        if (!s.na.title.trim()) { this.flash("Judul aktivitas belum diisi"); return; }
+        const id = "a" + (s.seq + 1);
+        this.patchTrip(trip.id, t => { t.days[dayIdx].acts.push({ id, time: s.na.time || "", dur: s.na.dur || 0, title: s.na.title.trim(), cat: s.na.cat, place: t.place, cost: parseInt(s.na.cost || "0", 10), note: "" }); return t; });
+        this.setState(st => ({ seq: st.seq + 1, showActForm: false, na: { time: "", title: "", cost: "", cat: "Transport", dur: 60 } }));
+        this.flash("Aktivitas ditambahkan");
+      },
+      addDay: () => {
+        this.patchTrip(trip.id, t => { t.days.push({ date: "Hari " + (t.days.length + 1), long: "Hari " + (t.days.length + 1), title: "Belum diberi nama", outfit: "", acts: [] }); return t; });
+        this.setState(st => ({ dayIdx: trip.days.length }));
+        this.flash("Hari ditambahkan");
+      },
+
+      goHome: () => this.set({ route: "home", activityId: null }),
+      goTemplates: () => this.set({ route: "templates", showNewTrip: false }),
+      goDays: () => this.set({ tab: "days" }),
+      goBudget: () => this.set({ tab: "budget" }),
+      goExpenses: () => this.set({ tab: "expenses" }),
+      goPacking: () => this.set({ tab: "packing" }),
+      goOutfit: () => this.set({ tab: "outfit" }),
+      openLive: () => this.set({ route: "trip", tripId: (live || trip).id, tab: "overview", dayIdx: 2 }),
+      goLogExpense: () => this.set({ route: "trip", tripId: (s.route === "trip" ? trip : (live || trip)).id, tab: "expenses" }),
+      openShare: () => this.set({ route: "share" }),
+      closeShare: () => this.set({ route: "trip" }),
+      copyShared: () => { this.set({ route: "home" }); this.flash("Trip disalin ke daftar kamu"); },
+
+      shareDays: trip.days.filter(d => d.acts.length).map((d, i) => ({
+        title: "Hari " + (trip.days.indexOf(d) + 1), dateLabel: d.date,
+        acts: d.acts.slice().sort((a, b) => (a.time || "99").localeCompare(b.time || "99")).map(a => mkAct(a, i, d))
+      })),
+      actTotal: trip.days.reduce((n, d) => n + d.acts.length, 0),
+      priciest: (() => { const m = lines.slice().sort((a, b) => b.amount - a.amount)[0]; return m ? m.title.split(" ")[0] + " " + shortRp(m.amount) : "-"; })(),
+
+      showNewTrip: s.showNewTrip,
+      openNewTrip: () => this.set({ showNewTrip: true }),
+      closeNewTrip: () => this.set({ showNewTrip: false }),
+      ntName: s.nt.name, ntPlace: s.nt.place, ntStart: s.nt.start, ntLen: s.nt.len,
+      ntEndLabel: s.nt.start ? longDate(addDays(s.nt.start, s.nt.len - 1)) : "pilih tanggal mulai dulu",
+      ntRangeCopy: s.nt.start
+        ? rangeLabel(s.nt.start, s.nt.len) + " · " + s.nt.len + " hari, " + (s.nt.len - 1) + " malam"
+        : s.nt.len + " hari, " + (s.nt.len - 1) + " malam",
+      ntEndInput: s.nt.start ? isoDate(addDays(s.nt.start, s.nt.len - 1)) : "",
+      onNtName: e => this.set({ nt: Object.assign({}, s.nt, { name: e.target.value }) }),
+      onNtPlace: e => this.set({ nt: Object.assign({}, s.nt, { place: e.target.value }) }),
+      onNtStart: e => this.set({ nt: Object.assign({}, s.nt, { start: e.target.value }) }),
+      onNtEnd: e => {
+        const v = e.target.value;
+        if (!v || !s.nt.start) return;
+        const diff = Math.round((new Date(v + "T00:00:00") - new Date(s.nt.start + "T00:00:00")) / 86400000) + 1;
+        this.set({ nt: Object.assign({}, s.nt, { len: Math.max(1, Math.min(30, diff)) }) });
+      },
+      ntLenMinus: () => this.set({ nt: Object.assign({}, s.nt, { len: Math.max(1, s.nt.len - 1) }) }),
+      ntLenPlus: () => this.set({ nt: Object.assign({}, s.nt, { len: Math.min(30, s.nt.len + 1) }) }),
+
+      matChoices: Object.keys(MATS).map(matChoice),
+      onNtCoverFile: e => { const f = e.target.files && e.target.files[0]; if (!f) return; const url = URL.createObjectURL(f); this.set({ nt: Object.assign({}, s.nt, { cover: url }) }); this.flash("Gambar dipakai untuk kartu trip"); },
+      ntCoverChoices: coverChoices(s.nt.cover, u => this.set({ nt: Object.assign({}, s.nt, { cover: u }) })),
+      ntCoverUrl: s.nt.cover ? "url('" + s.nt.cover + "')" : "none",
+      ntCoverEmpty: !s.nt.cover,
+
+      editOpen: !!s.et,
+      openEditTrip: () => this.set({ et: { name: trip.name, place: trip.place, start: trip.startIso || SEED_START[trip.id] || "", len: trip.days.length, cover: trip.cover || "", mat: trip.mat } }),
+      closeEditTrip: () => this.set({ et: null }),
+      etName: et.name, etPlace: et.place, etStart: et.start, etLen: et.len,
+      etEndInput: et.start ? isoDate(addDays(et.start, Math.max(1, et.len) - 1)) : "",
+      etRangeCopy: et.start
+        ? rangeLabel(et.start, et.len) + " · " + et.len + " hari, " + Math.max(0, et.len - 1) + " malam"
+        : et.len + " hari · tanggal mulai belum diatur",
+      etDayCopy: et.len < trip.days.length
+        ? "Hari " + (et.len + 1) + "–" + trip.days.length + " akan dihapus beserta aktivitasnya"
+        : (et.len > trip.days.length ? (et.len - trip.days.length) + " hari kosong akan ditambahkan" : "Jumlah hari tidak berubah"),
+      etDayWarn: et.len < trip.days.length,
+      onEtName: e => setEt({ name: e.target.value }),
+      onEtPlace: e => setEt({ place: e.target.value }),
+      onEtStart: e => setEt({ start: e.target.value }),
+      onEtEnd: e => {
+        const v = e.target.value;
+        if (!v || !et.start) return;
+        const diff = Math.round((new Date(v + "T00:00:00") - new Date(et.start + "T00:00:00")) / 86400000) + 1;
+        setEt({ len: Math.max(1, Math.min(30, diff)) });
+      },
+      etLenMinus: () => setEt({ len: Math.max(1, et.len - 1) }),
+      etLenPlus: () => setEt({ len: Math.min(30, et.len + 1) }),
+      etCoverChoices: coverChoices(et.cover, u => setEt({ cover: u })),
+      onEtCoverFile: e => { const f = e.target.files && e.target.files[0]; if (!f) return; setEt({ cover: URL.createObjectURL(f) }); },
+      etCoverUrl: et.cover ? "url('" + et.cover + "')" : "none",
+      etCoverEmpty: !et.cover,
+      etMatChoices: Object.keys(MATS).map(k => {
+        const m = MATS[k];
+        return {
+          label: m.label, matBg: m.bg, matA: m.a, matB: m.b, matSun: m.sun, matRadius: m.radius, matClip: m.clip,
+          motif: this.motifEl(m.motif, 26, "#fff", .7),
+          bd: et.mat === k ? "#0E6E76" : "#EDE9DA", fg: et.mat === k ? "#0A4F55" : "#33474C",
+          pick: () => setEt({ mat: k })
+        };
+      }),
+      saveEditTrip: () => {
+        if (!et.name.trim()) { this.flash("Nama trip belum diisi"); return; }
+        const len = Math.max(1, Math.min(30, et.len));
+        this.patchTrip(trip.id, t => {
+          t.name = et.name.trim();
+          t.place = et.place.trim() || "Belum ada destinasi";
+          t.mat = et.mat;
+          t.cover = et.cover;
+          if (len < t.days.length) t.days = t.days.slice(0, len);
+          while (t.days.length < len) t.days.push({ date: "", long: "Hari " + (t.days.length + 1), title: "Belum diberi nama", outfit: "", acts: [] });
+          if (et.start) {
+            t.startIso = et.start;
+            t.days.forEach((d, i) => { const dt = addDays(et.start, i); d.date = shortDate(dt); d.long = longDate(dt); });
+            t.dates = rangeLabel(et.start, len);
+          }
+          return t;
+        });
+        this.setState(st => ({ et: null, dayIdx: Math.min(st.dayIdx, len - 1) }));
+        this.flash("Detail trip diperbarui");
+      },
+
+      tabMembers: s.route === "trip" && s.tab === "members",
+      memberCount: memberList.length,
+      memberSummary: memberList.filter(m => m.status === "aktif").length + " aktif · " + memberList.filter(m => m.status !== "aktif").length + " menunggu jawaban",
+      members: memberList.map(m => {
+        const tn = tone(m.name);
+        const owner = m.role === "Pemilik";
+        return {
+          name: m.name, email: m.email, initials: initials(m.name), role: m.role,
+          avBg: tn[0], avFg: tn[1],
+          isOwner: owner, canEdit: !owner,
+          statusLabel: m.status === "aktif" ? "Aktif" : "Menunggu",
+          statusBg: m.status === "aktif" ? "#DEEEEC" : "#F1EEE1",
+          statusFg: m.status === "aktif" ? "#2F6B54" : "#8A6314",
+          pending: m.status !== "aktif",
+          onRole: e => { const v = e.target.value; patchMembers(list => list.map(x => x.id === m.id ? Object.assign({}, x, { role: v }) : x)); this.flash(m.name.split(" ")[0] + " sekarang " + v.toLowerCase()); },
+          resend: () => this.flash("Undangan dikirim ulang ke " + m.email),
+          remove: () => { patchMembers(list => list.filter(x => x.id !== m.id)); this.flash(m.name.split(" ")[0] + " dikeluarkan dari trip"); }
+        };
+      }),
+      roleOptions: ROLES,
+      mvEmail: s.mv.email, mvRole: s.mv.role,
+      onMvEmail: e => this.set({ mv: Object.assign({}, s.mv, { email: e.target.value }) }),
+      onMvRole: e => this.set({ mv: Object.assign({}, s.mv, { role: e.target.value }) }),
+      invite: () => {
+        const mail = s.mv.email.trim();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) { this.flash("Masukkan email yang benar"); return; }
+        if (memberList.some(m => m.email.toLowerCase() === mail.toLowerCase())) { this.flash("Email itu sudah diundang"); return; }
+        const nm = mail.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+        patchMembers(list => list.concat([{ id: "u" + (s.seq + 1), name: nm, email: mail, role: s.mv.role, status: "menunggu" }]));
+        this.setState(st => ({ seq: st.seq + 1, mv: { email: "", role: st.mv.role } }));
+        this.flash("Undangan dikirim ke " + mail);
+      },
+      copyInvite: () => this.flash("Tautan undangan disalin"),
+      createTrip: () => {
+        if (!s.nt.name.trim()) { this.flash("Nama trip belum diisi"); return; }
+        if (!s.nt.start) { this.flash("Pilih tanggal mulai dulu"); return; }
+        const id = "t" + (s.seq + 1);
+        this.setState(st => ({
+          seq: st.seq + 1, showNewTrip: false, route: "trip", tab: "days", tripId: id, dayIdx: 0, openCat: "Makan & minum",
+          nt: { name: "", place: "", start: "", len: 4, mat: "pantai", cover: "" },
+          trips: st.trips.concat([{ id, name: s.nt.name.trim(), place: s.nt.place.trim() || "Belum ada destinasi", mat: s.nt.mat, cover: s.nt.cover, startIso: s.nt.start, members: seedMembers(""), dates: rangeLabel(s.nt.start, s.nt.len), status: "draft", people: 2, plan: 0,
+            days: buildDays(s.nt.start, s.nt.len),
+            activeBudget: id + "-awal",
+            budgets: [ { id: id + "-awal", name: "Rencana awal", note: "", alloc: { "Makan & minum": 0, "Transport": 0, "Tiket & atraksi": 0, "Penginapan": 0, "Lain": 0 } } ],
+            manual: [], packing: [] }])
+        }));
+        this.flash("Trip dibuat, tambahkan hari pertama");
+      },
+
+      toast: s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>
