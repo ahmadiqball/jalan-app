@@ -36,7 +36,7 @@ const meta = computed(() =>
       <div class="money text-[14px] font-600" :class="act.cost ? '' : 'text-muted'">
         {{ act.cost ? rp(act.cost) : '–' }}
       </div>
-      <div class="text-[12px] text-muted mt-[2px]">{{ act.cost ? people + ' orang' : 'tanpa biaya' }}</div>
+      <div class="text-[12px] text-muted mt-[2px]">{{ act.cost ? (act.participants?.length ?? people) + ' orang' : 'tanpa biaya' }}</div>
     </div>
   </button>
 </template>

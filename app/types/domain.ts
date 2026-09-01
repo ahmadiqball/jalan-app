@@ -37,6 +37,8 @@ export interface Activity {
   place: string
   cost: number
   note: string
+  /** member ids who join this activity; undefined = everyone */
+  participants?: string[]
 }
 
 export interface Day {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
 import { rp, shortRp } from '~/utils/format'
-import { SHORT_CAT } from '~/utils/categories'
+import { SHORT_CAT, tone, iconFor } from '~/utils/categories'
 
 const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
@@ -27,13 +27,28 @@ const recent = computed(() => lines.value.slice().sort((a, b) => b.dayIdx - a.da
         <div class="money text-[34px] font-600 mt-1" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</div>
         <div class="text-[13.5px] text-muted mt-1 money">dari rencana {{ rp(budget.plan) }} · {{ rp(budget.perPerson) }} per orang</div>
         <div class="mt-3"><CoreBar :pct="budget.pct" :over="budget.over" /></div>
+        <div class="flex items-center justify-between mt-[6px] text-[12.5px]">
+          <span class="money" :style="{ color: budget.statusFg }">{{ Math.round(budget.pct) }}% terpakai</span>
+          <span v-if="budget.over" class="flex items-center gap-1 text-warn-fg font-600"><i class="i-lucide-alert-triangle text-[13px]" /> Lewat anggaran</span>
+        </div>
 
         <div class="grid gap-3 mt-4" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
-          <div v-for="c in categories" :key="c.name" class="bg-paper rounded-field p-[12px_14px]">
-            <div class="text-[12.5px] text-muted truncate">{{ SHORT_CAT[c.name] || c.name }}</div>
-            <div class="money text-[16px] font-600 mt-[2px]" :style="{ color: c.spentFg }">{{ c.spentShort }}</div>
+          <NuxtLink
+            v-for="c in categories"
+            :key="c.name"
+            :to="{ path: `/trip/${trip.id}/budget`, query: { cat: c.name } }"
+            class="bg-paper rounded-field p-[12px_14px] hover:bg-sand-100 transition-colors block"
+          >
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-[12.5px] text-muted truncate">{{ SHORT_CAT[c.name] || c.name }}</span>
+              <i v-if="c.alloc > 0 && c.spent > c.alloc" class="i-lucide-alert-triangle text-[13px] text-warn-fg shrink-0" />
+            </div>
+            <div class="flex items-baseline justify-between gap-1 mt-[2px]">
+              <span class="money text-[16px] font-600" :style="{ color: c.spentFg }">{{ c.spentShort }}</span>
+              <span class="money text-[11px]" :style="{ color: c.alloc > 0 && c.spent > c.alloc ? '#C85A28' : '#6C7C7D' }">{{ Math.round(c.pct) }}%</span>
+            </div>
             <div class="mt-2"><CoreBar :pct="c.pct" :color="c.barColor" :height="6" /></div>
-          </div>
+          </NuxtLink>
         </div>
       </div>
 
@@ -90,24 +105,27 @@ const recent = computed(() => lines.value.slice().sort((a, b) => b.dayIdx - a.da
           <NuxtLink :to="`/trip/${trip.id}/expenses`" class="text-[13px] font-600 text-teal-600">Semua</NuxtLink>
         </div>
         <div class="flex flex-col gap-2 mt-3">
-          <div v-for="l in recent" :key="l.id" class="flex items-center justify-between gap-2">
-            <span class="text-[13px] text-ink-2 truncate">{{ l.title }}</span>
+          <div v-for="l in recent" :key="l.id" class="flex items-center gap-2">
+            <span class="w-[26px] h-[26px] rounded-[8px] flex items-center justify-center shrink-0" :style="{ background: tone(l.cat)[0], color: tone(l.cat)[1] }">
+              <i :class="iconFor(l.cat)" class="text-[13px]" />
+            </span>
+            <span class="text-[13px] text-ink-2 truncate flex-1">{{ l.title }}</span>
             <span class="money text-[13px] font-600 shrink-0">{{ rp(l.amount) }}</span>
           </div>
           <div v-if="!recent.length" class="text-[13px] text-muted">Belum ada pengeluaran.</div>
         </div>
       </div>
 
-      <div class="card p-[18px]">
+      <NuxtLink :to="`/trip/${trip.id}/packing`" class="card p-[18px] block hover:shadow-lift transition-shadow">
         <div class="flex items-center justify-between">
           <div class="font-display text-[17px] font-600">Barang bawaan</div>
-          <span class="money text-[13px] text-muted">{{ packing.done }} / {{ packing.total }}</span>
+          <span class="flex items-center gap-1 money text-[13px] text-muted">{{ packing.done }} / {{ packing.total }} <i class="i-lucide-arrow-up-right text-[15px]" /></span>
         </div>
         <div class="mt-3"><CoreBar :pct="packing.total ? (packing.done / packing.total) * 100 : 0" :color="'#2F6B54'" /></div>
-        <div class="text-[12.5px] text-muted mt-2">
+        <div class="text-[12.5px] mt-2" :class="packing.reqLeft > 0 ? 'text-warn-fg font-600' : 'text-muted'">
           {{ packing.reqLeft > 0 ? packing.reqLeft + ' wajib belum dicentang' : 'Semua wajib sudah dicentang' }}
         </div>
-      </div>
+      </NuxtLink>
     </div>
   </div>
 </template>

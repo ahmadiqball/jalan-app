@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@internationalized/date": "^3.12.3",
     "@pinia/nuxt": "^1.0.2",
     "clsx": "^2.1.1",
     "nuxt": "^4.5.2",

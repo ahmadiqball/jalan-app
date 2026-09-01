@@ -42,6 +42,11 @@ export function iconFor(name: string): string {
   return CAT_ICON[name] || CAT_ICON.Lain!
 }
 
+/** DOM-id-safe slug for a category name (deep-linking to a budget row). */
+export function catSlug(name: string): string {
+  return 'bcat-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
 /** Segment palette for the budget donut / category dots. */
 export const SEG_PALETTE = [
   '#F0713A', '#0E6E76', '#D98F3B', '#2F6B54',

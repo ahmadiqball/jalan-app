@@ -1,11 +1,24 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
 import { rp, shortRp } from '~/utils/format'
+import { catSlug } from '~/utils/categories'
 
 const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
+const ui = useUiStore()
+const route = useRoute()
 const { flash } = useToast()
 const { budget, categories, donut, loose } = useDerived(() => props.trip)
+
+// deep-link: /trip/:id/budget?cat=<name> opens + scrolls to that category
+onMounted(() => {
+  const cat = route.query.cat as string | undefined
+  if (!cat) return
+  ui.openCat = cat
+  nextTick(() => {
+    document.getElementById(catSlug(cat))?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  })
+})
 
 const locked = computed(() => budget.value.locked)
 const activeName = computed({

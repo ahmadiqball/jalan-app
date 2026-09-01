@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { CategoryRow } from '~/utils/derive'
+import { catSlug } from '~/utils/categories'
 
 const props = defineProps<{ row: CategoryRow; tripId: string; locked: boolean }>()
 const trips = useTripsStore()
@@ -22,7 +23,7 @@ function remove(e: Event) {
 </script>
 
 <template>
-  <div class="border-b border-sand-100">
+  <div :id="catSlug(row.name)" class="border-b border-sand-100 scroll-mt-[160px]">
     <div class="flex items-center gap-3 py-[11px] cursor-pointer" @click="toggle">
       <div class="w-[30px] h-[30px] rounded-[9px] flex items-center justify-center shrink-0" :style="{ background: row.iconBg, color: row.iconFg }">
         <span class="w-[9px] h-[9px] rounded-full" :style="{ background: row.segColor }" />

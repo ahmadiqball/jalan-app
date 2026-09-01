@@ -18,14 +18,6 @@ const rail = [
   { label: 'Outfit', href: '#outfit', desc: 'Atasan, bawahan, alas kaki per hari', icon: 'i-lucide-shirt' },
   { label: 'Sharing', href: '#anggota', desc: 'Satu link buat teman — tanpa daftar', icon: 'i-lucide-users' },
 ]
-const shots = [
-  { src: '/img/screen-beranda.png', cap: 'Beranda · trip yang sedang jalan' },
-  { src: '/img/screen-hari.png', cap: 'Hari · aktivitas per jam' },
-  { src: '/img/screen-anggaran.png', cap: 'Anggaran · sisa uang per kategori' },
-  { src: '/img/screen-outfit.png', cap: 'Outfit · per hari atau per aktivitas' },
-  { src: '/img/screen-anggota.png', cap: 'Anggota · biaya dibagi otomatis' },
-  { src: '/img/screen-ringkasan.png', cap: 'Ringkasan · yang dilihat pertama' },
-]
 const stories = [
   { quote: '"Grup chat kami akhirnya sepi"', body: 'Dulu tiap orang pegang catatan sendiri. Sekarang semua lihat jadwal dan sisa anggaran yang sama.', who: 'Dimas P.', trip: 'Trip Sumba · 3 orang', ini: 'DP' },
   { quote: '"Catat pengeluaran sambil nunggu kapal"', body: 'Tanpa sinyal pun bisa. Pulang-pulang rekapnya sudah rapi, tidak perlu kumpulkan struk lagi.', who: 'Ayu L.', trip: 'Trip Labuan Bajo · 5 orang', ini: 'AL' },
@@ -319,10 +311,57 @@ function nav(i: number) { paused = true; go(i) }
           </div>
           <NuxtLink :to="appHref" class="bg-ink text-white rounded-pill px-5 py-3 text-[14px] font-700 whitespace-nowrap">Coba versi hidup</NuxtLink>
         </div>
-        <div class="grid gap-[18px] mt-[34px]" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-          <div v-for="(s, i) in shots" :key="s.src" class="bg-white border border-sand-line rounded-[18px] p-[7px] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]" :style="{ transform: `rotate(${(i % 2 ? 1 : -1) * (1.4 + (i % 3) * 0.5)}deg)` }">
-            <img :src="s.src" alt="" class="w-full block rounded-[12px]">
-            <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ s.cap }}</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[18px] items-start mt-[34px]">
+          <!-- col 1 -->
+          <div class="flex flex-col gap-[18px] lg:mt-4">
+            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[-2deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
+              <img src="/img/screen-beranda.png" alt="" class="w-full block rounded-[12px]">
+              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">Beranda · trip yang sedang jalan</div>
+            </div>
+            <div class="bg-teal-100 rounded-[18px] p-[15px] rotate-[1.4deg]">
+              <div class="font-mono text-[11px] font-600 text-teal-700">HARI 3 · TANGGEDU</div>
+              <div class="text-[14.5px] font-700 leading-[1.35] mt-[6px]">"Bawa kaos ganti, jalannya basah sampai pinggang."</div>
+            </div>
+            <div class="h-[130px] rounded-[18px] overflow-hidden rotate-[-1.4deg] bg-cover bg-center shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)]" style="background-image:url('/img/photo-bromo.jpg')" />
+          </div>
+          <!-- col 2 -->
+          <div class="flex flex-col gap-[18px]">
+            <div class="h-[150px] rounded-[18px] overflow-hidden rotate-[2deg] bg-cover bg-center shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)]" style="background-image:url('/img/photo-kota.jpg')" />
+            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[-1.2deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
+              <img src="/img/screen-hari.png" alt="" class="w-full block rounded-[12px]">
+              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">Hari · aktivitas per jam</div>
+            </div>
+            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[2.4deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
+              <img src="/img/screen-anggota.png" alt="" class="w-full block rounded-[12px]">
+              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">Anggota · biaya dibagi otomatis</div>
+            </div>
+          </div>
+          <!-- col 3 -->
+          <div class="flex flex-col gap-[18px] lg:mt-9">
+            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[1.8deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
+              <img src="/img/screen-anggaran.png" alt="" class="w-full block rounded-[12px]">
+              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">Anggaran · sisa uang per kategori</div>
+            </div>
+            <div class="bg-ink text-teal-100 rounded-[18px] p-4 rotate-[-2.2deg]">
+              <div class="font-mono text-[20px] font-600">Rp 685.000</div>
+              <div class="text-[12px] text-teal-deep mt-[5px]">sisa anggaran di hari terakhir — cukup untuk oleh-oleh</div>
+            </div>
+            <div class="h-[120px] rounded-[18px] overflow-hidden rotate-[1.2deg] bg-cover bg-center shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)]" style="background-image:url('/img/photo-sumba.jpg')" />
+          </div>
+          <!-- col 4 -->
+          <div class="flex flex-col gap-[18px] lg:mt-2">
+            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[2.2deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
+              <img src="/img/screen-outfit.png" alt="" class="w-full block rounded-[12px]">
+              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">Outfit · per hari atau per aktivitas</div>
+            </div>
+            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[-1.8deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
+              <img src="/img/screen-ringkasan.png" alt="" class="w-full block rounded-[12px]">
+              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">Ringkasan · yang dilihat pertama</div>
+            </div>
+            <div class="bg-peach-bg rounded-[18px] p-[15px] rotate-[1.6deg]">
+              <div class="font-mono text-[11px] font-600 text-peach-fg">BARANG BAWAAN</div>
+              <div class="text-[14.5px] font-700 leading-[1.35] mt-[6px]">3 dari 8 dicentang — 2 wajib belum masuk tas</div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Trip } from '~/types/domain'
+import type { Activity, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
-import { DUR_STEPS, durLabel, nearestDur, rp } from '~/utils/format'
-import { ofItems, tone, iconFor } from '~/utils/categories'
+import { DUR_STEPS, durLabel, nearestDur, rp, toInput, initials } from '~/utils/format'
+import { OF_SLOTS, tone, iconFor, ofText } from '~/utils/categories'
 import { outfitFind, outfitDaySet } from '~/utils/derive'
 
 const props = defineProps<{ trip: Trip }>()
@@ -22,30 +22,60 @@ const open = computed({
   set: (v: boolean) => { if (!v) ui.selectActivity(null) },
 })
 
-function set<K extends 'title' | 'time' | 'place' | 'note' | 'cat'>(field: K, v: string) {
+function set<K extends keyof Activity>(field: K, v: Activity[K]) {
   if (found.value) trips.setActivityField(props.trip.id, found.value.act.id, field, v)
 }
+
+/* time as native 24h <input type=time> ("HH:MM") <-> stored "HH.MM" */
+const timeModel = computed({
+  get: () => toInput(found.value?.act.time || ''),
+  set: (v: string) => set('time', v ? v.replace(':', '.') : ''),
+})
 const costModel = computed({
   get: () => (found.value?.act.cost ? String(found.value.act.cost) : ''),
-  set: (v: string) => found.value && trips.setActivityField(props.trip.id, found.value.act.id, 'cost', parseInt(v.replace(/[^0-9]/g, '') || '0', 10)),
+  set: (v: string) => set('cost', parseInt(v.replace(/[^0-9]/g, '') || '0', 10)),
 })
 const durModel = computed({
   get: () => String(nearestDur(found.value?.act.dur || 0)),
-  set: (v: string) => found.value && trips.setActivityField(props.trip.id, found.value.act.id, 'dur', parseInt(v, 10)),
+  set: (v: string) => set('dur', parseInt(v, 10)),
 })
 const durOptions = DUR_STEPS.map((m) => ({ value: String(m), label: durLabel(m) }))
 const cats = [...CATEGORIES, 'Santai', 'Tempat']
 
+/* participants (undefined = everyone) */
+const allIds = computed(() => props.trip.members.map((m) => m.id))
+const selected = computed(() => found.value?.act.participants ?? allIds.value)
+function toggleParticipant(id: string) {
+  const cur = [...(found.value?.act.participants ?? allIds.value)]
+  const next = cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]
+  if (!next.length) return
+  set('participants', next.length === allIds.value.length ? undefined : next)
+}
+const splitCount = computed(() => Math.max(1, selected.value.length))
 const costSub = computed(() => {
   const a = found.value?.act
   if (!a) return ''
-  return a.cost ? `${props.trip.people} orang · ${rp(a.cost / props.trip.people)} per orang` : 'Aktivitas ini tidak masuk anggaran'
+  return a.cost ? `${splitCount.value} orang · ${rp(a.cost / splitCount.value)} per orang` : 'Aktivitas ini tidak masuk anggaran'
 })
-const resolvedSet = computed(() => {
-  if (!found.value) return null
-  return outfitFind(props.trip, 'act:' + found.value.act.id) || outfitDaySet(props.trip, found.value.dayIdx)
-})
-const resolvedItems = computed(() => ofItems(resolvedSet.value))
+
+/* outfit — own act set editable, else fall back to day set */
+const ownSet = computed(() => (found.value ? outfitFind(props.trip, 'act:' + found.value.act.id) : undefined))
+const daySet = computed(() => (found.value ? outfitDaySet(props.trip, found.value.dayIdx) : null))
+function setOutfitSlot(slot: 'top' | 'bottom' | 'shoes' | 'other', v: string) {
+  if (found.value) trips.setOutfitSlot(props.trip.id, 'act:' + found.value.act.id, slot, v)
+}
+function makeOwnOutfit() {
+  if (!found.value) return
+  const base = daySet.value || undefined
+  trips.addOutfitSet(props.trip.id, 'act:' + found.value.act.id, base ? { top: base.top, bottom: base.bottom, shoes: base.shoes, other: base.other } : undefined)
+  flash(ofText(base) ? 'Disalin dari outfit hari ini, silakan ubah' : 'Set outfit aktivitas dibuat')
+}
+function dropOwnOutfit() {
+  if (!found.value) return
+  trips.removeOutfitScope(props.trip.id, 'act:' + found.value.act.id)
+  flash('Aktivitas ini ikut outfit hari ini lagi')
+}
+
 const t = computed(() => (found.value ? tone(found.value.act.cat) : ['#F1EEE1', '#8A6314']))
 
 function del() {
@@ -68,13 +98,13 @@ function del() {
 
       <label class="flex flex-col gap-[6px]">
         <span class="eyebrow">Judul</span>
-        <input :value="found.act.title" class="field !text-[16px] !font-600" @input="set('title', ($event.target as HTMLInputElement).value)">
+        <input :value="found.act.title" placeholder="Judul aktivitas" class="field !text-[16px] !font-600" @input="set('title', ($event.target as HTMLInputElement).value)">
       </label>
 
       <div class="grid grid-cols-2 gap-3">
         <label class="flex flex-col gap-[6px]">
           <span class="eyebrow">Jam</span>
-          <input :value="found.act.time" placeholder="13.40" class="field money" @input="set('time', ($event.target as HTMLInputElement).value)">
+          <input v-model="timeModel" type="time" step="300" class="field money">
         </label>
         <label class="flex flex-col gap-[6px]">
           <span class="eyebrow">Durasi</span>
@@ -99,22 +129,51 @@ function del() {
         <input :value="found.act.place" placeholder="Belum ada tempat" class="field" @input="set('place', ($event.target as HTMLInputElement).value)">
       </label>
 
+      <!-- participants -->
+      <div>
+        <span class="eyebrow">Ikut siapa</span>
+        <div class="flex flex-wrap gap-2 mt-2">
+          <button
+            v-for="m in trip.members"
+            :key="m.id"
+            class="flex items-center gap-2 rounded-pill pl-[6px] pr-[12px] py-[5px] border transition-colors"
+            :class="selected.includes(m.id) ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'"
+            @click="toggleParticipant(m.id)"
+          >
+            <span class="w-[22px] h-[22px] rounded-full bg-white/70 flex items-center justify-center text-[10px] font-700">{{ initials(m.name) }}</span>
+            <span class="text-[12.5px] font-600">{{ m.name.split(' ')[0] }}</span>
+          </button>
+        </div>
+      </div>
+
       <label class="flex flex-col gap-[6px]">
         <span class="eyebrow">Catatan</span>
         <textarea :value="found.act.note" rows="3" placeholder="Tambah catatan…" class="field resize-none" @input="set('note', ($event.target as HTMLTextAreaElement).value)" />
       </label>
 
+      <!-- outfit (editable) -->
       <div class="bg-paper rounded-card p-[14px_16px]">
-        <div class="eyebrow mb-2">Outfit</div>
-        <div v-if="resolvedItems.length" class="flex flex-col gap-2">
-          <div v-for="it in resolvedItems" :key="it.label" class="flex items-center gap-2 text-[13.5px]">
-            <i :class="it.icon" class="text-[15px] text-teal-700" />
-            <span class="text-muted w-[70px]">{{ it.label }}</span>
-            <span>{{ it.value }}</span>
-          </div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="eyebrow">Outfit</span>
+          <span class="rounded-pill px-[9px] py-[3px] text-[11px] font-700" :class="ownSet ? 'bg-sand-100 text-warn-fg2' : 'bg-teal-100 text-teal-700'">
+            {{ ownSet ? 'Khusus aktivitas' : (ofText(daySet) ? 'Ikut outfit hari ini' : 'Belum diisi') }}
+          </span>
         </div>
-        <div v-else class="text-[13px] text-muted">Outfit hari ini belum diisi.</div>
-        <NuxtLink :to="`/trip/${trip.id}/outfit`" class="text-[13px] font-600 text-teal-600 mt-2 inline-block" @click="open = false">Atur di Outfit</NuxtLink>
+
+        <template v-if="ownSet">
+          <div class="flex flex-col gap-2">
+            <label v-for="[k, label, ph, icon] in OF_SLOTS" :key="k" class="flex items-center gap-2 bg-white rounded-field px-[12px] py-[8px]">
+              <i :class="icon" class="text-[15px] text-teal-700 shrink-0" />
+              <input :value="ownSet[k]" :placeholder="label + ', mis. ' + ph" class="flex-1 bg-transparent outline-none text-[13.5px] min-w-0" @input="setOutfitSlot(k, ($event.target as HTMLInputElement).value)">
+            </label>
+          </div>
+          <button class="text-[12.5px] font-600 text-muted mt-2 hover:text-warn-fg" @click="dropOwnOutfit">Ikut outfit hari ini lagi</button>
+        </template>
+        <template v-else>
+          <div v-if="ofText(daySet)" class="text-[13.5px] text-ink-2">{{ ofText(daySet) }}</div>
+          <div v-else class="text-[13px] text-muted">Outfit hari ini belum diisi.</div>
+          <button class="text-[12.5px] font-600 text-teal-600 mt-2" @click="makeOwnOutfit">+ Outfit khusus aktivitas</button>
+        </template>
       </div>
     </div>
 

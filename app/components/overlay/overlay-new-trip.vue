@@ -50,7 +50,7 @@ function create() {
       <label class="flex flex-col gap-[6px]"><span class="eyebrow">Destinasi</span><input v-model="place" class="field" placeholder="mis. Waingapu, Sumba Timur"></label>
 
       <div class="grid grid-cols-2 gap-3">
-        <label class="flex flex-col gap-[6px]"><span class="eyebrow">Tanggal mulai</span><input v-model="startIso" type="date" class="field money"></label>
+        <label class="flex flex-col gap-[6px]"><span class="eyebrow">Tanggal mulai</span><CoreDatePicker v-model="startIso" /></label>
         <label class="flex flex-col gap-[6px]"><span class="eyebrow">Jumlah hari</span><input v-model.number="len" type="number" min="1" class="field money"></label>
       </div>
       <div class="text-[13px] text-ink-2 -mt-1">Rentang: <span class="money font-600">{{ dateLabel }}</span></div>
