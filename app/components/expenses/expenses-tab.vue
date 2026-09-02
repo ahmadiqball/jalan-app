@@ -79,21 +79,27 @@ function removeLine(id: string) {
   flash('Pengeluaran dihapus')
 }
 
-/* pete-pete handoff (split / settle-up) */
+/* pete-pete split / settle-up — embedded inside jalan (no leaving the app) */
 const pete = usePetePete()
+const splitOpen = ref(false)
+const splitUrl = computed(() => (props.trip.splitBillId ? pete.billUrl(props.trip.splitBillId) : ''))
 async function bagiRata() {
   try {
-    const id = await pete.createSplit(props.trip)
-    if (!id) return
-    trips.setSplitBill(props.trip.id, id)
-    flash('Split dibuat di PetePete')
-    window.open(pete.billUrl(id), '_blank', 'noopener')
+    let id = props.trip.splitBillId
+    if (!id) {
+      id = (await pete.createSplit(props.trip)) || undefined
+      if (!id) return
+      trips.setSplitBill(props.trip.id, id)
+      flash('Split dibuat di PetePete')
+    }
+    splitOpen.value = true
   } catch {
     flash('Gagal membuka PetePete')
   }
 }
-function openSplit() {
-  if (props.trip.splitBillId) window.open(pete.billUrl(props.trip.splitBillId), '_blank', 'noopener')
+function newSplit() {
+  trips.setSplitBill(props.trip.id, '')
+  bagiRata()
 }
 
 /* log form */
@@ -187,16 +193,18 @@ function log() {
           Serahkan urusan siapa bayar siapa ke <span class="font-600">PetePete</span> — bisa beberapa yang bayar, split per item, sampai rekap siapa transfer ke siapa.
         </p>
         <template v-if="trip.splitBillId">
-          <CoreButton variant="teal" block class="mt-3" @click="openSplit">
-            <i class="i-lucide-external-link text-[15px]" /> Buka split di PetePete
+          <CoreButton variant="teal" block class="mt-3" @click="splitOpen = true">
+            <i class="i-lucide-split text-[15px]" /> Buka split
           </CoreButton>
-          <button class="w-full text-[12.5px] font-600 text-muted mt-2 hover:text-teal-700" :disabled="pete.busy.value" @click="bagiRata">Buat split baru</button>
+          <button class="w-full text-[12.5px] font-600 text-muted mt-2 hover:text-teal-700 disabled:opacity-50" :disabled="pete.busy.value" @click="newSplit">Buat split baru</button>
         </template>
         <CoreButton v-else variant="primary" block class="mt-3" :disabled="pete.busy.value" @click="bagiRata">
-          {{ pete.busy.value ? 'Membuka…' : 'Bagi rata di PetePete' }}
+          {{ pete.busy.value ? 'Menyiapkan…' : 'Bagi rata di PetePete' }}
         </CoreButton>
       </div>
     </div>
+
+    <ExpensesSplitEmbed v-model:open="splitOpen" :url="splitUrl" />
 
     <!-- edit manual entry -->
     <CoreDialog v-if="editing" v-model:open="editOpen" side="center" :width="440" title="Ubah pengeluaran">
