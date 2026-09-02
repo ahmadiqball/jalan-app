@@ -2,6 +2,7 @@
 const session = useSessionStore()
 const ui = useUiStore()
 const route = useRoute()
+const { signOut: authSignOut } = useAuth()
 
 const nav = [
   { label: 'Beranda', to: '/beranda' },
@@ -12,8 +13,8 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(to +
 const mobileOpen = ref(false)
 watch(() => route.path, () => (mobileOpen.value = false))
 
-function signOut() {
-  session.signOut()
+async function signOut() {
+  await authSignOut()
   navigateTo('/masuk')
 }
 async function openNewTrip() {

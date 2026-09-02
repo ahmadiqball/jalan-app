@@ -220,6 +220,13 @@ export const useTripsStore = defineStore(
       trips.value = seedTrips()
       seq.value = 100
     }
+    /** Replace all trips (used by cloud sync on pull). Strips server meta. */
+    function replaceAll(list: Trip[]) {
+      trips.value = list.map((t) => {
+        const { _v, _shareId, ...rest } = t as Trip & { _v?: number; _shareId?: string }
+        return rest as Trip
+      })
+    }
 
     return {
       trips, seq, byId, liveTrip, patchTrip, nextId,
@@ -229,7 +236,7 @@ export const useTripsStore = defineStore(
       togglePackItem, addPackItem,
       setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,
       addMember, removeMember, setMemberRole,
-      createTrip, updateTrip, setSplitBill, resetSeed,
+      createTrip, updateTrip, setSplitBill, resetSeed, replaceAll,
     }
   },
   { persist: true },

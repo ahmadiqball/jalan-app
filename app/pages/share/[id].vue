@@ -2,11 +2,27 @@
 definePageMeta({ layout: 'blank', public: true })
 import { matDef } from '~/utils/motifs'
 
+import type { Trip } from '~/types/domain'
+
 const route = useRoute()
 const trips = useTripsStore()
 const { flash } = useToast()
 
-const trip = computed(() => trips.byId(route.params.id as string))
+// Owner viewing their own trip resolves from the local store; a public viewer
+// (cloud mode, not signed in) has no local data, so fetch the shared copy.
+const remote = ref<Trip | null>(null)
+const local = computed(() => trips.byId(route.params.id as string))
+const trip = computed(() => local.value ?? remote.value)
+
+onMounted(async () => {
+  if (local.value) return
+  try {
+    remote.value = await $fetch<Trip>(`/api/share/${route.params.id}`)
+  } catch {
+    remote.value = null
+  }
+})
+
 useHead(() => ({ title: (trip.value?.name ?? 'Trip') + ' · Jalan' }))
 
 function copyLink() {
