@@ -67,7 +67,8 @@ export default defineNuxtPlugin(() => {
     if (!session.authed || !loaded) return
     const ids = new Set(trips.trips.map((t) => t.id))
     for (const t of trips.trips) {
-      if (snapshot.get(t.id) !== json(t)) pushQueue.add(t.id)
+      // only push trips this user may edit — a viewer's local edits stay local
+      if (snapshot.get(t.id) !== json(t) && tripRole(t, session.email, true) !== 'viewer') pushQueue.add(t.id)
     }
     for (const id of snapshot.keys()) {
       if (!ids.has(id)) delQueue.add(id)

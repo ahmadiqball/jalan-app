@@ -184,7 +184,7 @@ export const useTripsStore = defineStore(
     }
 
     /* ---- trip lifecycle ---- */
-    function createTrip(input: Partial<Trip> & { name: string; startIso?: string; len?: number }): string {
+    function createTrip(input: Partial<Trip> & { name: string; startIso?: string; len?: number; owner?: { name: string; email: string } }): string {
       const id = 't' + nextId()
       const len = input.len ?? (input.days?.length || 1)
       const trip: Trip = {
@@ -204,7 +204,11 @@ export const useTripsStore = defineStore(
         outfitSets: [],
         manual: [],
         packing: [],
-        members: [{ id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' }],
+        members: [
+          input.owner
+            ? { id: 'u1', name: input.owner.name, email: input.owner.email, role: 'Pemilik', status: 'aktif' }
+            : { id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' },
+        ],
       }
       trips.value = [...trips.value, trip]
       return id

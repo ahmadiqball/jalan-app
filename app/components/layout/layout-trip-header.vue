@@ -4,6 +4,9 @@ import { matDef } from '~/utils/motifs'
 
 const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
+const { canEdit, isOwner } = useTripAccess()
+const editable = computed(() => canEdit(props.trip))
+const owner = computed(() => isOwner(props.trip))
 
 const locked = computed(() => props.trip.status === 'live')
 const typeLabel = computed(() => matDef(props.trip.mat).label)
@@ -36,9 +39,10 @@ const budgetChip = computed(() => {
           backgroundColor: matDef(trip.mat).bg,
         }"
         title="Ubah detail"
-        @click="ui.editOpen = true"
+        :disabled="!editable"
+        @click="editable && (ui.editOpen = true)"
       >
-        <span class="absolute right-[5px] bottom-[5px] w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-[0_4px_10px_-4px_rgba(16,38,43,.5)]">
+        <span v-if="editable" class="absolute right-[5px] bottom-[5px] w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-[0_4px_10px_-4px_rgba(16,38,43,.5)]">
           <i class="i-lucide-pencil text-[12px] text-teal-700" />
         </span>
       </button>
@@ -61,21 +65,22 @@ const budgetChip = computed(() => {
       </div>
 
       <div class="flex gap-[10px] items-center text-[13px] font-600 mt-1 flex-wrap">
+        <span v-if="!editable" class="bg-sand-100 text-ink-2 rounded-pill px-[13px] py-2 flex items-center gap-[6px]">
+          <i class="i-lucide-eye text-[14px]" />
+          Hanya lihat
+        </span>
         <button
+          v-if="editable"
           class="flex gap-[6px] items-center bg-white border border-sand-line2 text-ink-2 rounded-pill px-[14px] py-2 hover:border-teal-600 hover:text-teal-700"
           @click="ui.editOpen = true"
         >
           <i class="i-lucide-pencil text-[14px]" />
           Ubah detail
         </button>
-        <span class="bg-sand-100 text-warn-fg2 rounded-pill px-[13px] py-2 flex items-center gap-[6px]">
-          <i class="i-lucide-hard-drive text-[13px]" />
-          Tersimpan di perangkat
-        </span>
-        <NuxtLink :to="`/share/${trip.id}`" class="bg-white border border-sand-line2 text-ink-2 rounded-pill px-[14px] py-2 hover:border-teal-600">
+        <NuxtLink v-if="owner" :to="`/share/${trip.id}`" class="bg-white border border-sand-line2 text-ink-2 rounded-pill px-[14px] py-2 hover:border-teal-600">
           Bagikan tautan
         </NuxtLink>
-        <NuxtLink :to="`/trip/${trip.id}/expenses`" class="bg-primary text-white rounded-pill px-[16px] py-[9px] font-700 hover:bg-primary-hover">
+        <NuxtLink v-if="editable" :to="`/trip/${trip.id}/expenses`" class="bg-primary text-white rounded-pill px-[16px] py-[9px] font-700 hover:bg-primary-hover">
           Catat pengeluaran
         </NuxtLink>
       </div>

@@ -1,17 +1,22 @@
 import type { H3Event } from 'h3'
 import { cloudEnabled, useSupabase } from './supabase'
 
-/** Fixed owner id used in local (no-Supabase) mode so the API works offline. */
-export const LOCAL_USER_ID = 'local-dev-user'
+/** Fixed owner used in local (no-Supabase) mode so the API works offline. */
+export const LOCAL_USER = { id: 'local-dev-user', email: 'local@jalan.id' }
+
+export interface Actor {
+  id: string
+  email: string
+}
 
 /**
- * Resolve the authenticated user id.
- * - Cloud mode: verify the Supabase JWT from the Authorization: Bearer header.
- * - Local mode: a single shared dev user (no auth) so the API is usable.
+ * Resolve the authenticated actor.
+ * - Cloud mode: verify the Supabase JWT from Authorization: Bearer.
+ * - Local mode: a single shared dev user (no auth).
  * Returns null in cloud mode when the token is missing/invalid.
  */
-export async function getUserId(event: H3Event): Promise<string | null> {
-  if (!cloudEnabled(event)) return LOCAL_USER_ID
+export async function getActor(event: H3Event): Promise<Actor | null> {
+  if (!cloudEnabled(event)) return { ...LOCAL_USER }
 
   const header = getRequestHeader(event, 'authorization') || ''
   const token = header.startsWith('Bearer ') ? header.slice(7) : ''
@@ -19,12 +24,11 @@ export async function getUserId(event: H3Event): Promise<string | null> {
 
   const { data, error } = await useSupabase(event).auth.getUser(token)
   if (error || !data.user) return null
-  return data.user.id
+  return { id: data.user.id, email: (data.user.email || '').toLowerCase() }
 }
 
-/** Same as getUserId but throws 401 when unauthenticated. */
-export async function requireUserId(event: H3Event): Promise<string> {
-  const id = await getUserId(event)
-  if (!id) throw createError({ statusCode: 401, statusMessage: 'Harus masuk dulu' })
-  return id
+export async function requireActor(event: H3Event): Promise<Actor> {
+  const actor = await getActor(event)
+  if (!actor) throw createError({ statusCode: 401, statusMessage: 'Harus masuk dulu' })
+  return actor
 }

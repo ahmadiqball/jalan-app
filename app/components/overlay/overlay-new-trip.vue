@@ -5,7 +5,9 @@ import { COVERS } from '~/utils/categories'
 
 const ui = useUiStore()
 const trips = useTripsStore()
+const session = useSessionStore()
 const { flash } = useToast()
+const cloud = useIsCloud()
 
 const name = ref('')
 const place = ref('')
@@ -36,6 +38,7 @@ function create() {
     startIso: startIso.value,
     len: Math.max(1, len.value),
     dates: rangeLabel(startIso.value, Math.max(1, len.value)) === 'belum diatur' ? '' : rangeLabel(startIso.value, Math.max(1, len.value)),
+    owner: cloud ? { name: session.name, email: session.email } : undefined,
   })
   ui.showNewTrip = false
   flash('Trip dibuat')

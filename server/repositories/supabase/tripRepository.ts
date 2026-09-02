@@ -23,14 +23,20 @@ function mapRow(row: Record<string, unknown>): TripRow {
 export class SupabaseTripRepository implements TripRepository {
   constructor(private readonly sb: SupabaseClient) {}
 
-  async listByOwner(ownerId: string): Promise<TripRow[]> {
-    const { data, error } = await this.sb
+  async listForUser(userId: string, email: string): Promise<TripRow[]> {
+    // owned
+    const owned = await this.sb.from(TABLE).select('*').eq('owner_id', userId)
+    if (owned.error) throw owned.error
+    // shared: data.members contains an object with this email (JSONB @>)
+    const shared = await this.sb
       .from(TABLE)
       .select('*')
-      .eq('owner_id', ownerId)
-      .order('updated_at', { ascending: false })
-    if (error) throw error
-    return (data ?? []).map(mapRow)
+      .contains('data', { members: [{ email: email.toLowerCase() }] })
+    if (shared.error) throw shared.error
+
+    const byId = new Map<string, TripRow>()
+    for (const r of [...(owned.data ?? []), ...(shared.data ?? [])]) byId.set(r.id as string, mapRow(r))
+    return [...byId.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
   }
 
   async get(id: string): Promise<TripRow | null> {
@@ -45,27 +51,37 @@ export class SupabaseTripRepository implements TripRepository {
     return data ? mapRow(data) : null
   }
 
-  async save(ownerId: string, trip: TripData): Promise<TripRow> {
-    const { data: existing, error: readErr } = await this.sb
-      .from(TABLE)
-      .select('owner_id, version, share_id')
-      .eq('id', trip.id)
-      .maybeSingle()
-    if (readErr) throw readErr
-    if (existing && existing.owner_id !== ownerId) {
-      throw createError({ statusCode: 403, statusMessage: 'Bukan trip milikmu' })
-    }
+  async create(ownerId: string, trip: TripData): Promise<TripRow> {
     const row = {
       id: trip.id,
       owner_id: ownerId,
       data: trip,
-      share_id: existing?.share_id ?? null,
-      version: ((existing?.version as number) ?? 0) + 1,
+      share_id: null,
+      version: 1,
       updated_at: new Date().toISOString(),
     }
-    const { data, error } = await this.sb.from(TABLE).upsert(row).select().single()
+    const { data, error } = await this.sb.from(TABLE).insert(row).select().single()
     if (error) throw error
     return mapRow(data)
+  }
+
+  async replace(id: string, trip: TripData): Promise<TripRow | null> {
+    // read current version for the bump; owner_id & share_id are left untouched
+    const { data: cur, error: readErr } = await this.sb
+      .from(TABLE)
+      .select('version')
+      .eq('id', id)
+      .maybeSingle()
+    if (readErr) throw readErr
+    if (!cur) return null
+    const { data, error } = await this.sb
+      .from(TABLE)
+      .update({ data: trip, version: ((cur.version as number) ?? 0) + 1, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .maybeSingle()
+    if (error) throw error
+    return data ? mapRow(data) : null
   }
 
   async remove(ownerId: string, id: string): Promise<boolean> {

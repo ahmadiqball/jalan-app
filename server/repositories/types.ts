@@ -16,14 +16,16 @@ export interface TripRow {
 }
 
 export interface TripRepository {
-  /** All trips owned by a user (newest first). */
-  listByOwner(ownerId: string): Promise<TripRow[]>
+  /** Trips a user can see: owned OR a member (by email). Newest first. */
+  listForUser(userId: string, email: string): Promise<TripRow[]>
   /** One trip by id, regardless of owner (route enforces access). */
   get(id: string): Promise<TripRow | null>
   /** Public read: a trip exposed under a share slug. */
   getByShare(shareId: string): Promise<TripRow | null>
-  /** Upsert the whole document for an owner (creates or replaces). */
-  save(ownerId: string, trip: TripData): Promise<TripRow>
+  /** Create a new trip owned by ownerId. */
+  create(ownerId: string, trip: TripData): Promise<TripRow>
+  /** Replace an existing trip's document — preserves owner & share, bumps version. */
+  replace(id: string, trip: TripData): Promise<TripRow | null>
   /** Delete a trip the owner owns. Returns whether a row was removed. */
   remove(ownerId: string, id: string): Promise<boolean>
   /** Enable (slug) or disable (null) public sharing; returns the updated row. */

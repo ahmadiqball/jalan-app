@@ -14,6 +14,8 @@ create table if not exists public.trips (
 
 create index if not exists trips_owner_idx on public.trips (owner_id);
 create index if not exists trips_share_idx on public.trips (share_id);
+-- speeds up "trips shared with me" (data->'members' @> [{"email": ...}])
+create index if not exists trips_data_gin on public.trips using gin (data jsonb_path_ops);
 
 -- Only the service-role key (server routes) may read/write. The anon/auth keys
 -- used by the browser are for Supabase Auth only; all trip data flows through

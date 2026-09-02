@@ -4,9 +4,16 @@ import type { TripData, TripRepository, TripRow } from '../types'
 export class MemoryTripRepository implements TripRepository {
   private rows = new Map<string, TripRow>()
 
-  async listByOwner(ownerId: string): Promise<TripRow[]> {
+  async listForUser(userId: string, email: string): Promise<TripRow[]> {
+    const e = email.toLowerCase()
     return [...this.rows.values()]
-      .filter((r) => r.ownerId === ownerId)
+      .filter(
+        (r) =>
+          r.ownerId === userId ||
+          ((r.data.members as { email?: string }[] | undefined) || []).some(
+            (m) => (m.email || '').toLowerCase() === e,
+          ),
+      )
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
   }
 
@@ -19,21 +26,26 @@ export class MemoryTripRepository implements TripRepository {
     return null
   }
 
-  async save(ownerId: string, trip: TripData): Promise<TripRow> {
-    const existing = this.rows.get(trip.id)
-    if (existing && existing.ownerId !== ownerId) {
-      throw createError({ statusCode: 403, statusMessage: 'Bukan trip milikmu' })
-    }
+  async create(ownerId: string, trip: TripData): Promise<TripRow> {
     const row: TripRow = {
       id: trip.id,
       ownerId,
       data: trip,
-      shareId: existing?.shareId ?? null,
-      version: (existing?.version ?? 0) + 1,
+      shareId: null,
+      version: 1,
       updatedAt: new Date().toISOString(),
     }
     this.rows.set(trip.id, row)
     return row
+  }
+
+  async replace(id: string, trip: TripData): Promise<TripRow | null> {
+    const existing = this.rows.get(id)
+    if (!existing) return null
+    existing.data = trip
+    existing.version += 1
+    existing.updatedAt = new Date().toISOString()
+    return existing
   }
 
   async remove(ownerId: string, id: string): Promise<boolean> {
