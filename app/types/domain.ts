@@ -121,6 +121,8 @@ export interface Trip {
   plan: number
   /** ISO start date, used to regenerate day labels */
   startIso?: string
+  /** pete-pete bill id created for splitting this trip's expenses (handoff) */
+  splitBillId?: string
   days: Day[]
   activeBudget: string
   budgets: Budget[]

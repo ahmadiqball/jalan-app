@@ -212,6 +212,9 @@ export const useTripsStore = defineStore(
     function updateTrip(id: string, patch: Partial<Trip>) {
       patchTrip(id, (t) => Object.assign(t, patch))
     }
+    function setSplitBill(id: string, billId: string) {
+      patchTrip(id, (t) => { t.splitBillId = billId; return t })
+    }
 
     function resetSeed() {
       trips.value = seedTrips()
@@ -226,7 +229,7 @@ export const useTripsStore = defineStore(
       togglePackItem, addPackItem,
       setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,
       addMember, removeMember, setMemberRole,
-      createTrip, updateTrip, resetSeed,
+      createTrip, updateTrip, setSplitBill, resetSeed,
     }
   },
   { persist: true },

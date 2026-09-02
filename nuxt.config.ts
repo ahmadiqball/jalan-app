@@ -22,6 +22,15 @@ export default defineNuxtConfig({
     '~/designs/base.css',
   ],
 
+  runtimeConfig: {
+    public: {
+      // pete-pete handoff base URL. Empty => the "Bagi rata di PetePete" action
+      // is hidden. Override with NUXT_PUBLIC_PETE_PETE_URL.
+      // canonical host — the apex 308-redirects to www
+      petePeteUrl: 'https://www.petepete.in',
+    },
+  },
+
   fonts: {
     families: [
       { name: 'Plus Jakarta Sans', provider: 'google', weights: [400, 500, 600, 700, 800] },

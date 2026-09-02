@@ -79,6 +79,23 @@ function removeLine(id: string) {
   flash('Pengeluaran dihapus')
 }
 
+/* pete-pete handoff (split / settle-up) */
+const pete = usePetePete()
+async function bagiRata() {
+  try {
+    const id = await pete.createSplit(props.trip)
+    if (!id) return
+    trips.setSplitBill(props.trip.id, id)
+    flash('Split dibuat di PetePete')
+    window.open(pete.billUrl(id), '_blank', 'noopener')
+  } catch {
+    flash('Gagal membuka PetePete')
+  }
+}
+function openSplit() {
+  if (props.trip.splitBillId) window.open(pete.billUrl(props.trip.splitBillId), '_blank', 'noopener')
+}
+
 /* log form */
 const amount = ref('')
 const cat = ref<string>('Makan & minum')
@@ -158,6 +175,26 @@ function log() {
       <div class="card p-[18px] text-[13px] text-ink-2 leading-[1.5]">
         <div class="font-600 text-ink mb-1">Cara hitung</div>
         Biaya aktivitas otomatis jadi pengeluaran — ubah lewat layar Hari. Pengeluaran manual bisa diubah langsung di sini.
+      </div>
+
+      <!-- pete-pete handoff -->
+      <div v-if="pete.enabled.value" class="card p-[18px]">
+        <div class="flex items-center gap-2">
+          <i class="i-lucide-split text-teal-600 text-[17px]" />
+          <div class="font-display text-[16px] font-600">Bagi rata &amp; lunas-lunasan</div>
+        </div>
+        <p class="text-[13px] text-ink-2 leading-[1.5] mt-1">
+          Serahkan urusan siapa bayar siapa ke <span class="font-600">PetePete</span> — bisa beberapa yang bayar, split per item, sampai rekap siapa transfer ke siapa.
+        </p>
+        <template v-if="trip.splitBillId">
+          <CoreButton variant="teal" block class="mt-3" @click="openSplit">
+            <i class="i-lucide-external-link text-[15px]" /> Buka split di PetePete
+          </CoreButton>
+          <button class="w-full text-[12.5px] font-600 text-muted mt-2 hover:text-teal-700" :disabled="pete.busy.value" @click="bagiRata">Buat split baru</button>
+        </template>
+        <CoreButton v-else variant="primary" block class="mt-3" :disabled="pete.busy.value" @click="bagiRata">
+          {{ pete.busy.value ? 'Membuka…' : 'Bagi rata di PetePete' }}
+        </CoreButton>
       </div>
     </div>
 
