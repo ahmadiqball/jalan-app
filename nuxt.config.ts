@@ -23,11 +23,17 @@ export default defineNuxtConfig({
   ],
 
   runtimeConfig: {
+    // server-only (service role). Empty => local mode (memory repo, no cloud).
+    supabaseUrl: '', // NUXT_SUPABASE_URL
+    supabaseServiceKey: '', // NUXT_SUPABASE_SERVICE_KEY (secret, never client)
     public: {
       // pete-pete handoff base URL. Empty => the "Bagi rata di PetePete" action
       // is hidden. Override with NUXT_PUBLIC_PETE_PETE_URL.
       // canonical host — the apex 308-redirects to www
       petePeteUrl: 'https://www.petepete.in',
+      // client auth (cloud mode). Empty => local mode (stub auth, localStorage).
+      supabaseUrl: '', // NUXT_PUBLIC_SUPABASE_URL
+      supabaseAnonKey: '', // NUXT_PUBLIC_SUPABASE_ANON_KEY
     },
   },
 
