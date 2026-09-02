@@ -12,15 +12,15 @@ const sortedActs = computed(() =>
   (day.value?.acts || []).slice().sort((a, b) => (a.time || '99').localeCompare(b.time || '99')),
 )
 const dayPlanned = computed(() => (day.value?.acts || []).reduce((n, a) => n + a.cost, 0))
-const dayTotal = computed(
+const daySpent = computed(
   () =>
-    dayPlanned.value +
+    (day.value?.acts || []).reduce((n, a) => n + (a.paid ? a.cost : 0), 0) +
     (props.trip.manual || []).filter((m) => m.dayIdx === dayIdx.value).reduce((n, m) => n + m.amount, 0),
 )
 const dayPct = computed(() =>
-  dayPlanned.value ? Math.min(100, (dayTotal.value / dayPlanned.value) * 100) : dayTotal.value ? 100 : 0,
+  dayPlanned.value ? Math.min(100, (daySpent.value / dayPlanned.value) * 100) : daySpent.value ? 100 : 0,
 )
-const dayOver = computed(() => dayTotal.value > dayPlanned.value && dayPlanned.value > 0)
+const dayOver = computed(() => daySpent.value > dayPlanned.value && dayPlanned.value > 0)
 
 /** timeline: activities with gap markers between them */
 const timeline = computed(() => {
@@ -114,7 +114,7 @@ function addAndOpen(time = '') {
         </div>
         <div class="flex items-baseline justify-between mt-2">
           <span class="text-[13px] text-muted">Terpakai</span>
-          <span class="money text-[18px] font-600" :style="dayOver ? { color: '#C85A28' } : {}">{{ rp(dayTotal) }}</span>
+          <span class="money text-[18px] font-600" :style="dayOver ? { color: '#C85A28' } : {}">{{ rp(daySpent) }}</span>
         </div>
         <div class="mt-3"><CoreBar :pct="dayPct" :over="dayOver" /></div>
         <div class="text-[12.5px] text-muted mt-2 money">Rencana hari ini {{ rp(dayPlanned) }}</div>

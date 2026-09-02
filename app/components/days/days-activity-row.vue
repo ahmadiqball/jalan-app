@@ -33,10 +33,13 @@ const meta = computed(() =>
       <div class="text-[13px] text-muted truncate">{{ meta }}</div>
     </div>
     <div class="text-right shrink-0">
-      <div class="money text-[14px] font-600" :class="act.cost ? '' : 'text-muted'">
+      <div class="money text-[14px] font-600" :class="act.cost && act.paid ? 'text-ink' : 'text-muted'">
         {{ act.cost ? rp(act.cost) : '–' }}
       </div>
-      <div class="text-[12px] text-muted mt-[2px]">{{ act.cost ? (act.participants?.length ?? people) + ' orang' : 'tanpa biaya' }}</div>
+      <div v-if="act.cost" class="text-[11px] font-600 mt-[2px]" :class="act.paid ? 'text-teal-700' : 'text-muted'">
+        {{ act.paid ? 'Dibayar' : 'Rencana' }}
+      </div>
+      <div v-else class="text-[12px] text-muted mt-[2px]">tanpa biaya</div>
     </div>
   </button>
 </template>

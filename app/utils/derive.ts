@@ -24,7 +24,8 @@ export function expenseLines(trip: Trip): ExpenseLine[] {
   const out: ExpenseLine[] = []
   trip.days.forEach((d, di) =>
     d.acts.forEach((a) => {
-      if (a.cost > 0)
+      // an activity is an expense only once its cost has actually been spent
+      if (a.cost > 0 && a.paid)
         out.push({
           id: a.id,
           title: a.title,

@@ -221,5 +221,8 @@ export function seedTrips(): Trip[] {
   ]
   // attach members
   for (const t of trips) t.members = seedMembers(t.id)
+  // the live trip is mid-journey: its planned costs have actually been spent
+  const live = trips.find((t) => t.status === 'live')
+  if (live) for (const d of live.days) for (const a of d.acts) if (a.cost > 0) a.paid = true
   return trips
 }

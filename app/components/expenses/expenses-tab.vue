@@ -14,6 +14,21 @@ const allIds = computed(() => props.trip.members.map((m) => m.id))
 
 const lines = computed(() => expenseLines(props.trip))
 
+// planned activity costs not yet recorded as spent (opt-in from here)
+const unpaidPlanned = computed(() => {
+  const out: { id: string; title: string; cat: string; amount: number; dayLabel: string }[] = []
+  props.trip.days.forEach((d) =>
+    d.acts.forEach((a) => {
+      if (a.cost > 0 && !a.paid) out.push({ id: a.id, title: a.title, cat: a.cat === 'Santai' ? 'Lain' : a.cat, amount: a.cost, dayLabel: d.date })
+    }),
+  )
+  return out
+})
+function record(id: string) {
+  trips.setActivityField(props.trip.id, id, 'paid', true)
+  flash('Dicatat sebagai pengeluaran')
+}
+
 // group by day
 const byDay = computed(() => {
   const map: Record<number, { key: string; label: string; total: number; items: typeof lines.value }> = {}
@@ -127,6 +142,26 @@ function log() {
         <button v-for="m in ['Hari', 'Kategori', 'Orang']" :key="m" :class="mode === m ? 'chip-active' : 'chip-idle'" class="!py-[7px] !px-[13px] !text-[12.5px]" @click="mode = m as typeof mode">{{ m }}</button>
       </div>
 
+      <!-- planned costs waiting to be recorded as spent -->
+      <div v-if="unpaidPlanned.length" class="card p-[16px_20px] border-dashed">
+        <div class="flex items-center gap-2">
+          <i class="i-lucide-clock text-teal-600 text-[16px]" />
+          <div class="font-display text-[16px] font-600">Dari rencana — belum dicatat</div>
+        </div>
+        <div class="text-[12.5px] text-muted mt-[2px]">Biaya aktivitas baru jadi pengeluaran setelah ditandai sudah dibayar.</div>
+        <div v-for="a in unpaidPlanned" :key="a.id" class="flex items-center gap-3 py-[9px]">
+          <div class="w-[32px] h-[32px] rounded-[10px] flex items-center justify-center shrink-0" :style="{ background: tone(a.cat)[0], color: tone(a.cat)[1] }">
+            <i :class="iconFor(a.cat)" class="text-[15px]" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-[13.5px] font-600 truncate">{{ a.title }}</div>
+            <div class="text-[12px] text-muted">{{ a.dayLabel }} · {{ a.cat }}</div>
+          </div>
+          <div class="money text-[13.5px] text-muted shrink-0">{{ rp(a.amount) }}</div>
+          <button class="rounded-pill bg-teal-100 text-teal-700 px-[13px] py-[6px] text-[12.5px] font-700 shrink-0 hover:bg-teal-deep" @click="record(a.id)">Catat</button>
+        </div>
+      </div>
+
       <!-- by person -->
       <div v-if="mode === 'Orang'" class="card p-[6px_18px]">
         <div v-for="p in byPerson" :key="p.member.id" class="flex items-center gap-3 py-[12px] border-b border-sand-100 last:border-0">
@@ -180,7 +215,7 @@ function log() {
       </div>
       <div class="card p-[18px] text-[13px] text-ink-2 leading-[1.5]">
         <div class="font-600 text-ink mb-1">Cara hitung</div>
-        Biaya aktivitas otomatis jadi pengeluaran — ubah lewat layar Hari. Pengeluaran manual bisa diubah langsung di sini.
+        Biaya aktivitas awalnya cuma rencana — baru masuk terpakai setelah ditandai <span class="font-600">sudah dibayar</span> (di layar Hari atau "Catat" di atas). Pengeluaran manual bisa diubah langsung di sini.
       </div>
 
       <!-- pete-pete handoff -->

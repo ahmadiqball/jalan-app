@@ -41,6 +41,10 @@ const durModel = computed({
 })
 const durOptions = DUR_STEPS.map((m) => ({ value: String(m), label: durLabel(m) }))
 const cats = [...CATEGORIES, 'Santai', 'Tempat']
+const paid = computed({
+  get: () => !!found.value?.act.paid,
+  set: (v: boolean) => set('paid', v),
+})
 
 /* participants (undefined = everyone) */
 const allIds = computed(() => props.trip.members.map((m) => m.id))
@@ -123,6 +127,14 @@ function del() {
         </label>
       </div>
       <div class="text-[12.5px] text-muted -mt-2">{{ costSub }}</div>
+
+      <label v-if="found.act.cost > 0" class="flex items-center justify-between gap-3 bg-paper rounded-field px-[13px] py-[11px] cursor-pointer">
+        <div>
+          <div class="text-[13.5px] font-600">Sudah dibayar</div>
+          <div class="text-[12px] text-muted">{{ paid ? 'Dihitung sebagai pengeluaran' : 'Masih rencana — belum masuk terpakai' }}</div>
+        </div>
+        <CoreCheckbox :model-value="paid" @update:model-value="paid = $event" />
+      </label>
 
       <label class="flex flex-col gap-[6px]">
         <span class="eyebrow">Tempat</span>

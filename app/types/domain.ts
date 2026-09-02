@@ -39,6 +39,9 @@ export interface Activity {
   note: string
   /** member ids who join this activity; undefined = everyone */
   participants?: string[]
+  /** true once the cost has actually been spent — only then is it an expense.
+   *  Until then the cost is just a plan and does not count as "terpakai". */
+  paid?: boolean
 }
 
 export interface Day {
