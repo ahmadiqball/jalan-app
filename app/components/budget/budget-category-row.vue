@@ -46,7 +46,12 @@ function remove(e: Event) {
         >
       </div>
 
-      <div class="w-[96px] shrink-0"><CoreBar :pct="row.pct" :color="row.barColor" :height="8" /></div>
+      <div class="w-[96px] shrink-0">
+        <CoreBar :pct="row.pct" :color="row.barColor" :height="8" />
+        <div v-if="row.over" class="flex items-center gap-1 mt-[3px] text-[10.5px] font-600 text-warn-fg">
+          <i class="i-lucide-alert-triangle text-[11px]" /> lewat {{ row.exceedShort }}
+        </div>
+      </div>
 
       <div class="w-[30px] shrink-0 flex justify-end">
         <button

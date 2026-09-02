@@ -64,6 +64,8 @@ export interface Budget {
 export interface OutfitSet {
   id: string
   scope: string
+  /** member id this set is for; undefined = shared / everyone */
+  person?: string
   top: string
   bottom: string
   shoes: string

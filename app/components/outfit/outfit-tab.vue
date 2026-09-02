@@ -15,8 +15,8 @@ function addSet() {
   trips.addOutfitSet(props.trip.id, scope)
   flash('Set outfit dibuat')
 }
-function remove(scope: string) {
-  trips.removeOutfitScope(props.trip.id, scope)
+function removeSet(id: string) {
+  trips.removeOutfit(props.trip.id, id)
   flash('Set outfit dihapus')
 }
 </script>
@@ -41,7 +41,7 @@ function remove(scope: string) {
         :key="s.id"
         :trip="trip"
         :set="s"
-        @remove="remove(s.scope)"
+        @remove="removeSet(s.id)"
       />
       <button
         v-if="!trip.outfitSets.length"

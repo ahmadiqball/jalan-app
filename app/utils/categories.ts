@@ -47,11 +47,20 @@ export function catSlug(name: string): string {
   return 'bcat-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 }
 
-/** Segment palette for the budget donut / category dots. */
+/**
+ * Segment palette for the budget donut / category identity dots.
+ * Deliberately COOL/NEUTRAL only — no green/amber/red — so it never collides
+ * with the usage-bar state colors (green ok / amber near / red over).
+ */
 export const SEG_PALETTE = [
-  '#F0713A', '#0E6E76', '#D98F3B', '#2F6B54',
-  '#C4B29E', '#8FC2BE', '#C85A28', '#8A6314',
+  '#0E6E76', '#0A4F55', '#8FC2BE', '#C8E2DE',
+  '#C4B29E', '#8A6314', '#33474C', '#D8D0BB',
 ]
+
+/** Usage-bar fill by fill-state — distinct from SEG_PALETTE. */
+export const BAR_OK = '#2F6B54'
+export const BAR_NEAR = '#D98F3B'
+export const BAR_OVER = '#C85A28'
 
 export const SHORT_CAT: Record<string, string> = {
   'Makan & minum': 'Makan',

@@ -96,6 +96,13 @@ export const useTripsStore = defineStore(
     function deleteManual(tripId: string, id: string) {
       patchTrip(tripId, (t) => { t.manual = t.manual.filter((m) => m.id !== id); return t })
     }
+    function updateManual(tripId: string, id: string, patch: Partial<ManualExpense>) {
+      patchTrip(tripId, (t) => {
+        const m = t.manual.find((x) => x.id === id)
+        if (m) Object.assign(m, patch)
+        return t
+      })
+    }
 
     /* ---- packing ---- */
     function togglePackItem(tripId: string, itemId: string) {
@@ -129,16 +136,26 @@ export const useTripsStore = defineStore(
         return t
       })
     }
-    function addOutfitSet(tripId: string, scope: string, base?: Partial<Pick<Activity, never>> & { top?: string; bottom?: string; shoes?: string; other?: string }): string {
+    function addOutfitSet(tripId: string, scope: string, base?: { top?: string; bottom?: string; shoes?: string; other?: string }, person?: string): string {
       const id = 'o' + nextId()
       patchTrip(tripId, (t) => {
-        t.outfitSets.push({ id, scope, top: base?.top || '', bottom: base?.bottom || '', shoes: base?.shoes || '', other: base?.other || '' })
+        t.outfitSets.push({ id, scope, person, top: base?.top || '', bottom: base?.bottom || '', shoes: base?.shoes || '', other: base?.other || '' })
         return t
       })
       return id
     }
+    function setOutfitPerson(tripId: string, setId: string, person: string | undefined) {
+      patchTrip(tripId, (t) => {
+        const set = t.outfitSets.find((x) => x.id === setId)
+        if (set) set.person = person
+        return t
+      })
+    }
     function removeOutfitScope(tripId: string, scope: string) {
       patchTrip(tripId, (t) => { t.outfitSets = t.outfitSets.filter((x) => x.scope !== scope); return t })
+    }
+    function removeOutfit(tripId: string, setId: string) {
+      patchTrip(tripId, (t) => { t.outfitSets = t.outfitSets.filter((x) => x.id !== setId); return t })
     }
 
     /* ---- members ---- */
@@ -205,9 +222,9 @@ export const useTripsStore = defineStore(
       trips, seq, byId, liveTrip, patchTrip, nextId,
       setActivityField, addActivity, deleteActivity,
       setActiveBudget, setAlloc, addCategory, deleteCategory, addBudgetVersion,
-      addManual, deleteManual,
+      addManual, deleteManual, updateManual,
       togglePackItem, addPackItem,
-      setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope,
+      setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,
       addMember, removeMember, setMemberRole,
       createTrip, updateTrip, resetSeed,
     }

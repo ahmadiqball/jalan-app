@@ -5,6 +5,7 @@ import { OF_SLOTS, ofText } from '~/utils/categories'
 const props = defineProps<{ trip: Trip; set: OutfitSet }>()
 const emit = defineEmits<{ remove: [] }>()
 const trips = useTripsStore()
+const { flash } = useToast()
 
 const isDay = computed(() => props.set.scope.startsWith('day:'))
 const filled = computed(() => !!ofText(props.set))
@@ -13,8 +14,23 @@ const scope = computed({
   get: () => props.set.scope,
   set: (v: string) => trips.setOutfitScope(props.trip.id, props.set.id, v),
 })
+const ALL = '__all__'
+const personOptions = computed(() => [
+  { value: ALL, label: 'Semua orang' },
+  ...props.trip.members.map((m) => ({ value: m.id, label: m.name })),
+])
+const person = computed({
+  get: () => props.set.person ?? ALL,
+  set: (v: string) => trips.setOutfitPerson(props.trip.id, props.set.id, v === ALL ? undefined : v),
+})
 function setSlot(slot: 'top' | 'bottom' | 'shoes' | 'other', v: string) {
   trips.setOutfitSlot(props.trip.id, props.set.scope, slot, v)
+}
+function addToPacking() {
+  const items = OF_SLOTS.map(([k]) => (props.set[k] || '').trim()).filter(Boolean)
+  if (!items.length) return flash('Isi outfit dulu sebelum ditambah ke barang')
+  items.forEach((label) => trips.addPackItem(props.trip.id, 'Pakaian', { label, req: false, done: false }))
+  flash(items.length + ' barang ditambah ke Barang')
 }
 </script>
 
@@ -37,6 +53,11 @@ function setSlot(slot: 'top' | 'bottom' | 'shoes' | 'other', v: string) {
       <OutfitScopePicker v-model="scope" :trip="trip" />
     </div>
 
+    <div>
+      <div class="eyebrow !text-[10.5px] mb-1">Buat siapa</div>
+      <CoreSelect v-model="person" :options="personOptions" />
+    </div>
+
     <div class="flex flex-col gap-2">
       <label v-for="[k, label, ph, icon] in OF_SLOTS" :key="k" class="flex items-center gap-2 bg-paper rounded-field px-[12px] py-[9px]">
         <i :class="icon" class="text-[16px] text-teal-700 shrink-0" />
@@ -48,5 +69,9 @@ function setSlot(slot: 'top' | 'bottom' | 'shoes' | 'other', v: string) {
         >
       </label>
     </div>
+
+    <button class="flex items-center justify-center gap-2 rounded-field border border-sand-line2 py-[9px] text-[13px] font-600 text-ink-2 hover:border-teal-600 hover:text-teal-700 transition-colors" @click="addToPacking">
+      <i class="i-lucide-luggage text-[15px]" /> Tambah ke barang
+    </button>
   </div>
 </template>

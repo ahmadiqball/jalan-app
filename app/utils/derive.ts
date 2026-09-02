@@ -1,7 +1,7 @@
 import type { Budget, Day, ExpenseLine, OutfitSet, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { addDays, longDate, shortDate, rp, shortRp } from '~/utils/format'
-import { SEG_PALETTE, ofItems, ofText, tone } from '~/utils/categories'
+import { BAR_NEAR, BAR_OK, BAR_OVER, SEG_PALETTE, ofItems, ofText, tone } from '~/utils/categories'
 
 /** Generate blank days from a start ISO date. */
 export function buildDays(iso: string, len: number): Day[] {
@@ -117,6 +117,8 @@ export interface CategoryRow {
   barColor: string
   spentFg: string
   leftCopy: string
+  over: boolean
+  exceedShort: string
   segColor: string
   iconBg: string
   iconFg: string
@@ -151,9 +153,11 @@ export function categoryRows(trip: Trip): CategoryRow[] {
       allocInput: catAlloc ? String(catAlloc) : '',
       pct: cpct,
       sharePct: spent ? Math.round((cs / spent) * 100) : 0,
-      barColor: cover ? '#F0713A' : cpct >= 99 ? '#C4B29E' : cpct >= 80 ? '#D98F3B' : '#2F6B54',
+      barColor: cover ? BAR_OVER : cpct >= 80 ? BAR_NEAR : BAR_OK,
       spentFg: cover ? '#C85A28' : '#10262B',
       leftCopy: catAlloc ? (cover ? 'lewat ' + shortRp(cs - catAlloc) : 'sisa ' + shortRp(catAlloc - cs)) : 'tanpa alokasi',
+      over: cover,
+      exceedShort: cover ? shortRp(cs - catAlloc) : '',
       segColor: SEG_PALETTE[ci % SEG_PALETTE.length]!,
       iconBg,
       iconFg,
