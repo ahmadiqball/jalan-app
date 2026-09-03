@@ -108,7 +108,8 @@ const chips = ['6 trip tersimpan', 'Anggaran per kategori', 'Daftar barang otoma
               <i class="i-lucide-chrome text-[16px]" /> Lanjut dengan Google
             </CoreButton>
           </template>
-          <CoreButton v-else variant="ghost" block @click="signInGuest">Coba tanpa akun</CoreButton>
+          <CoreButton variant="ghost" block @click="signInGuest">Coba tanpa akun</CoreButton>
+          <div class="text-[12px] text-muted text-center">Mode tamu dicoba di perangkat ini saja — tidak disimpan.</div>
         </div>
 
         <div class="border-t border-sand-line pt-4 text-[13.5px] text-muted">

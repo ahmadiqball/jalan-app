@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { Activity, ManualExpense, Member, PackItem, Trip } from '~/types/domain'
 import { seedTrips } from '~/utils/seed'
 import { buildDays } from '~/utils/derive'
+import { clientPersist } from '~/utils/persist'
 
 /**
  * Domain store. Every trip edit goes through `patchTrip(id, fn)` which
@@ -243,5 +244,5 @@ export const useTripsStore = defineStore(
       createTrip, updateTrip, setSplitBill, resetSeed, replaceAll,
     }
   },
-  { persist: true },
+  { persist: { storage: clientPersist } },
 )

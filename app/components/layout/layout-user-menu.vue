@@ -7,10 +7,14 @@ import {
 const session = useSessionStore()
 const { signOut } = useAuth()
 const { isAdmin } = useMe()
+const showAdmin = computed(() => isAdmin.value && !session.guest)
 
 async function logout() {
+  const wasGuest = session.guest
   await signOut()
-  navigateTo('/masuk')
+  // hard-reload after a guest trial so ephemeral in-memory data is cleared
+  if (wasGuest && import.meta.client) window.location.href = '/masuk'
+  else navigateTo('/masuk')
 }
 </script>
 
@@ -30,11 +34,11 @@ async function logout() {
       >
         <DropdownMenuLabel class="px-[10px] py-[8px]">
           <div class="text-[13.5px] font-700 text-ink truncate">{{ session.name }}</div>
-          <div class="text-[12px] text-muted truncate">{{ session.email }}</div>
+          <div class="text-[12px] text-muted truncate">{{ session.guest ? 'Mode tamu · tidak disimpan' : session.email }}</div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
         <DropdownMenuItem
-          v-if="isAdmin"
+          v-if="showAdmin"
           class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[13.5px] text-ink cursor-pointer outline-none data-[highlighted]:bg-sand-100"
           @select="navigateTo('/admin')"
         >

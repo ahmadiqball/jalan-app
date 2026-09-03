@@ -64,7 +64,7 @@ export default defineNuxtPlugin(() => {
   }
 
   function schedule() {
-    if (!session.authed || !loaded) return
+    if (!session.authed || session.guest || !loaded) return
     const ids = new Set(trips.trips.map((t) => t.id))
     for (const t of trips.trips) {
       // only push trips this user may edit — a viewer's local edits stay local
