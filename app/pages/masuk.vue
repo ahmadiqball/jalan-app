@@ -3,7 +3,7 @@ definePageMeta({ layout: 'blank', public: true })
 useHead({ title: 'Masuk · Jalan' })
 
 const session = useSessionStore()
-const { cloud, signIn, signUp, guest } = useAuth()
+const { cloud, signIn, signUp, signInGoogle, guest } = useAuth()
 
 const mode = ref<'in' | 'up'>('in')
 const email = ref(session.email || 'rina@jalan.id')
@@ -42,6 +42,13 @@ function toggleMode() {
   else signInGuest()
 }
 function onKey(e: KeyboardEvent) { if (e.key === 'Enter') submit() }
+async function google() {
+  if (busy.value) return
+  busy.value = true
+  const r = await signInGoogle()
+  busy.value = false
+  if (!r.ok) err.value = r.error || 'Gagal masuk dengan Google.'
+}
 
 const chips = ['6 trip tersimpan', 'Anggaran per kategori', 'Daftar barang otomatis']
 </script>
@@ -93,7 +100,15 @@ const chips = ['6 trip tersimpan', 'Anggaran per kategori', 'Daftar barang otoma
           <CoreButton variant="primary" block :disabled="busy" @click="submit">
             {{ busy ? 'Sebentar…' : mode === 'up' ? 'Daftar' : 'Masuk' }}
           </CoreButton>
-          <CoreButton v-if="!cloud" variant="ghost" block @click="signInGuest">Coba tanpa akun</CoreButton>
+          <template v-if="cloud">
+            <div class="flex items-center gap-3 text-[12px] text-muted my-1">
+              <span class="flex-1 h-px bg-sand-line" /> atau <span class="flex-1 h-px bg-sand-line" />
+            </div>
+            <CoreButton variant="ghost" block :disabled="busy" @click="google">
+              <i class="i-lucide-chrome text-[16px]" /> Lanjut dengan Google
+            </CoreButton>
+          </template>
+          <CoreButton v-else variant="ghost" block @click="signInGuest">Coba tanpa akun</CoreButton>
         </div>
 
         <div class="border-t border-sand-line pt-4 text-[13.5px] text-muted">

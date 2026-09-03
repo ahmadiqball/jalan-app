@@ -1,19 +1,13 @@
 <script setup lang="ts">
 useHead({ title: 'Template · Jalan' })
+import type { TemplateItem } from '~/types/content'
+
 const trips = useTripsStore()
 const { flash } = useToast()
 const { rp } = useMoney()
+const { templates } = useContent()
 
-const templates = [
-  { name: 'Sumba 4 hari', sub: 'Waingapu, Wairinding, Tanggedu', mat: 'pantai', days: 4, plan: 3100000 },
-  { name: 'Bromo–Ijen 5 hari', sub: 'Cemoro Lawang & Banyuwangi', mat: 'gunung', days: 5, plan: 4600000 },
-  { name: 'Ubud hemat 3 hari', sub: 'Tegallalang & Ubud pusat', mat: 'sawah', days: 3, plan: 1850000 },
-  { name: 'Bali Selatan 4 hari', sub: 'Seminyak, Uluwatu, Canggu', mat: 'kota', days: 4, plan: 2700000 },
-  { name: 'Yogyakarta 3 hari', sub: 'Malioboro, Prambanan, Borobudur', mat: 'kuil', days: 3, plan: 2100000 },
-  { name: 'Labuan Bajo 5 hari', sub: 'Komodo, Padar, Pink Beach', mat: 'pulau', days: 5, plan: 5400000 },
-]
-
-function use(tp: (typeof templates)[number]) {
+function use(tp: TemplateItem) {
   const id = trips.createTrip({ name: tp.name, place: tp.sub, mat: tp.mat, len: tp.days, plan: tp.plan })
   flash('Template dipakai, tinggal atur tanggal')
   navigateTo(`/trip/${id}/days`)

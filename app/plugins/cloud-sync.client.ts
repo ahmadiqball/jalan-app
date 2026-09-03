@@ -83,6 +83,16 @@ export default defineNuxtPlugin(() => {
     { deep: true },
   )
 
+  const isAdmin = useState<boolean>('me-admin', () => false)
+  async function refreshMe() {
+    try {
+      const me = await apiFetch<{ isAdmin: boolean }>('/api/me')
+      isAdmin.value = me.isAdmin
+    } catch {
+      isAdmin.value = false
+    }
+  }
+
   client.auth.onAuthStateChange((eventName, s) => {
     if (s?.user) {
       session.setUser({
@@ -90,9 +100,13 @@ export default defineNuxtPlugin(() => {
         email: s.user.email || undefined,
         name: (s.user.user_metadata?.name as string) || s.user.email?.split('@')[0] || 'Kamu',
       })
-      if (eventName === 'SIGNED_IN' || eventName === 'INITIAL_SESSION') pull()
+      if (eventName === 'SIGNED_IN' || eventName === 'INITIAL_SESSION') {
+        pull()
+        refreshMe()
+      }
     } else if (eventName === 'SIGNED_OUT') {
       session.signOut()
+      isAdmin.value = false
       applyingRemote = true
       trips.replaceAll([])
       snapshot.clear()

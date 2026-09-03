@@ -44,10 +44,18 @@ export function useAuth() {
     session.signOut()
   }
 
+  async function signInGoogle(): Promise<Result> {
+    if (!cloud.value || !client) return { ok: false, error: 'Google hanya di mode cloud' }
+    const redirectTo = `${window.location.origin}/beranda`
+    const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } })
+    if (error) return { ok: false, error: error.message }
+    return { ok: true } // browser redirects to Google; session resolves on return
+  }
+
   /** Local-only guest bypass. */
   function guest() {
     session.signIn({ email: 'tamu@jalan.id', name: 'Tamu' })
   }
 
-  return { cloud, signIn, signUp, signOut, guest }
+  return { cloud, signIn, signUp, signInGoogle, signOut, guest }
 }

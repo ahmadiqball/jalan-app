@@ -1,8 +1,6 @@
 <script setup lang="ts">
-const session = useSessionStore()
 const ui = useUiStore()
 const route = useRoute()
-const { signOut: authSignOut } = useAuth()
 
 const nav = [
   { label: 'Beranda', to: '/beranda' },
@@ -13,10 +11,6 @@ const isActive = (to: string) => route.path === to || route.path.startsWith(to +
 const mobileOpen = ref(false)
 watch(() => route.path, () => (mobileOpen.value = false))
 
-async function signOut() {
-  await authSignOut()
-  navigateTo('/masuk')
-}
 async function openNewTrip() {
   if (route.path !== '/beranda') await navigateTo('/beranda')
   ui.showNewTrip = true
@@ -58,13 +52,7 @@ async function openNewTrip() {
         <i class="i-lucide-plus" />
         <span class="hidden sm:inline">Trip baru</span>
       </CoreButton>
-      <button
-        class="w-9 h-9 rounded-full bg-sand-100 hover:bg-sand-line flex items-center justify-center text-[13px] font-700 text-ink-2 transition-colors shrink-0"
-        title="Keluar"
-        @click="signOut"
-      >
-        {{ session.initials }}
-      </button>
+      <LayoutUserMenu />
     </div>
 
     <!-- mobile menu -->

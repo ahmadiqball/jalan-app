@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
-import { packingRecs } from '~/utils/recommendations'
 
 const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
 const { flash } = useToast()
 const { packing } = useDerived(() => props.trip)
+const { recs: allRecs } = useContent()
 
 const newItem = ref('')
 const newGroup = ref('Pakaian')
@@ -16,9 +16,18 @@ const groupOptions = computed(() => {
   return names
 })
 
-// recommendations not already on the list (matched by label, case-insensitive)
+// recommendations: not already on the list, matching the trip's motif and
+// (when tagged) the trip's activity categories — "based on activities"
 const existingLabels = computed(() => new Set(props.trip.packing.flatMap((g) => g.items.map((i) => i.label.toLowerCase()))))
-const recs = computed(() => packingRecs(props.trip.mat).filter((r) => !existingLabels.value.has(r.label.toLowerCase())))
+const tripCats = computed(() => new Set(props.trip.days.flatMap((d) => d.acts.map((a) => (a.cat === 'Santai' ? 'Lain' : a.cat)))))
+const recs = computed(() =>
+  allRecs.value.filter((r) => {
+    if (existingLabels.value.has(r.label.toLowerCase())) return false
+    if (r.mats?.length && !r.mats.includes(props.trip.mat)) return false
+    if (r.cats?.length && !r.cats.some((c) => tripCats.value.has(c))) return false
+    return true
+  }),
+)
 
 function add() {
   if (!newItem.value.trim()) return

@@ -1,15 +1,13 @@
 <script setup lang="ts">
+import type { TemplateItem } from '~/types/content'
+
 const trips = useTripsStore()
 const { flash } = useToast()
 const { rp } = useMoney()
+const { templates } = useContent()
+const picks = computed(() => templates.value.slice(0, 3))
 
-const picks = [
-  { name: 'Sumba 4 hari', sub: 'Waingapu, Wairinding, Tanggedu', mat: 'pantai', days: 4, plan: 3100000 },
-  { name: 'Bromo–Ijen 5 hari', sub: 'Cemoro Lawang & Banyuwangi', mat: 'gunung', days: 5, plan: 4600000 },
-  { name: 'Ubud hemat 3 hari', sub: 'Tegallalang & Ubud pusat', mat: 'sawah', days: 3, plan: 1850000 },
-]
-
-function use(tp: (typeof picks)[number]) {
+function use(tp: TemplateItem) {
   const id = trips.createTrip({ name: tp.name, place: tp.sub, mat: tp.mat, len: tp.days, plan: tp.plan })
   flash('Template dipakai, tinggal atur tanggal')
   navigateTo(`/trip/${id}/days`)
@@ -17,7 +15,7 @@ function use(tp: (typeof picks)[number]) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 mt-2">
+  <div v-if="picks.length" class="flex flex-col gap-4 mt-2">
     <div class="flex justify-between items-baseline">
       <div>
         <div class="font-display text-[20px] font-600">Mulai dari template</div>

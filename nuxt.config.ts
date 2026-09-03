@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     // server-only (service role). Empty => local mode (memory repo, no cloud).
     supabaseUrl: '', // NUXT_SUPABASE_URL
     supabaseServiceKey: '', // NUXT_SUPABASE_SERVICE_KEY (secret, never client)
+    adminEmails: '', // NUXT_ADMIN_EMAILS — comma-separated admin emails
     public: {
       // pete-pete handoff base URL. Empty => the "Bagi rata di PetePete" action
       // is hidden. Override with NUXT_PUBLIC_PETE_PETE_URL.

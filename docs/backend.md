@@ -24,10 +24,23 @@ the `TripRepository` interface.
   and verify it with `supabase.auth.getUser(token)`.
 
 ### API
-- `GET /api/trips` — current user's trips
+- `GET /api/trips` — trips you own or are a member of (each tagged `_role`)
 - `GET /api/trips/:id` · `PUT /api/trips/:id` · `DELETE /api/trips/:id`
 - `POST /api/trips/:id/share` → `{shareId}` · `DELETE /api/trips/:id/share`
 - `GET /api/share/:id` — public read by share slug (no auth)
+- `GET /api/me` → `{authed, email, isAdmin}`
+- `GET /api/content` (public) · `PUT /api/content` (admin) — starter templates +
+  packing recommendations, managed at `/admin`
+
+### Admin
+Admins manage templates + packing recommendations at **/admin**. Who's admin:
+`NUXT_ADMIN_EMAILS` (comma-separated) in cloud mode; in local mode the dev user
+is always admin. Content is stored in `app_content` (see migration `0002`).
+
+### Auth
+Email/password + **Google** (Supabase OAuth) in cloud mode; a local stub +
+guest in local mode. Enable Google under Supabase → Auth → Providers and add the
+app origin to the redirect allowlist.
 
 ## Cloud setup
 1. Create a Supabase project (or reuse the one behind pete-pete — the tables

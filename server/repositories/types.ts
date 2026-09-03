@@ -32,6 +32,37 @@ export interface TripRepository {
   setShare(ownerId: string, id: string, shareId: string | null): Promise<TripRow | null>
 }
 
+/* ── app content (admin-managed): starter templates + packing recommendations ── */
+export interface TemplateItem {
+  id: string
+  name: string
+  sub: string
+  mat: string
+  days: number
+  plan: number
+}
+export interface PackRecItem {
+  id: string
+  label: string
+  group: string
+  req?: boolean
+  url?: string
+  /** limit to these trip motifs (empty/undefined = all) */
+  mats?: string[]
+  /** surface when the trip has activities in these categories (empty = any) */
+  cats?: string[]
+}
+export interface ContentDoc {
+  templates: TemplateItem[]
+  recs: PackRecItem[]
+}
+
+export interface ContentRepository {
+  get(): Promise<ContentDoc>
+  save(doc: ContentDoc): Promise<ContentDoc>
+}
+
 export interface Repositories {
   trips: TripRepository
+  content: ContentRepository
 }
