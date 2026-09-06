@@ -18,7 +18,9 @@ const sortedActs = computed(() =>
 )
 // activity stops with a location, in time order — feeds the day route map
 const dayPlaces = computed(() =>
-  sortedActs.value.filter((a) => a.place?.trim()).map((a) => ({ label: a.title || a.place, query: a.place })),
+  sortedActs.value
+    .filter((a) => a.place?.trim())
+    .map((a) => ({ label: a.title || a.place, name: a.place, placeId: a.placeId })),
 )
 const dayPlanned = computed(() => (day.value?.acts || []).reduce((n, a) => n + a.cost, 0))
 const daySpent = computed(
@@ -140,8 +142,8 @@ function addAndOpen(time = '') {
 
       <MapsPanel
         heading="Peta hari ini"
-        :places="dayPlaces"
-        :place="trip.place"
+        :stops="dayPlaces"
+        :single="{ name: trip.place }"
         :context="trip.place"
       />
 

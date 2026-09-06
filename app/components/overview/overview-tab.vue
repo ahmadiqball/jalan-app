@@ -18,7 +18,7 @@ const allPlaces = computed(() =>
   props.trip.days
     .flatMap((d) => d.acts)
     .filter((a) => a.place?.trim())
-    .map((a) => ({ label: a.title || a.place, query: a.place })),
+    .map((a) => ({ label: a.title || a.place, name: a.place, placeId: a.placeId })),
 )
 </script>
 
@@ -93,8 +93,8 @@ const allPlaces = computed(() =>
 
       <MapsPanel
         heading="Peta trip"
-        :place="trip.place"
-        :places="allPlaces"
+        :single="{ name: trip.place }"
+        :stops="allPlaces"
         :context="trip.place"
         :route="false"
         :height="260"

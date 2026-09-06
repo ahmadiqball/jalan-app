@@ -151,12 +151,12 @@ function del() {
         <CoreCheckbox :model-value="paid" @update:model-value="paid = $event" />
       </label>
 
-      <label class="flex flex-col gap-[6px]">
+      <div class="flex flex-col gap-[6px]">
         <div class="flex items-center justify-between">
           <span class="eyebrow">Tempat</span>
           <a
             v-if="found.act.place.trim()"
-            :href="searchUrl(found.act.place, trip.place)"
+            :href="searchUrl({ name: found.act.place, placeId: found.act.placeId }, trip.place)"
             target="_blank"
             rel="noopener"
             class="text-[12px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1"
@@ -164,8 +164,13 @@ function del() {
             <i class="i-lucide-map-pin text-[13px]" /> Buka di Maps
           </a>
         </div>
-        <input :value="found.act.place" placeholder="Belum ada tempat" class="field" @input="set('place', ($event.target as HTMLInputElement).value)">
-      </label>
+        <CorePlaceInput
+          :model-value="found.act.place"
+          :place-id="found.act.placeId"
+          @update:model-value="set('place', $event)"
+          @update:place-id="set('placeId', $event)"
+        />
+      </div>
 
       <!-- participants -->
       <div>

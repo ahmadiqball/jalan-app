@@ -34,7 +34,11 @@ export interface Activity {
   dur: number
   title: string
   cat: string
+  /** display name of the place (from Google autocomplete, or free text) */
   place: string
+  /** Google place_id when the place was picked from autocomplete; enables
+   *  accurate map pins/links. Absent for free-text or unset locations. */
+  placeId?: string
   cost: number
   note: string
   /** member ids who join this activity; undefined = everyone */

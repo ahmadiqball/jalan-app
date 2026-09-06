@@ -1,19 +1,21 @@
 <script setup lang="ts">
+import type { MapStop } from '~/composables/use-maps'
+
 /**
- * Map panel (POC). Shows a free Maps embed when a key is configured — a route
- * through the given places, or a single place — and always shows free "open in
- * Maps" deep links (which work with no key). Renders nothing if it has no place.
+ * Map panel (POC). Shows a free Maps embed when a key is set — a route through
+ * the day's stops, or a single place — and always shows free "open in Maps"
+ * deep links (which work with no key). Renders nothing if it has no place.
  */
 const props = withDefaults(
   defineProps<{
     heading?: string
     /** single place, e.g. the trip destination (place mode) */
-    place?: string
+    single?: MapStop
     /** ordered stops, e.g. a day's activities (route mode when 2+) */
-    places?: { label: string; query: string }[]
-    /** appended to every query to disambiguate short names */
+    stops?: (MapStop & { label: string })[]
+    /** appended to text queries to disambiguate short names */
     context?: string
-    /** draw a route through `places` (day view); false = single-place map (ringkasan) */
+    /** draw a route through `stops` (day); false = single-place map (ringkasan) */
     route?: boolean
     height?: number
   }>(),
@@ -22,17 +24,23 @@ const props = withDefaults(
 
 const { enabled, searchUrl, directionsUrl, placeEmbed, routeEmbed } = useMaps()
 
-const stops = computed(() => (props.places || []).filter((p) => p.query?.trim()))
-const primary = computed(() => props.place?.trim() || stops.value[0]?.query || '')
-const hasAny = computed(() => !!primary.value || stops.value.length > 0)
-const isRoute = computed(() => props.route && stops.value.length >= 2)
+const list = computed(() => (props.stops || []).filter((s) => s.placeId || s.name?.trim()))
+const firstStop = computed<MapStop | undefined>(() =>
+  list.value[0] ? { name: list.value[0]!.name, placeId: list.value[0]!.placeId } : undefined,
+)
+// route mode (day) centers on the first activity; single mode (ringkasan) on the destination
+const primary = computed<MapStop>(() =>
+  (props.route ? firstStop.value ?? props.single : props.single ?? firstStop.value) ?? { name: '' },
+)
+const hasAny = computed(() => !!(primary.value.name || primary.value.placeId) || list.value.length > 0)
+const isRoute = computed(() => props.route && list.value.length >= 2)
 
 const src = computed(() =>
-  isRoute.value ? routeEmbed(stops.value.map((s) => s.query), props.context) : placeEmbed(primary.value, props.context),
+  isRoute.value ? routeEmbed(list.value, props.context) : placeEmbed(primary.value, props.context),
 )
 // route mode opens the whole day's route in Maps; else opens the single place
-const openAllUrl = computed(() =>
-  isRoute.value ? directionsUrl(stops.value.map((s) => s.query), props.context) : searchUrl(primary.value, props.context),
+const openUrl = computed(() =>
+  isRoute.value ? directionsUrl(list.value, props.context) : searchUrl(primary.value, props.context),
 )
 const openLabel = computed(() => (isRoute.value ? 'Buka rute di Maps' : 'Buka di Maps'))
 </script>
@@ -44,7 +52,7 @@ const openLabel = computed(() => (isRoute.value ? 'Buka rute di Maps' : 'Buka di
         <i class="i-lucide-map text-teal-600 text-[16px]" />
         <div class="font-display text-[16px] font-600">{{ heading }}</div>
       </div>
-      <a :href="openAllUrl" target="_blank" rel="noopener" class="text-[12.5px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1 shrink-0">
+      <a :href="openUrl" target="_blank" rel="noopener" class="text-[12.5px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1 shrink-0">
         {{ openLabel }} <i class="i-lucide-external-link text-[13px]" />
       </a>
     </div>
@@ -71,11 +79,11 @@ const openLabel = computed(() => (isRoute.value ? 'Buka rute di Maps' : 'Buka di
     </div>
 
     <!-- free deep links per stop -->
-    <div v-if="stops.length" class="flex flex-wrap gap-2 mt-3">
+    <div v-if="list.length" class="flex flex-wrap gap-2 mt-3">
       <a
-        v-for="(s, i) in stops"
+        v-for="(s, i) in list"
         :key="i"
-        :href="searchUrl(s.query, context)"
+        :href="searchUrl(s, context)"
         target="_blank"
         rel="noopener"
         class="flex items-center gap-1 rounded-pill border border-sand-line2 px-[11px] py-[6px] text-[12.5px] text-ink-2 hover:border-teal-600 hover:text-teal-700 transition-colors max-w-full"
