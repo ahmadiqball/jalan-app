@@ -47,7 +47,7 @@ const budgetChip = computed(() => {
         </span>
       </button>
 
-      <div class="flex-1 min-w-[300px]">
+      <div class="flex-1 min-w-[220px]">
         <div class="flex flex-wrap gap-[9px] items-center">
           <CoreStatusPill :status="trip.status" />
           <span class="rounded-pill bg-teal-100 text-teal-700 px-[11px] py-[5px] text-[12px] font-700">{{ typeLabel }}</span>

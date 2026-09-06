@@ -42,7 +42,7 @@ const listCount = computed(() => `${cards.value.length} trip`)
         <div class="text-[13px] text-muted">{{ listCount }}</div>
       </div>
 
-      <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+      <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))">
         <DashboardTripCard v-for="t in cards" :key="t.id" :trip="t" />
         <button
           class="border border-dashed border-sand-line3 rounded-[24px] min-h-[260px] flex flex-col items-center justify-center gap-[10px] text-muted transition-colors hover:border-teal-600 hover:text-teal-700"

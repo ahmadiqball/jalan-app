@@ -16,7 +16,7 @@ const current = computed(() => route.params.tab as string)
 </script>
 
 <template>
-  <div class="max-w-[1400px] mx-auto p-[14px_20px_0] md:p-[14px_32px_0] flex flex-wrap gap-[2px] overflow-x-auto">
+  <div class="max-w-[1400px] mx-auto p-[14px_20px_0] md:p-[14px_32px_0] flex flex-nowrap gap-[2px] overflow-x-auto">
     <NuxtLink
       v-for="[key, label] in tabs"
       :key="key"

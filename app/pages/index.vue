@@ -227,7 +227,7 @@ function nav(i: number) { paused = true; go(i) }
       </div>
 
       <!-- pengeluaran + barang -->
-      <div class="grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+      <div class="grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
         <div id="pengeluaran" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-[90px]">
           <div class="h-[170px] bg-cover" style="background-image:url('/img/photo-ubud.jpg');background-position:center 60%" />
           <div class="p-5 flex flex-col gap-[13px]">
@@ -261,7 +261,7 @@ function nav(i: number) { paused = true; go(i) }
       </div>
 
       <!-- outfit + anggota -->
-      <div class="grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+      <div class="grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
         <div id="outfit" class="bg-white border border-sand-line rounded-hero p-[22px] flex flex-col gap-[15px] scroll-mt-[90px]">
           <div>
             <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700">Outfit</span>
@@ -374,7 +374,7 @@ function nav(i: number) { paused = true; go(i) }
           <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-deep">Cerita yang jalan</div>
           <div class="text-[clamp(26px,3.2vw,36px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px] text-white">12.400 trip sudah tersusun di Jalan</div>
         </div>
-        <div class="grid gap-4 mt-[26px]" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+        <div class="grid gap-4 mt-[26px]" style="grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))">
           <div v-for="s in stories" :key="s.who" class="bg-white/[.08] rounded-[22px] p-5 flex flex-col gap-[11px]">
             <div class="flex gap-[3px] text-brand-amber"><i v-for="n in 5" :key="n" class="i-lucide-star text-[14px]" /></div>
             <div class="text-[14.5px] font-700 text-white">{{ s.quote }}</div>
@@ -400,7 +400,7 @@ function nav(i: number) { paused = true; go(i) }
           <button class="rounded-pill px-[17px] py-[9px] text-[13px] font-700 whitespace-nowrap" :class="annual ? 'bg-ink text-white' : 'text-ink-2'" @click="annual = true">Tahunan · hemat 2 bulan</button>
         </div>
       </div>
-      <div class="grid gap-[18px] mt-[26px]" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <div class="grid gap-[18px] mt-[26px]" style="grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))">
         <div v-for="p in plans" :key="p.name" class="rounded-hero p-[22px] flex flex-col gap-[15px] border-[1.5px]" :class="p.featured ? 'bg-ink text-white border-ink' : 'bg-white text-ink border-sand-line'">
           <div class="flex justify-between items-center gap-[10px]">
             <div class="text-[19px] font-800 tracking-[-.02em]">{{ p.name }}</div>

@@ -23,7 +23,7 @@ function use(tp: TemplateItem) {
       </div>
       <NuxtLink to="/template" class="text-[13px] font-600 text-teal-600 shrink-0">Lihat semua</NuxtLink>
     </div>
-    <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
+    <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))">
       <div v-for="tp in picks" :key="tp.name" class="bg-white border border-sand-line rounded-[20px] overflow-hidden flex flex-col">
         <div class="h-[96px]"><CoreCover :mat="tp.mat" :photo-size="0" /></div>
         <div class="p-[15px_17px_17px] flex flex-col gap-[10px] flex-1">

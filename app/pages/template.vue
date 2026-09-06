@@ -22,7 +22,7 @@ function use(tp: TemplateItem) {
         Rencana lengkap dengan anggaran dan daftar barang. Ganti tanggal, langsung jalan.
       </div>
     </div>
-    <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">
+    <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))">
       <div v-for="tp in templates" :key="tp.name" class="bg-white border border-sand-line rounded-[22px] overflow-hidden flex flex-col">
         <div class="h-[104px]"><CoreCover :mat="tp.mat" :photo-size="0" /></div>
         <div class="p-[16px_18px_18px] flex flex-col gap-[11px] flex-1">
