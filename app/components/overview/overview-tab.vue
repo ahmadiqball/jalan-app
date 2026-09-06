@@ -13,6 +13,13 @@ const nextAct = computed(() => {
   return acts.find((a) => a.cost > 0) || acts[0] || null
 })
 const recent = computed(() => lines.value.slice().sort((a, b) => b.dayIdx - a.dayIdx).slice(0, 4))
+// every activity that has a location, for the overview map's deep-link chips
+const allPlaces = computed(() =>
+  props.trip.days
+    .flatMap((d) => d.acts)
+    .filter((a) => a.place?.trim())
+    .map((a) => ({ label: a.title || a.place, query: a.place })),
+)
 </script>
 
 <template>
@@ -83,6 +90,15 @@ const recent = computed(() => lines.value.slice().sort((a, b) => b.dayIdx - a.da
           </NuxtLink>
         </div>
       </div>
+
+      <MapsPanel
+        heading="Peta trip"
+        :place="trip.place"
+        :places="allPlaces"
+        :context="trip.place"
+        :route="false"
+        :height="260"
+      />
     </div>
 
     <!-- rail -->

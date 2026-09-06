@@ -9,6 +9,7 @@ const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
 const trips = useTripsStore()
 const { flash } = useToast()
+const { searchUrl } = useMaps()
 
 const found = computed(() => {
   for (let di = 0; di < props.trip.days.length; di++) {
@@ -151,7 +152,18 @@ function del() {
       </label>
 
       <label class="flex flex-col gap-[6px]">
-        <span class="eyebrow">Tempat</span>
+        <div class="flex items-center justify-between">
+          <span class="eyebrow">Tempat</span>
+          <a
+            v-if="found.act.place.trim()"
+            :href="searchUrl(found.act.place, trip.place)"
+            target="_blank"
+            rel="noopener"
+            class="text-[12px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1"
+          >
+            <i class="i-lucide-map-pin text-[13px]" /> Buka di Maps
+          </a>
+        </div>
         <input :value="found.act.place" placeholder="Belum ada tempat" class="field" @input="set('place', ($event.target as HTMLInputElement).value)">
       </label>
 

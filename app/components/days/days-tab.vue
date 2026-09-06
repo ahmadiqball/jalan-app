@@ -16,6 +16,10 @@ const dayName = computed(() => {
 const sortedActs = computed(() =>
   (day.value?.acts || []).slice().sort((a, b) => (a.time || '99').localeCompare(b.time || '99')),
 )
+// activity stops with a location, in time order — feeds the day route map
+const dayPlaces = computed(() =>
+  sortedActs.value.filter((a) => a.place?.trim()).map((a) => ({ label: a.title || a.place, query: a.place })),
+)
 const dayPlanned = computed(() => (day.value?.acts || []).reduce((n, a) => n + a.cost, 0))
 const daySpent = computed(
   () =>
@@ -133,6 +137,13 @@ function addAndOpen(time = '') {
         <div class="mt-3"><CoreBar :pct="dayPct" :over="dayOver" /></div>
         <div class="text-[12.5px] text-muted mt-2 money">Rencana hari ini {{ rp(dayPlanned) }}</div>
       </NuxtLink>
+
+      <MapsPanel
+        heading="Peta hari ini"
+        :places="dayPlaces"
+        :place="trip.place"
+        :context="trip.place"
+      />
 
       <DaysOutfitCard :trip="trip" :day-idx="dayIdx" />
     </div>

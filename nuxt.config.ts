@@ -35,6 +35,9 @@ export default defineNuxtConfig({
       // client auth (cloud mode). Empty => local mode (stub auth, localStorage).
       supabaseUrl: '', // NUXT_PUBLIC_SUPABASE_URL
       supabaseAnonKey: '', // NUXT_PUBLIC_SUPABASE_ANON_KEY
+      // Google Maps Embed API key. Empty => embeds fall back to free "open in
+      // Maps" deep links (no key, no cost). The Embed API itself is free.
+      googleMapsKey: '', // NUXT_PUBLIC_GOOGLE_MAPS_KEY
     },
   },
 
