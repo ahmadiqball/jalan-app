@@ -34,7 +34,7 @@ const opts = computed<Opt[]>(() =>
       <SelectContent
         position="popper"
         :side-offset="6"
-        class="z-[80] min-w-[--reka-select-trigger-width] bg-white border border-sand-line2 rounded-field p-[6px] shadow-drop"
+        class="z-[80] min-w-[--reka-select-trigger-width] max-h-[min(56vh,264px)] overflow-y-auto bg-white border border-sand-line2 rounded-field p-[6px] shadow-drop"
       >
         <SelectViewport>
           <SelectItem
