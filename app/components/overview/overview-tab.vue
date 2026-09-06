@@ -96,7 +96,6 @@ const allPlaces = computed(() =>
         :single="{ name: trip.place }"
         :stops="allPlaces"
         :context="trip.place"
-        :route="false"
         :height="260"
       />
     </div>
