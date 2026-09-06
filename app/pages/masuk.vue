@@ -3,7 +3,14 @@ definePageMeta({ layout: 'blank', public: true })
 useHead({ title: 'Masuk · Jalan' })
 
 const session = useSessionStore()
+const route = useRoute()
 const { cloud, signIn, signUp, signInGoogle, guest } = useAuth()
+
+// where to land after a successful sign-in (e.g. an invite link)
+const next = computed(() => {
+  const n = String(route.query.next || '')
+  return n.startsWith('/') ? n : '/beranda'
+})
 
 const mode = ref<'in' | 'up'>('in')
 const email = ref(session.email || 'rina@jalan.id')
@@ -31,7 +38,7 @@ async function submit() {
   busy.value = false
   if (!r.ok) { err.value = r.error || 'Gagal masuk.'; return }
   if (r.needConfirm) { info.value = 'Cek email kamu untuk konfirmasi, lalu masuk.'; mode.value = 'in'; return }
-  navigateTo('/beranda')
+  navigateTo(next.value)
 }
 function signInGuest() {
   guest()

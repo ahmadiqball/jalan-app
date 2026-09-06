@@ -195,6 +195,9 @@ export const useTripsStore = defineStore(
         return t
       })
     }
+    function setInviteRole(tripId: string, role: Member['role']) {
+      patchTrip(tripId, (t) => { t.inviteRole = role; return t })
+    }
     function setMemberRole(tripId: string, id: string, role: Member['role']) {
       patchTrip(tripId, (t) => {
         const m = t.members.find((x) => x.id === id)
@@ -259,7 +262,7 @@ export const useTripsStore = defineStore(
       addManual, deleteManual, updateManual,
       togglePackItem, addPackItem,
       setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,
-      addMember, removeMember, setMemberRole,
+      addMember, removeMember, setMemberRole, setInviteRole,
       createTrip, updateTrip, setSplitBill, resetSeed, replaceAll,
     }
   },

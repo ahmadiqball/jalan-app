@@ -130,6 +130,9 @@ export interface Trip {
   startIso?: string
   /** pete-pete bill id created for splitting this trip's expenses (handoff) */
   splitBillId?: string
+  /** role granted to anyone who opens the invite link (owner-controlled, so a
+   *  view link can't be escalated to edit by editing the URL) */
+  inviteRole?: MemberRole
   /** per-category custom icon (lucide class), overrides the default map */
   catIcons?: Record<string, string>
   days: Day[]
