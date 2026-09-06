@@ -9,6 +9,15 @@ export default defineConfig({
     }),
     presetTypography(),
   ],
+  // Icons chosen at runtime (category icons in CAT_ICON + the icon picker's
+  // ICON_CHOICES) live in .ts files UnoCSS doesn't scan, so their classes must
+  // be pre-generated here. Keep in sync with ICON_CHOICES in utils/categories.ts.
+  safelist: [
+    'i-lucide-utensils', 'i-lucide-coffee', 'i-lucide-bus', 'i-lucide-car',
+    'i-lucide-plane', 'i-lucide-ticket', 'i-lucide-bed-double', 'i-lucide-map-pin',
+    'i-lucide-shopping-bag', 'i-lucide-gift', 'i-lucide-camera', 'i-lucide-waves',
+    'i-lucide-mountain', 'i-lucide-sun', 'i-lucide-wine', 'i-lucide-ellipsis',
+  ],
   theme: {
     colors: {
       // primary action = terracotta (HTML source of truth, not teal)
