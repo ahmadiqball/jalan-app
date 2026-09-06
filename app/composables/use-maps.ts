@@ -18,6 +18,18 @@ export function useMaps() {
     return `https://www.google.com/maps/search/?api=1&query=${q(place, context)}`
   }
 
+  /** free deep link — opens the Maps app/site with a full route through the
+   * given stops (all pins + directions). No key, no cost. */
+  function directionsUrl(places: string[], context = ''): string {
+    const pts = places.map((p) => p.trim()).filter(Boolean)
+    if (pts.length < 2) return searchUrl(pts[0] || '', context)
+    const origin = q(pts[0]!, context)
+    const destination = q(pts[pts.length - 1]!, context)
+    const mid = pts.slice(1, -1)
+    const waypoints = mid.length ? `&waypoints=${mid.map((p) => q(p, context)).join('|')}` : ''
+    return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}${waypoints}`
+  }
+
   /** free embed of a single place (empty when no key) */
   function placeEmbed(place: string, context = ''): string {
     return enabled.value && place.trim()
@@ -36,5 +48,5 @@ export function useMaps() {
     return `https://www.google.com/maps/embed/v1/directions?key=${key.value}&origin=${origin}&destination=${destination}${waypoints}&mode=driving`
   }
 
-  return { key, enabled, searchUrl, placeEmbed, routeEmbed }
+  return { key, enabled, searchUrl, directionsUrl, placeEmbed, routeEmbed }
 }

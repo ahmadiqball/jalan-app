@@ -20,17 +20,21 @@ const props = withDefaults(
   { heading: 'Peta', route: true, height: 220 },
 )
 
-const { enabled, searchUrl, placeEmbed, routeEmbed } = useMaps()
+const { enabled, searchUrl, directionsUrl, placeEmbed, routeEmbed } = useMaps()
 
 const stops = computed(() => (props.places || []).filter((p) => p.query?.trim()))
 const primary = computed(() => props.place?.trim() || stops.value[0]?.query || '')
 const hasAny = computed(() => !!primary.value || stops.value.length > 0)
+const isRoute = computed(() => props.route && stops.value.length >= 2)
 
-const src = computed(() => {
-  if (props.route && stops.value.length >= 2) return routeEmbed(stops.value.map((s) => s.query), props.context)
-  return placeEmbed(primary.value, props.context)
-})
-const openAllUrl = computed(() => searchUrl(primary.value, props.context))
+const src = computed(() =>
+  isRoute.value ? routeEmbed(stops.value.map((s) => s.query), props.context) : placeEmbed(primary.value, props.context),
+)
+// route mode opens the whole day's route in Maps; else opens the single place
+const openAllUrl = computed(() =>
+  isRoute.value ? directionsUrl(stops.value.map((s) => s.query), props.context) : searchUrl(primary.value, props.context),
+)
+const openLabel = computed(() => (isRoute.value ? 'Buka rute di Maps' : 'Buka di Maps'))
 </script>
 
 <template>
@@ -40,8 +44,8 @@ const openAllUrl = computed(() => searchUrl(primary.value, props.context))
         <i class="i-lucide-map text-teal-600 text-[16px]" />
         <div class="font-display text-[16px] font-600">{{ heading }}</div>
       </div>
-      <a :href="openAllUrl" target="_blank" rel="noopener" class="text-[12.5px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1">
-        Buka di Maps <i class="i-lucide-external-link text-[13px]" />
+      <a :href="openAllUrl" target="_blank" rel="noopener" class="text-[12.5px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1 shrink-0">
+        {{ openLabel }} <i class="i-lucide-external-link text-[13px]" />
       </a>
     </div>
 
