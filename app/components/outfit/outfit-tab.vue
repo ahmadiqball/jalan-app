@@ -13,7 +13,7 @@ function addSet() {
     if (!used.has('day:' + i)) { scope = 'day:' + i; break }
   }
   trips.addOutfitSet(props.trip.id, scope)
-  flash('Set outfit dibuat')
+  flash('Outfit ditambahkan')
 }
 function removeSet(id: string) {
   trips.removeOutfit(props.trip.id, id)
@@ -32,7 +32,7 @@ function removeSet(id: string) {
 
     <div class="flex items-center justify-between">
       <div class="font-display text-[24px] font-600">Outfit</div>
-      <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="addSet">+ Set outfit</CoreButton>
+      <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="addSet">+ Tambah outfit</CoreButton>
     </div>
 
     <div class="grid gap-4" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">

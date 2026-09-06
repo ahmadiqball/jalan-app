@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Activity, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
-import { DUR_STEPS, durLabel, nearestDur, rp, toInput, initials } from '~/utils/format'
+import { DUR_STEPS, durLabel, nearestDur, rp, initials } from '~/utils/format'
 import { OF_SLOTS, tone, iconFor, ofText } from '~/utils/categories'
 import { outfitFind, outfitDaySet } from '~/utils/derive'
 
@@ -26,15 +26,6 @@ function set<K extends keyof Activity>(field: K, v: Activity[K]) {
   if (found.value) trips.setActivityField(props.trip.id, found.value.act.id, field, v)
 }
 
-/* time as native 24h <input type=time> ("HH:MM") <-> stored "HH.MM" */
-const timeModel = computed({
-  get: () => toInput(found.value?.act.time || ''),
-  set: (v: string) => set('time', v ? v.replace(':', '.') : ''),
-})
-const costModel = computed({
-  get: () => (found.value?.act.cost ? String(found.value.act.cost) : ''),
-  set: (v: string) => set('cost', parseInt(v.replace(/[^0-9]/g, '') || '0', 10)),
-})
 const durModel = computed({
   get: () => String(nearestDur(found.value?.act.dur || 0)),
   set: (v: string) => set('dur', parseInt(v, 10)),
@@ -55,6 +46,29 @@ function toggleParticipant(id: string) {
   if (!next.length) return
   set('participants', next.length === allIds.value.length ? undefined : next)
 }
+
+/* add a participant right here — creates a trip member (optionally invited by
+ * email) and includes them in this activity */
+const addingPerson = ref(false)
+const newName = ref('')
+const newEmail = ref('')
+function addPerson() {
+  const name = newName.value.trim()
+  if (!name) return
+  const email = newEmail.value.trim()
+  const id = trips.addMember(props.trip.id, {
+    name,
+    email,
+    role: 'Bisa ubah',
+    status: email ? 'menunggu' : 'aktif',
+  })
+  // only extend an explicit subset; "everyone" (undefined) already covers them
+  if (found.value?.act.participants) set('participants', [...found.value.act.participants, id])
+  newName.value = ''
+  newEmail.value = ''
+  addingPerson.value = false
+  flash(email ? name + ' diundang' : name + ' ditambahkan')
+}
 const splitCount = computed(() => Math.max(1, selected.value.length))
 const costSub = computed(() => {
   const a = found.value?.act
@@ -66,7 +80,7 @@ const costSub = computed(() => {
 const ownSet = computed(() => (found.value ? outfitFind(props.trip, 'act:' + found.value.act.id) : undefined))
 const daySet = computed(() => (found.value ? outfitDaySet(props.trip, found.value.dayIdx) : null))
 function setOutfitSlot(slot: 'top' | 'bottom' | 'shoes' | 'other', v: string) {
-  if (found.value) trips.setOutfitSlot(props.trip.id, 'act:' + found.value.act.id, slot, v)
+  if (ownSet.value) trips.setOutfitSlot(props.trip.id, ownSet.value.id, slot, v)
 }
 function makeOwnOutfit() {
   if (!found.value) return
@@ -106,10 +120,10 @@ function del() {
       </label>
 
       <div class="grid grid-cols-2 gap-3">
-        <label class="flex flex-col gap-[6px]">
+        <div class="flex flex-col gap-[6px]">
           <span class="eyebrow">Jam</span>
-          <input v-model="timeModel" type="time" step="300" class="field money">
-        </label>
+          <CoreTimeInput :model-value="found.act.time" @update:model-value="set('time', $event)" />
+        </div>
         <label class="flex flex-col gap-[6px]">
           <span class="eyebrow">Durasi</span>
           <CoreSelect v-model="durModel" :options="durOptions" />
@@ -123,7 +137,7 @@ function del() {
         </label>
         <label class="flex flex-col gap-[6px]">
           <span class="eyebrow">Biaya</span>
-          <input v-model="costModel" placeholder="0" class="field money">
+          <CoreMoneyInput :model-value="found.act.cost" @update:model-value="set('cost', $event)" />
         </label>
       </div>
       <div class="text-[12.5px] text-muted -mt-2">{{ costSub }}</div>
@@ -143,7 +157,7 @@ function del() {
 
       <!-- participants -->
       <div>
-        <span class="eyebrow">Ikut siapa</span>
+        <span class="eyebrow">Peserta</span>
         <div class="flex flex-wrap gap-2 mt-2">
           <button
             v-for="m in trip.members"
@@ -155,6 +169,23 @@ function del() {
             <span class="w-[22px] h-[22px] rounded-full bg-white/70 flex items-center justify-center text-[10px] font-700">{{ initials(m.name) }}</span>
             <span class="text-[12.5px] font-600">{{ m.name.split(' ')[0] }}</span>
           </button>
+          <button
+            v-if="!addingPerson"
+            class="flex items-center gap-1 rounded-pill px-[12px] py-[6px] border border-dashed border-sand-line3 text-muted text-[12.5px] font-600 hover:border-teal-600 hover:text-teal-700 transition-colors"
+            @click="addingPerson = true"
+          >
+            <i class="i-lucide-user-plus text-[14px]" /> Tambah peserta
+          </button>
+        </div>
+
+        <div v-if="addingPerson" class="mt-3 bg-paper rounded-field p-[12px] flex flex-col gap-2">
+          <input v-model="newName" placeholder="Nama peserta" class="field !py-[9px]" @keydown.enter="addPerson">
+          <input v-model="newEmail" type="email" placeholder="Email (opsional — untuk mengundang)" class="field !py-[9px]" @keydown.enter="addPerson">
+          <div class="text-[11.5px] text-muted">Isi email kalau mau mengundang. Tanpa email, namanya bisa diklaim nanti oleh yang ikut.</div>
+          <div class="flex justify-end gap-2">
+            <button class="text-[12.5px] font-600 text-muted px-2 hover:text-ink" @click="addingPerson = false">Batal</button>
+            <CoreButton variant="teal" class="!px-[14px] !py-[7px] !text-[12.5px]" @click="addPerson">Tambah</CoreButton>
+          </div>
         </div>
       </div>
 

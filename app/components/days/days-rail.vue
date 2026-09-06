@@ -6,6 +6,8 @@ const props = defineProps<{ days: Day[]; selected: number }>()
 const emit = defineEmits<{ select: [number]; add: [] }>()
 
 const total = (d: Day) => d.acts.reduce((n, a) => n + a.cost, 0)
+// show the day's name, or a neutral "Hari N" when it has none (no forced name)
+const dayName = (d: Day, i: number) => (d.title && d.title !== 'Belum diberi nama' ? d.title : 'Hari ' + (i + 1))
 </script>
 
 <template>
@@ -26,7 +28,7 @@ const total = (d: Day) => d.acts.reduce((n, a) => n + a.cost, 0)
         class="text-[14px] mt-[3px] truncate"
         :class="i === selected ? 'text-teal-700 font-700' : 'text-ink font-500'"
       >
-        {{ d.title || 'Belum diberi nama' }}
+        {{ dayName(d, i) }}
       </div>
     </button>
     <button

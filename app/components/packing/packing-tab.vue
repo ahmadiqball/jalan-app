@@ -59,10 +59,13 @@ function addRec(r: (typeof recs.value)[number]) {
     </div>
 
     <!-- groups -->
-    <div v-for="(g, gi) in trip.packing" :key="gi" class="flex flex-col gap-1">
-      <div class="text-[12.5px] font-700 text-muted uppercase tracking-[.06em] px-[13px]">{{ g.name }}</div>
-      <PackingItem v-for="it in g.items" :key="it.id" :item="it" @toggle="trips.togglePackItem(trip.id, it.id)" />
+    <div v-if="packing.total" class="card p-[8px_10px] flex flex-col">
+      <div v-for="(g, gi) in trip.packing" :key="gi" class="py-2 border-b border-sand-100 last:border-0">
+        <div class="text-[12px] font-700 text-muted uppercase tracking-[.06em] px-[13px] pt-1 pb-[2px]">{{ g.name }}</div>
+        <PackingItem v-for="it in g.items" :key="it.id" :item="it" @toggle="trips.togglePackItem(trip.id, it.id)" />
+      </div>
     </div>
+    <div v-else class="card p-8 text-center text-muted text-[14px]">Belum ada barang. Tambah di bawah atau pilih dari rekomendasi.</div>
 
     <!-- add item (no buy-link: that comes from recommendations) -->
     <div class="card p-[14px_16px] flex gap-3 flex-wrap items-end">

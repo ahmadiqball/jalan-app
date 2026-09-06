@@ -70,12 +70,12 @@ const byPerson = computed(() => {
 /* edit manual entry */
 const editing = ref<ManualExpense | null>(null)
 const editOpen = computed({ get: () => !!editing.value, set: (v) => { if (!v) editing.value = null } })
-const editAmount = ref('')
+const editAmount = ref(0)
 function openEdit(l: (typeof lines.value)[number]) {
   const m = props.trip.manual.find((x) => x.id === l.id)
   if (!m) return
   editing.value = { ...m }
-  editAmount.value = String(m.amount)
+  editAmount.value = m.amount
 }
 function saveEdit() {
   if (!editing.value) return
@@ -83,7 +83,7 @@ function saveEdit() {
     title: editing.value.title.trim() || editing.value.cat,
     cat: editing.value.cat,
     dayIdx: editing.value.dayIdx,
-    amount: parseInt(editAmount.value.replace(/[^0-9]/g, '') || '0', 10),
+    amount: editAmount.value,
     note: editing.value.note,
   })
   editing.value = null
@@ -118,16 +118,15 @@ function newSplit() {
 }
 
 /* log form */
-const amount = ref('')
+const amount = ref(0)
 const cat = ref<string>('Makan & minum')
 const dayIdx = ref('0')
 const note = ref('')
 const dayOptions = computed(() => props.trip.days.map((d, i) => ({ value: String(i), label: d.date })))
 function log() {
-  const amt = parseInt(amount.value.replace(/[^0-9]/g, '') || '0', 10)
-  if (!amt) return
-  trips.addManual(props.trip.id, { title: note.value.trim() || cat.value, cat: cat.value, dayIdx: parseInt(dayIdx.value, 10), amount: amt, note: note.value.trim() })
-  amount.value = ''
+  if (!amount.value) return
+  trips.addManual(props.trip.id, { title: note.value.trim() || cat.value, cat: cat.value, dayIdx: parseInt(dayIdx.value, 10), amount: amount.value, note: note.value.trim() })
+  amount.value = 0
   note.value = ''
   flash('Pengeluaran dicatat')
 }
@@ -206,7 +205,7 @@ function log() {
       <div class="card p-[18px]">
         <div class="font-display text-[17px] font-600">Catat pengeluaran</div>
         <div class="flex flex-col gap-3 mt-3">
-          <CoreInput v-model="amount" label="Jumlah" mono placeholder="0" @keydown.enter="log" />
+          <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah</span><CoreMoneyInput :model-value="amount" @update:model-value="amount = $event" @keydown.enter="log" /></label>
           <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Kategori</span><CoreSelect v-model="cat" :options="[...CATEGORIES]" /></label>
           <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Hari</span><CoreSelect v-model="dayIdx" :options="dayOptions" /></label>
           <CoreInput v-model="note" label="Catatan (opsional)" placeholder="mis. Oleh-oleh" @keydown.enter="log" />
@@ -245,7 +244,7 @@ function log() {
     <CoreDialog v-if="editing" v-model:open="editOpen" side="center" :width="440" title="Ubah pengeluaran">
       <div class="flex flex-col gap-3">
         <CoreInput v-model="editing.title" label="Judul" placeholder="mis. Oleh-oleh" />
-        <CoreInput v-model="editAmount" label="Jumlah" mono placeholder="0" />
+        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah</span><CoreMoneyInput :model-value="editAmount" @update:model-value="editAmount = $event" /></label>
         <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Kategori</span><CoreSelect v-model="editing.cat" :options="[...CATEGORIES]" /></label>
         <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Hari</span><CoreSelect :model-value="String(editing.dayIdx)" :options="dayOptions" @update:model-value="editing.dayIdx = parseInt($event, 10)" /></label>
         <CoreInput v-model="editing.note" label="Catatan (opsional)" />

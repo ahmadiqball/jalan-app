@@ -19,6 +19,17 @@ export function rp(n: number): string {
   return 'Rp ' + Math.round(n).toLocaleString('id-ID')
 }
 
+/** digits of a string as a number: "Rp 10.000" -> 10000 */
+export function digitsOnly(s: string): number {
+  return parseInt(String(s).replace(/\D/g, '') || '0', 10)
+}
+
+/** group a raw number/string with id-ID thousand separators: "10000" -> "10.000" */
+export function groupDigits(s: string | number): string {
+  const digits = String(s).replace(/\D/g, '').replace(/^0+(?=\d)/, '')
+  return digits ? Number(digits).toLocaleString('id-ID') : ''
+}
+
 /** compact money: "2,7jt" / "743rb" / "0" */
 export function shortRp(n: number): string {
   if (!n) return '0'

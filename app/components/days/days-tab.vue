@@ -8,6 +8,11 @@ const trips = useTripsStore()
 
 const dayIdx = computed(() => Math.min(ui.dayIdx, Math.max(0, props.trip.days.length - 1)))
 const day = computed(() => props.trip.days[dayIdx.value])
+// treat the legacy auto-placeholder as "no name"
+const dayName = computed(() => {
+  const t = day.value?.title || ''
+  return t === 'Belum diberi nama' ? '' : t
+})
 const sortedActs = computed(() =>
   (day.value?.acts || []).slice().sort((a, b) => (a.time || '99').localeCompare(b.time || '99')),
 )
@@ -46,10 +51,13 @@ function selectDay(i: number) {
 }
 function addDay() {
   trips.patchTrip(props.trip.id, (t) => {
-    t.days.push({ date: 'Hari ' + (t.days.length + 1), long: 'Hari ' + (t.days.length + 1), title: 'Belum diberi nama', outfit: '', acts: [] })
+    t.days.push({ date: 'Hari ' + (t.days.length + 1), long: 'Hari ' + (t.days.length + 1), title: '', outfit: '', acts: [] })
     return t
   })
   ui.dayIdx = props.trip.days.length - 1
+}
+function setTitle(v: string) {
+  trips.setDayTitle(props.trip.id, dayIdx.value, v)
 }
 /** create a blank activity and open the slide-over to edit it */
 function addAndOpen(time = '') {
@@ -66,8 +74,14 @@ function addAndOpen(time = '') {
 
     <div class="flex-1 min-w-0 flex flex-col gap-3">
       <div class="flex items-center justify-between gap-3 flex-wrap">
-        <div>
+        <div class="min-w-0">
           <div class="font-display text-[24px] font-600">{{ day?.long }}</div>
+          <input
+            :value="dayName"
+            placeholder="+ Beri nama hari (opsional)"
+            class="mt-[3px] text-[14px] font-600 text-ink-2 bg-transparent border-b border-transparent hover:border-sand-line focus:border-teal-600 outline-none w-full max-w-[300px] placeholder:font-500 placeholder:text-muted"
+            @input="setTitle(($event.target as HTMLInputElement).value)"
+          >
           <div class="text-[13.5px] text-muted mt-[2px]">
             {{ (day?.acts.length || 0) }} aktivitas · {{ rp(dayPlanned) }} masuk anggaran
           </div>

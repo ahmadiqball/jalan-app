@@ -11,9 +11,11 @@ const open = computed(() => ui.openCat === props.row.name)
 function toggle() {
   ui.openCat = open.value ? null : props.row.name
 }
-function onAlloc(e: Event) {
-  const v = parseInt((e.target as HTMLInputElement).value.replace(/[^0-9]/g, '') || '0', 10)
+function onAlloc(v: number) {
   trips.setAlloc(props.tripId, props.row.name, v)
+}
+function pickIcon(icon: string) {
+  trips.setCatIcon(props.tripId, props.row.name, icon)
 }
 function remove(e: Event) {
   e.stopPropagation()
@@ -25,9 +27,8 @@ function remove(e: Event) {
 <template>
   <div :id="catSlug(row.name)" class="border-b border-sand-100 scroll-mt-[160px]">
     <div class="flex items-center gap-3 py-[11px] cursor-pointer" @click="toggle">
-      <div class="w-[30px] h-[30px] rounded-[9px] flex items-center justify-center shrink-0" :style="{ background: row.iconBg, color: row.iconFg }">
-        <span class="w-[9px] h-[9px] rounded-full" :style="{ background: row.segColor }" />
-      </div>
+      <span class="w-[9px] h-[9px] rounded-full shrink-0" :style="{ background: row.segColor }" />
+      <BudgetIconPicker :icon="row.icon" :bg="row.iconBg" :fg="row.iconFg" :disabled="locked" @select="pickIcon" />
       <div class="flex-1 min-w-0">
         <div class="text-[14px] font-600 truncate">{{ row.name }}</div>
         <div class="text-[11.5px] text-muted">{{ row.lineCount }} baris</div>
@@ -37,13 +38,12 @@ function remove(e: Event) {
 
       <div class="w-[130px] text-right shrink-0" @click.stop>
         <span v-if="locked" class="money text-[13.5px] text-ink-2">{{ row.allocRp }}</span>
-        <input
+        <CoreMoneyInput
           v-else
-          :value="row.allocInput"
-          placeholder="0"
-          class="w-[120px] text-right money text-[13.5px] bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[7px] outline-none focus:border-teal-600"
-          @input="onAlloc"
-        >
+          :model-value="row.alloc"
+          input-class="w-[120px] text-right money text-[13.5px] bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[7px] outline-none focus:border-teal-600"
+          @update:model-value="onAlloc"
+        />
       </div>
 
       <div class="w-[96px] shrink-0">

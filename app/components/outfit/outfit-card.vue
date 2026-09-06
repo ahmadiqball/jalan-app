@@ -24,7 +24,7 @@ const person = computed({
   set: (v: string) => trips.setOutfitPerson(props.trip.id, props.set.id, v === ALL ? undefined : v),
 })
 function setSlot(slot: 'top' | 'bottom' | 'shoes' | 'other', v: string) {
-  trips.setOutfitSlot(props.trip.id, props.set.scope, slot, v)
+  trips.setOutfitSlot(props.trip.id, props.set.id, slot, v)
 }
 function addToPacking() {
   const items = OF_SLOTS.map(([k]) => (props.set[k] || '').trim()).filter(Boolean)

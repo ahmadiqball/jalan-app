@@ -42,6 +42,19 @@ export function iconFor(name: string): string {
   return CAT_ICON[name] || CAT_ICON.Lain!
 }
 
+/** Curated lucide icons offered when changing a category's icon. */
+export const ICON_CHOICES = [
+  'i-lucide-utensils', 'i-lucide-coffee', 'i-lucide-bus', 'i-lucide-car',
+  'i-lucide-plane', 'i-lucide-ticket', 'i-lucide-bed-double', 'i-lucide-map-pin',
+  'i-lucide-shopping-bag', 'i-lucide-gift', 'i-lucide-camera', 'i-lucide-waves',
+  'i-lucide-mountain', 'i-lucide-sun', 'i-lucide-wine', 'i-lucide-ellipsis',
+]
+
+/** Icon for a category, honoring the trip's custom override. */
+export function catIcon(icons: Record<string, string> | undefined, name: string): string {
+  return icons?.[name] || iconFor(name)
+}
+
 /** DOM-id-safe slug for a category name (deep-linking to a budget row). */
 export function catSlug(name: string): string {
   return 'bcat-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
 import { rp, shortRp } from '~/utils/format'
-import { catSlug } from '~/utils/categories'
+import { catSlug, tone } from '~/utils/categories'
 
 const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
@@ -32,13 +32,16 @@ const activeName = computed({
 })
 
 const newCatName = ref('')
-const newCatAmount = ref('')
+const newCatAmount = ref(0)
+const newCatIcon = ref('i-lucide-ellipsis')
+const newCatTone = computed(() => tone(newCatName.value || 'Lain'))
 function addCategory() {
   const name = newCatName.value.trim()
   if (!name) return
-  trips.addCategory(props.trip.id, name, parseInt(newCatAmount.value.replace(/[^0-9]/g, '') || '0', 10))
+  trips.addCategory(props.trip.id, name, newCatAmount.value, newCatIcon.value)
   newCatName.value = ''
-  newCatAmount.value = ''
+  newCatAmount.value = 0
+  newCatIcon.value = 'i-lucide-ellipsis'
 }
 function newVersion() {
   trips.addBudgetVersion(props.trip.id)
@@ -121,9 +124,14 @@ function versionTotal(b: Trip['budgets'][number]) {
       <BudgetCategoryRow v-for="c in categories" :key="c.name" :row="c" :trip-id="trip.id" :locked="locked" />
 
       <div v-if="!locked" class="flex items-center gap-3 mt-3 bg-paper rounded-field p-[10px_12px]">
-        <span class="w-[30px] h-[30px] rounded-full bg-white border border-sand-line flex items-center justify-center text-muted shrink-0"><i class="i-lucide-plus text-[15px]" /></span>
+        <BudgetIconPicker :icon="newCatIcon" :bg="newCatTone[0]" :fg="newCatTone[1]" @select="newCatIcon = $event" />
         <input v-model="newCatName" placeholder="Kategori sendiri, mis. Oleh-oleh" class="flex-1 bg-transparent outline-none text-[14px]" @keydown.enter="addCategory">
-        <input v-model="newCatAmount" placeholder="0" class="w-[110px] text-right money text-[14px] bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[7px] outline-none focus:border-teal-600" @keydown.enter="addCategory">
+        <CoreMoneyInput
+          :model-value="newCatAmount"
+          input-class="w-[110px] text-right money text-[14px] bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[7px] outline-none focus:border-teal-600"
+          @update:model-value="newCatAmount = $event"
+          @keydown.enter="addCategory"
+        />
         <CoreButton variant="teal" class="!px-[16px] !py-[8px] !text-[13px]" @click="addCategory">Tambah</CoreButton>
       </div>
       </div>

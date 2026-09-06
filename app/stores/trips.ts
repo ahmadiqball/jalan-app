@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import type { Activity, ManualExpense, Member, PackItem, Trip } from '~/types/domain'
+import type { Activity, Budget, ManualExpense, Member, PackItem, Trip } from '~/types/domain'
+import { CATEGORIES } from '~/types/domain'
 import { seedTrips } from '~/utils/seed'
 import { buildDays } from '~/utils/derive'
 import { clientPersist } from '~/utils/persist'
@@ -51,29 +52,44 @@ export const useTripsStore = defineStore(
         return t
       })
     }
+    function setDayTitle(tripId: string, dayIdx: number, title: string) {
+      patchTrip(tripId, (t) => { const d = t.days[dayIdx]; if (d) d.title = title; return t })
+    }
 
     /* ---- budget ---- */
+    // The category table shows the 5 default categories when a budget has no
+    // allocations yet (phantom rows). The moment the user allocates or adds a
+    // category those phantoms would vanish — so materialize them first, keeping
+    // every visible category on the list.
+    function ensureCats(b: Budget) {
+      if (Object.keys(b.alloc).length === 0) for (const c of CATEGORIES) b.alloc[c] = 0
+    }
     function setActiveBudget(tripId: string, budgetId: string) {
       patchTrip(tripId, (t) => { t.activeBudget = budgetId; return t })
     }
     function setAlloc(tripId: string, cat: string, amount: number) {
       patchTrip(tripId, (t) => {
         const b = t.budgets.find((x) => x.id === t.activeBudget) || t.budgets[0]
-        if (b) b.alloc[cat] = amount
+        if (b) { ensureCats(b); b.alloc[cat] = amount }
         return t
       })
     }
-    function addCategory(tripId: string, name: string, amount: number) {
+    function addCategory(tripId: string, name: string, amount: number, icon?: string) {
       patchTrip(tripId, (t) => {
         const b = t.budgets.find((x) => x.id === t.activeBudget) || t.budgets[0]
-        if (b) b.alloc[name] = amount
+        if (b) { ensureCats(b); b.alloc[name] = amount }
+        if (icon) { (t.catIcons ||= {})[name] = icon }
         return t
       })
+    }
+    function setCatIcon(tripId: string, name: string, icon: string) {
+      patchTrip(tripId, (t) => { (t.catIcons ||= {})[name] = icon; return t })
     }
     function deleteCategory(tripId: string, name: string) {
       patchTrip(tripId, (t) => {
         const b = t.budgets.find((x) => x.id === t.activeBudget) || t.budgets[0]
         if (b) delete b.alloc[name]
+        if (t.catIcons) delete t.catIcons[name]
         return t
       })
     }
@@ -123,9 +139,12 @@ export const useTripsStore = defineStore(
     }
 
     /* ---- outfit ---- */
-    function setOutfitSlot(tripId: string, scope: string, slot: 'top' | 'bottom' | 'shoes' | 'other', value: string) {
+    // Target sets by id, not scope: with per-person outfits several sets can
+    // share one scope (e.g. two "day:0" for different people), so a scope match
+    // could edit the wrong card.
+    function setOutfitSlot(tripId: string, setId: string, slot: 'top' | 'bottom' | 'shoes' | 'other', value: string) {
       patchTrip(tripId, (t) => {
-        const set = t.outfitSets.find((x) => x.scope === scope)
+        const set = t.outfitSets.find((x) => x.id === setId)
         if (set) set[slot] = value
         return t
       })
@@ -235,8 +254,8 @@ export const useTripsStore = defineStore(
 
     return {
       trips, seq, byId, liveTrip, patchTrip, nextId,
-      setActivityField, addActivity, deleteActivity,
-      setActiveBudget, setAlloc, addCategory, deleteCategory, addBudgetVersion,
+      setActivityField, addActivity, deleteActivity, setDayTitle,
+      setActiveBudget, setAlloc, addCategory, deleteCategory, setCatIcon, addBudgetVersion,
       addManual, deleteManual, updateManual,
       togglePackItem, addPackItem,
       setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,

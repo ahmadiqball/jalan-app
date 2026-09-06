@@ -126,6 +126,8 @@ export interface Trip {
   startIso?: string
   /** pete-pete bill id created for splitting this trip's expenses (handoff) */
   splitBillId?: string
+  /** per-category custom icon (lucide class), overrides the default map */
+  catIcons?: Record<string, string>
   days: Day[]
   activeBudget: string
   budgets: Budget[]
