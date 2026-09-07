@@ -73,7 +73,8 @@ URL+anon key). Set only some and auth/data won't line up.
 5. **Auth → URL Configuration** → set **Site URL** to your production domain and
    add it (plus `http://localhost:3000` for dev) to the **Redirect allowlist**
    — a `<origin>/**` wildcard is easiest. The app returns OAuth to
-   `<origin>/masuk`, which forwards to `/beranda` once the session resolves.
+   `<origin>/beranda`; if the session is still resolving it lands on `/masuk`
+   briefly and forwards to `/beranda` automatically.
 
 Emails: Supabase's built-in SMTP is test-grade. For real signup/confirmation
 email at volume, configure a custom SMTP under **Auth → Emails**. (Jalan sends

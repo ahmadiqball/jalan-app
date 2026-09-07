@@ -60,7 +60,7 @@ function onKey(e: KeyboardEvent) { if (e.key === 'Enter') submit() }
 async function google() {
   if (busy.value) return
   busy.value = true
-  const r = await signInGoogle(next.value)
+  const r = await signInGoogle()
   busy.value = false
   if (!r.ok) err.value = r.error || 'Gagal masuk dengan Google.'
 }

@@ -95,6 +95,8 @@ export default defineNuxtPlugin(() => {
     }
   }
 
+  const router = useRouter()
+
   client.auth.onAuthStateChange((eventName, s) => {
     if (s?.user) {
       session.setUser({
@@ -105,6 +107,14 @@ export default defineNuxtPlugin(() => {
       if (eventName === 'SIGNED_IN' || eventName === 'INITIAL_SESSION') {
         pull()
         refreshMe()
+      }
+      // Auth resolves asynchronously (e.g. after the OAuth redirect lands on a
+      // page). If we're still on the login screen once signed in, forward on —
+      // the route middleware only runs on navigation, so it can't do this.
+      const cur = router.currentRoute.value
+      if (cur.path === '/masuk') {
+        const q = cur.query.next
+        navigateTo(typeof q === 'string' && q.startsWith('/') ? q : '/beranda')
       }
     } else if (eventName === 'SIGNED_OUT') {
       session.signOut()
