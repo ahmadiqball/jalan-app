@@ -84,7 +84,7 @@ function addRec(r: (typeof recs.value)[number]) {
     <div v-if="recs.length" class="card p-[16px_18px]">
       <div class="flex items-center gap-2">
         <i class="i-lucide-sparkles text-teal-600 text-[16px]" />
-        <div class="font-display text-[16px] font-600">Rekomendasi dari Jalan</div>
+        <div class="font-display text-[16px] font-600">Rekomendasi dari Kelana</div>
       </div>
       <div class="text-[12.5px] text-muted mt-[2px]">Saran barang untuk trip {{ trip.mat }} — ketuk untuk menambah.</div>
       <div class="flex flex-wrap gap-2 mt-3">

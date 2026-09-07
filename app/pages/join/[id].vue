@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'blank', public: true })
-useHead({ title: 'Gabung trip · Jalan' })
+useHead({ title: 'Gabung trip · Kelana' })
 
 const route = useRoute()
 const session = useSessionStore()

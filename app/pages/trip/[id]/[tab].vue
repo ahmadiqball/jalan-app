@@ -25,7 +25,7 @@ const tab = computed(() => route.params.tab as string)
 const trip = computed(() => trips.byId(tripId.value))
 const tabComp = computed(() => TAB_COMPONENTS[tab.value as keyof typeof TAB_COMPONENTS] || OverviewTab)
 
-useHead(() => ({ title: (trip.value?.name ?? 'Trip') + ' · Jalan' }))
+useHead(() => ({ title: (trip.value?.name ?? 'Trip') + ' · Kelana' }))
 </script>
 
 <template>

@@ -52,7 +52,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'id' },
-      title: 'Jalan',
+      title: 'Kelana',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'Rencana jalan, anggaran, dan barang di satu tempat.' },

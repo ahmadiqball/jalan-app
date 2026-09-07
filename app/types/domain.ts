@@ -1,4 +1,4 @@
-// Domain model for Jalan. Ported from the prototype state shape.
+// Domain model for Kelana. Ported from the prototype state shape.
 
 /** Budget categories that carry an allocation line. */
 export const CATEGORIES = [

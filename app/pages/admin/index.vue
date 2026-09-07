@@ -3,7 +3,7 @@ import type { PackRecItem } from '~/types/content'
 import type { Trip } from '~/types/domain'
 import { rp } from '~/utils/format'
 
-useHead({ title: 'Admin · Jalan' })
+useHead({ title: 'Admin · Kelana' })
 const { flash } = useToast()
 const trips = useTripsStore()
 const { content, save } = useContent()

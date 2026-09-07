@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Template · Jalan' })
+useHead({ title: 'Template · Kelana' })
 import type { Trip } from '~/types/domain'
 
 const trips = useTripsStore()

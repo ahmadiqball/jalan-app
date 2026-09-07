@@ -6,7 +6,7 @@ export const useSessionStore = defineStore(
   'session',
   () => {
     const authed = ref(false)
-    const email = ref('rina@jalan.id')
+    const email = ref('rina@kelana.id')
     const name = ref('Rina Kartika')
     /** Supabase user id in cloud mode; null in local/guest mode. */
     const userId = ref<string | null>(null)
@@ -21,7 +21,7 @@ export const useSessionStore = defineStore(
     }
     /** Guest trial: local + ephemeral, never cloud. */
     function signInGuest() {
-      email.value = 'tamu@jalan.id'
+      email.value = 'tamu@kelana.id'
       name.value = 'Tamu'
       userId.value = null
       guest.value = true

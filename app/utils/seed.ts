@@ -10,12 +10,12 @@ export const SEED_START: Record<string, string> = {
 
 const SEED_MEMBERS: Record<string, Member[]> = {
   t1: [
-    { id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' },
+    { id: 'u1', name: 'Rina Kartika', email: 'rina@kelana.id', role: 'Pemilik', status: 'aktif' },
     { id: 'u2', name: 'Dimas Prayoga', email: 'dimas@mail.com', role: 'Bisa ubah', status: 'aktif' },
     { id: 'u3', name: 'Ayu Larasati', email: 'ayu@mail.com', role: 'Hanya lihat', status: 'menunggu' },
   ],
   t2: [
-    { id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' },
+    { id: 'u1', name: 'Rina Kartika', email: 'rina@kelana.id', role: 'Pemilik', status: 'aktif' },
     { id: 'u4', name: 'Sari Hapsari', email: 'sari@mail.com', role: 'Bisa ubah', status: 'aktif' },
   ],
 }
@@ -23,7 +23,7 @@ const SEED_MEMBERS: Record<string, Member[]> = {
 export function seedMembers(id: string): Member[] {
   return (
     SEED_MEMBERS[id] || [
-      { id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' },
+      { id: 'u1', name: 'Rina Kartika', email: 'rina@kelana.id', role: 'Pemilik', status: 'aktif' },
     ]
   ).map((m) => ({ ...m }))
 }

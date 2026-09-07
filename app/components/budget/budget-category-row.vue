@@ -32,7 +32,6 @@ function remove(e: Event) {
       <BudgetIconPicker :icon="row.icon" :bg="row.iconBg" :fg="row.iconFg" :disabled="locked" @select="pickIcon" />
       <div class="flex-1 min-w-0">
         <div class="text-[14px] font-600 truncate">{{ row.name }}</div>
-        <div v-if="!template" class="text-[11.5px] text-muted">{{ row.lineCount }} baris</div>
       </div>
 
       <div v-if="!template" class="w-[120px] text-right money text-[13.5px] shrink-0" :style="{ color: row.spentFg }">{{ row.spentRp }}</div>

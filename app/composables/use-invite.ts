@@ -25,7 +25,7 @@ export function useInvite() {
   }
 
   function waUrl(link: string, tripName: string): string {
-    const text = `Yuk ikut rencana trip "${tripName}" di Jalan: ${link}`
+    const text = `Yuk ikut rencana trip "${tripName}" di Kelana: ${link}`
     return `https://wa.me/?text=${encodeURIComponent(text)}`
   }
 

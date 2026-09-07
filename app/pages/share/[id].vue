@@ -23,7 +23,7 @@ onMounted(async () => {
   }
 })
 
-useHead(() => ({ title: (trip.value?.name ?? 'Trip') + ' · Jalan' }))
+useHead(() => ({ title: (trip.value?.name ?? 'Trip') + ' · Kelana' }))
 
 function copyLink() {
   try {
@@ -82,7 +82,7 @@ function copyLink() {
           </div>
         </div>
 
-        <div class="text-center text-[12.5px] text-muted pt-4">Dibuat dengan Jalan</div>
+        <div class="text-center text-[12.5px] text-muted pt-4">Dibuat dengan Kelana</div>
       </div>
     </div>
     <div v-else class="min-h-screen flex items-center justify-center text-muted">Trip tidak ditemukan.</div>

@@ -3,7 +3,7 @@ import DaysTab from '~/components/days/days-tab.vue'
 import BudgetTab from '~/components/budget/budget-tab.vue'
 import PackingTab from '~/components/packing/packing-tab.vue'
 
-useHead({ title: 'Template · Admin · Jalan' })
+useHead({ title: 'Template · Admin · Kelana' })
 const route = useRoute()
 const trips = useTripsStore()
 const { flash } = useToast()

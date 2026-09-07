@@ -125,7 +125,7 @@ function versionTotal(b: Trip['budgets'][number]) {
     <div class="card p-[16px_22px] overflow-x-auto">
       <div :class="template ? '' : 'min-w-[560px]'">
       <div class="flex items-center gap-3 pb-2 border-b border-sand-line">
-        <span class="eyebrow flex-1">{{ template ? 'Kategori' : 'Kategori dan baris' }}</span>
+        <span class="eyebrow flex-1">Kategori</span>
         <span v-if="!template" class="eyebrow w-[120px] text-right">Terpakai</span>
         <span class="eyebrow w-[130px] text-right">Alokasi</span>
         <span v-if="!template" class="eyebrow w-[96px]">Progres</span>

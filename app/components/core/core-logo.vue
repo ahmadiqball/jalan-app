@@ -34,7 +34,7 @@ const palette = computed(() => {
       class="font-display"
       :style="{ fontSize: textSize + 'px', color: palette.text, fontWeight: weight, letterSpacing: '-.02em' }"
     >
-      Jalan
+      Kelana
     </div>
   </div>
 </template>

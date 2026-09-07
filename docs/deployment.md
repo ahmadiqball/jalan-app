@@ -1,6 +1,6 @@
-# Deploying Jalan
+# Deploying Kelana
 
-Jalan is a Nuxt 4 (SSR) app with a Nitro server. It runs in **local mode** with
+Kelana is a Nuxt 4 (SSR) app with a Nitro server. It runs in **local mode** with
 zero credentials, and flips to **cloud mode** when Supabase env is present (see
 [backend.md](./backend.md)). For a real deployment you almost always want cloud
 mode so trips persist and multiple people can collaborate.
@@ -77,7 +77,7 @@ URL+anon key). Set only some and auth/data won't line up.
    briefly and forwards to `/beranda` automatically.
 
 Emails: Supabase's built-in SMTP is test-grade. For real signup/confirmation
-email at volume, configure a custom SMTP under **Auth → Emails**. (Jalan sends
+email at volume, configure a custom SMTP under **Auth → Emails**. (Kelana sends
 no email itself — invitations are share links; see the Anggota tab.)
 
 ---

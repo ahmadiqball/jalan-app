@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Beranda · Jalan' })
+useHead({ title: 'Beranda · Kelana' })
 
 const trips = useTripsStore()
 const ui = useUiStore()

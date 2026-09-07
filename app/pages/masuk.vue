@@ -1,12 +1,15 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'blank', public: true })
-useHead({ title: 'Masuk · Jalan' })
+useHead({ title: 'Masuk · Kelana' })
 
 const session = useSessionStore()
 const route = useRoute()
-const { cloud, signIn, signUp, signInGoogle, guest } = useAuth()
+const { cloud, signIn, signInGoogle, guest } = useAuth()
 
-// where to land after a successful sign-in (e.g. an invite link)
+const err = ref('')
+const busy = ref(false)
+
+// where to land after sign-in (e.g. an invite link)
 const next = computed(() => {
   const n = String(route.query.next || '')
   return n.startsWith('/') ? n : '/beranda'
@@ -20,49 +23,24 @@ watch(
   { immediate: true },
 )
 
-const mode = ref<'in' | 'up'>('in')
-const email = ref(session.email || 'rina@jalan.id')
-const pw = ref('')
-const name = ref('')
-const err = ref('')
-const info = ref('')
-const busy = ref(false)
-
-function validate(): boolean {
-  if (!email.value.trim() || !email.value.includes('@')) { err.value = 'Masukkan email yang benar.'; return false }
-  if (pw.value.length < 4) { err.value = 'Sandi minimal 4 karakter.'; return false }
-  if (mode.value === 'up' && cloud.value && !name.value.trim()) { err.value = 'Isi nama kamu.'; return false }
-  err.value = ''
-  return true
-}
-
-async function submit() {
-  if (busy.value || !validate()) return
-  busy.value = true
-  info.value = ''
-  const r = mode.value === 'up'
-    ? await signUp(email.value.trim(), pw.value, name.value.trim())
-    : await signIn(email.value.trim(), pw.value)
-  busy.value = false
-  if (!r.ok) { err.value = r.error || 'Gagal masuk.'; return }
-  if (r.needConfirm) { info.value = 'Cek email kamu untuk konfirmasi, lalu masuk.'; mode.value = 'in'; return }
-  navigateTo(next.value)
-}
-function signInGuest() {
-  guest()
-  navigateTo('/beranda')
-}
-function toggleMode() {
-  if (cloud.value) { mode.value = mode.value === 'in' ? 'up' : 'in'; err.value = ''; info.value = '' }
-  else signInGuest()
-}
-function onKey(e: KeyboardEvent) { if (e.key === 'Enter') submit() }
 async function google() {
   if (busy.value) return
   busy.value = true
   const r = await signInGoogle()
   busy.value = false
   if (!r.ok) err.value = r.error || 'Gagal masuk dengan Google.'
+}
+// local/dev mode has no Google — a simple stub entry so the app still runs
+async function localSignIn() {
+  if (busy.value) return
+  busy.value = true
+  const r = await signIn('kamu@kelana.id', 'local')
+  busy.value = false
+  if (r.ok) navigateTo(next.value)
+}
+function signInGuest() {
+  guest()
+  navigateTo('/beranda')
 }
 
 const chips = ['6 trip tersimpan', 'Anggaran per kategori', 'Daftar barang otomatis']
@@ -93,48 +71,34 @@ const chips = ['6 trip tersimpan', 'Anggaran per kategori', 'Daftar barang otoma
       </div>
     </div>
 
-    <!-- right form -->
+    <!-- right: sign-in -->
     <div class="flex-1 basis-[420px] flex items-center justify-center p-[48px_32px] bg-paper">
       <div class="w-full max-w-[376px] flex flex-col gap-[22px] anim-rise">
         <div>
-          <div class="font-display text-[30px] font-600">{{ mode === 'up' ? 'Daftar' : 'Masuk' }}</div>
-          <div class="text-[14.5px] text-ink-2 mt-[6px]">
-            {{ mode === 'up' ? 'Buat akun untuk simpan trip di semua perangkat.' : 'Lanjutkan trip yang sedang jalan.' }}
-          </div>
+          <div class="font-display text-[30px] font-600">Masuk</div>
+          <div class="text-[14.5px] text-ink-2 mt-[6px]">Lanjutkan trip yang sedang jalan.</div>
         </div>
 
-        <div class="flex flex-col gap-[14px]">
-          <CoreInput v-if="mode === 'up' && cloud" v-model="name" label="Nama" eyebrow placeholder="Nama kamu" @keydown="onKey" />
-          <CoreInput v-model="email" type="email" label="Email" eyebrow placeholder="nama@email.com" @keydown="onKey" />
-          <CoreInput v-model="pw" type="password" label="Sandi" eyebrow placeholder="Minimal 4 karakter" @keydown="onKey" />
-          <div v-if="err" class="bg-warn-bg text-warn-fg rounded-banner px-[14px] py-[10px] text-[13px] font-600">{{ err }}</div>
-          <div v-if="info" class="bg-teal-100 text-teal-700 rounded-banner px-[14px] py-[10px] text-[13px] font-600">{{ info }}</div>
-        </div>
+        <div v-if="err" class="bg-warn-bg text-warn-fg rounded-banner px-[14px] py-[10px] text-[13px] font-600">{{ err }}</div>
 
         <div class="flex flex-col gap-[11px]">
-          <CoreButton variant="primary" block :disabled="busy" @click="submit">
-            {{ busy ? 'Sebentar…' : mode === 'up' ? 'Daftar' : 'Masuk' }}
+          <CoreButton v-if="cloud" variant="primary" block :disabled="busy" @click="google">
+            <i class="i-lucide-chrome text-[16px]" /> {{ busy ? 'Sebentar…' : 'Lanjut dengan Google' }}
           </CoreButton>
-          <template v-if="cloud">
-            <div class="flex items-center gap-3 text-[12px] text-muted my-1">
-              <span class="flex-1 h-px bg-sand-line" /> atau <span class="flex-1 h-px bg-sand-line" />
-            </div>
-            <CoreButton variant="ghost" block :disabled="busy" @click="google">
-              <i class="i-lucide-chrome text-[16px]" /> Lanjut dengan Google
-            </CoreButton>
-          </template>
+          <CoreButton v-else variant="primary" block :disabled="busy" @click="localSignIn">
+            {{ busy ? 'Sebentar…' : 'Masuk (mode lokal)' }}
+          </CoreButton>
+
+          <div class="flex items-center gap-3 text-[12px] text-muted my-1">
+            <span class="flex-1 h-px bg-sand-line" /> atau <span class="flex-1 h-px bg-sand-line" />
+          </div>
+
           <CoreButton variant="ghost" block @click="signInGuest">Coba tanpa akun</CoreButton>
           <div class="text-[12px] text-muted text-center">Mode tamu dicoba di perangkat ini saja — tidak disimpan.</div>
         </div>
 
-        <div class="border-t border-sand-line pt-4 text-[13.5px] text-muted">
-          <template v-if="cloud">
-            {{ mode === 'up' ? 'Sudah punya akun?' : 'Belum punya akun?' }}
-            <a href="#" class="font-600" @click.prevent="toggleMode">{{ mode === 'up' ? 'Masuk' : 'Daftar gratis' }}</a>
-          </template>
-          <template v-else>
-            Mode lokal — data tersimpan di perangkat ini.
-          </template>
+        <div class="border-t border-sand-line pt-4 text-[13px] text-muted">
+          {{ cloud ? 'Masuk pakai akun Google kamu — cepat dan aman.' : 'Mode lokal — data tersimpan di perangkat ini.' }}
         </div>
       </div>
     </div>

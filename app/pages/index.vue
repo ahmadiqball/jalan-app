@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'blank', public: true })
-useHead({ title: 'Jalan — rapikan rencananya, nikmatin jalannya' })
+useHead({ title: 'Kelana — rapikan rencananya, nikmatin jalannya' })
 const session = useSessionStore()
 const appHref = computed(() => (session.authed ? '/beranda' : '/masuk'))
 
@@ -27,9 +27,9 @@ const stories = [
 const annual = ref(false)
 const irp = (n: number) => (n === 0 ? 'Rp 0' : 'Rp ' + n.toLocaleString('id-ID'))
 const plans = computed(() => [
-  { name: 'Jalan Gratis', m: 0, y: 0, note: 'Satu trip aktif, tanpa batas waktu.', cta: 'Mulai gratis', featured: false, feats: ['Satu trip aktif', 'Jadwal harian dan biaya', 'Daftar barang dan outfit', 'Undang 1 anggota'] },
-  { name: 'Jalan Plus', m: 29000, y: 290000, note: 'Untuk yang jalan tiap beberapa bulan.', cta: 'Coba 14 hari', featured: true, feats: ['Trip aktif tanpa batas', 'Beberapa versi anggaran', 'Catat pengeluaran offline', 'Undang 8 anggota', 'Tautan hanya-baca'] },
-  { name: 'Rombongan', m: 79000, y: 790000, note: 'Trip kantor, komunitas, keluarga besar.', cta: 'Hubungi kami', featured: false, feats: ['Semua di Jalan Plus', 'Anggota tanpa batas', 'Ekspor rekap pengeluaran', 'Template trip sendiri', 'Bantuan prioritas'] },
+  { name: 'Kelana Gratis', m: 0, y: 0, note: 'Satu trip aktif, tanpa batas waktu.', cta: 'Mulai gratis', featured: false, feats: ['Satu trip aktif', 'Jadwal harian dan biaya', 'Daftar barang dan outfit', 'Undang 1 anggota'] },
+  { name: 'Kelana Plus', m: 29000, y: 290000, note: 'Untuk yang jalan tiap beberapa bulan.', cta: 'Coba 14 hari', featured: true, feats: ['Trip aktif tanpa batas', 'Beberapa versi anggaran', 'Catat pengeluaran offline', 'Undang 8 anggota', 'Tautan hanya-baca'] },
+  { name: 'Rombongan', m: 79000, y: 790000, note: 'Trip kantor, komunitas, keluarga besar.', cta: 'Hubungi kami', featured: false, feats: ['Semua di Kelana Plus', 'Anggota tanpa batas', 'Ekspor rekap pengeluaran', 'Template trip sendiri', 'Bantuan prioritas'] },
 ].map((p) => ({ ...p, price: annual.value ? irp(p.y) : irp(p.m), per: p.m === 0 ? 'selamanya' : annual.value ? 'per tahun' : 'per bulan' })))
 
 // destination carousel
@@ -372,7 +372,7 @@ function nav(i: number) { paused = true; go(i) }
       <div class="max-w-[1200px] mx-auto">
         <div class="max-w-[560px]">
           <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-deep">Cerita yang jalan</div>
-          <div class="text-[clamp(26px,3.2vw,36px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px] text-white">12.400 trip sudah tersusun di Jalan</div>
+          <div class="text-[clamp(26px,3.2vw,36px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px] text-white">12.400 trip sudah tersusun di Kelana</div>
         </div>
         <div class="grid gap-4 mt-[26px]" style="grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))">
           <div v-for="s in stories" :key="s.who" class="bg-white/[.08] rounded-[22px] p-5 flex flex-col gap-[11px]">

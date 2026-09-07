@@ -1,6 +1,6 @@
-# Jalan backend
+# Kelana backend
 
-Jalan runs in one of two modes, chosen automatically from env — no code change:
+Kelana runs in one of two modes, chosen automatically from env — no code change:
 
 | | **Local mode** (default) | **Cloud mode** |
 |---|---|---|

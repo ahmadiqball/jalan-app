@@ -1,4 +1,4 @@
-# Jalan — Build Plan
+# Kelana — Build Plan
 
 Rebuild of the `design_handoff_jalan` prototype as a production app.
 

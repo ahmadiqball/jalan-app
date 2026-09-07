@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Arsip · Jalan' })
+useHead({ title: 'Arsip · Kelana' })
 import { matDef } from '~/utils/motifs'
 import { budgetSummary } from '~/utils/derive'
 

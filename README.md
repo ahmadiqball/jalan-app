@@ -1,4 +1,4 @@
-# Jalan
+# Kelana
 
 Desktop-first + responsive group **trip-planning** web app for Indonesian travellers —
 day-by-day itinerary, versioned budgets, expense log, packing checklist, per-day/activity

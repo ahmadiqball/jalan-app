@@ -259,7 +259,7 @@ export const useTripsStore = defineStore(
             : [
                 input.owner
                   ? { id: 'u1', name: input.owner.name, email: input.owner.email, role: 'Pemilik', status: 'aktif' }
-                  : { id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' },
+                  : { id: 'u1', name: 'Rina Kartika', email: 'rina@kelana.id', role: 'Pemilik', status: 'aktif' },
               ]),
       }
       trips.value = [...trips.value, trip]
@@ -308,7 +308,7 @@ export const useTripsStore = defineStore(
         members: [
           opts?.owner
             ? { id: 'u1', name: opts.owner.name, email: opts.owner.email, role: 'Pemilik', status: 'aktif' }
-            : { id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' },
+            : { id: 'u1', name: 'Rina Kartika', email: 'rina@kelana.id', role: 'Pemilik', status: 'aktif' },
         ],
       }
       trips.value = [...trips.value, trip]
