@@ -23,6 +23,7 @@
     "vue-router": "^5.3.0"
   },
   "devDependencies": {
+    "@iconify-json/circle-flags": "^1.2.10",
     "@iconify-json/lucide": "^1.2.127",
     "@nuxt/fonts": "^0.14.0",
     "@unocss/nuxt": "^66.8.1",

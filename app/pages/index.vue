@@ -2,7 +2,8 @@
 definePageMeta({ layout: 'blank', public: true })
 useHead({ title: 'Kelana — rapikan rencananya, nikmatin jalannya' })
 const session = useSessionStore()
-const appHref = computed(() => (session.authed ? '/beranda' : '/masuk'))
+const localePath = useLocalePath()
+const appHref = computed(() => localePath(session.authed ? '/beranda' : '/masuk'))
 
 const places = [
   { name: 'Sumba Timur', photo: '/img/photo-sumba.jpg', tag: 'Pantai & bukit', meta: '4 hari · 3 orang', price: 'Rp 3,1jt' },
@@ -63,8 +64,9 @@ function nav(i: number) { paused = true; go(i) }
           <a href="#harga" class="hover:text-brand-amber">Harga</a>
         </nav>
         <div class="ml-auto md:ml-0 flex gap-[10px] items-center">
-          <NuxtLink :to="appHref" class="text-[13.5px] font-700 text-ink px-1">Masuk</NuxtLink>
-          <NuxtLink :to="appHref" class="bg-primary text-white rounded-pill px-[19px] py-[11px] text-[13.5px] font-700 hover:bg-primary-hover">Coba gratis</NuxtLink>
+          <LayoutLangSwitch />
+          <NuxtLink :to="appHref" class="text-[13.5px] font-700 text-ink px-1 hidden sm:block">Masuk</NuxtLink>
+          <NuxtLink :to="appHref" class="bg-primary text-white rounded-pill px-[16px] sm:px-[19px] py-[11px] text-[13.5px] font-700 hover:bg-primary-hover">Coba gratis</NuxtLink>
         </div>
       </div>
     </div>

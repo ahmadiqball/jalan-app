@@ -9,12 +9,7 @@ const { signOut } = useAuth()
 const { isAdmin } = useMe()
 const showAdmin = computed(() => isAdmin.value && !session.guest)
 
-const { locale, setLocale } = useI18n()
-const switchLocalePath = useSwitchLocalePath()
 const localePath = useLocalePath()
-function switchTo(code: 'id' | 'en') {
-  if (code !== locale.value) navigateTo(switchLocalePath(code))
-}
 
 async function logout() {
   const wasGuest = session.guest
@@ -43,23 +38,6 @@ async function logout() {
           <div class="text-[13.5px] font-700 text-ink truncate">{{ session.name }}</div>
           <div class="text-[12px] text-muted truncate">{{ session.guest ? $t('menu.guest') : session.email }}</div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
-
-        <!-- language switcher -->
-        <div class="px-[10px] py-[6px]">
-          <div class="text-[11px] font-700 text-muted uppercase tracking-[.06em] mb-[6px]">{{ $t('menu.language') }}</div>
-          <div class="flex gap-1">
-            <button
-              v-for="l in [['id', 'ID'], ['en', 'EN']] as const"
-              :key="l[0]"
-              class="flex-1 rounded-[8px] py-[6px] text-[12.5px] font-600 transition-colors"
-              :class="locale === l[0] ? 'bg-teal-100 text-teal-700' : 'bg-sand-100 text-ink-2 hover:bg-sand-line'"
-              @click="switchTo(l[0])"
-            >
-              {{ l[1] }}
-            </button>
-          </div>
-        </div>
         <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
 
         <DropdownMenuItem

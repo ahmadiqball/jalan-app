@@ -52,6 +52,7 @@ async function openNewTrip() {
         <i class="i-lucide-search text-[15px]" />
         {{ $t('nav.search') }}
       </div>
+      <LayoutLangSwitch />
       <CoreButton variant="primary" class="!px-[14px] sm:!px-[18px] !py-[10px] !text-[14px]" @click="openNewTrip">
         <i class="i-lucide-plus" />
         <span class="hidden sm:inline">{{ $t('nav.newTrip') }}</span>
