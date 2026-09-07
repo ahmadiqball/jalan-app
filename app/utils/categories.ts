@@ -118,18 +118,17 @@ export const COVERS: [string, string][] = [
 
 /**
  * Default cover photo per category. Picking a category sets its cover too.
- * Categories without a photo here fall back to the motif illustration.
- * To add the missing ones, drop a file in public/img and map it below:
- *   budaya:  '/img/cat-budaya.jpg'
- *   kuliner: '/img/cat-kuliner.jpg'
- *   pulau:   '/img/cat-pulau.jpg'
- *   lainnya: (usually left as motif art)
+ * Categories without a photo here fall back to the motif illustration
+ * ("lainnya" / Other stays as motif art).
  */
 export const MAT_COVER: Record<string, string> = {
   pantai: '/img/photo-sumba.jpg',
   gunung: '/img/photo-bromo.jpg',
   alam: '/img/photo-ubud.jpg',
-  kota: '/img/photo-kota.jpg',
+  kota: '/img/cat-city.webp',
+  budaya: '/img/cat-culture.jpg',
+  kuliner: '/img/cat-culinary.jpg',
+  pulau: '/img/cat-island.avif',
 }
 export function coverForMat(mat: string): string {
   return MAT_COVER[mat] || ''

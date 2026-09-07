@@ -256,7 +256,7 @@ function nav(i: number) { paused = true; go(i) }
           </div>
         </div>
         <div id="barang" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-[90px]">
-          <div class="h-[170px] bg-cover" style="background-image:url('/img/teal-shore.svg');background-position:center 42%" />
+          <div class="h-[170px] bg-cover bg-center" style="background-image:url('/img/img-items.webp')" />
           <div class="p-5 flex flex-col gap-[13px]">
             <div>
               <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700 mb-3">{{ $t('landing.packing.tag') }}</span>
