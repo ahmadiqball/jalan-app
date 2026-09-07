@@ -51,7 +51,7 @@ function use(tp: Trip) {
         </div>
         <div v-if="!templates.length" class="text-muted text-[14px]">Belum ada template.</div>
       </div>
-      <template #fallback><div class="card p-8 text-muted">Memuat…</div></template>
+      <template #fallback><SkeletonCards :count="6" /></template>
     </ClientOnly>
   </div>
 </template>

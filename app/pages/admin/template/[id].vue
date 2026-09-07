@@ -91,7 +91,7 @@ async function save() {
         <div v-else class="text-muted p-10 text-center">
           Template tidak ditemukan. <NuxtLink to="/admin" class="text-teal-600 font-600">Kembali</NuxtLink>
         </div>
-        <template #fallback><div class="text-muted p-10 text-center">Memuat…</div></template>
+        <template #fallback><SkeletonRows :count="5" /></template>
       </ClientOnly>
     </template>
   </div>

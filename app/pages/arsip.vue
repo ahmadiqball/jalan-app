@@ -57,7 +57,7 @@ const rows = computed(() =>
           <span class="w-[110px] text-right money text-[13px] font-600" :style="{ color: a.diffFg }">{{ a.diff }}</span>
         </NuxtLink>
       </div>
-      <template #fallback><div class="card p-8 text-muted">Memuat…</div></template>
+      <template #fallback><SkeletonRows :count="5" /></template>
     </ClientOnly>
   </div>
 </template>

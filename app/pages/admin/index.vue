@@ -118,7 +118,7 @@ async function removeTemplate(id: string) {
               <span class="text-[13px] font-600">Template baru</span>
             </button>
           </div>
-          <template #fallback><div class="card p-8 text-muted">Memuat…</div></template>
+          <template #fallback><SkeletonCards :count="4" /></template>
         </ClientOnly>
       </template>
 
@@ -130,7 +130,7 @@ async function removeTemplate(id: string) {
         </div>
         <ClientOnly>
           <AdminRecs v-model="recs" />
-          <template #fallback><div class="card p-8 text-muted">Memuat…</div></template>
+          <template #fallback><SkeletonRows :count="6" /></template>
         </ClientOnly>
       </template>
     </template>

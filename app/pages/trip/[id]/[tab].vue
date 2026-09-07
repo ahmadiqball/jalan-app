@@ -44,7 +44,7 @@ useHead(() => ({ title: (trip.value?.name ?? 'Trip') + ' · Kelana' }))
     </div>
 
     <template #fallback>
-      <div class="flex-1 flex items-center justify-center p-16 text-muted">Memuat trip…</div>
+      <SkeletonTrip />
     </template>
   </ClientOnly>
 </template>
