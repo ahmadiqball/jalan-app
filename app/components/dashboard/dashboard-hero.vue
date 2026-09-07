@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
 import { matKey } from '~/utils/motifs'
+import { tripCover } from '~/utils/categories'
 import { rp, shortRp } from '~/utils/format'
 
 const props = defineProps<{ trip: Trip }>()
@@ -48,7 +49,7 @@ function open(tab: string) {
   <div class="bg-white border border-sand-line rounded-hero flex flex-wrap overflow-hidden shadow-card">
     <!-- media -->
     <div class="w-full sm:w-[392px] sm:flex-[1_0_340px] min-h-[220px] sm:min-h-[300px] relative">
-      <CoreCover :mat="trip.mat" :photo="trip.cover" :photo-size="184" :photo-border="7">
+      <CoreCover :mat="trip.mat" :photo="tripCover(trip)" :photo-size="184" :photo-border="7">
         <template #badge>
           <span class="bg-white rounded-pill px-[13px] py-[7px] text-[12px] font-700 text-teal-700">
             {{ dayLabel }}

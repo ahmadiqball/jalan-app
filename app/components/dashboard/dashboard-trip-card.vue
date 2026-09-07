@@ -2,9 +2,11 @@
 import type { Trip } from '~/types/domain'
 import { rp } from '~/utils/format'
 import { matDef } from '~/utils/motifs'
+import { tripCover } from '~/utils/categories'
 
 const props = defineProps<{ trip: Trip }>()
 const { t } = useI18n()
+const cover = computed(() => tripCover(props.trip))
 
 const actCount = computed(() => props.trip.days.reduce((n, d) => n + d.acts.length, 0))
 const packAll = computed(() => (props.trip.packing || []).flatMap((g) => g.items))
@@ -38,9 +40,9 @@ const badgeColor = computed(() => {
     <!-- circular photo straddling the boundary (above both strip and body) -->
     <div
       class="absolute left-1/2 -translate-x-1/2 top-[80px] z-[3] w-[104px] h-[104px] rounded-full overflow-hidden border-[6px] border-white bg-cover bg-center bg-white flex items-center justify-center shadow-[0_12px_24px_-14px_rgba(16,38,43,.45)]"
-      :style="{ backgroundImage: trip.cover ? `url('${trip.cover}')` : undefined, backgroundColor: matDef(trip.mat).bg }"
+      :style="{ backgroundImage: cover ? `url('${cover}')` : undefined, backgroundColor: matDef(trip.mat).bg }"
     >
-      <i v-if="!trip.cover" class="i-lucide-map-pin text-[30px] text-teal-600" />
+      <i v-if="!cover" class="i-lucide-map-pin text-[30px] text-teal-600" />
     </div>
 
     <div class="p-[62px_20px_20px] flex flex-col gap-3 text-center">

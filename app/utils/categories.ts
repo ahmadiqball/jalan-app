@@ -133,3 +133,8 @@ export const MAT_COVER: Record<string, string> = {
 export function coverForMat(mat: string): string {
   return MAT_COVER[mat] || ''
 }
+
+/** A trip's cover, falling back to its category's default photo when unset. */
+export function tripCover(trip: { cover?: string; mat: string }): string {
+  return trip.cover || coverForMat(trip.mat)
+}

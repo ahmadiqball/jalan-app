@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
-import { matDef } from '~/utils/motifs'
+import { matDef, matKey } from '~/utils/motifs'
+import { tripCover } from '~/utils/categories'
 
 const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
@@ -11,7 +12,8 @@ const editable = computed(() => canEdit(props.trip))
 const owner = computed(() => isOwner(props.trip))
 
 const locked = computed(() => props.trip.status === 'live')
-const typeLabel = computed(() => matDef(props.trip.mat).label)
+const cover = computed(() => tripCover(props.trip))
+const typeLabel = computed(() => t('cat.' + matKey(props.trip.mat)))
 const activeBudget = computed(
   () => props.trip.budgets.find((b) => b.id === props.trip.activeBudget) || props.trip.budgets[0],
 )
@@ -36,7 +38,7 @@ const budgetChip = computed(() => {
       <button
         class="w-[78px] h-[78px] shrink-0 rounded-[20px] overflow-hidden relative bg-cover"
         :style="{
-          backgroundImage: trip.cover ? `url('${trip.cover}')` : undefined,
+          backgroundImage: cover ? `url('${cover}')` : undefined,
           backgroundPosition: 'center 58%',
           backgroundColor: matDef(trip.mat).bg,
         }"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: 'blank', public: true })
 import { matDef } from '~/utils/motifs'
+import { tripCover } from '~/utils/categories'
 
 import type { Trip } from '~/types/domain'
 
@@ -13,6 +14,7 @@ const { flash } = useToast()
 const remote = ref<Trip | null>(null)
 const local = computed(() => trips.byId(route.params.id as string))
 const trip = computed(() => local.value ?? remote.value)
+const cover = computed(() => (trip.value ? tripCover(trip.value) : ''))
 
 onMounted(async () => {
   if (local.value) return
@@ -43,17 +45,17 @@ function copyLink() {
         class="h-[236px] relative flex items-end"
         :style="{
           backgroundColor: matDef(trip.mat).bg,
-          backgroundImage: trip.cover ? `linear-gradient(180deg, rgba(16,38,43,0) 30%, rgba(16,38,43,.55)), url('${trip.cover}')` : undefined,
+          backgroundImage: cover ? `linear-gradient(180deg, rgba(16,38,43,0) 30%, rgba(16,38,43,.55)), url('${cover}')` : undefined,
           backgroundSize: 'cover',
           backgroundPosition: 'center 56%',
         }"
       >
         <div class="max-w-[880px] w-full mx-auto p-[0_24px_24px]">
           <div class="flex items-center gap-2 mb-2">
-            <CoreLogo :size="26" :text-size="18" :class="trip.cover ? '[&_*]:!text-white' : ''" />
+            <CoreLogo :size="26" :text-size="18" :class="cover ? '[&_*]:!text-white' : ''" />
           </div>
-          <div class="font-display text-[34px] font-600" :class="trip.cover ? 'text-white' : 'text-ink'">{{ trip.name }}</div>
-          <div class="text-[14px] mt-1" :class="trip.cover ? 'text-white/85' : 'text-ink-2'">{{ trip.place }} · {{ trip.dates }}</div>
+          <div class="font-display text-[34px] font-600" :class="cover ? 'text-white' : 'text-ink'">{{ trip.name }}</div>
+          <div class="text-[14px] mt-1" :class="cover ? 'text-white/85' : 'text-ink-2'">{{ trip.place }} · {{ trip.dates }}</div>
         </div>
       </div>
 
