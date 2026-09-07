@@ -33,24 +33,8 @@ export interface TripRepository {
 }
 
 /* ── app content (admin-managed): starter templates + packing recommendations ── */
-export interface TemplatePackItem {
-  label: string
-  group: string
-  req?: boolean
-}
-export interface TemplateItem {
-  id: string
-  name: string
-  sub: string
-  mat: string
-  cover?: string
-  days: number
-  plan: number
-  /** anggaran per category */
-  alloc?: Record<string, number>
-  /** barang */
-  packing?: TemplatePackItem[]
-}
+/** A template is a full trip document stored opaquely (client owns its shape). */
+export type TemplateTrip = TripData
 export interface PackRecItem {
   id: string
   label: string
@@ -63,7 +47,8 @@ export interface PackRecItem {
   cats?: string[]
 }
 export interface ContentDoc {
-  templates: TemplateItem[]
+  /** starter templates, each a full trip document (opaque here) */
+  templates: TemplateTrip[]
   recs: PackRecItem[]
 }
 

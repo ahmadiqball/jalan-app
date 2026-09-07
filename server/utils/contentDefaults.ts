@@ -1,15 +1,103 @@
-import type { ContentDoc } from '../repositories/types'
+import type { ContentDoc, TemplateTrip } from '../repositories/types'
+
+interface DaySeed { title?: string; acts?: { time?: string; title: string; cat?: string; place?: string; cost?: number; dur?: number }[] }
+interface TplSeed {
+  id: string; name: string; place: string; mat: string; cover?: string; people?: number
+  days: DaySeed[]; alloc?: Record<string, number>; packing?: { group: string; items: { label: string; req?: boolean }[] }[]
+}
+
+/** Expand a concise seed into a full trip document (status: 'template'). */
+function tpl(s: TplSeed): TemplateTrip {
+  let seq = 0
+  const days = s.days.map((d, i) => ({
+    date: 'Hari ' + (i + 1),
+    long: 'Hari ' + (i + 1),
+    title: d.title || '',
+    outfit: '',
+    acts: (d.acts || []).map((a) => ({
+      id: 'a' + s.id + ++seq,
+      time: a.time || '',
+      dur: a.dur ?? 60,
+      title: a.title,
+      cat: a.cat || 'Tempat',
+      place: a.place || '',
+      cost: a.cost ?? 0,
+      note: '',
+      paid: false,
+    })),
+  }))
+  const alloc = s.alloc || {}
+  const plan = Object.values(alloc).reduce((n, v) => n + v, 0)
+  let pseq = 0
+  const packing = (s.packing || []).map((g) => ({
+    name: g.group,
+    items: g.items.map((it) => ({ id: 'p' + s.id + ++pseq, label: it.label, req: !!it.req, done: false })),
+  }))
+  return {
+    id: s.id,
+    name: s.name,
+    place: s.place,
+    mat: s.mat,
+    cover: s.cover || '',
+    dates: '',
+    status: 'template',
+    people: s.people ?? 2,
+    plan,
+    days,
+    activeBudget: s.id + '-awal',
+    budgets: [{ id: s.id + '-awal', name: 'Rencana awal', note: '', alloc }],
+    outfitSets: [],
+    manual: [],
+    packing,
+    members: [],
+  }
+}
 
 /** Seed content shipped with the app; the admin can override it via /admin. */
 export function defaultContent(): ContentDoc {
   return {
     templates: [
-      { id: 'tpl-sumba', name: 'Sumba 4 hari', sub: 'Waingapu, Wairinding, Tanggedu', mat: 'pantai', days: 4, plan: 3100000 },
-      { id: 'tpl-bromo', name: 'Bromo–Ijen 5 hari', sub: 'Cemoro Lawang & Banyuwangi', mat: 'gunung', days: 5, plan: 4600000 },
-      { id: 'tpl-ubud', name: 'Ubud hemat 3 hari', sub: 'Tegallalang & Ubud pusat', mat: 'sawah', days: 3, plan: 1850000 },
-      { id: 'tpl-bali', name: 'Bali Selatan 4 hari', sub: 'Seminyak, Uluwatu, Canggu', mat: 'kota', days: 4, plan: 2700000 },
-      { id: 'tpl-jogja', name: 'Yogyakarta 3 hari', sub: 'Malioboro, Prambanan, Borobudur', mat: 'kuil', days: 3, plan: 2100000 },
-      { id: 'tpl-lbj', name: 'Labuan Bajo 5 hari', sub: 'Komodo, Padar, Pink Beach', mat: 'pulau', days: 5, plan: 5400000 },
+      tpl({
+        id: 'tpl-sumba', name: 'Sumba 4 hari', place: 'Waingapu, Sumba Timur', mat: 'pantai', cover: '/img/photo-sumba.jpg',
+        days: [
+          { title: 'Tiba & sekitar kota', acts: [
+            { time: '13.00', title: 'Tiba di Bandara Umbu Mehang Kunda', cat: 'Transport', cost: 0, dur: 60 },
+            { time: '16.00', title: 'Bukit Wairinding', cat: 'Tiket & atraksi', place: 'Wairinding', cost: 50000, dur: 120 },
+          ] },
+          { title: 'Air terjun', acts: [
+            { time: '08.00', title: 'Air Terjun Tanggedu', cat: 'Tiket & atraksi', place: 'Tanggedu', cost: 150000, dur: 300 },
+          ] },
+          { title: 'Pantai', acts: [
+            { time: '09.00', title: 'Pantai Walakiri', cat: 'Tiket & atraksi', place: 'Pantai Walakiri', cost: 20000, dur: 180 },
+          ] },
+          { title: 'Pulang' },
+        ],
+        alloc: { 'Penginapan': 1200000, 'Transport': 900000, 'Makan & minum': 700000, 'Tiket & atraksi': 300000 },
+        packing: [
+          { group: 'Dokumen', items: [{ label: 'KTP', req: true }] },
+          { group: 'Pakaian', items: [{ label: 'Baju pantai' }, { label: 'Sandal' }] },
+          { group: 'Perlengkapan', items: [{ label: 'Sunblock SPF 50', req: true }, { label: 'Dry bag' }] },
+        ],
+      }),
+      tpl({
+        id: 'tpl-bromo', name: 'Bromo–Ijen 5 hari', place: 'Cemoro Lawang & Banyuwangi', mat: 'gunung', cover: '/img/photo-bromo.jpg',
+        days: [
+          { title: 'Menuju Bromo', acts: [{ time: '15.00', title: 'Perjalanan ke Cemoro Lawang', cat: 'Transport', cost: 0, dur: 240 }] },
+          { title: 'Sunrise Bromo', acts: [
+            { time: '03.30', title: 'Penanjakan sunrise', cat: 'Tiket & atraksi', place: 'Penanjakan Bromo', cost: 350000, dur: 300 },
+          ] },
+          { title: 'Ke Banyuwangi', acts: [{ time: '10.00', title: 'Perjalanan ke Banyuwangi', cat: 'Transport', cost: 0, dur: 300 }] },
+          { title: 'Blue fire Ijen', acts: [
+            { time: '01.00', title: 'Pendakian Kawah Ijen', cat: 'Tiket & atraksi', place: 'Kawah Ijen', cost: 100000, dur: 360 },
+          ] },
+          { title: 'Pulang' },
+        ],
+        alloc: { 'Penginapan': 1500000, 'Transport': 2000000, 'Makan & minum': 800000, 'Tiket & atraksi': 300000 },
+        packing: [
+          { group: 'Pakaian', items: [{ label: 'Jaket tebal anti angin', req: true }, { label: 'Sarung tangan' }] },
+          { group: 'Perlengkapan', items: [{ label: 'Masker debu', req: true }, { label: 'Senter kepala' }] },
+        ],
+      }),
     ],
     recs: [
       { id: 'r-ktp', label: 'KTP dan kartu vaksin', group: 'Dokumen', req: true },

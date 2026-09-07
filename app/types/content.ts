@@ -1,23 +1,7 @@
-export interface TemplatePackItem {
-  label: string
-  group: string
-  req?: boolean
-}
+import type { Trip } from '~/types/domain'
 
-export interface TemplateItem {
-  id: string
-  name: string
-  sub: string
-  mat: string
-  /** cover image path (admin-editable placeholder); '' = motif art only */
-  cover?: string
-  days: number
-  plan: number
-  /** anggaran per category — the template's starter budget allocation */
-  alloc?: Record<string, number>
-  /** barang — the template's starter packing list */
-  packing?: TemplatePackItem[]
-}
+/** A template is a full trip document (status: 'template'). */
+export type TemplateTrip = Trip
 
 export interface PackRecItem {
   id: string
@@ -30,6 +14,7 @@ export interface PackRecItem {
 }
 
 export interface ContentDoc {
-  templates: TemplateItem[]
+  /** starter templates, each a full trip document */
+  templates: Trip[]
   recs: PackRecItem[]
 }

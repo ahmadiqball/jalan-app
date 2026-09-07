@@ -10,12 +10,12 @@ const live = computed(() => trips.liveTrip)
 
 const homeSub = computed(() =>
   live.value
-    ? `Satu trip sedang jalan dan ${trips.trips.length - 1} rencana menunggu tanggal.`
-    : `${trips.trips.length} trip tersimpan.`,
+    ? `Satu trip sedang jalan dan ${trips.userTrips.length - 1} rencana menunggu tanggal.`
+    : `${trips.userTrips.length} trip tersimpan.`,
 )
 
 const cards = computed(() =>
-  trips.trips.filter((t) => {
+  trips.userTrips.filter((t) => {
     if (ui.homeFilter === 'Sedang jalan') return t.status === 'live'
     if (ui.homeFilter === 'Rencana') return t.status !== 'live'
     return t.id !== live.value?.id

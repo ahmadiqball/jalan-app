@@ -7,7 +7,7 @@ const trips = useTripsStore()
 const { rp, shortRp } = useMoney()
 
 const rows = computed(() =>
-  trips.trips.map((t) => {
+  trips.userTrips.map((t) => {
     const b = budgetSummary(t)
     return {
       id: t.id,

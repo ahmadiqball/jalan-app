@@ -2,7 +2,7 @@
 import type { Trip } from '~/types/domain'
 import { rp, toMin, fromMin } from '~/utils/format'
 
-const props = defineProps<{ trip: Trip }>()
+const props = withDefaults(defineProps<{ trip: Trip; template?: boolean }>(), { template: false })
 const ui = useUiStore()
 const trips = useTripsStore()
 
@@ -126,7 +126,7 @@ function addAndOpen(time = '') {
       <DaysEmpty v-else @add="addAndOpen()" />
     </div>
 
-    <div class="w-full md:w-[300px] md:shrink-0 flex flex-col gap-4">
+    <div v-if="!template" class="w-full md:w-[300px] md:shrink-0 flex flex-col gap-4">
       <NuxtLink :to="`/trip/${trip.id}/expenses`" class="card p-[18px] block hover:shadow-lift transition-shadow">
         <div class="flex items-center justify-between">
           <div class="eyebrow">Uang hari ini</div>

@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import type { ContentDoc, PackRecItem, TemplateItem } from '~/types/content'
-import { MATS } from '~/utils/motifs'
+import type { PackRecItem } from '~/types/content'
+import type { Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { rp } from '~/utils/format'
+import { MATS } from '~/utils/motifs'
 
 useHead({ title: 'Admin · Jalan' })
 const { flash } = useToast()
+const trips = useTripsStore()
 const { content, save } = useContent()
+const { list, ensureLoaded, create, remove } = useTemplates()
 const { apiFetch } = useApi()
 
 // authoritative admin gate (token-attached in cloud)
@@ -21,57 +24,32 @@ onMounted(async () => {
   if (!allowed.value) navigateTo('/beranda')
 })
 
-const matKeys = Object.keys(MATS)
+const menu = ref<'templates' | 'recs'>('templates')
 const groups = ['Dokumen', 'Pakaian', 'Elektronik', 'Perlengkapan', 'Lain-lain']
 
-// editable local copies (normalized so every template has the new fields)
-const templates = ref<TemplateItem[]>([])
-const recs = ref<PackRecItem[]>([])
-watchEffect(() => {
-  if (content.value) {
-    templates.value = structuredClone(toRaw(content.value.templates)).map((t) => ({
-      ...t,
-      cover: t.cover ?? '',
-      alloc: t.alloc ?? {},
-      packing: t.packing ?? [],
-    }))
-    recs.value = structuredClone(toRaw(content.value.recs))
-  }
-})
+// load templates into the store so the trip tabs can edit them
+watchEffect(() => { if (content.value) ensureLoaded() })
 
+const templateTotal = (tp: Trip) => {
+  const b = tp.budgets?.find((x) => x.id === tp.activeBudget) || tp.budgets?.[0]
+  return Object.values(b?.alloc || {}).reduce((n, v) => n + v, 0)
+}
+
+// recs editable local copy
+const recs = ref<PackRecItem[]>([])
+watchEffect(() => { if (content.value) recs.value = structuredClone(toRaw(content.value.recs)) })
+const matKeys = Object.keys(MATS)
 const listInput = (arr: string[] | undefined) => (arr || []).join(', ')
 const parseList = (s: string) => s.split(',').map((x) => x.trim()).filter(Boolean)
-
-// template anggaran / barang helpers
-function setAlloc(t: TemplateItem, cat: string, v: number) {
-  t.alloc = { ...(t.alloc || {}), [cat]: v }
-}
-function allocTotal(t: TemplateItem) {
-  return Object.values(t.alloc || {}).reduce((n, v) => n + v, 0)
-}
-function addPack(t: TemplateItem) {
-  ;(t.packing ||= []).push({ label: '', group: 'Perlengkapan', req: false })
-}
-
-function addTemplate() {
-  templates.value.push({ id: 'tpl-' + Date.now(), name: '', sub: '', mat: 'pantai', cover: '', days: 3, plan: 0, alloc: {}, packing: [] })
-}
 function addRec() {
   recs.value.push({ id: 'r-' + Date.now(), label: '', group: 'Perlengkapan', req: false, url: '', mats: [], cats: [] })
 }
+
 const saving = ref(false)
 async function saveAll() {
   saving.value = true
   try {
-    // clean each template: drop zero allocations, blank packing rows; plan = anggaran total
-    const templatesOut = templates.value.map((t) => {
-      const alloc: Record<string, number> = {}
-      for (const [k, v] of Object.entries(t.alloc || {})) if (v > 0) alloc[k] = v
-      const packing = (t.packing || []).filter((p) => p.label.trim())
-      return { ...t, alloc, packing, plan: Object.values(alloc).reduce((n, v) => n + v, 0) || t.plan }
-    })
-    const doc: ContentDoc = { templates: templatesOut, recs: recs.value }
-    await save(doc)
+    await save({ templates: trips.templateTrips as Trip[], recs: recs.value })
     flash('Konten disimpan')
   } catch {
     flash('Gagal menyimpan')
@@ -79,79 +57,75 @@ async function saveAll() {
     saving.value = false
   }
 }
+
+function newTemplate() {
+  const id = create()
+  navigateTo(`/admin/template/${id}`)
+}
+async function removeTemplate(id: string) {
+  remove(id)
+  await saveAll()
+}
 </script>
 
 <template>
   <div class="flex-1 w-full max-w-[1100px] mx-auto p-[30px_20px_60px] md:p-[30px_32px_60px] flex flex-col gap-6 anim-rise">
     <div v-if="checking" class="text-muted">Memeriksa akses…</div>
     <template v-else-if="allowed">
-      <div class="flex items-center justify-between gap-3 flex-wrap">
-        <div>
-          <div class="font-display text-[32px] font-600">Admin</div>
-          <div class="text-[14px] text-ink-2 mt-[4px]">Kelola template kurasi dan rekomendasi barang untuk semua pengguna.</div>
-        </div>
-        <CoreButton variant="primary" :disabled="saving" @click="saveAll">{{ saving ? 'Menyimpan…' : 'Simpan semua' }}</CoreButton>
+      <div>
+        <div class="font-display text-[32px] font-600">Admin</div>
+        <div class="text-[14px] text-ink-2 mt-[4px]">Kelola template kurasi dan rekomendasi barang untuk semua pengguna.</div>
       </div>
 
-      <!-- templates -->
-      <section class="flex flex-col gap-3">
-        <div class="flex items-center justify-between">
-          <div class="font-display text-[20px] font-600">Template</div>
-          <CoreButton variant="ghost" class="!px-[14px] !py-[8px] !text-[13px]" @click="addTemplate">+ Template</CoreButton>
+      <!-- menu -->
+      <div class="flex gap-1 border-b border-sand-line">
+        <button
+          v-for="m in [['templates', 'Template'], ['recs', 'Rekomendasi barang']] as const"
+          :key="m[0]"
+          class="px-4 pt-[10px] pb-[12px] text-[14px] border-b-[2.5px] transition-colors"
+          :class="menu === m[0] ? 'border-teal-600 text-ink font-700' : 'border-transparent text-muted font-500 hover:text-ink-2'"
+          @click="menu = m[0]"
+        >
+          {{ m[1] }}
+        </button>
+      </div>
+
+      <!-- TEMPLATES: grid of trip-shaped templates -->
+      <template v-if="menu === 'templates'">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="text-[13.5px] text-ink-2">Tiap template dibuat seperti trip biasa — atur hari, anggaran, dan barang. Pengguna tinggal “pakai”.</div>
+          <CoreButton variant="primary" @click="newTemplate">+ Template baru</CoreButton>
         </div>
-        <div class="text-[12.5px] text-muted -mt-1">Template seperti bikin trip, tapi cukup atur kategori, hari, anggaran, dan barang.</div>
-        <div v-for="(t, i) in templates" :key="t.id" class="card p-[16px_18px] flex flex-col gap-4">
-          <div class="flex items-start justify-between gap-3">
-            <div class="font-display text-[16px] font-600">{{ t.name || 'Template baru' }}</div>
-            <button class="text-warn-fg text-[13px] font-600 flex items-center gap-1 hover:underline shrink-0" @click="templates.splice(i, 1)"><i class="i-lucide-trash-2 text-[14px]" /> Hapus</button>
-          </div>
-
-          <div class="flex gap-3 flex-wrap items-end">
-            <div class="flex-1 min-w-[180px]"><CoreInput v-model="t.name" label="Nama" placeholder="mis. Sumba 4 hari" /></div>
-            <div class="flex-1 min-w-[180px]"><CoreInput v-model="t.sub" label="Deskripsi / tempat" placeholder="mis. Waingapu, Sumba" /></div>
-            <div class="w-[100px]"><CoreInput v-model.number="t.days" type="number" label="Hari" mono /></div>
-          </div>
-
-          <CoreCategoryPicker v-model:mat="t.mat" :cover="t.cover || ''" editable-image @update:cover="t.cover = $event" />
-
-          <!-- anggaran -->
-          <div>
-            <div class="eyebrow mb-2">Anggaran per kategori</div>
-            <div class="flex flex-col gap-2">
-              <div v-for="cat in CATEGORIES" :key="cat" class="flex items-center gap-3">
-                <span class="text-[13.5px] text-ink-2 flex-1">{{ cat }}</span>
-                <CoreMoneyInput
-                  :model-value="t.alloc?.[cat] || 0"
-                  input-class="w-[150px] text-right money text-[13.5px] bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[7px] outline-none focus:border-teal-600"
-                  @update:model-value="setAlloc(t, cat, $event)"
-                />
+        <ClientOnly>
+          <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))">
+            <div v-for="tp in list" :key="tp.id" class="bg-white border border-sand-line rounded-[20px] overflow-hidden flex flex-col group">
+              <div class="h-[92px] bg-cover bg-center relative" :style="tp.cover ? { backgroundImage: `url('${tp.cover}')` } : {}">
+                <CoreCover v-if="!tp.cover" :mat="tp.mat" :photo-size="0" />
+                <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-muted hover:text-warn-fg shadow" title="Hapus" @click.stop="removeTemplate(tp.id)"><i class="i-lucide-trash-2 text-[14px]" /></button>
               </div>
+              <NuxtLink :to="`/admin/template/${tp.id}`" class="p-[14px_16px] flex flex-col gap-[9px] flex-1 hover:bg-sand-100 transition-colors">
+                <div>
+                  <div class="font-display text-[17px] font-600">{{ tp.name || 'Template baru' }}</div>
+                  <div class="text-[12.5px] text-muted mt-[2px]">{{ tp.place || 'Belum ada destinasi' }}</div>
+                </div>
+                <div class="flex gap-[6px] text-[12px] font-600 flex-wrap">
+                  <span class="bg-paper rounded-pill px-[10px] py-[5px] text-ink-2 money">{{ tp.days.length }} hari</span>
+                  <span class="bg-paper rounded-pill px-[10px] py-[5px] text-ink-2 money">{{ rp(templateTotal(tp)) }}</span>
+                </div>
+                <div class="mt-auto text-[12.5px] font-600 text-teal-600 flex items-center gap-1">Atur template <i class="i-lucide-arrow-up-right text-[14px]" /></div>
+              </NuxtLink>
             </div>
-            <div class="text-[12.5px] text-muted mt-2 money">Total anggaran: {{ rp(allocTotal(t)) }}</div>
+            <button class="border border-dashed border-sand-line3 rounded-[20px] min-h-[200px] flex flex-col items-center justify-center gap-2 text-muted hover:border-teal-600 hover:text-teal-700" @click="newTemplate">
+              <i class="i-lucide-plus text-[24px]" />
+              <span class="text-[13px] font-600">Template baru</span>
+            </button>
           </div>
+          <template #fallback><div class="card p-8 text-muted">Memuat…</div></template>
+        </ClientOnly>
+      </template>
 
-          <!-- barang -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <span class="eyebrow">Barang bawaan</span>
-              <button class="text-[13px] font-600 text-teal-600 hover:text-teal-700" @click="addPack(t)">+ Barang</button>
-            </div>
-            <div class="flex flex-col gap-2">
-              <div v-for="(p, pi) in t.packing" :key="pi" class="flex gap-2 items-center flex-wrap">
-                <input v-model="p.label" class="field !py-[8px] flex-1 min-w-[150px]" placeholder="mis. Dry bag">
-                <div class="w-[150px]"><CoreSelect v-model="p.group" :options="groups" /></div>
-                <label class="flex items-center gap-1 text-[12.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!p.req" @update:model-value="p.req = $event" /> Wajib</label>
-                <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center" @click="t.packing!.splice(pi, 1)"><i class="i-lucide-x text-[15px]" /></button>
-              </div>
-              <div v-if="!t.packing?.length" class="text-[12.5px] text-muted">Belum ada barang.</div>
-            </div>
-          </div>
-        </div>
-        <div v-if="!templates.length" class="text-muted text-[13.5px]">Belum ada template.</div>
-      </section>
-
-      <!-- recommendations -->
-      <section class="flex flex-col gap-3">
+      <!-- RECS -->
+      <template v-else>
         <div class="flex items-center justify-between">
           <div class="font-display text-[20px] font-600">Rekomendasi barang</div>
           <CoreButton variant="ghost" class="!px-[14px] !py-[8px] !text-[13px]" @click="addRec">+ Barang</CoreButton>
@@ -171,11 +145,10 @@ async function saveAll() {
           </div>
         </div>
         <div v-if="!recs.length" class="text-muted text-[13.5px]">Belum ada rekomendasi.</div>
-      </section>
-
-      <div class="flex justify-end">
-        <CoreButton variant="primary" :disabled="saving" @click="saveAll">{{ saving ? 'Menyimpan…' : 'Simpan semua' }}</CoreButton>
-      </div>
+        <div class="flex justify-end">
+          <CoreButton variant="primary" :disabled="saving" @click="saveAll">{{ saving ? 'Menyimpan…' : 'Simpan rekomendasi' }}</CoreButton>
+        </div>
+      </template>
     </template>
   </div>
 </template>

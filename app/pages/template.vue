@@ -1,24 +1,21 @@
 <script setup lang="ts">
 useHead({ title: 'Template · Jalan' })
-import type { TemplateItem } from '~/types/content'
-import { coverForMat } from '~/utils/categories'
+import type { Trip } from '~/types/domain'
 
 const trips = useTripsStore()
+const session = useSessionStore()
 const { flash } = useToast()
 const { rp } = useMoney()
 const { templates } = useContent()
+const cloud = useIsCloud()
 
-function use(tp: TemplateItem) {
-  const id = trips.createTrip({
-    name: tp.name,
-    place: tp.sub,
-    mat: tp.mat,
-    cover: tp.cover || coverForMat(tp.mat),
-    len: tp.days,
-    plan: tp.plan,
-    alloc: tp.alloc,
-    packingSeed: tp.packing,
-  })
+const total = (tp: Trip) => {
+  const b = tp.budgets?.find((x) => x.id === tp.activeBudget) || tp.budgets?.[0]
+  return Object.values(b?.alloc || {}).reduce((n, v) => n + v, 0) || tp.plan || 0
+}
+
+function use(tp: Trip) {
+  const id = trips.cloneTrip(tp, { owner: cloud ? { name: session.name, email: session.email } : undefined })
   flash('Template dipakai, tinggal atur tanggal')
   navigateTo(`/trip/${id}/days`)
 }
@@ -32,25 +29,29 @@ function use(tp: TemplateItem) {
         Rencana lengkap dengan anggaran dan daftar barang. Ganti tanggal, langsung jalan.
       </div>
     </div>
-    <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))">
-      <div v-for="tp in templates" :key="tp.name" class="bg-white border border-sand-line rounded-[22px] overflow-hidden flex flex-col">
-        <div class="h-[104px] bg-cover bg-center" :style="tp.cover ? { backgroundImage: `url('${tp.cover}')` } : {}">
-          <CoreCover v-if="!tp.cover" :mat="tp.mat" :photo-size="0" />
-        </div>
-        <div class="p-[16px_18px_18px] flex flex-col gap-[11px] flex-1">
-          <div>
-            <div class="font-display text-[19px] font-600">{{ tp.name }}</div>
-            <div class="text-[13px] text-muted mt-[3px]">{{ tp.sub }}</div>
+    <ClientOnly>
+      <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))">
+        <div v-for="tp in templates" :key="tp.id" class="bg-white border border-sand-line rounded-[22px] overflow-hidden flex flex-col">
+          <div class="h-[104px] bg-cover bg-center" :style="tp.cover ? { backgroundImage: `url('${tp.cover}')` } : {}">
+            <CoreCover v-if="!tp.cover" :mat="tp.mat" :photo-size="0" />
           </div>
-          <div class="flex gap-[7px] text-[12px] font-600">
-            <span class="bg-paper rounded-pill px-[11px] py-[6px] text-ink-2 money">{{ tp.days }} hari</span>
-            <span class="bg-paper rounded-pill px-[11px] py-[6px] text-ink-2 money">{{ rp(tp.plan) }}</span>
+          <div class="p-[16px_18px_18px] flex flex-col gap-[11px] flex-1">
+            <div>
+              <div class="font-display text-[19px] font-600">{{ tp.name }}</div>
+              <div class="text-[13px] text-muted mt-[3px]">{{ tp.place || 'Belum ada destinasi' }}</div>
+            </div>
+            <div class="flex gap-[7px] text-[12px] font-600 flex-wrap">
+              <span class="bg-paper rounded-pill px-[11px] py-[6px] text-ink-2 money">{{ tp.days.length }} hari</span>
+              <span class="bg-paper rounded-pill px-[11px] py-[6px] text-ink-2 money">{{ rp(total(tp)) }}</span>
+            </div>
+            <button class="mt-auto bg-teal-100 text-teal-700 rounded-pill py-[11px] text-[13.5px] font-700 hover:bg-teal-deep transition-colors" @click="use(tp)">
+              Pakai template
+            </button>
           </div>
-          <button class="mt-auto bg-teal-100 text-teal-700 rounded-pill py-[11px] text-[13.5px] font-700 hover:bg-teal-deep transition-colors" @click="use(tp)">
-            Pakai template
-          </button>
         </div>
+        <div v-if="!templates.length" class="text-muted text-[14px]">Belum ada template.</div>
       </div>
-    </div>
+      <template #fallback><div class="card p-8 text-muted">Memuat…</div></template>
+    </ClientOnly>
   </div>
 </template>

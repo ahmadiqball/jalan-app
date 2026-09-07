@@ -32,7 +32,8 @@ export default defineNuxtPlugin(() => {
       trips.replaceAll(rows)
       await nextTick()
       snapshot.clear()
-      for (const t of trips.trips) snapshot.set(t.id, json(t))
+      // snapshot only real user trips — templates are not synced as trips
+      for (const t of trips.userTrips) snapshot.set(t.id, json(t))
       loaded = true
     } catch {
       // offline / not reachable — keep local cache, try again later
@@ -65,8 +66,9 @@ export default defineNuxtPlugin(() => {
 
   function schedule() {
     if (!session.authed || session.guest || !loaded) return
-    const ids = new Set(trips.trips.map((t) => t.id))
-    for (const t of trips.trips) {
+    const ids = new Set(trips.userTrips.map((t) => t.id))
+    for (const t of trips.userTrips) {
+      // templates live in global content, never as user trips; skip them.
       // only push trips this user may edit — a viewer's local edits stay local
       if (snapshot.get(t.id) !== json(t) && tripRole(t, session.email, true) !== 'viewer') pushQueue.add(t.id)
     }

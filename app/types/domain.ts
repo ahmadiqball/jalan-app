@@ -13,7 +13,7 @@ export type Category = (typeof CATEGORIES)[number]
 /** Activity categories include the budget categories plus "Santai" (maps to Lain). */
 export type ActivityCategory = Category | 'Santai' | 'Tempat'
 
-export type TripStatus = 'live' | 'plan' | 'draft'
+export type TripStatus = 'live' | 'plan' | 'draft' | 'template'
 
 /** Motif keys drive the decorative cover art. */
 export type MotifKey =

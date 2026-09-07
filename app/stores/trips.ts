@@ -18,6 +18,9 @@ export const useTripsStore = defineStore(
 
     const byId = (id: string) => trips.value.find((t) => t.id === id)
     const liveTrip = computed(() => trips.value.find((t) => t.status === 'live'))
+    /** real user trips (templates are edited in-store but never shown/synced as trips) */
+    const userTrips = computed(() => trips.value.filter((t) => t.status !== 'template'))
+    const templateTrips = computed(() => trips.value.filter((t) => t.status === 'template'))
 
     function nextId(prefix = ''): string {
       seq.value += 1
@@ -239,7 +242,7 @@ export const useTripsStore = defineStore(
         mat: input.mat || 'pantai',
         cover: input.cover || '',
         dates: input.dates || '',
-        status: 'draft',
+        status: input.status ?? 'draft',
         people: input.people ?? 2,
         plan: input.plan ?? allocTotal,
         startIso: input.startIso,
@@ -249,9 +252,62 @@ export const useTripsStore = defineStore(
         outfitSets: [],
         manual: [],
         packing: input.packing ?? packing,
+        members:
+          input.members ??
+          (input.status === 'template'
+            ? []
+            : [
+                input.owner
+                  ? { id: 'u1', name: input.owner.name, email: input.owner.email, role: 'Pemilik', status: 'aktif' }
+                  : { id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' },
+              ]),
+      }
+      trips.value = [...trips.value, trip]
+      return id
+    }
+
+    /* ---- templates (admin-authored trip documents) ---- */
+    /** blank template trip, edited via the normal trip tabs */
+    function addTemplate(): string {
+      return createTrip({ name: 'Template baru', place: '', status: 'template', len: 3, members: [] })
+    }
+    function deleteTemplate(id: string) {
+      trips.value = trips.value.filter((t) => t.id !== id)
+    }
+    /** load admin content templates into the store (once), as editable template trips */
+    function loadTemplates(list: Trip[]) {
+      const others = trips.value.filter((t) => t.status !== 'template')
+      const tpls = list.map((t) => ({ ...structuredClone(toRaw(t)), status: 'template' as const }))
+      trips.value = [...others, ...tpls]
+    }
+    /** deep-copy a template (or any trip) into a fresh user trip */
+    function cloneTrip(source: Trip, opts?: { owner?: { name: string; email: string } }): string {
+      const id = 't' + nextId()
+      const src = structuredClone(toRaw(source))
+      const budgets = src.budgets.map((b, i) => ({ ...b, id: i === 0 ? id + '-awal' : id + '-b' + i }))
+      const activeBudget = budgets[0]?.id || id + '-awal'
+      const days = src.days.map((d) => ({
+        ...d,
+        acts: d.acts.map((a) => ({ ...a, paid: false })), // costs become plans again
+      }))
+      const packing = src.packing.map((g) => ({ ...g, items: g.items.map((it) => ({ ...it, done: false })) }))
+      const trip: Trip = {
+        ...src,
+        id,
+        status: 'draft',
+        dates: '',
+        startIso: undefined,
+        splitBillId: undefined,
+        inviteRole: undefined,
+        outfitSets: [],
+        manual: [],
+        days,
+        budgets,
+        activeBudget,
+        packing,
         members: [
-          input.owner
-            ? { id: 'u1', name: input.owner.name, email: input.owner.email, role: 'Pemilik', status: 'aktif' }
+          opts?.owner
+            ? { id: 'u1', name: opts.owner.name, email: opts.owner.email, role: 'Pemilik', status: 'aktif' }
             : { id: 'u1', name: 'Rina Kartika', email: 'rina@jalan.id', role: 'Pemilik', status: 'aktif' },
         ],
       }
@@ -269,16 +325,19 @@ export const useTripsStore = defineStore(
       trips.value = seedTrips()
       seq.value = 100
     }
-    /** Replace all trips (used by cloud sync on pull). Strips server meta. */
+    /** Replace all trips (used by cloud sync on pull). Strips server meta,
+     *  preserves in-store templates (they live in global content, not user trips). */
     function replaceAll(list: Trip[]) {
-      trips.value = list.map((t) => {
+      const templates = trips.value.filter((t) => t.status === 'template')
+      const incoming = list.map((t) => {
         const { _v, _shareId, ...rest } = t as Trip & { _v?: number; _shareId?: string }
         return rest as Trip
       })
+      trips.value = [...templates, ...incoming]
     }
 
     return {
-      trips, seq, byId, liveTrip, patchTrip, nextId,
+      trips, seq, byId, liveTrip, userTrips, templateTrips, patchTrip, nextId,
       setActivityField, addActivity, deleteActivity, setDayTitle,
       setActiveBudget, setAlloc, addCategory, deleteCategory, setCatIcon, addBudgetVersion,
       addManual, deleteManual, updateManual,
@@ -286,6 +345,7 @@ export const useTripsStore = defineStore(
       setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,
       addMember, removeMember, setMemberRole, setInviteRole,
       createTrip, updateTrip, setSplitBill, resetSeed, replaceAll,
+      addTemplate, deleteTemplate, loadTemplates, cloneTrip,
     }
   },
   { persist: { storage: clientPersist } },
