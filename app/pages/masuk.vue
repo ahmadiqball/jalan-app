@@ -12,6 +12,14 @@ const next = computed(() => {
   return n.startsWith('/') ? n : '/beranda'
 })
 
+// forward onward the moment we're authed — covers the OAuth redirect, whose
+// session hydrates asynchronously after this page has already mounted.
+watch(
+  () => session.authed,
+  (v) => { if (v && import.meta.client) navigateTo(next.value) },
+  { immediate: true },
+)
+
 const mode = ref<'in' | 'up'>('in')
 const email = ref(session.email || 'rina@jalan.id')
 const pw = ref('')
@@ -52,7 +60,7 @@ function onKey(e: KeyboardEvent) { if (e.key === 'Enter') submit() }
 async function google() {
   if (busy.value) return
   busy.value = true
-  const r = await signInGoogle()
+  const r = await signInGoogle(next.value)
   busy.value = false
   if (!r.ok) err.value = r.error || 'Gagal masuk dengan Google.'
 }
