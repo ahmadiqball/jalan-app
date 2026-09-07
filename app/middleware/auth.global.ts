@@ -6,12 +6,15 @@
 export default defineNuxtRouteMiddleware((to) => {
   if (import.meta.server) return
   const session = useSessionStore()
+  const localePath = useLocalePath()
+  // compare on the locale-stripped path so /en/* is treated the same as /*
+  const base = to.path.replace(/^\/en(?=\/|$)/, '') || '/'
   const isPublic =
     to.meta.public === true ||
-    to.path === '/' ||
-    to.path === '/masuk' ||
-    to.path.startsWith('/share')
+    base === '/' ||
+    base === '/masuk' ||
+    base.startsWith('/share')
 
-  if (!session.authed && !isPublic) return navigateTo('/masuk')
-  if (session.authed && to.path === '/masuk') return navigateTo('/beranda')
+  if (!session.authed && !isPublic) return navigateTo(localePath('/masuk'))
+  if (session.authed && base === '/masuk') return navigateTo(localePath('/beranda'))
 })

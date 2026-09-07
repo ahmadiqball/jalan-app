@@ -1,0 +1,39 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "templates": "Template",
+    "archive": "Arsip",
+    "newTrip": "Trip baru",
+    "search": "Cari trip atau tempat"
+  },
+  "tabs": {
+    "overview": "Ringkasan",
+    "days": "Hari",
+    "budget": "Anggaran",
+    "expenses": "Pengeluaran",
+    "packing": "Barang",
+    "outfit": "Outfit",
+    "members": "Anggota"
+  },
+  "menu": {
+    "admin": "Admin",
+    "logout": "Keluar",
+    "guest": "Mode tamu · tidak disimpan",
+    "language": "Bahasa"
+  },
+  "login": {
+    "title": "Masuk",
+    "subtitle": "Lanjutkan trip yang sedang jalan.",
+    "google": "Lanjut dengan Google",
+    "local": "Masuk (mode lokal)",
+    "guest": "Coba tanpa akun",
+    "guestNote": "Mode tamu dicoba di perangkat ini saja — tidak disimpan.",
+    "cloudNote": "Masuk pakai akun Google kamu — cepat dan aman.",
+    "localNote": "Mode lokal — data tersimpan di perangkat ini.",
+    "busy": "Sebentar…",
+    "or": "atau",
+    "headline": "Rencana jalan, anggaran, dan barang di satu tempat.",
+    "blurb": "Catat pengeluaran sambil jalan, biar tahu sisa anggaran sebelum hari terakhir.",
+    "googleError": "Gagal masuk dengan Google."
+  }
+}

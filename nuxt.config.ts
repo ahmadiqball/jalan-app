@@ -14,7 +14,20 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
     'reka-ui/nuxt',
+    '@nuxtjs/i18n',
   ],
+
+  // Indonesian at the root (default, no prefix); English under /en.
+  i18n: {
+    strategy: 'prefix_except_default',
+    defaultLocale: 'id',
+    locales: [
+      { code: 'id', name: 'Indonesia', language: 'id-ID', file: 'id.json' },
+      { code: 'en', name: 'English', language: 'en-US', file: 'en.json' },
+    ],
+    detectBrowserLanguage: false,
+    bundle: { optimizeTranslationDirective: false },
+  },
 
   css: [
     '@unocss/reset/tailwind.css',

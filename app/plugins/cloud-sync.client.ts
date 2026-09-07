@@ -96,6 +96,7 @@ export default defineNuxtPlugin(() => {
   }
 
   const router = useRouter()
+  const localePath = useLocalePath()
 
   client.auth.onAuthStateChange((eventName, s) => {
     if (s?.user) {
@@ -112,9 +113,9 @@ export default defineNuxtPlugin(() => {
       // page). If we're still on the login screen once signed in, forward on —
       // the route middleware only runs on navigation, so it can't do this.
       const cur = router.currentRoute.value
-      if (cur.path === '/masuk') {
-        const q = cur.query.next
-        navigateTo(typeof q === 'string' && q.startsWith('/') ? q : '/beranda')
+      if (cur.path.replace(/^\/en(?=\/|$)/, '') === '/masuk') {
+        const q = typeof cur.query.next === 'string' ? cur.query.next.replace(/^\/en(?=\/|$)/, '') : ''
+        navigateTo(localePath(q.startsWith('/') ? q : '/beranda'))
       }
     } else if (eventName === 'SIGNED_OUT') {
       session.signOut()

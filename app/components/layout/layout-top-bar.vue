@@ -1,18 +1,22 @@
 <script setup lang="ts">
 const ui = useUiStore()
 const route = useRoute()
+const localePath = useLocalePath()
 
 const nav = [
-  { label: 'Beranda', to: '/beranda' },
-  { label: 'Template', to: '/template' },
-  { label: 'Arsip', to: '/arsip' },
+  { key: 'home', to: '/beranda' },
+  { key: 'templates', to: '/template' },
+  { key: 'archive', to: '/arsip' },
 ]
-const isActive = (to: string) => route.path === to || route.path.startsWith(to + '/')
+const isActive = (to: string) => {
+  const p = localePath(to)
+  return route.path === p || route.path.startsWith(p + '/')
+}
 const mobileOpen = ref(false)
 watch(() => route.path, () => (mobileOpen.value = false))
 
 async function openNewTrip() {
-  if (route.path !== '/beranda') await navigateTo('/beranda')
+  if (!isActive('/beranda')) await navigateTo(localePath('/beranda'))
   ui.showNewTrip = true
 }
 </script>
@@ -25,7 +29,7 @@ async function openNewTrip() {
       <i :class="mobileOpen ? 'i-lucide-x' : 'i-lucide-menu'" class="text-[20px] text-ink-2" />
     </button>
 
-    <NuxtLink to="/beranda" class="shrink-0">
+    <NuxtLink :to="localePath('/beranda')" class="shrink-0">
       <CoreLogo :size="30" :text-size="21" />
     </NuxtLink>
 
@@ -33,11 +37,11 @@ async function openNewTrip() {
       <NuxtLink
         v-for="n in nav"
         :key="n.to"
-        :to="n.to"
+        :to="localePath(n.to)"
         class="rounded-pill px-4 py-2 transition-colors"
         :class="isActive(n.to) ? 'bg-teal-100 text-teal-700' : 'text-ink-2 hover:bg-sand-100'"
       >
-        {{ n.label }}
+        {{ $t('nav.' + n.key) }}
       </NuxtLink>
     </nav>
 
@@ -46,11 +50,11 @@ async function openNewTrip() {
         class="hidden lg:flex items-center gap-2 w-[230px] bg-paper border border-sand-line2 rounded-pill px-4 py-[9px] text-[13.5px] text-muted"
       >
         <i class="i-lucide-search text-[15px]" />
-        Cari trip atau tempat
+        {{ $t('nav.search') }}
       </div>
       <CoreButton variant="primary" class="!px-[14px] sm:!px-[18px] !py-[10px] !text-[14px]" @click="openNewTrip">
         <i class="i-lucide-plus" />
-        <span class="hidden sm:inline">Trip baru</span>
+        <span class="hidden sm:inline">{{ $t('nav.newTrip') }}</span>
       </CoreButton>
       <LayoutUserMenu />
     </div>
@@ -65,12 +69,12 @@ async function openNewTrip() {
           <NuxtLink
             v-for="n in nav"
             :key="n.to"
-            :to="n.to"
+            :to="localePath(n.to)"
             class="rounded-field px-4 py-3 text-[15px] font-600 transition-colors"
             :class="isActive(n.to) ? 'bg-teal-100 text-teal-700' : 'text-ink-2 hover:bg-sand-100'"
             @click="mobileOpen = false"
           >
-            {{ n.label }}
+            {{ $t('nav.' + n.key) }}
           </NuxtLink>
         </nav>
       </div>
