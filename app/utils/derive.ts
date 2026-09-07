@@ -22,8 +22,9 @@ export function buildDays(iso: string, len: number): Day[] {
 /** Union of derived (activity cost) and manual expense lines. Never stored. */
 export function expenseLines(trip: Trip): ExpenseLine[] {
   const out: ExpenseLine[] = []
-  trip.days.forEach((d, di) =>
-    d.acts.forEach((a) => {
+  const days = trip.days || []
+  days.forEach((d, di) =>
+    (d.acts || []).forEach((a) => {
       // an activity is an expense only once its cost has actually been spent
       if (a.cost > 0 && a.paid)
         out.push({
@@ -47,7 +48,7 @@ export function expenseLines(trip: Trip): ExpenseLine[] {
       amount: m.amount,
       derived: false,
       time: '',
-      dayLabel: (trip.days[m.dayIdx] || ({} as Day)).date || '',
+      dayLabel: (days[m.dayIdx] || ({} as Day)).date || '',
     }),
   )
   return out
@@ -246,7 +247,7 @@ export function resolveActivityOutfit(trip: Trip, actId: string, dayIdx: number)
 
 /** Options for the outfit scope picker: every day and every activity. */
 export function scopeOptions(trip: Trip) {
-  return trip.days.reduce<{ value: string; label: string; child: boolean }[]>((acc, d, i) => {
+  return (trip.days || []).reduce<{ value: string; label: string; child: boolean }[]>((acc, d, i) => {
     acc.push({ value: 'day:' + i, label: 'Hari ' + (i + 1) + ' · ' + (d.title || d.date), child: false })
     ;(d.acts || [])
       .slice()
@@ -264,8 +265,8 @@ export function tripWarnings(trip: Trip): string[] {
   categoryRows(trip).forEach((r) => {
     if (r.alloc > 0 && r.spent > r.alloc) out.push('Kategori ' + r.name + ' sudah lewat anggaran (' + r.leftCopy + ').')
   })
-  trip.days.forEach((d, i) => {
-    if (d.acts.length === 0) out.push('Hari ' + (i + 1) + ' (' + d.date + ') belum ada aktivitas.')
+  ;(trip.days || []).forEach((d, i) => {
+    if ((d.acts || []).length === 0) out.push('Hari ' + (i + 1) + ' (' + d.date + ') belum ada aktivitas.')
   })
   return out
 }

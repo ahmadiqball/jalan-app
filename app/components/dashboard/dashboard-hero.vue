@@ -11,8 +11,9 @@ const { budget, packing } = useDerived(() => props.trip)
 
 const typeLabel = computed(() => `${t('cat.' + matKey(props.trip.mat))} · ${t('app.hero.people', { n: props.trip.people })}`)
 
-const dayIdx = computed(() => Math.min(ui.dayIdx, props.trip.days.length - 1))
-const dayLabel = computed(() => t('app.hero.dayLabel', { i: dayIdx.value + 1, n: props.trip.days.length }))
+const dayCount = computed(() => (props.trip.days || []).length)
+const dayIdx = computed(() => Math.min(ui.dayIdx, Math.max(0, dayCount.value - 1)))
+const dayLabel = computed(() => t('app.hero.dayLabel', { i: dayIdx.value + 1, n: dayCount.value }))
 
 // two-tone progress: within-plan vs over
 const bars = computed(() => {

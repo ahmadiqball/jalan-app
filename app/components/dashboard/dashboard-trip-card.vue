@@ -8,7 +8,7 @@ const props = defineProps<{ trip: Trip }>()
 const { t } = useI18n()
 const cover = computed(() => tripCover(props.trip))
 
-const actCount = computed(() => props.trip.days.reduce((n, d) => n + d.acts.length, 0))
+const actCount = computed(() => (props.trip.days || []).reduce((n, d) => n + (d.acts?.length || 0), 0))
 const packAll = computed(() => (props.trip.packing || []).flatMap((g) => g.items))
 const packCopy = computed(() =>
   packAll.value.length
