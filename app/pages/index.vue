@@ -62,7 +62,7 @@ function nav(i: number) { paused = true; go(i) }
 </script>
 
 <template>
-  <div class="min-h-screen overflow-x-hidden">
+  <div class="min-h-screen overflow-x-clip">
     <!-- sticky nav -->
     <div class="sticky top-0 z-[60] bg-paper/95 backdrop-blur border-b border-sand-line">
       <div class="max-w-[1200px] mx-auto px-4 md:px-6 py-[13px] flex gap-3 md:gap-[18px] items-center">
@@ -241,7 +241,7 @@ function nav(i: number) { paused = true; go(i) }
       <!-- pengeluaran + barang -->
       <div class="grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
         <div id="pengeluaran" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-[90px]">
-          <div class="h-[170px] bg-cover" style="background-image:url('/img/photo-ubud.jpg');background-position:center 60%" />
+          <div class="h-[170px] bg-cover bg-center" style="background-image:url('/img/img-budget.jpg')" />
           <div class="p-5 flex flex-col gap-[13px]">
             <div>
               <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700 mb-3">{{ $t('landing.expenses.tag') }}</span>
