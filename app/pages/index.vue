@@ -65,18 +65,18 @@ function nav(i: number) { paused = true; go(i) }
   <div class="min-h-screen overflow-x-hidden">
     <!-- sticky nav -->
     <div class="sticky top-0 z-[60] bg-paper/95 backdrop-blur border-b border-sand-line">
-      <div class="max-w-[1200px] mx-auto px-6 py-[13px] flex gap-[18px] items-center">
-        <CoreLogo :size="28" :text-size="19" variant="ink" :weight="800" />
+      <div class="max-w-[1200px] mx-auto px-4 md:px-6 py-[13px] flex gap-3 md:gap-[18px] items-center">
+        <CoreLogo :size="28" :text-size="19" variant="ink" :weight="800" class="shrink-0" />
         <nav class="flex-1 hidden md:flex gap-6 items-center justify-center text-[14px] font-600 text-ink-2">
           <a href="#fitur" class="hover:text-brand-amber">{{ $t('landing.nav.features') }}</a>
           <a href="#dalam" class="hover:text-brand-amber">{{ $t('landing.nav.inside') }}</a>
           <a href="#cerita" class="hover:text-brand-amber">{{ $t('landing.nav.stories') }}</a>
           <a href="#harga" class="hover:text-brand-amber">{{ $t('landing.nav.pricing') }}</a>
         </nav>
-        <div class="ml-auto md:ml-0 flex gap-[10px] items-center">
+        <div class="ml-auto md:ml-0 flex gap-2 sm:gap-[10px] items-center shrink-0">
           <LayoutLangSwitch />
           <NuxtLink :to="appHref" class="text-[13.5px] font-700 text-ink px-1 hidden sm:block">{{ $t('landing.nav.signin') }}</NuxtLink>
-          <NuxtLink :to="appHref" class="bg-primary text-white rounded-pill px-[16px] sm:px-[19px] py-[11px] text-[13.5px] font-700 hover:bg-primary-hover">{{ $t('landing.nav.tryFree') }}</NuxtLink>
+          <NuxtLink :to="appHref" class="bg-primary text-white rounded-pill px-[14px] sm:px-[19px] py-[10px] sm:py-[11px] text-[13px] sm:text-[13.5px] font-700 whitespace-nowrap hover:bg-primary-hover">{{ $t('landing.nav.tryFree') }}</NuxtLink>
         </div>
       </div>
     </div>
