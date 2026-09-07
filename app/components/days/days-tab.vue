@@ -143,7 +143,7 @@ function addAndOpen(time = '') {
       <MapsPanel
         heading="Peta hari ini"
         :stops="dayPlaces"
-        :single="{ name: trip.place }"
+        :single="{ name: trip.place, placeId: trip.placeId }"
         :context="trip.place"
       />
 

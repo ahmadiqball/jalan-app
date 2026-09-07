@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { rangeLabel } from '~/utils/format'
-import { MATS } from '~/utils/motifs'
-import { COVERS } from '~/utils/categories'
+import { coverForMat } from '~/utils/categories'
 
 const ui = useUiStore()
 const trips = useTripsStore()
@@ -11,28 +10,32 @@ const cloud = useIsCloud()
 
 const name = ref('')
 const place = ref('')
+const placeId = ref<string | undefined>(undefined)
 const mat = ref('pantai')
-const cover = ref('')
+const cover = ref(coverForMat('pantai'))
 const startIso = ref('')
 const len = ref(4)
 
 watch(
   () => ui.showNewTrip,
   (o) => {
-    if (o) { name.value = ''; place.value = ''; mat.value = 'pantai'; cover.value = ''; startIso.value = ''; len.value = 4 }
+    if (o) {
+      name.value = ''; place.value = ''; placeId.value = undefined
+      mat.value = 'pantai'; cover.value = coverForMat('pantai')
+      startIso.value = ''; len.value = 4
+    }
   },
 )
 
 const open = computed({ get: () => ui.showNewTrip, set: (v: boolean) => (ui.showNewTrip = v) })
 const dateLabel = computed(() => rangeLabel(startIso.value, len.value))
-const matChoices = Object.entries(MATS).map(([key, def]) => ({ key, label: def.label, bg: def.bg }))
-const coverChoices = [['', 'Tanpa gambar'] as [string, string], ...COVERS]
 
 function create() {
   if (!name.value.trim()) return
   const id = trips.createTrip({
     name: name.value.trim(),
     place: place.value.trim(),
+    placeId: placeId.value,
     mat: mat.value,
     cover: cover.value,
     startIso: startIso.value,
@@ -50,7 +53,16 @@ function create() {
   <CoreDialog v-model:open="open" side="center" :width="560" title="Trip baru">
     <div class="flex flex-col gap-4">
       <label class="flex flex-col gap-[6px]"><span class="eyebrow">Nama trip</span><input v-model="name" class="field" placeholder="mis. Sumba Timur"></label>
-      <label class="flex flex-col gap-[6px]"><span class="eyebrow">Destinasi</span><input v-model="place" class="field" placeholder="mis. Waingapu, Sumba Timur"></label>
+      <div class="flex flex-col gap-[6px]">
+        <span class="eyebrow">Destinasi</span>
+        <CorePlaceInput
+          :model-value="place"
+          :place-id="placeId"
+          placeholder="Cari kota atau tempat…"
+          @update:model-value="place = $event"
+          @update:place-id="placeId = $event"
+        />
+      </div>
 
       <div class="grid grid-cols-2 gap-3">
         <label class="flex flex-col gap-[6px]"><span class="eyebrow">Tanggal mulai</span><CoreDatePicker v-model="startIso" /></label>
@@ -58,36 +70,7 @@ function create() {
       </div>
       <div class="text-[13px] text-ink-2 -mt-1">Rentang: <span class="money font-600">{{ dateLabel }}</span></div>
 
-      <div>
-        <span class="eyebrow">Motif</span>
-        <div class="flex flex-wrap gap-2 mt-2">
-          <button
-            v-for="m in matChoices"
-            :key="m.key"
-            class="rounded-pill px-[11px] py-[6px] text-[12px] font-600 border flex items-center gap-2 transition-colors"
-            :class="mat === m.key ? 'border-teal-600 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'"
-            @click="mat = m.key"
-          >
-            <span class="w-[12px] h-[12px] rounded-full" :style="{ background: m.bg }" />
-            {{ m.label }}
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <span class="eyebrow">Gambar sampul</span>
-        <div class="flex flex-wrap gap-2 mt-2">
-          <button
-            v-for="[url, label] in coverChoices"
-            :key="url || 'none'"
-            class="rounded-pill px-[11px] py-[6px] text-[12px] font-600 border transition-colors"
-            :class="cover === url ? 'border-teal-600 text-teal-700 bg-teal-100' : 'border-sand-line text-muted hover:border-teal-600'"
-            @click="cover = url"
-          >
-            {{ label }}
-          </button>
-        </div>
-      </div>
+      <CoreCategoryPicker v-model:mat="mat" v-model:cover="cover" />
     </div>
 
     <template #footer>

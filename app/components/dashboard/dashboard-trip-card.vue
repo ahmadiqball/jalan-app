@@ -40,7 +40,7 @@ const badge = computed(() => {
       <i v-if="!trip.cover" class="i-lucide-map-pin text-[30px] text-teal-600" />
     </div>
 
-    <div class="p-[44px_20px_20px] flex flex-col gap-3 text-center">
+    <div class="p-[62px_20px_20px] flex flex-col gap-3 text-center">
       <div>
         <div class="font-display text-[20px] font-600">{{ trip.name }}</div>
         <div class="text-[13px] text-muted mt-1">{{ trip.place }}</div>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TemplateItem } from '~/types/content'
+import { coverForMat } from '~/utils/categories'
 
 const trips = useTripsStore()
 const { flash } = useToast()
@@ -8,7 +9,16 @@ const { templates } = useContent()
 const picks = computed(() => templates.value.slice(0, 3))
 
 function use(tp: TemplateItem) {
-  const id = trips.createTrip({ name: tp.name, place: tp.sub, mat: tp.mat, len: tp.days, plan: tp.plan })
+  const id = trips.createTrip({
+    name: tp.name,
+    place: tp.sub,
+    mat: tp.mat,
+    cover: tp.cover || coverForMat(tp.mat),
+    len: tp.days,
+    plan: tp.plan,
+    alloc: tp.alloc,
+    packingSeed: tp.packing,
+  })
   flash('Template dipakai, tinggal atur tanggal')
   navigateTo(`/trip/${id}/days`)
 }
@@ -25,7 +35,9 @@ function use(tp: TemplateItem) {
     </div>
     <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))">
       <div v-for="tp in picks" :key="tp.name" class="bg-white border border-sand-line rounded-[20px] overflow-hidden flex flex-col">
-        <div class="h-[96px]"><CoreCover :mat="tp.mat" :photo-size="0" /></div>
+        <div class="h-[96px] bg-cover bg-center" :style="tp.cover ? { backgroundImage: `url('${tp.cover}')` } : {}">
+          <CoreCover v-if="!tp.cover" :mat="tp.mat" :photo-size="0" />
+        </div>
         <div class="p-[15px_17px_17px] flex flex-col gap-[10px] flex-1">
           <div>
             <div class="font-display text-[18px] font-600">{{ tp.name }}</div>

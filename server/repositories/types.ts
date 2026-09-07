@@ -33,13 +33,23 @@ export interface TripRepository {
 }
 
 /* ── app content (admin-managed): starter templates + packing recommendations ── */
+export interface TemplatePackItem {
+  label: string
+  group: string
+  req?: boolean
+}
 export interface TemplateItem {
   id: string
   name: string
   sub: string
   mat: string
+  cover?: string
   days: number
   plan: number
+  /** anggaran per category */
+  alloc?: Record<string, number>
+  /** barang */
+  packing?: TemplatePackItem[]
 }
 export interface PackRecItem {
   id: string

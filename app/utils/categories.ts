@@ -115,3 +115,14 @@ export const COVERS: [string, string][] = [
   ['/img/photo-bromo.jpg', 'Gunung'],
   ['/img/photo-kota.jpg', 'Kota'],
 ]
+
+/** Default cover photo for a motif — picking a category sets both as a set. */
+export const MAT_COVER: Record<string, string> = {
+  pantai: '/img/photo-sumba.jpg',
+  sawah: '/img/photo-ubud.jpg',
+  gunung: '/img/photo-bromo.jpg',
+  kota: '/img/photo-kota.jpg',
+}
+export function coverForMat(mat: string): string {
+  return MAT_COVER[mat] || ''
+}

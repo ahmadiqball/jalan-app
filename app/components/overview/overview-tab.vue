@@ -93,7 +93,7 @@ const allPlaces = computed(() =>
 
       <MapsPanel
         heading="Peta trip"
-        :single="{ name: trip.place }"
+        :single="{ name: trip.place, placeId: trip.placeId }"
         :stops="allPlaces"
         :context="trip.place"
         :height="260"

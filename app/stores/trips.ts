@@ -207,26 +207,48 @@ export const useTripsStore = defineStore(
     }
 
     /* ---- trip lifecycle ---- */
-    function createTrip(input: Partial<Trip> & { name: string; startIso?: string; len?: number; owner?: { name: string; email: string } }): string {
+    function createTrip(
+      input: Partial<Trip> & {
+        name: string
+        startIso?: string
+        len?: number
+        owner?: { name: string; email: string }
+        /** starter budget allocation (e.g. from a template's anggaran) */
+        alloc?: Record<string, number>
+        /** starter packing list (e.g. from a template's barang) */
+        packingSeed?: { label: string; group: string; req?: boolean }[]
+      },
+    ): string {
       const id = 't' + nextId()
       const len = input.len ?? (input.days?.length || 1)
+      // group the packing seed by group name
+      const packing: Trip['packing'] = []
+      let pseq = 0
+      for (const it of input.packingSeed || []) {
+        let g = packing.find((x) => x.name === it.group)
+        if (!g) { g = { name: it.group, items: [] }; packing.push(g) }
+        g.items.push({ id: 'p' + id + ++pseq, label: it.label, req: !!it.req, done: false })
+      }
+      const alloc = input.alloc || {}
+      const allocTotal = Object.values(alloc).reduce((n, v) => n + v, 0)
       const trip: Trip = {
         id,
         name: input.name,
         place: input.place || 'Belum ada destinasi',
+        placeId: input.placeId,
         mat: input.mat || 'pantai',
         cover: input.cover || '',
         dates: input.dates || '',
         status: 'draft',
         people: input.people ?? 2,
-        plan: input.plan ?? 0,
+        plan: input.plan ?? allocTotal,
         startIso: input.startIso,
         days: input.days ?? buildDays(input.startIso || '', len),
         activeBudget: id + '-awal',
-        budgets: input.budgets ?? [{ id: id + '-awal', name: 'Rencana awal', note: '', alloc: {} }],
+        budgets: input.budgets ?? [{ id: id + '-awal', name: 'Rencana awal', note: '', alloc }],
         outfitSets: [],
         manual: [],
-        packing: [],
+        packing: input.packing ?? packing,
         members: [
           input.owner
             ? { id: 'u1', name: input.owner.name, email: input.owner.email, role: 'Pemilik', status: 'aktif' }

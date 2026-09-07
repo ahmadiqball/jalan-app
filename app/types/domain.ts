@@ -116,6 +116,8 @@ export interface Trip {
   id: string
   name: string
   place: string
+  /** Google place_id for the destination (from autocomplete); exact map pin */
+  placeId?: string
   /** motif key */
   mat: string
   /** cover image path, may be "" */
