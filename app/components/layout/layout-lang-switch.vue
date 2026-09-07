@@ -15,7 +15,7 @@ function go(code: 'id' | 'en') {
       title="Bahasa Indonesia"
       @click="go('id')"
     >
-      <i class="i-circle-flags-id text-[15px]" /> ID
+      <i class="i-circle-flags-id text-[16px]" /> <span class="hidden sm:inline">ID</span>
     </button>
     <button
       class="flex items-center gap-[5px] rounded-pill px-[9px] py-[5px] text-[12px] font-700 transition-colors"
@@ -23,7 +23,7 @@ function go(code: 'id' | 'en') {
       title="English"
       @click="go('en')"
     >
-      <i class="i-circle-flags-us text-[15px]" /> EN
+      <i class="i-circle-flags-us text-[16px]" /> <span class="hidden sm:inline">EN</span>
     </button>
   </div>
 </template>
