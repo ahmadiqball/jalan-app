@@ -224,7 +224,7 @@ function log() {
           <div class="font-display text-[16px] font-600">Bagi rata &amp; lunas-lunasan</div>
         </div>
         <p class="text-[13px] text-ink-2 leading-[1.5] mt-1">
-          Serahkan urusan siapa bayar siapa ke <span class="font-600">PetePete</span> — bisa beberapa yang bayar, split per item, sampai rekap siapa transfer ke siapa.
+          Pengeluaran yang sudah tercatat langsung dikirim ke <span class="font-600">PetePete</span> — dibagi sesuai peserta tiap aktivitas. Atur siapa yang bayar & lunas-lunasan di sana.
         </p>
         <template v-if="trip.splitBillId">
           <CoreButton variant="teal" block class="mt-3" @click="splitOpen = true">
