@@ -37,6 +37,7 @@
     "googleError": "Google sign-in failed."
   },
   "status": { "live": "In progress", "plan": "Planned", "draft": "Draft", "template": "Template" },
+  "cat": { "pantai": "Beach", "gunung": "Mountain", "alam": "Nature", "budaya": "Culture", "kota": "City", "kuliner": "Food", "pulau": "Island", "lainnya": "Other" },
   "app": {
     "home": {
       "hello": "Hi, {name}",

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
-import { matDef } from '~/utils/motifs'
+import { matKey } from '~/utils/motifs'
 import { rp, shortRp } from '~/utils/format'
 
 const props = defineProps<{ trip: Trip }>()
@@ -8,8 +8,7 @@ const ui = useUiStore()
 const { t } = useI18n()
 const { budget, packing } = useDerived(() => props.trip)
 
-const mat = computed(() => matDef(props.trip.mat))
-const typeLabel = computed(() => `${mat.value.label} · ${t('app.hero.people', { n: props.trip.people })}`)
+const typeLabel = computed(() => `${t('cat.' + matKey(props.trip.mat))} · ${t('app.hero.people', { n: props.trip.people })}`)
 
 const dayIdx = computed(() => Math.min(ui.dayIdx, props.trip.days.length - 1))
 const dayLabel = computed(() => t('app.hero.dayLabel', { i: dayIdx.value + 1, n: props.trip.days.length }))

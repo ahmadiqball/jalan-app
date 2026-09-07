@@ -37,6 +37,7 @@
     "googleError": "Gagal masuk dengan Google."
   },
   "status": { "live": "Sedang jalan", "plan": "Rencana", "draft": "Draf", "template": "Template" },
+  "cat": { "pantai": "Pantai", "gunung": "Gunung", "alam": "Alam", "budaya": "Budaya", "kota": "Kota", "kuliner": "Kuliner", "pulau": "Pulau", "lainnya": "Lainnya" },
   "app": {
     "home": {
       "hello": "Halo, {name}",

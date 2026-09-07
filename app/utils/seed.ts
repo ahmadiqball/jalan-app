@@ -126,7 +126,7 @@ export function seedTrips(): Trip[] {
       id: 't2',
       name: 'Ubud & Tegallalang',
       place: 'Tegallalang, Gianyar',
-      mat: 'sawah',
+      mat: 'alam',
       cover: '/img/photo-ubud.jpg',
       dates: '26–28 Sep',
       status: 'plan',

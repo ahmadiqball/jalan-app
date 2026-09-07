@@ -15,16 +15,16 @@ export type ActivityCategory = Category | 'Santai' | 'Tempat'
 
 export type TripStatus = 'live' | 'plan' | 'draft' | 'template'
 
-/** Motif keys drive the decorative cover art. */
+/** Category keys drive the cover art / photo. */
 export type MotifKey =
   | 'pantai'
-  | 'sawah'
   | 'gunung'
+  | 'alam'
+  | 'budaya'
   | 'kota'
+  | 'kuliner'
   | 'pulau'
-  | 'kuil'
-  | 'gurun'
-  | 'luar'
+  | 'lainnya'
 
 export interface Activity {
   id: string

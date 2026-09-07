@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MATS } from '~/utils/motifs'
+import { MATS, MAT_KEYS } from '~/utils/motifs'
 import { COVERS, coverForMat } from '~/utils/categories'
 
 /**
@@ -13,7 +13,7 @@ const props = withDefaults(
 )
 const emit = defineEmits<{ 'update:mat': [string]; 'update:cover': [string] }>()
 
-const cats = Object.entries(MATS).map(([key, def]) => ({ key, label: def.label, bg: def.bg }))
+const cats = MAT_KEYS.map((key) => ({ key, bg: MATS[key]!.bg }))
 const coverChoices = [['', 'Tanpa gambar'] as [string, string], ...COVERS]
 
 function pickCat(key: string) {
@@ -36,7 +36,7 @@ function pickCat(key: string) {
           @click="pickCat(c.key)"
         >
           <span class="w-[12px] h-[12px] rounded-full" :style="{ background: c.bg }" />
-          {{ c.label }}
+          {{ $t('cat.' + c.key) }}
         </button>
       </div>
     </div>

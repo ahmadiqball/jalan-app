@@ -11,16 +11,31 @@ export interface MatDef {
   motif: string
 }
 
+/**
+ * Broad trip categories. Keys are stored on the trip (trip.mat); labels are
+ * defaults — the UI localizes via i18n `cat.<key>`. Old keys (sawah/kuil/…)
+ * still resolve through matDef's alias map for backward compatibility.
+ */
 export const MATS: Record<string, MatDef> = {
   pantai: { bg: '#DEEEEC', a: '#C8E2DE', b: '#8FC2BE', sun: '#F1EEE1', radius: '110px 110px 0 0', clip: 'none', label: 'Pantai', motif: 'palm' },
   gunung: { bg: '#F1EEE1', a: '#E4DECB', b: '#D8D0BB', sun: '#FCE3D3', radius: '0', clip: 'polygon(0 100%,0 58%,30% 6%,56% 60%,100% 22%,100% 100%)', label: 'Gunung', motif: 'mountain' },
-  sawah: { bg: '#DEEEEC', a: '#C8E2DE', b: '#8FC2BE', sun: '#F1EEE1', radius: '0 999px 999px 0', clip: 'none', label: 'Sawah', motif: 'candi' },
+  alam: { bg: '#DEEEEC', a: '#C8E2DE', b: '#2F6B54', sun: '#F1EEE1', radius: '0 999px 999px 0', clip: 'none', label: 'Alam', motif: 'leaf' },
+  budaya: { bg: '#F1EEE1', a: '#D8D0BB', b: '#C4B29E', sun: '#F1EEE1', radius: '0', clip: 'polygon(0 100%,14% 54%,28% 100%,46% 40%,62% 100%,78% 58%,100% 100%)', label: 'Budaya', motif: 'candi' },
   kota: { bg: '#FCE3D3', a: '#FCE3D3', b: '#FCE3D3', sun: '#F1EEE1', radius: '8px 8px 0 0', clip: 'polygon(0 100%,0 44%,18% 44%,18% 20%,40% 20%,40% 56%,64% 56%,64% 30%,86% 30%,86% 62%,100% 62%,100% 100%)', label: 'Kota', motif: 'camera' },
+  kuliner: { bg: '#FCE3D3', a: '#F6E2CE', b: '#F0713A', sun: '#F1EEE1', radius: '999px 999px 0 0', clip: 'none', label: 'Kuliner', motif: 'food' },
   pulau: { bg: '#DEEEEC', a: '#8FC2BE', b: '#8FC2BE', sun: '#FCE3D3', radius: '160px 160px 0 0', clip: 'none', label: 'Pulau', motif: 'ship' },
-  kuil: { bg: '#F1EEE1', a: '#D8D0BB', b: '#C4B29E', sun: '#F1EEE1', radius: '0', clip: 'polygon(0 100%,14% 54%,28% 100%,46% 40%,62% 100%,78% 58%,100% 100%)', label: 'Kuil', motif: 'pagoda' },
-  gurun: { bg: '#FCE3D3', a: '#E4DECB', b: '#C85A28', sun: '#F1EEE1', radius: '999px 999px 0 0', clip: 'none', label: 'Gurun', motif: 'cactus' },
-  luar: { bg: '#F1EEE1', a: '#E4DECB', b: '#D8D0BB', sun: '#FCE3D3', radius: '6px 6px 0 0', clip: 'polygon(0 100%,0 62%,20% 62%,20% 34%,36% 34%,36% 68%,58% 68%,58% 26%,76% 26%,76% 70%,100% 70%,100% 100%)', label: 'Luar negeri', motif: 'eiffel' },
+  lainnya: { bg: '#F1EEE1', a: '#E4DECB', b: '#D8D0BB', sun: '#FCE3D3', radius: '999px 999px 0 0', clip: 'none', label: 'Lainnya', motif: 'compass' },
 }
+
+/** old category keys → current ones, so existing trips keep working */
+const MAT_ALIAS: Record<string, string> = {
+  sawah: 'alam',
+  kuil: 'budaya',
+  gurun: 'lainnya',
+  luar: 'lainnya',
+}
+/** ordered keys for the category picker */
+export const MAT_KEYS = Object.keys(MATS)
 
 export interface MotifPart {
   d: string
@@ -69,8 +84,22 @@ export const MOTIFS: Record<string, MotifPart[]> = {
     { d: 'M50 6c17 0 28 14 28 29 0 15-14 27-28 42-14-15-28-27-28-42 0-15 11-29 28-29z' },
     { d: 'M44 78h12l-2 14H46z', o: 0.85 }, { d: 'M40 76h20v4H40z', o: 0.55 },
   ],
+  leaf: [
+    { d: 'M50 92c0-32 7-53 24-70-2 36-9 55-24 70z' },
+    { d: 'M50 92c0-32-7-53-24-70 2 36 9 55 24 70z', o: 0.72 },
+  ],
+  food: [
+    { d: 'M12 44h76c0 24-17 41-38 41S12 68 12 44z' },
+    { d: 'M8 42h84v6H8z', o: 0.85 },
+    { d: 'M60 8l7 2-15 36-6-2z', o: 0.72 },
+    { d: 'M71 11l7 2-17 35-5-2z', o: 0.52 },
+  ],
 }
 
+/** normalize any (possibly legacy) category key to a current one */
+export function matKey(key: string): string {
+  return MATS[key] ? key : MAT_ALIAS[key] || 'lainnya'
+}
 export function matDef(key: string): MatDef {
-  return MATS[key] || MATS.pantai!
+  return MATS[matKey(key)] || MATS.pantai!
 }

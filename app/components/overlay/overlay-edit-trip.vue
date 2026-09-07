@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Day, Trip } from '~/types/domain'
 import { rangeLabel, shortDate, longDate, addDays } from '~/utils/format'
-import { MATS } from '~/utils/motifs'
+import { MATS, matKey } from '~/utils/motifs'
 
 const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
@@ -73,9 +73,9 @@ function save() {
         <span class="eyebrow">Pratinjau</span>
         <div
           class="mt-2 h-[132px] rounded-card overflow-hidden flex items-center justify-center bg-cover bg-center"
-          :style="{ backgroundImage: cover ? `url('${cover}')` : undefined, backgroundColor: MATS[mat]?.bg }"
+          :style="{ backgroundImage: cover ? `url('${cover}')` : undefined, backgroundColor: MATS[matKey(mat)]?.bg }"
         >
-          <span v-if="!cover" class="text-[13px] text-teal-700">Motif {{ MATS[mat]?.label }}</span>
+          <span v-if="!cover" class="text-[13px] text-teal-700">{{ $t('cat.' + matKey(mat)) }}</span>
         </div>
       </div>
 
