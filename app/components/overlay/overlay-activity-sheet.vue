@@ -48,27 +48,19 @@ function toggleParticipant(id: string) {
   set('participants', next.length === allIds.value.length ? undefined : next)
 }
 
-/* add a participant right here — creates a trip member (optionally invited by
- * email) and includes them in this activity */
+/* add a participant right here — just a name (no invite). Real invitations go
+ * through the shareable link on the Anggota tab. */
 const addingPerson = ref(false)
 const newName = ref('')
-const newEmail = ref('')
 function addPerson() {
   const name = newName.value.trim()
   if (!name) return
-  const email = newEmail.value.trim()
-  const id = trips.addMember(props.trip.id, {
-    name,
-    email,
-    role: 'Bisa ubah',
-    status: email ? 'menunggu' : 'aktif',
-  })
+  const id = trips.addMember(props.trip.id, { name, email: '', role: 'Bisa ubah', status: 'aktif' })
   // only extend an explicit subset; "everyone" (undefined) already covers them
   if (found.value?.act.participants) set('participants', [...found.value.act.participants, id])
   newName.value = ''
-  newEmail.value = ''
   addingPerson.value = false
-  flash(email ? name + ' diundang' : name + ' ditambahkan')
+  flash(name + ' ditambahkan')
 }
 const splitCount = computed(() => Math.max(1, selected.value.length))
 const costSub = computed(() => {
@@ -191,19 +183,16 @@ function del() {
             class="flex items-center gap-1 rounded-pill px-[12px] py-[6px] border border-dashed border-sand-line3 text-muted text-[12.5px] font-600 hover:border-teal-600 hover:text-teal-700 transition-colors"
             @click="addingPerson = true"
           >
-            <i class="i-lucide-user-plus text-[14px]" /> Tambah peserta
+            <i class="i-lucide-user-plus text-[14px]" /> Tambah nama
           </button>
         </div>
 
-        <div v-if="addingPerson" class="mt-3 bg-paper rounded-field p-[12px] flex flex-col gap-2">
-          <input v-model="newName" placeholder="Nama peserta" class="field !py-[9px]" @keydown.enter="addPerson">
-          <input v-model="newEmail" type="email" placeholder="Email (opsional — untuk mengundang)" class="field !py-[9px]" @keydown.enter="addPerson">
-          <div class="text-[11.5px] text-muted">Isi email kalau mau mengundang. Tanpa email, namanya bisa diklaim nanti oleh yang ikut.</div>
-          <div class="flex justify-end gap-2">
-            <button class="text-[12.5px] font-600 text-muted px-2 hover:text-ink" @click="addingPerson = false">Batal</button>
-            <CoreButton variant="teal" class="!px-[14px] !py-[7px] !text-[12.5px]" @click="addPerson">Tambah</CoreButton>
-          </div>
+        <div v-if="addingPerson" class="mt-3 flex items-center gap-2">
+          <input v-model="newName" placeholder="Nama peserta" class="field !py-[9px] flex-1" @keydown.enter="addPerson">
+          <CoreButton variant="teal" class="!px-[14px] !py-[9px] !text-[12.5px]" @click="addPerson">Tambah</CoreButton>
+          <button class="text-[12.5px] font-600 text-muted px-1 hover:text-ink" @click="addingPerson = false">Batal</button>
         </div>
+        <div v-if="addingPerson" class="text-[11.5px] text-muted mt-2">Cukup nama buat bagi biaya. Undang lewat link di tab Anggota.</div>
       </div>
 
       <label class="flex flex-col gap-[6px]">
