@@ -36,6 +36,60 @@
     "blurb": "Catat pengeluaran sambil jalan, biar tahu sisa anggaran sebelum hari terakhir.",
     "googleError": "Gagal masuk dengan Google."
   },
+  "status": { "live": "Sedang jalan", "plan": "Rencana", "draft": "Draf", "template": "Template" },
+  "app": {
+    "home": {
+      "hello": "Halo, {name}",
+      "subLive": "Satu trip sedang jalan dan {n} rencana menunggu tanggal.",
+      "subCount": "{n} trip tersimpan.",
+      "next": "Rencana berikutnya",
+      "count": "{n} trip",
+      "newTrip": "Trip baru",
+      "newTripHint": "Mulai kosong atau ambil dari template kurasi",
+      "loading": "Memuat trip…"
+    },
+    "filter": { "all": "Semua", "live": "Sedang jalan", "plan": "Rencana" },
+    "hero": {
+      "dayLabel": "Hari {i} dari {n}",
+      "used": "Terpakai",
+      "perPerson": "Per orang",
+      "packing": "Barang",
+      "overPace": "Sudah lewat rencana",
+      "okPace": "Masih di dalam rencana",
+      "noAct": "Belum ada aktivitas hari ini",
+      "logExpense": "Catat pengeluaran",
+      "openTrip": "Buka trip",
+      "people": "{n} orang"
+    },
+    "card": {
+      "plan": "Rencana",
+      "noItems": "Belum ada barang",
+      "packing": "Barang {done}/{total}",
+      "activities": "{n} aktivitas",
+      "notSet": "belum diatur"
+    },
+    "templates": {
+      "startTitle": "Mulai dari template",
+      "startSub": "Rencana lengkap dengan anggaran dan barang. Ganti tanggal, langsung jalan.",
+      "seeAll": "Lihat semua",
+      "use": "Pakai template",
+      "days": "{n} hari",
+      "noDest": "Belum ada destinasi",
+      "used": "Template dipakai, tinggal atur tanggal",
+      "pageTitle": "Template kurasi",
+      "pageSub": "Rencana lengkap dengan anggaran dan daftar barang. Ganti tanggal, langsung jalan.",
+      "empty": "Belum ada template."
+    },
+    "header": {
+      "people": "{n} orang",
+      "viewOnly": "Hanya lihat",
+      "edit": "Ubah detail",
+      "share": "Bagikan tautan",
+      "logExpense": "Catat pengeluaran",
+      "locked": "terkunci",
+      "versions": "{n} versi"
+    }
+  },
   "landing": {
     "metaTitle": "Kelana — rapikan rencananya, nikmatin jalannya",
     "nav": { "features": "Fitur", "inside": "Isi aplikasi", "stories": "Cerita", "pricing": "Harga", "signin": "Masuk", "tryFree": "Coba gratis" },

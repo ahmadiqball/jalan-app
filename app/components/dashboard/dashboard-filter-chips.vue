@@ -1,17 +1,22 @@
 <script setup lang="ts">
 const ui = useUiStore()
-const filters = ['Semua', 'Sedang jalan', 'Rencana'] as const
+// value stays the stable Indonesian key (used in filtering); label is localized
+const filters = [
+  { v: 'Semua', k: 'all' },
+  { v: 'Sedang jalan', k: 'live' },
+  { v: 'Rencana', k: 'plan' },
+] as const
 </script>
 
 <template>
   <div class="flex gap-[9px] text-[13px] font-600 flex-wrap">
     <button
       v-for="f in filters"
-      :key="f"
-      :class="ui.homeFilter === f ? 'chip-active' : 'chip-idle'"
-      @click="ui.homeFilter = f"
+      :key="f.v"
+      :class="ui.homeFilter === f.v ? 'chip-active' : 'chip-idle'"
+      @click="ui.homeFilter = f.v"
     >
-      {{ f }}
+      {{ $t('app.filter.' + f.k) }}
     </button>
   </div>
 </template>

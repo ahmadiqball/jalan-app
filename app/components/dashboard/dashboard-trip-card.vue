@@ -4,14 +4,17 @@ import { rp } from '~/utils/format'
 import { matDef } from '~/utils/motifs'
 
 const props = defineProps<{ trip: Trip }>()
+const { t } = useI18n()
 
 const actCount = computed(() => props.trip.days.reduce((n, d) => n + d.acts.length, 0))
 const packAll = computed(() => (props.trip.packing || []).flatMap((g) => g.items))
 const packCopy = computed(() =>
-  packAll.value.length ? `Barang ${packAll.value.filter((i) => i.done).length}/${packAll.value.length}` : 'Belum ada barang',
+  packAll.value.length
+    ? t('app.card.packing', { done: packAll.value.filter((i) => i.done).length, total: packAll.value.length })
+    : t('app.card.noItems'),
 )
-const badge = computed(() => {
-  const map = { live: ['Sedang jalan', '#0A4F55'], plan: ['Rencana', '#33474C'], draft: ['Draf', '#6C7C7D'] } as const
+const badgeColor = computed(() => {
+  const map = { live: '#0A4F55', plan: '#33474C', draft: '#6C7C7D', template: '#33474C' } as const
   return map[props.trip.status]
 })
 </script>
@@ -25,8 +28,8 @@ const badge = computed(() => {
     <div class="h-[132px] relative">
       <CoreCover :mat="trip.mat" :photo-size="0">
         <template #badge>
-          <span class="bg-white rounded-pill px-[11px] py-[6px] text-[11px] font-700" :style="{ color: badge[1] }">
-            {{ badge[0] }}
+          <span class="bg-white rounded-pill px-[11px] py-[6px] text-[11px] font-700" :style="{ color: badgeColor }">
+            {{ $t('status.' + trip.status) }}
           </span>
         </template>
       </CoreCover>
@@ -46,12 +49,12 @@ const badge = computed(() => {
         <div class="text-[13px] text-muted mt-1">{{ trip.place }}</div>
       </div>
       <div class="flex justify-center gap-2 text-[12px] font-600 flex-wrap">
-        <span class="bg-paper rounded-pill px-3 py-[6px] text-ink-2 money">{{ trip.dates || 'belum diatur' }}</span>
-        <span class="bg-paper rounded-pill px-3 py-[6px] text-ink-2">{{ actCount }} aktivitas</span>
+        <span class="bg-paper rounded-pill px-3 py-[6px] text-ink-2 money">{{ trip.dates || $t('app.card.notSet') }}</span>
+        <span class="bg-paper rounded-pill px-3 py-[6px] text-ink-2">{{ $t('app.card.activities', { n: actCount }) }}</span>
       </div>
       <div class="border-t border-sand-line pt-[13px] flex justify-between items-center">
         <div class="text-left">
-          <div class="eyebrow">Rencana</div>
+          <div class="eyebrow">{{ $t('app.card.plan') }}</div>
           <div class="money text-[17px] font-600 mt-[2px]">{{ rp(trip.plan) }}</div>
         </div>
         <div class="text-[12px] text-muted money text-right">{{ packCopy }}</div>

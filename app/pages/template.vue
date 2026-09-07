@@ -1,6 +1,7 @@
 <script setup lang="ts">
-useHead({ title: 'Template · Kelana' })
 import type { Trip } from '~/types/domain'
+const { t } = useI18n()
+useHead({ title: () => t('nav.templates') + ' · Kelana' })
 
 const trips = useTripsStore()
 const session = useSessionStore()
@@ -16,7 +17,7 @@ const total = (tp: Trip) => {
 
 function use(tp: Trip) {
   const id = trips.cloneTrip(tp, { owner: cloud ? { name: session.name, email: session.email } : undefined })
-  flash('Template dipakai, tinggal atur tanggal')
+  flash(t('app.templates.used'))
   navigateTo(`/trip/${id}/days`)
 }
 </script>
@@ -24,9 +25,9 @@ function use(tp: Trip) {
 <template>
   <div class="flex-1 w-full max-w-[1400px] mx-auto p-[30px_20px_60px] md:p-[30px_32px_60px] flex flex-col gap-5 anim-rise">
     <div>
-      <div class="font-display text-[32px] font-600">Template kurasi</div>
+      <div class="font-display text-[32px] font-600">{{ $t('app.templates.pageTitle') }}</div>
       <div class="text-[15px] text-ink-2 mt-[5px]">
-        Rencana lengkap dengan anggaran dan daftar barang. Ganti tanggal, langsung jalan.
+        {{ $t('app.templates.pageSub') }}
       </div>
     </div>
     <ClientOnly>
@@ -38,18 +39,18 @@ function use(tp: Trip) {
           <div class="p-[16px_18px_18px] flex flex-col gap-[11px] flex-1">
             <div>
               <div class="font-display text-[19px] font-600">{{ tp.name }}</div>
-              <div class="text-[13px] text-muted mt-[3px]">{{ tp.place || 'Belum ada destinasi' }}</div>
+              <div class="text-[13px] text-muted mt-[3px]">{{ tp.place || $t('app.templates.noDest') }}</div>
             </div>
             <div class="flex gap-[7px] text-[12px] font-600 flex-wrap">
-              <span class="bg-paper rounded-pill px-[11px] py-[6px] text-ink-2 money">{{ tp.days.length }} hari</span>
+              <span class="bg-paper rounded-pill px-[11px] py-[6px] text-ink-2 money">{{ $t('app.templates.days', { n: tp.days.length }) }}</span>
               <span class="bg-paper rounded-pill px-[11px] py-[6px] text-ink-2 money">{{ rp(total(tp)) }}</span>
             </div>
             <button class="mt-auto bg-teal-100 text-teal-700 rounded-pill py-[11px] text-[13.5px] font-700 hover:bg-teal-deep transition-colors" @click="use(tp)">
-              Pakai template
+              {{ $t('app.templates.use') }}
             </button>
           </div>
         </div>
-        <div v-if="!templates.length" class="text-muted text-[14px]">Belum ada template.</div>
+        <div v-if="!templates.length" class="text-muted text-[14px]">{{ $t('app.templates.empty') }}</div>
       </div>
       <template #fallback><SkeletonCards :count="6" /></template>
     </ClientOnly>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-useHead({ title: 'Beranda · Kelana' })
+const { t } = useI18n()
+useHead({ title: () => t('nav.home') + ' · Kelana' })
 
 const trips = useTripsStore()
 const ui = useUiStore()
@@ -10,25 +11,25 @@ const live = computed(() => trips.liveTrip)
 
 const homeSub = computed(() =>
   live.value
-    ? `Satu trip sedang jalan dan ${trips.userTrips.length - 1} rencana menunggu tanggal.`
-    : `${trips.userTrips.length} trip tersimpan.`,
+    ? t('app.home.subLive', { n: trips.userTrips.length - 1 })
+    : t('app.home.subCount', { n: trips.userTrips.length }),
 )
 
 const cards = computed(() =>
-  trips.userTrips.filter((t) => {
-    if (ui.homeFilter === 'Sedang jalan') return t.status === 'live'
-    if (ui.homeFilter === 'Rencana') return t.status !== 'live'
-    return t.id !== live.value?.id
+  trips.userTrips.filter((tr) => {
+    if (ui.homeFilter === 'Sedang jalan') return tr.status === 'live'
+    if (ui.homeFilter === 'Rencana') return tr.status !== 'live'
+    return tr.id !== live.value?.id
   }),
 )
-const listCount = computed(() => `${cards.value.length} trip`)
+const listCount = computed(() => t('app.home.count', { n: cards.value.length }))
 </script>
 
 <template>
   <div class="flex-1 w-full max-w-[1400px] mx-auto p-[30px_20px_60px] md:p-[30px_32px_60px] flex flex-col gap-[22px] anim-rise">
     <div class="flex justify-between items-end gap-4 flex-wrap">
       <div>
-        <div class="font-display text-[34px] font-600">Halo, {{ firstName }}</div>
+        <div class="font-display text-[34px] font-600">{{ $t('app.home.hello', { name: firstName }) }}</div>
         <div class="text-[15px] text-ink-2 mt-[5px]">{{ homeSub }}</div>
       </div>
       <DashboardFilterChips />
@@ -38,7 +39,7 @@ const listCount = computed(() => `${cards.value.length} trip`)
       <DashboardHero v-if="live" :trip="live" />
 
       <div class="flex justify-between items-baseline mt-1">
-        <div class="font-display text-[20px] font-600">Rencana berikutnya</div>
+        <div class="font-display text-[20px] font-600">{{ $t('app.home.next') }}</div>
         <div class="text-[13px] text-muted">{{ listCount }}</div>
       </div>
 
@@ -49,15 +50,15 @@ const listCount = computed(() => `${cards.value.length} trip`)
           @click="ui.showNewTrip = true"
         >
           <span class="w-[46px] h-[46px] rounded-full bg-teal-100 flex items-center justify-center text-[22px] text-teal-700">+</span>
-          <span class="text-[14px] font-600">Trip baru</span>
-          <span class="text-[12.5px] max-w-[200px] text-center leading-[1.5]">Mulai kosong atau ambil dari template kurasi</span>
+          <span class="text-[14px] font-600">{{ $t('app.home.newTrip') }}</span>
+          <span class="text-[12.5px] max-w-[200px] text-center leading-[1.5]">{{ $t('app.home.newTripHint') }}</span>
         </button>
       </div>
 
       <DashboardTemplates />
 
       <template #fallback>
-        <div class="card p-8 text-muted">Memuat trip…</div>
+        <div class="card p-8 text-muted">{{ $t('app.home.loading') }}</div>
       </template>
     </ClientOnly>
 

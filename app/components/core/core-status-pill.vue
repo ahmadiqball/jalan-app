@@ -2,15 +2,16 @@
 import type { TripStatus } from '~/types/domain'
 
 const props = defineProps<{ status: TripStatus }>()
+const { t } = useI18n()
 
-const MAP: Record<TripStatus, { cls: string; label: string }> = {
-  live: { cls: 'status-live', label: 'Sedang jalan' },
-  plan: { cls: 'status-plan', label: 'Rencana' },
-  draft: { cls: 'status-draft', label: 'Draf' },
+const CLS: Record<TripStatus, string> = {
+  live: 'status-live',
+  plan: 'status-plan',
+  draft: 'status-draft',
+  template: 'status-plan',
 }
-const it = computed(() => MAP[props.status])
 </script>
 
 <template>
-  <span :class="it.cls">{{ it.label }}</span>
+  <span :class="CLS[status]">{{ t('status.' + status) }}</span>
 </template>

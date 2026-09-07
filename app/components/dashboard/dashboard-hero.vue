@@ -5,13 +5,14 @@ import { rp, shortRp } from '~/utils/format'
 
 const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
+const { t } = useI18n()
 const { budget, packing } = useDerived(() => props.trip)
 
 const mat = computed(() => matDef(props.trip.mat))
-const typeLabel = computed(() => `${mat.value.label} · ${props.trip.people} orang`)
+const typeLabel = computed(() => `${mat.value.label} · ${t('app.hero.people', { n: props.trip.people })}`)
 
 const dayIdx = computed(() => Math.min(ui.dayIdx, props.trip.days.length - 1))
-const dayLabel = computed(() => `Hari ${dayIdx.value + 1} dari ${props.trip.days.length}`)
+const dayLabel = computed(() => t('app.hero.dayLabel', { i: dayIdx.value + 1, n: props.trip.days.length }))
 
 // two-tone progress: within-plan vs over
 const bars = computed(() => {
@@ -22,7 +23,7 @@ const bars = computed(() => {
   return { a: (within / denom) * 100, b: (over / denom) * 100 }
 })
 const pctCopy = computed(() => Math.round(budget.value.pct) + '%')
-const paceCopy = computed(() => (budget.value.over ? 'Sudah lewat rencana' : 'Masih di dalam rencana'))
+const paceCopy = computed(() => (budget.value.over ? t('app.hero.overPace') : t('app.hero.okPace')))
 const perHead = computed(() => rp(budget.value.perPerson))
 
 // next activity of the current day
@@ -33,7 +34,7 @@ const nextAct = computed(() => {
   return acts.find((a) => a.cost > 0) || acts[0] || null
 })
 const nextActCopy = computed(() =>
-  nextAct.value ? `${nextAct.value.time} · ${nextAct.value.title}` : 'Belum ada aktivitas hari ini',
+  nextAct.value ? `${nextAct.value.time} · ${nextAct.value.title}` : t('app.hero.noAct'),
 )
 const nextActSub = computed(() =>
   nextAct.value ? `${nextAct.value.cost ? shortRp(nextAct.value.cost) + ' · ' : ''}${nextAct.value.cat}` : '',
@@ -80,7 +81,7 @@ function open(tab: string) {
       <div class="bg-paper rounded-card p-[16px_18px]">
         <div class="flex items-baseline justify-between gap-3 flex-wrap">
           <div class="flex items-baseline gap-2">
-            <span class="eyebrow">Terpakai</span>
+            <span class="eyebrow">{{ $t('app.hero.used') }}</span>
             <span class="money text-[26px] font-600" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</span>
             <span class="text-[13px] text-muted money">/ {{ rp(budget.plan) }}</span>
           </div>
@@ -96,11 +97,11 @@ function open(tab: string) {
       <!-- compact secondary stats -->
       <div class="flex gap-3 flex-wrap">
         <div class="flex-1 min-w-[150px] bg-paper rounded-field px-[14px] py-[11px] flex items-center justify-between gap-2">
-          <span class="eyebrow">Per orang</span>
+          <span class="eyebrow">{{ $t('app.hero.perPerson') }}</span>
           <span class="money text-[15px] font-600">{{ perHead }}</span>
         </div>
         <div class="flex-1 min-w-[150px] bg-paper rounded-field px-[14px] py-[11px] flex items-center justify-between gap-2">
-          <span class="eyebrow">Barang</span>
+          <span class="eyebrow">{{ $t('app.hero.packing') }}</span>
           <span class="money text-[15px] font-600">{{ packing.done }} / {{ packing.total }}</span>
         </div>
       </div>
@@ -118,8 +119,8 @@ function open(tab: string) {
 
       <!-- buttons on their own line -->
       <div class="flex gap-[10px] flex-wrap">
-        <CoreButton variant="primary" class="flex-1 min-w-[160px] !py-[12px] !text-[14px]" @click="open('expenses')">Catat pengeluaran</CoreButton>
-        <CoreButton variant="teal" class="flex-1 min-w-[130px] !bg-teal-100 !text-teal-700 !py-[12px] !text-[14px] hover:!bg-teal-deep" @click="open('overview')">Buka trip</CoreButton>
+        <CoreButton variant="primary" class="flex-1 min-w-[160px] !py-[12px] !text-[14px]" @click="open('expenses')">{{ $t('app.hero.logExpense') }}</CoreButton>
+        <CoreButton variant="teal" class="flex-1 min-w-[130px] !bg-teal-100 !text-teal-700 !py-[12px] !text-[14px] hover:!bg-teal-deep" @click="open('overview')">{{ $t('app.hero.openTrip') }}</CoreButton>
       </div>
     </div>
   </div>

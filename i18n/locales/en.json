@@ -36,6 +36,60 @@
     "blurb": "Log spending as you go, so you know what's left before the last day.",
     "googleError": "Google sign-in failed."
   },
+  "status": { "live": "In progress", "plan": "Planned", "draft": "Draft", "template": "Template" },
+  "app": {
+    "home": {
+      "hello": "Hi, {name}",
+      "subLive": "One trip in progress and {n} plans waiting on dates.",
+      "subCount": "{n} trips saved.",
+      "next": "Next plans",
+      "count": "{n} trips",
+      "newTrip": "New trip",
+      "newTripHint": "Start blank or pick a curated template",
+      "loading": "Loading trips…"
+    },
+    "filter": { "all": "All", "live": "In progress", "plan": "Planned" },
+    "hero": {
+      "dayLabel": "Day {i} of {n}",
+      "used": "Spent",
+      "perPerson": "Per person",
+      "packing": "Packing",
+      "overPace": "Over the plan already",
+      "okPace": "Still within the plan",
+      "noAct": "No activities today yet",
+      "logExpense": "Log expense",
+      "openTrip": "Open trip",
+      "people": "{n} people"
+    },
+    "card": {
+      "plan": "Plan",
+      "noItems": "No items yet",
+      "packing": "Packing {done}/{total}",
+      "activities": "{n} activities",
+      "notSet": "not set"
+    },
+    "templates": {
+      "startTitle": "Start from a template",
+      "startSub": "A full plan with budget and packing. Change the dates, go.",
+      "seeAll": "See all",
+      "use": "Use template",
+      "days": "{n} days",
+      "noDest": "No destination yet",
+      "used": "Template applied — just set the dates",
+      "pageTitle": "Curated templates",
+      "pageSub": "A full plan with budget and packing list. Change the dates, go.",
+      "empty": "No templates yet."
+    },
+    "header": {
+      "people": "{n} people",
+      "viewOnly": "View only",
+      "edit": "Edit details",
+      "share": "Share link",
+      "logExpense": "Log expense",
+      "locked": "locked",
+      "versions": "{n} versions"
+    }
+  },
   "landing": {
     "metaTitle": "Kelana — plan it neatly, enjoy the journey",
     "nav": { "features": "Features", "inside": "Inside the app", "stories": "Stories", "pricing": "Pricing", "signin": "Sign in", "tryFree": "Try free" },
