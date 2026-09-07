@@ -3,7 +3,7 @@ import type { Trip } from '~/types/domain'
 import { rp, shortRp } from '~/utils/format'
 import { catSlug, tone } from '~/utils/categories'
 
-const props = defineProps<{ trip: Trip }>()
+const props = withDefaults(defineProps<{ trip: Trip; template?: boolean }>(), { template: false })
 const trips = useTripsStore()
 const ui = useUiStore()
 const route = useRoute()
@@ -55,7 +55,7 @@ function versionTotal(b: Trip['budgets'][number]) {
 <template>
   <div class="flex flex-col gap-5">
     <!-- version bar -->
-    <div class="flex items-center gap-3 flex-wrap">
+    <div v-if="!template" class="flex items-center gap-3 flex-wrap">
       <span class="eyebrow">Versi rencana</span>
       <button
         v-for="b in trip.budgets"
@@ -79,7 +79,17 @@ function versionTotal(b: Trip['budgets'][number]) {
     </div>
 
     <!-- summary -->
-    <div class="card p-[20px_22px] flex items-center gap-6 flex-wrap">
+    <div v-if="template" class="card p-[18px_22px] flex items-center justify-between gap-4 flex-wrap">
+      <div class="flex items-center gap-3">
+        <input
+          v-model="activeName"
+          class="font-display text-[19px] font-600 bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[6px] outline-none focus:border-teal-600"
+        >
+        <span class="rounded-pill px-[10px] py-[4px] text-[11px] font-700 bg-teal-100 text-teal-700">Anggaran template</span>
+      </div>
+      <div class="money text-[22px] font-600">{{ rp(budget.allocTotal) }} <span class="text-muted text-[13px] font-500">total rencana</span></div>
+    </div>
+    <div v-else class="card p-[20px_22px] flex items-center gap-6 flex-wrap">
       <div
         class="w-[110px] h-[110px] rounded-full shrink-0 flex items-center justify-center"
         :style="{ background: `conic-gradient(${donut})` }"
@@ -113,15 +123,15 @@ function versionTotal(b: Trip['budgets'][number]) {
 
     <!-- category table -->
     <div class="card p-[16px_22px] overflow-x-auto">
-      <div class="min-w-[560px]">
+      <div :class="template ? '' : 'min-w-[560px]'">
       <div class="flex items-center gap-3 pb-2 border-b border-sand-line">
-        <span class="eyebrow flex-1">Kategori dan baris</span>
-        <span class="eyebrow w-[120px] text-right">Terpakai</span>
+        <span class="eyebrow flex-1">{{ template ? 'Kategori' : 'Kategori dan baris' }}</span>
+        <span v-if="!template" class="eyebrow w-[120px] text-right">Terpakai</span>
         <span class="eyebrow w-[130px] text-right">Alokasi</span>
-        <span class="eyebrow w-[96px]">Progres</span>
+        <span v-if="!template" class="eyebrow w-[96px]">Progres</span>
         <span class="w-[30px]" />
       </div>
-      <BudgetCategoryRow v-for="c in categories" :key="c.name" :row="c" :trip-id="trip.id" :locked="locked" />
+      <BudgetCategoryRow v-for="c in categories" :key="c.name" :row="c" :trip-id="trip.id" :locked="locked" :template="template" />
 
       <div v-if="!locked" class="flex items-center gap-3 mt-3 bg-paper rounded-field p-[10px_12px]">
         <BudgetIconPicker :icon="newCatIcon" :bg="newCatTone[0]" :fg="newCatTone[1]" @select="newCatIcon = $event" />
@@ -138,10 +148,10 @@ function versionTotal(b: Trip['budgets'][number]) {
     </div>
 
     <!-- loose lines warning -->
-    <div v-if="loose.length" class="bg-sand-100 rounded-[16px] p-[12px_16px] text-[12.5px] text-warn-fg2">
+    <div v-if="!template && loose.length" class="bg-sand-100 rounded-[16px] p-[12px_16px] text-[12.5px] text-warn-fg2">
       Ada pengeluaran di kategori {{ loose.join(', ') }} yang tidak ada di versi ini. Tambahkan lagi kategorinya atau pindahkan barisnya di Pengeluaran.
     </div>
 
-    <BudgetCompareMatrix :trip="trip" />
+    <BudgetCompareMatrix v-if="!template" :trip="trip" />
   </div>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
+import { shuffle } from '~/utils/format'
 
 const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
@@ -17,17 +18,19 @@ const groupOptions = computed(() => {
 })
 
 // recommendations: not already on the list, matching the trip's motif and
-// (when tagged) the trip's activity categories — "based on activities"
+// (when tagged) the trip's activity categories — "based on activities". Shuffled
+// so the set feels fresh, and reshuffled whenever the packing list changes.
 const existingLabels = computed(() => new Set(props.trip.packing.flatMap((g) => g.items.map((i) => i.label.toLowerCase()))))
 const tripCats = computed(() => new Set(props.trip.days.flatMap((d) => d.acts.map((a) => (a.cat === 'Santai' ? 'Lain' : a.cat)))))
-const recs = computed(() =>
-  allRecs.value.filter((r) => {
+const recs = computed(() => {
+  const matched = allRecs.value.filter((r) => {
     if (existingLabels.value.has(r.label.toLowerCase())) return false
     if (r.mats?.length && !r.mats.includes(props.trip.mat)) return false
     if (r.cats?.length && !r.cats.some((c) => tripCats.value.has(c))) return false
     return true
-  }),
-)
+  })
+  return shuffle(matched).slice(0, 12)
+})
 
 function add() {
   if (!newItem.value.trim()) return
@@ -37,7 +40,7 @@ function add() {
   flash('Barang ditambahkan')
 }
 function addRec(r: (typeof recs.value)[number]) {
-  trips.addPackItem(props.trip.id, r.group, { label: r.label, req: !!r.req, done: false, ...(r.url ? { url: r.url } : {}) })
+  trips.addPackItem(props.trip.id, r.groups?.[0] || 'Lain-lain', { label: r.label, req: !!r.req, done: false, ...(r.url ? { url: r.url } : {}) })
   flash(r.label + ' ditambahkan')
 }
 </script>

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { PackRecItem } from '~/types/content'
 import type { Trip } from '~/types/domain'
-import { CATEGORIES } from '~/types/domain'
 import { rp } from '~/utils/format'
-import { MATS } from '~/utils/motifs'
 
 useHead({ title: 'Admin · Jalan' })
 const { flash } = useToast()
@@ -25,7 +23,6 @@ onMounted(async () => {
 })
 
 const menu = ref<'templates' | 'recs'>('templates')
-const groups = ['Dokumen', 'Pakaian', 'Elektronik', 'Perlengkapan', 'Lain-lain']
 
 // load templates into the store so the trip tabs can edit them
 watchEffect(() => { if (content.value) ensureLoaded() })
@@ -35,15 +32,16 @@ const templateTotal = (tp: Trip) => {
   return Object.values(b?.alloc || {}).reduce((n, v) => n + v, 0)
 }
 
-// recs editable local copy
+// recs editable local copy (normalize legacy single `group` → `groups[]`)
 const recs = ref<PackRecItem[]>([])
-watchEffect(() => { if (content.value) recs.value = structuredClone(toRaw(content.value.recs)) })
-const matKeys = Object.keys(MATS)
-const listInput = (arr: string[] | undefined) => (arr || []).join(', ')
-const parseList = (s: string) => s.split(',').map((x) => x.trim()).filter(Boolean)
-function addRec() {
-  recs.value.push({ id: 'r-' + Date.now(), label: '', group: 'Perlengkapan', req: false, url: '', mats: [], cats: [] })
-}
+watchEffect(() => {
+  if (content.value) {
+    recs.value = structuredClone(toRaw(content.value.recs)).map((r) => {
+      const legacy = r as PackRecItem & { group?: string }
+      return { ...r, groups: legacy.groups ?? (legacy.group ? [legacy.group] : []) }
+    })
+  }
+})
 
 const saving = ref(false)
 async function saveAll() {
@@ -126,28 +124,14 @@ async function removeTemplate(id: string) {
 
       <!-- RECS -->
       <template v-else>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
           <div class="font-display text-[20px] font-600">Rekomendasi barang</div>
-          <CoreButton variant="ghost" class="!px-[14px] !py-[8px] !text-[13px]" @click="addRec">+ Barang</CoreButton>
-        </div>
-        <div class="text-[12.5px] text-muted -mt-1">Motif &amp; kategori dipisah koma. Motif: {{ matKeys.join(', ') }}. Kategori aktivitas: {{ CATEGORIES.join(', ') }}.</div>
-        <div v-for="(r, i) in recs" :key="r.id" class="card p-[14px_16px] flex flex-col gap-3">
-          <div class="flex gap-3 flex-wrap items-end">
-            <div class="flex-1 min-w-[180px]"><CoreInput v-model="r.label" label="Nama barang" placeholder="mis. Dry bag" /></div>
-            <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Grup</span><CoreSelect v-model="r.group" :options="groups" /></label>
-            <label class="flex items-center gap-2 text-[13px] text-ink-2 pb-[10px] cursor-pointer"><CoreCheckbox :model-value="!!r.req" @update:model-value="r.req = $event" /> Wajib</label>
-          </div>
-          <div class="flex gap-3 flex-wrap items-end">
-            <div class="flex-1 min-w-[200px]"><CoreInput :model-value="r.url || ''" label="Link beli (opsional)" placeholder="https://…" @update:model-value="r.url = $event" /></div>
-            <div class="w-[160px]"><CoreInput :model-value="listInput(r.mats)" label="Motif" placeholder="pantai, gunung" @update:model-value="r.mats = parseList($event)" /></div>
-            <div class="w-[200px]"><CoreInput :model-value="listInput(r.cats)" label="Kategori aktivitas" placeholder="Tiket & atraksi" @update:model-value="r.cats = parseList($event)" /></div>
-            <button class="ml-auto text-warn-fg text-[13px] font-600 flex items-center gap-1 hover:underline pb-[10px]" @click="recs.splice(i, 1)"><i class="i-lucide-trash-2 text-[14px]" /> Hapus</button>
-          </div>
-        </div>
-        <div v-if="!recs.length" class="text-muted text-[13.5px]">Belum ada rekomendasi.</div>
-        <div class="flex justify-end">
           <CoreButton variant="primary" :disabled="saving" @click="saveAll">{{ saving ? 'Menyimpan…' : 'Simpan rekomendasi' }}</CoreButton>
         </div>
+        <ClientOnly>
+          <AdminRecs v-model="recs" />
+          <template #fallback><div class="card p-8 text-muted">Memuat…</div></template>
+        </ClientOnly>
       </template>
     </template>
   </div>

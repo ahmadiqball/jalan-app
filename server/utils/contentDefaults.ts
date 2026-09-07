@@ -3,7 +3,7 @@ import type { ContentDoc, TemplateTrip } from '../repositories/types'
 interface DaySeed { title?: string; acts?: { time?: string; title: string; cat?: string; place?: string; cost?: number; dur?: number }[] }
 interface TplSeed {
   id: string; name: string; place: string; mat: string; cover?: string; people?: number
-  days: DaySeed[]; alloc?: Record<string, number>; packing?: { group: string; items: { label: string; req?: boolean }[] }[]
+  days: DaySeed[]; alloc?: Record<string, number>; packing?: { groups: string[]; items: { label: string; req?: boolean }[] }[]
 }
 
 /** Expand a concise seed into a full trip document (status: 'template'). */
@@ -30,7 +30,7 @@ function tpl(s: TplSeed): TemplateTrip {
   const plan = Object.values(alloc).reduce((n, v) => n + v, 0)
   let pseq = 0
   const packing = (s.packing || []).map((g) => ({
-    name: g.group,
+    name: g.groups[0] || 'Lain-lain',
     items: g.items.map((it) => ({ id: 'p' + s.id + ++pseq, label: it.label, req: !!it.req, done: false })),
   }))
   return {
@@ -74,9 +74,9 @@ export function defaultContent(): ContentDoc {
         ],
         alloc: { 'Penginapan': 1200000, 'Transport': 900000, 'Makan & minum': 700000, 'Tiket & atraksi': 300000 },
         packing: [
-          { group: 'Dokumen', items: [{ label: 'KTP', req: true }] },
-          { group: 'Pakaian', items: [{ label: 'Baju pantai' }, { label: 'Sandal' }] },
-          { group: 'Perlengkapan', items: [{ label: 'Sunblock SPF 50', req: true }, { label: 'Dry bag' }] },
+          { groups: ['Dokumen'], items: [{ label: 'KTP', req: true }] },
+          { groups: ['Pakaian'], items: [{ label: 'Baju pantai' }, { label: 'Sandal' }] },
+          { groups: ['Perlengkapan'], items: [{ label: 'Sunblock SPF 50', req: true }, { label: 'Dry bag' }] },
         ],
       }),
       tpl({
@@ -94,29 +94,29 @@ export function defaultContent(): ContentDoc {
         ],
         alloc: { 'Penginapan': 1500000, 'Transport': 2000000, 'Makan & minum': 800000, 'Tiket & atraksi': 300000 },
         packing: [
-          { group: 'Pakaian', items: [{ label: 'Jaket tebal anti angin', req: true }, { label: 'Sarung tangan' }] },
-          { group: 'Perlengkapan', items: [{ label: 'Masker debu', req: true }, { label: 'Senter kepala' }] },
+          { groups: ['Pakaian'], items: [{ label: 'Jaket tebal anti angin', req: true }, { label: 'Sarung tangan' }] },
+          { groups: ['Perlengkapan'], items: [{ label: 'Masker debu', req: true }, { label: 'Senter kepala' }] },
         ],
       }),
     ],
     recs: [
-      { id: 'r-ktp', label: 'KTP dan kartu vaksin', group: 'Dokumen', req: true },
-      { id: 'r-obat', label: 'Obat pribadi', group: 'Dokumen', req: true, url: 'https://www.halodoc.com/kategori/obat-obatan' },
-      { id: 'r-pb', label: 'Powerbank 10.000 mAh', group: 'Elektronik', url: 'https://www.tokopedia.com/search?q=powerbank+10000mah' },
-      { id: 'r-charger', label: 'Kabel dan kepala charger', group: 'Elektronik' },
-      { id: 'r-sunblock', label: 'Sunblock SPF 50', group: 'Perlengkapan', url: 'https://www.tokopedia.com/search?q=sunblock+spf+50' },
-      { id: 'r-botol', label: 'Botol minum lipat', group: 'Perlengkapan', url: 'https://www.tokopedia.com/search?q=botol+minum+lipat' },
-      { id: 'r-sandal', label: 'Sandal gunung', group: 'Pakaian', url: 'https://www.tokopedia.com/search?q=sandal+gunung', mats: ['pantai'] },
-      { id: 'r-drybag', label: 'Dry bag 10 liter', group: 'Perlengkapan', url: 'https://www.tokopedia.com/search?q=dry+bag+10+liter', mats: ['pantai'], cats: ['Tiket & atraksi'] },
-      { id: 'r-renang', label: 'Baju renang', group: 'Pakaian', mats: ['pantai'] },
-      { id: 'r-jaket', label: 'Jaket tebal anti angin', group: 'Pakaian', req: true, url: 'https://www.tokopedia.com/search?q=jaket+gunung', mats: ['gunung'] },
-      { id: 'r-glove', label: 'Sarung tangan', group: 'Pakaian', mats: ['gunung'] },
-      { id: 'r-masker', label: 'Masker debu', group: 'Perlengkapan', req: true, url: 'https://www.tokopedia.com/search?q=masker+debu', mats: ['gunung'] },
-      { id: 'r-headlamp', label: 'Senter kepala', group: 'Elektronik', url: 'https://www.tokopedia.com/search?q=headlamp', mats: ['gunung'] },
-      { id: 'r-jashujan', label: 'Jas hujan tipis', group: 'Perlengkapan', url: 'https://www.tokopedia.com/search?q=jas+hujan', mats: ['sawah'] },
-      { id: 'r-antislip', label: 'Sepatu anti selip', group: 'Pakaian', mats: ['sawah'] },
-      { id: 'r-antimaling', label: 'Tas selempang anti maling', group: 'Perlengkapan', url: 'https://www.tokopedia.com/search?q=tas+anti+maling', mats: ['kota'] },
-      { id: 'r-topi', label: 'Topi', group: 'Pakaian', mats: ['kota'] },
+      { id: 'r-ktp', label: 'KTP dan kartu vaksin', groups: ['Dokumen'], req: true },
+      { id: 'r-obat', label: 'Obat pribadi', groups: ['Dokumen'], req: true, url: 'https://www.halodoc.com/kategori/obat-obatan' },
+      { id: 'r-pb', label: 'Powerbank 10.000 mAh', groups: ['Elektronik'], url: 'https://www.tokopedia.com/search?q=powerbank+10000mah' },
+      { id: 'r-charger', label: 'Kabel dan kepala charger', groups: ['Elektronik'] },
+      { id: 'r-sunblock', label: 'Sunblock SPF 50', groups: ['Perlengkapan'], url: 'https://www.tokopedia.com/search?q=sunblock+spf+50' },
+      { id: 'r-botol', label: 'Botol minum lipat', groups: ['Perlengkapan'], url: 'https://www.tokopedia.com/search?q=botol+minum+lipat' },
+      { id: 'r-sandal', label: 'Sandal gunung', groups: ['Pakaian'], url: 'https://www.tokopedia.com/search?q=sandal+gunung', mats: ['pantai'] },
+      { id: 'r-drybag', label: 'Dry bag 10 liter', groups: ['Perlengkapan'], url: 'https://www.tokopedia.com/search?q=dry+bag+10+liter', mats: ['pantai'], cats: ['Tiket & atraksi'] },
+      { id: 'r-renang', label: 'Baju renang', groups: ['Pakaian'], mats: ['pantai'] },
+      { id: 'r-jaket', label: 'Jaket tebal anti angin', groups: ['Pakaian'], req: true, url: 'https://www.tokopedia.com/search?q=jaket+gunung', mats: ['gunung'] },
+      { id: 'r-glove', label: 'Sarung tangan', groups: ['Pakaian'], mats: ['gunung'] },
+      { id: 'r-masker', label: 'Masker debu', groups: ['Perlengkapan'], req: true, url: 'https://www.tokopedia.com/search?q=masker+debu', mats: ['gunung'] },
+      { id: 'r-headlamp', label: 'Senter kepala', groups: ['Elektronik'], url: 'https://www.tokopedia.com/search?q=headlamp', mats: ['gunung'] },
+      { id: 'r-jashujan', label: 'Jas hujan tipis', groups: ['Perlengkapan'], url: 'https://www.tokopedia.com/search?q=jas+hujan', mats: ['sawah'] },
+      { id: 'r-antislip', label: 'Sepatu anti selip', groups: ['Pakaian'], mats: ['sawah'] },
+      { id: 'r-antimaling', label: 'Tas selempang anti maling', groups: ['Perlengkapan'], url: 'https://www.tokopedia.com/search?q=tas+anti+maling', mats: ['kota'] },
+      { id: 'r-topi', label: 'Topi', groups: ['Pakaian'], mats: ['kota'] },
     ],
   }
 }

@@ -2,13 +2,14 @@
 import type { CategoryRow } from '~/utils/derive'
 import { catSlug } from '~/utils/categories'
 
-const props = defineProps<{ row: CategoryRow; tripId: string; locked: boolean }>()
+const props = defineProps<{ row: CategoryRow; tripId: string; locked: boolean; template?: boolean }>()
 const trips = useTripsStore()
 const ui = useUiStore()
 const { flash } = useToast()
 
 const open = computed(() => ui.openCat === props.row.name)
 function toggle() {
+  if (props.template) return // a template has no expense lines to expand
   ui.openCat = open.value ? null : props.row.name
 }
 function onAlloc(v: number) {
@@ -26,15 +27,15 @@ function remove(e: Event) {
 
 <template>
   <div :id="catSlug(row.name)" class="border-b border-sand-100 scroll-mt-[160px]">
-    <div class="flex items-center gap-3 py-[11px] cursor-pointer" @click="toggle">
+    <div class="flex items-center gap-3 py-[11px]" :class="template ? '' : 'cursor-pointer'" @click="toggle">
       <span class="w-[9px] h-[9px] rounded-full shrink-0" :style="{ background: row.segColor }" />
       <BudgetIconPicker :icon="row.icon" :bg="row.iconBg" :fg="row.iconFg" :disabled="locked" @select="pickIcon" />
       <div class="flex-1 min-w-0">
         <div class="text-[14px] font-600 truncate">{{ row.name }}</div>
-        <div class="text-[11.5px] text-muted">{{ row.lineCount }} baris</div>
+        <div v-if="!template" class="text-[11.5px] text-muted">{{ row.lineCount }} baris</div>
       </div>
 
-      <div class="w-[120px] text-right money text-[13.5px] shrink-0" :style="{ color: row.spentFg }">{{ row.spentRp }}</div>
+      <div v-if="!template" class="w-[120px] text-right money text-[13.5px] shrink-0" :style="{ color: row.spentFg }">{{ row.spentRp }}</div>
 
       <div class="w-[130px] text-right shrink-0" @click.stop>
         <span v-if="locked" class="money text-[13.5px] text-ink-2">{{ row.allocRp }}</span>
@@ -46,7 +47,7 @@ function remove(e: Event) {
         />
       </div>
 
-      <div class="w-[96px] shrink-0">
+      <div v-if="!template" class="w-[96px] shrink-0">
         <CoreBar :pct="row.pct" :color="row.barColor" :height="8" />
         <div v-if="row.over" class="flex items-center gap-1 mt-[3px] text-[10.5px] font-600 text-warn-fg">
           <i class="i-lucide-alert-triangle text-[11px]" /> lewat {{ row.exceedShort }}

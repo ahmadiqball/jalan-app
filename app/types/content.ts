@@ -6,10 +6,13 @@ export type TemplateTrip = Trip
 export interface PackRecItem {
   id: string
   label: string
-  group: string
+  /** barang groups this item belongs to (multiselect) */
+  groups: string[]
   req?: boolean
   url?: string
+  /** limit to these trip motifs (empty = all) */
   mats?: string[]
+  /** surface when the trip has activities in these categories (empty = any) */
   cats?: string[]
 }
 

@@ -83,7 +83,7 @@ async function save() {
             </button>
           </div>
 
-          <component :is="tabComp" :trip="trip" :template="tab === 'days' ? true : undefined" />
+          <component :is="tabComp" :trip="trip" :template="tab === 'packing' ? undefined : true" />
 
           <!-- activity editor (Days tab opens this) -->
           <OverlayActivitySheet :trip="trip" />
