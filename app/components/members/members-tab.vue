@@ -7,6 +7,12 @@ const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
 const { flash } = useToast()
 const { cloud, busy, ensureLink, joinUrl, waUrl } = useInvite()
+const { isOwner, canEdit } = useTripAccess()
+
+// only the owner may revoke access or change roles
+const canManage = computed(() => isOwner(props.trip))
+// viewers can't invite anyone
+const canInvite = computed(() => canEdit(props.trip))
 
 const activeCount = computed(() => props.trip.members.filter((m) => m.status === 'aktif').length)
 const pendingCount = computed(() => props.trip.members.filter((m) => m.status === 'menunggu').length)
@@ -63,13 +69,13 @@ function addManual() {
         </div>
       </div>
       <div class="card p-[6px_18px]">
-        <MembersRow v-for="m in trip.members" :key="m.id" :member="m" :trip-id="trip.id" />
+        <MembersRow v-for="m in trip.members" :key="m.id" :member="m" :trip-id="trip.id" :can-manage="canManage" />
       </div>
     </div>
 
     <div class="w-full lg:w-[340px] lg:shrink-0 flex flex-col gap-4">
       <!-- invite link (primary) -->
-      <div class="card p-[18px]">
+      <div v-if="canInvite" class="card p-[18px]">
         <div class="font-display text-[17px] font-600">Undang lewat link</div>
         <div class="text-[12.5px] text-muted mt-[2px]">Bagikan satu link — siapa pun yang buka & masuk langsung gabung.</div>
 
@@ -106,7 +112,7 @@ function addManual() {
       </div>
 
       <!-- manual add (fallback) -->
-      <div class="card p-[18px]">
+      <div v-if="canInvite" class="card p-[18px]">
         <div class="font-display text-[15px] font-600">Atau tambah manual</div>
         <div class="flex flex-col gap-3 mt-3">
           <CoreInput v-model="manualEmail" type="email" label="Email" placeholder="email@contoh.com" @keydown.enter="addManual" />

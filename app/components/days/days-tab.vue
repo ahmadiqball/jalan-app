@@ -22,6 +22,13 @@ const dayPlaces = computed(() =>
     .filter((a) => a.place?.trim())
     .map((a) => ({ label: a.title || a.place, name: a.place, placeId: a.placeId })),
 )
+// default start for a new activity = end of the day's last (latest) activity
+const nextStart = computed(() => {
+  const timed = sortedActs.value.filter((a) => a.time)
+  const last = timed[timed.length - 1]
+  if (!last) return ''
+  return fromMin((toMin(last.time) || 0) + (last.dur || 0))
+})
 const dayPlanned = computed(() => (day.value?.acts || []).reduce((n, a) => n + a.cost, 0))
 const daySpent = computed(
   () =>
@@ -92,7 +99,7 @@ function addAndOpen(time = '') {
             {{ (day?.acts.length || 0) }} aktivitas · {{ rp(dayPlanned) }} masuk anggaran
           </div>
         </div>
-        <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[14px]" @click="addAndOpen()">
+        <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[14px]" @click="addAndOpen(nextStart)">
           <i class="i-lucide-plus" /> Tambah aktivitas
         </CoreButton>
       </div>
@@ -123,7 +130,7 @@ function addAndOpen(time = '') {
           </template>
         </div>
       </template>
-      <DaysEmpty v-else @add="addAndOpen()" />
+      <DaysEmpty v-else @add="addAndOpen(nextStart)" />
     </div>
 
     <div v-if="!template" class="w-full md:w-[300px] md:shrink-0 flex flex-col gap-4">

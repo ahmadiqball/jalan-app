@@ -72,15 +72,11 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#0E6E76' },
       ],
       link: [
-        {
-          rel: 'icon',
-          type: 'image/svg+xml',
-          href:
-            "data:image/svg+xml," +
-            encodeURIComponent(
-              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#0E6E76"/><circle cx="11" cy="12" r="3.5" fill="#F1EEE1"/><path d="M2 24c0-5 4-8 8-8s8 3 8 8z" fill="#2F6B54"/><rect x="10" y="24" width="20" height="4" rx="2" fill="#F0713A"/></svg>',
-            ),
-        },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon/favicon.ico' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/favicon-16x16.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/favicon/site.webmanifest' },
       ],
     },
   },

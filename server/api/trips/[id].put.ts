@@ -17,8 +17,17 @@ export default defineEventHandler(async (event) => {
   if (!existing) {
     row = await repo.create(actor.id, trip as TripData)
   } else {
-    if (!canWrite(roleFor(existing, actor))) {
+    const role = roleFor(existing, actor)
+    if (!canWrite(role)) {
       throw createError({ statusCode: 403, statusMessage: 'Kamu hanya bisa melihat trip ini' })
+    }
+    // removing a member or changing a role is owner-only
+    if (role !== 'owner') {
+      const prev = (existing.data.members as { id?: string; email?: string; role?: string }[]) || []
+      const next = (trip.members as { id?: string; email?: string; role?: string }[]) || []
+      if (revokesOrRerolesMembers(prev, next)) {
+        throw createError({ statusCode: 403, statusMessage: 'Hanya pemilik yang bisa mengeluarkan anggota atau mengubah peran' })
+      }
     }
     row = await repo.replace(id, trip as TripData)
   }

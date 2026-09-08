@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Member } from '~/types/domain'
 
-const props = defineProps<{ member: Member; tripId: string }>()
+const props = withDefaults(defineProps<{ member: Member; tripId: string; canManage?: boolean }>(), {
+  canManage: false,
+})
 const trips = useTripsStore()
 const { flash } = useToast()
 
@@ -27,7 +29,8 @@ const role = computed({
     </div>
 
     <span v-if="isOwner" class="rounded-pill bg-teal-100 text-teal-700 px-[13px] py-[7px] text-[12.5px] font-700 shrink-0">Pemilik</span>
-    <template v-else>
+    <!-- owner-only management: change role / revoke access -->
+    <template v-else-if="canManage">
       <button v-if="isPending" class="text-[13px] font-600 text-teal-600 shrink-0" @click="flash('Undangan dikirim ulang')">Kirim ulang</button>
       <CoreSelect v-model="role" :options="['Bisa ubah', 'Hanya lihat']" small />
       <button
@@ -38,5 +41,7 @@ const role = computed({
         <i class="i-lucide-x text-[15px]" />
       </button>
     </template>
+    <!-- everyone else sees the role read-only -->
+    <span v-else class="rounded-pill bg-sand-100 text-ink-2 px-[13px] py-[7px] text-[12.5px] font-700 shrink-0">{{ member.role }}</span>
   </div>
 </template>

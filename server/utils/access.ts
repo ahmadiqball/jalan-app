@@ -18,3 +18,18 @@ export function roleFor(row: TripRow, actor: Actor): Role | null {
 
 export const canRead = (r: Role | null): r is Role => r !== null
 export const canWrite = (r: Role | null): boolean => r === 'owner' || r === 'editor'
+
+interface MemberRec { id?: string; email?: string; role?: string }
+const memberKey = (m: MemberRec) => (m.id || (m.email || '').toLowerCase())
+
+/** True if `next` removes a member from `prev` or changes anyone's role —
+ *  changes only the owner is allowed to make. */
+export function revokesOrRerolesMembers(prev: MemberRec[], next: MemberRec[]): boolean {
+  const byKey = new Map(next.map((m) => [memberKey(m), m]))
+  for (const p of prev) {
+    const n = byKey.get(memberKey(p))
+    if (!n) return true // member removed
+    if ((n.role || '') !== (p.role || '')) return true // role changed
+  }
+  return false
+}
