@@ -100,13 +100,14 @@ const splitOpen = ref(false)
 const splitUrl = computed(() => (props.trip.splitBillId ? pete.billUrl(props.trip.splitBillId) : ''))
 async function bagiRata() {
   try {
-    let id = props.trip.splitBillId
-    if (!id) {
-      id = (await pete.createSplit(props.trip)) || undefined
-      if (!id) return
-      trips.setSplitBill(props.trip.id, id)
-      flash('Split dibuat di PetePete')
-    }
+    const isNew = !props.trip.splitBillId
+    // create the bill on first use; either way reconcile the latest spending
+    const res = await pete.sync(props.trip)
+    if (!res) return
+    // persist the id (it may differ if the bill was recreated in pete-pete)
+    if (res.id !== props.trip.splitBillId) trips.setSplitBill(props.trip.id, res.id)
+    trips.setSplitMap(props.trip.id, res.map)
+    flash(isNew ? 'Split dibuat di PetePete' : 'Split disinkronkan')
     splitOpen.value = true
   } catch {
     flash('Gagal membuka PetePete')

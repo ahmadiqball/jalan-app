@@ -15,12 +15,15 @@ export default defineNuxtPlugin(() => {
   const session = useSessionStore()
   const trips = useTripsStore()
   const { apiFetch } = useApi()
+  const pete = usePetePete()
 
   const snapshot = new Map<string, string>() // id -> JSON of last-synced trip
   const pushQueue = new Set<string>()
   const delQueue = new Set<string>()
+  const peteSig = new Map<string, string>() // trip id -> last spending signature mirrored to pete-pete
   let applyingRemote = false
   let timer: ReturnType<typeof setTimeout> | undefined
+  let peteTimer: ReturnType<typeof setTimeout> | undefined
   let loaded = false
 
   const json = (t: Trip) => JSON.stringify(t)
@@ -35,6 +38,7 @@ export default defineNuxtPlugin(() => {
       // snapshot only real user trips — templates are not synced as trips
       for (const t of trips.userTrips) snapshot.set(t.id, json(t))
       loaded = true
+      schedulePete()
     } catch {
       // offline / not reachable — keep local cache, try again later
     } finally {
@@ -61,6 +65,34 @@ export default defineNuxtPlugin(() => {
         snapshot.delete(id)
         delQueue.delete(id)
       } catch { /* keep queued */ }
+    }
+    schedulePete()
+  }
+
+  /** Mirror recorded spending into pete-pete for any trip that has a bill and
+   *  whose spending changed. Best-effort: failures retry on the next sync.
+   *  The map it writes back excludes the spending signature, so it can't loop. */
+  function schedulePete() {
+    if (!pete.enabled.value) return
+    clearTimeout(peteTimer)
+    peteTimer = setTimeout(reconcilePete, 1200)
+  }
+  async function reconcilePete() {
+    if (!pete.enabled.value || !session.authed || session.guest || !loaded) return
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) return
+    for (const t of trips.userTrips) {
+      // only mirror trips that already opted into a bill and that this user may edit
+      if (!t.splitBillId || tripRole(t, session.email, true) === 'viewer') continue
+      const sig = pete.entriesSig(t)
+      if (peteSig.get(t.id) === sig) continue
+      try {
+        const res = await pete.sync(t)
+        if (!res) continue
+        // the bill may have been recreated (deleted in pete-pete) — keep the id current
+        if (res.id !== t.splitBillId) trips.setSplitBill(t.id, res.id)
+        if (JSON.stringify(t.splitMap || {}) !== JSON.stringify(res.map)) trips.setSplitMap(t.id, res.map)
+        peteSig.set(t.id, sig)
+      } catch { /* retry next sync */ }
     }
   }
 
@@ -123,6 +155,7 @@ export default defineNuxtPlugin(() => {
       applyingRemote = true
       trips.replaceAll([])
       snapshot.clear()
+      peteSig.clear()
       loaded = false
       applyingRemote = false
     }

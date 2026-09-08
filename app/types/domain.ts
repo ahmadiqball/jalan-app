@@ -132,6 +132,10 @@ export interface Trip {
   startIso?: string
   /** pete-pete bill id created for splitting this trip's expenses (handoff) */
   splitBillId?: string
+  /** sync ledger: jalan expense-line id -> the pete-pete entry id it maps to.
+   *  Lets re-syncs reconcile (update/delete) only jalan-managed entries and
+   *  leave anything added directly in pete-pete untouched. */
+  splitMap?: Record<string, string>
   /** role granted to anyone who opens the invite link (owner-controlled, so a
    *  view link can't be escalated to edit by editing the URL) */
   inviteRole?: MemberRole

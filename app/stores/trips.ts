@@ -298,6 +298,7 @@ export const useTripsStore = defineStore(
         dates: '',
         startIso: undefined,
         splitBillId: undefined,
+        splitMap: undefined,
         inviteRole: undefined,
         outfitSets: [],
         manual: [],
@@ -318,7 +319,10 @@ export const useTripsStore = defineStore(
       patchTrip(id, (t) => Object.assign(t, patch))
     }
     function setSplitBill(id: string, billId: string) {
-      patchTrip(id, (t) => { t.splitBillId = billId; return t })
+      patchTrip(id, (t) => { t.splitBillId = billId; if (!billId) t.splitMap = {}; return t })
+    }
+    function setSplitMap(id: string, map: Record<string, string>) {
+      patchTrip(id, (t) => { t.splitMap = map; return t })
     }
 
     function resetSeed() {
@@ -344,7 +348,7 @@ export const useTripsStore = defineStore(
       togglePackItem, addPackItem,
       setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,
       addMember, removeMember, setMemberRole, setInviteRole,
-      createTrip, updateTrip, setSplitBill, resetSeed, replaceAll,
+      createTrip, updateTrip, setSplitBill, setSplitMap, resetSeed, replaceAll,
       addTemplate, deleteTemplate, loadTemplates, cloneTrip,
     }
   },
