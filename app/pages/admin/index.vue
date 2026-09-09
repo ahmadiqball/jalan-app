@@ -9,6 +9,8 @@ const trips = useTripsStore()
 const { content, save } = useContent()
 const { list, ensureLoaded, create, remove } = useTemplates()
 const { apiFetch } = useApi()
+const { confirm } = useConfirm()
+const { t } = useI18n()
 
 // authoritative admin gate (token-attached in cloud)
 const allowed = ref(!useIsCloud())
@@ -60,7 +62,14 @@ function newTemplate() {
   const id = create()
   navigateTo(`/admin/template/${id}`)
 }
-async function removeTemplate(id: string) {
+async function removeTemplate(id: string, name: string) {
+  const ok = await confirm({
+    title: t('confirm.delTplTitle'),
+    message: t('confirm.delTplMsg', { name: name || 'ini' }),
+    confirmLabel: t('confirm.delTplCta'),
+    danger: true,
+  })
+  if (!ok) return
   remove(id)
   await saveAll()
 }
@@ -99,7 +108,7 @@ async function removeTemplate(id: string) {
             <div v-for="tp in list" :key="tp.id" class="bg-white border border-sand-line rounded-[20px] overflow-hidden flex flex-col group">
               <div class="h-[92px] bg-cover bg-center relative" :style="tp.cover ? { backgroundImage: `url('${tp.cover}')` } : {}">
                 <CoreCover v-if="!tp.cover" :mat="tp.mat" :photo-size="0" />
-                <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-muted hover:text-warn-fg shadow" title="Hapus" @click.stop="removeTemplate(tp.id)"><i class="i-lucide-trash-2 text-[14px]" /></button>
+                <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-muted hover:text-warn-fg shadow" title="Hapus" @click.stop="removeTemplate(tp.id, tp.name)"><i class="i-lucide-trash-2 text-[14px]" /></button>
               </div>
               <NuxtLink :to="`/admin/template/${tp.id}`" class="p-[14px_16px] flex flex-col gap-[9px] flex-1 hover:bg-sand-100 transition-colors">
                 <div>

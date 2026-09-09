@@ -36,8 +36,22 @@
     "blurb": "Log spending as you go, so you know what's left before the last day.",
     "googleError": "Google sign-in failed."
   },
-  "status": { "live": "In progress", "plan": "Planned", "draft": "Draft", "template": "Template" },
-  "cat": { "pantai": "Beach", "gunung": "Mountain", "alam": "Nature", "budaya": "Culture", "kota": "City", "kuliner": "Food", "pulau": "Island", "lainnya": "Other" },
+  "status": {
+    "live": "In progress",
+    "plan": "Planned",
+    "draft": "Draft",
+    "template": "Template"
+  },
+  "cat": {
+    "pantai": "Beach",
+    "gunung": "Mountain",
+    "alam": "Nature",
+    "budaya": "Culture",
+    "kota": "City",
+    "kuliner": "Food",
+    "pulau": "Island",
+    "lainnya": "Other"
+  },
   "app": {
     "home": {
       "hello": "Hi, {name}",
@@ -49,7 +63,11 @@
       "newTripHint": "Start blank or pick a curated template",
       "loading": "Loading trips…"
     },
-    "filter": { "all": "All", "live": "In progress", "plan": "Planned" },
+    "filter": {
+      "all": "All",
+      "live": "In progress",
+      "plan": "Planned"
+    },
     "hero": {
       "dayLabel": "Day {i} of {n}",
       "used": "Spent",
@@ -93,8 +111,18 @@
   },
   "landing": {
     "metaTitle": "Kelana — plan it neatly, enjoy the journey",
-    "nav": { "features": "Features", "inside": "Inside the app", "stories": "Stories", "pricing": "Pricing", "signin": "Sign in", "tryFree": "Try free" },
-    "units": { "days": "days", "people": "people" },
+    "nav": {
+      "features": "Features",
+      "inside": "Inside the app",
+      "stories": "Stories",
+      "pricing": "Pricing",
+      "signin": "Sign in",
+      "tryFree": "Try free"
+    },
+    "units": {
+      "days": "days",
+      "people": "people"
+    },
     "hero": {
       "badge": "A trip planner made in Indonesia",
       "title1": "Plan it neatly.",
@@ -109,8 +137,15 @@
       "collageAct": "Tanggedu Waterfall",
       "collageToday": "Rp 745,000 today"
     },
-    "carousel": { "heading": "Trending destinations" },
-    "places": { "sumba": "Beach & hills", "ubud": "Rice fields", "bromo": "Mountain", "bali": "City & beach" },
+    "carousel": {
+      "heading": "Trending destinations"
+    },
+    "places": {
+      "sumba": "Beach & hills",
+      "ubud": "Rice fields",
+      "bromo": "Mountain",
+      "bali": "City & beach"
+    },
     "rail": {
       "eyebrow": "What's inside",
       "title": "Everything a trip needs, in one place.",
@@ -257,6 +292,28 @@
       "tryFree": "Try free",
       "seePricing": "See pricing"
     },
-    "footer": { "openApp": "Open the app", "madeIn": "Made in Bandung" }
+    "footer": {
+      "openApp": "Open the app",
+      "madeIn": "Made in Bandung"
+    }
+  },
+  "confirm": {
+    "cancel": "Cancel",
+    "ok": "Continue",
+    "revokeTitle": "Remove member?",
+    "revokeMsg": "{name} will lose access to this trip. You can invite them again with a link anytime.",
+    "revokeCta": "Remove",
+    "delActTitle": "Delete activity?",
+    "delActMsg": "\"{title}\" and its cost and notes will be removed from this day.",
+    "delActCta": "Delete",
+    "delExpTitle": "Delete expense?",
+    "delExpMsg": "\"{title}\" ({amount}) will be removed from the expense log.",
+    "delExpCta": "Delete",
+    "delTplTitle": "Delete template?",
+    "delTplMsg": "The \"{name}\" template will be permanently deleted. Trips already created from it are unaffected.",
+    "delTplCta": "Delete",
+    "newSplitTitle": "Start a new split?",
+    "newSplitMsg": "The current split will be unlinked from this trip (the old bill stays in PetePete). Syncing starts from scratch.",
+    "newSplitCta": "Start new"
   }
 }

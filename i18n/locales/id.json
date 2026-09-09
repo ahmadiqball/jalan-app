@@ -36,8 +36,22 @@
     "blurb": "Catat pengeluaran sambil jalan, biar tahu sisa anggaran sebelum hari terakhir.",
     "googleError": "Gagal masuk dengan Google."
   },
-  "status": { "live": "Sedang jalan", "plan": "Rencana", "draft": "Draf", "template": "Template" },
-  "cat": { "pantai": "Pantai", "gunung": "Gunung", "alam": "Alam", "budaya": "Budaya", "kota": "Kota", "kuliner": "Kuliner", "pulau": "Pulau", "lainnya": "Lainnya" },
+  "status": {
+    "live": "Sedang jalan",
+    "plan": "Rencana",
+    "draft": "Draf",
+    "template": "Template"
+  },
+  "cat": {
+    "pantai": "Pantai",
+    "gunung": "Gunung",
+    "alam": "Alam",
+    "budaya": "Budaya",
+    "kota": "Kota",
+    "kuliner": "Kuliner",
+    "pulau": "Pulau",
+    "lainnya": "Lainnya"
+  },
   "app": {
     "home": {
       "hello": "Halo, {name}",
@@ -49,7 +63,11 @@
       "newTripHint": "Mulai kosong atau ambil dari template kurasi",
       "loading": "Memuat trip…"
     },
-    "filter": { "all": "Semua", "live": "Sedang jalan", "plan": "Rencana" },
+    "filter": {
+      "all": "Semua",
+      "live": "Sedang jalan",
+      "plan": "Rencana"
+    },
     "hero": {
       "dayLabel": "Hari {i} dari {n}",
       "used": "Terpakai",
@@ -93,8 +111,18 @@
   },
   "landing": {
     "metaTitle": "Kelana — rapikan rencananya, nikmatin jalannya",
-    "nav": { "features": "Fitur", "inside": "Isi aplikasi", "stories": "Cerita", "pricing": "Harga", "signin": "Masuk", "tryFree": "Coba gratis" },
-    "units": { "days": "hari", "people": "orang" },
+    "nav": {
+      "features": "Fitur",
+      "inside": "Isi aplikasi",
+      "stories": "Cerita",
+      "pricing": "Harga",
+      "signin": "Masuk",
+      "tryFree": "Coba gratis"
+    },
+    "units": {
+      "days": "hari",
+      "people": "orang"
+    },
     "hero": {
       "badge": "Perencana jalan-jalan buatan Indonesia",
       "title1": "Rapikan rencananya.",
@@ -109,8 +137,15 @@
       "collageAct": "Air Terjun Tanggedu",
       "collageToday": "Rp 745.000 hari ini"
     },
-    "carousel": { "heading": "Tujuan yang sedang ramai" },
-    "places": { "sumba": "Pantai & bukit", "ubud": "Sawah", "bromo": "Gunung", "bali": "Kota & pantai" },
+    "carousel": {
+      "heading": "Tujuan yang sedang ramai"
+    },
+    "places": {
+      "sumba": "Pantai & bukit",
+      "ubud": "Sawah",
+      "bromo": "Gunung",
+      "bali": "Kota & pantai"
+    },
     "rail": {
       "eyebrow": "Isinya apa saja",
       "title": "Semua kebutuhan trip, dalam satu tempat.",
@@ -257,6 +292,28 @@
       "tryFree": "Coba gratis",
       "seePricing": "Lihat harga"
     },
-    "footer": { "openApp": "Buka aplikasi", "madeIn": "Dibuat di Bandung" }
+    "footer": {
+      "openApp": "Buka aplikasi",
+      "madeIn": "Dibuat di Bandung"
+    }
+  },
+  "confirm": {
+    "cancel": "Batal",
+    "ok": "Lanjut",
+    "revokeTitle": "Keluarkan anggota?",
+    "revokeMsg": "{name} akan kehilangan akses ke trip ini. Kamu bisa mengundang mereka lagi lewat link kapan saja.",
+    "revokeCta": "Keluarkan",
+    "delActTitle": "Hapus aktivitas?",
+    "delActMsg": "\"{title}\" beserta biaya dan catatannya akan dihapus dari hari ini.",
+    "delActCta": "Hapus",
+    "delExpTitle": "Hapus pengeluaran?",
+    "delExpMsg": "\"{title}\" ({amount}) akan dihapus dari catatan pengeluaran.",
+    "delExpCta": "Hapus",
+    "delTplTitle": "Hapus template?",
+    "delTplMsg": "Template \"{name}\" akan dihapus permanen. Trip yang sudah pakai template ini tidak terpengaruh.",
+    "delTplCta": "Hapus",
+    "newSplitTitle": "Buat split baru?",
+    "newSplitMsg": "Split yang sekarang akan dilepas dari trip ini (bill lama tetap ada di PetePete). Sinkronisasi dimulai dari nol.",
+    "newSplitCta": "Buat baru"
   }
 }

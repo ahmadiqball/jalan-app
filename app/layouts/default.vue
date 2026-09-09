@@ -5,5 +5,6 @@
       <slot />
     </div>
     <CoreToast />
+    <CoreConfirm />
   </div>
 </template>

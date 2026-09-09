@@ -6,6 +6,20 @@ const props = withDefaults(defineProps<{ member: Member; tripId: string; canMana
 })
 const trips = useTripsStore()
 const { flash } = useToast()
+const { confirm } = useConfirm()
+const { t } = useI18n()
+
+async function revoke() {
+  const ok = await confirm({
+    title: t('confirm.revokeTitle'),
+    message: t('confirm.revokeMsg', { name: props.member.name }),
+    confirmLabel: t('confirm.revokeCta'),
+    danger: true,
+  })
+  if (!ok) return
+  trips.removeMember(props.tripId, props.member.id)
+  flash('Anggota dikeluarkan')
+}
 
 const isOwner = computed(() => props.member.role === 'Pemilik')
 const isPending = computed(() => props.member.status === 'menunggu')
@@ -36,7 +50,7 @@ const role = computed({
       <button
         class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center shrink-0"
         title="Keluarkan"
-        @click="trips.removeMember(tripId, member.id); flash('Anggota dikeluarkan')"
+        @click="revoke"
       >
         <i class="i-lucide-x text-[15px]" />
       </button>

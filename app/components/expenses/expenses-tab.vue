@@ -8,6 +8,8 @@ import { expenseLines } from '~/utils/derive'
 const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
 const { flash } = useToast()
+const { confirm } = useConfirm()
+const { t } = useI18n()
 
 const mode = ref<'Hari' | 'Kategori' | 'Orang'>('Hari')
 const allIds = computed(() => props.trip.members.map((m) => m.id))
@@ -89,8 +91,15 @@ function saveEdit() {
   editing.value = null
   flash('Pengeluaran diperbarui')
 }
-function removeLine(id: string) {
-  trips.deleteManual(props.trip.id, id)
+async function removeLine(line: { id: string; title: string; amount: number }) {
+  const ok = await confirm({
+    title: t('confirm.delExpTitle'),
+    message: t('confirm.delExpMsg', { title: line.title, amount: rp(line.amount) }),
+    confirmLabel: t('confirm.delExpCta'),
+    danger: true,
+  })
+  if (!ok) return
+  trips.deleteManual(props.trip.id, line.id)
   flash('Pengeluaran dihapus')
 }
 
@@ -113,7 +122,13 @@ async function bagiRata() {
     flash('Gagal membuka PetePete')
   }
 }
-function newSplit() {
+async function newSplit() {
+  const ok = await confirm({
+    title: t('confirm.newSplitTitle'),
+    message: t('confirm.newSplitMsg'),
+    confirmLabel: t('confirm.newSplitCta'),
+  })
+  if (!ok) return
   trips.setSplitBill(props.trip.id, '')
   bagiRata()
 }
@@ -193,7 +208,7 @@ function log() {
           <div class="money text-[14px] font-600 shrink-0">{{ rp(l.amount) }}</div>
           <template v-if="!l.derived">
             <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-teal-700 hover:bg-teal-100 flex items-center justify-center shrink-0" title="Ubah" @click="openEdit(l)"><i class="i-lucide-pencil text-[14px]" /></button>
-            <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center shrink-0" title="Hapus" @click="removeLine(l.id)"><i class="i-lucide-x text-[15px]" /></button>
+            <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center shrink-0" title="Hapus" @click="removeLine(l)"><i class="i-lucide-x text-[15px]" /></button>
           </template>
           <span v-else class="text-[11px] text-muted shrink-0 w-[92px] text-right">dari aktivitas</span>
         </div>

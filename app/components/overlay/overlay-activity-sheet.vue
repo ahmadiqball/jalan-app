@@ -89,8 +89,17 @@ function dropOwnOutfit() {
 
 const t = computed(() => (found.value ? tone(found.value.act.cat) : ['#F1EEE1', '#8A6314']))
 
-function del() {
+const { confirm } = useConfirm()
+const { t: tr } = useI18n()
+async function del() {
   if (!found.value) return
+  const ok = await confirm({
+    title: tr('confirm.delActTitle'),
+    message: tr('confirm.delActMsg', { title: found.value.act.title || found.value.act.cat }),
+    confirmLabel: tr('confirm.delActCta'),
+    danger: true,
+  })
+  if (!ok || !found.value) return
   trips.deleteActivity(props.trip.id, found.value.act.id)
   ui.selectActivity(null)
   flash('Aktivitas dihapus')
