@@ -2,7 +2,7 @@
 import type { Day } from '~/types/domain'
 import { shortRp } from '~/utils/format'
 
-const props = defineProps<{ days: Day[]; selected: number }>()
+const props = withDefaults(defineProps<{ days: Day[]; selected: number; stickyTop?: number }>(), { stickyTop: 0 })
 const emit = defineEmits<{ select: [number]; add: [] }>()
 
 const total = (d: Day) => d.acts.reduce((n, a) => n + a.cost, 0)
@@ -11,7 +11,10 @@ const dayName = (d: Day, i: number) => (d.title && d.title !== 'Belum diberi nam
 </script>
 
 <template>
-  <div class="w-full md:w-[212px] md:shrink-0 flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-1 md:pb-0">
+  <div
+    class="w-full md:w-[212px] md:shrink-0 md:self-start md:sticky flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-1 md:pb-0"
+    :style="props.stickyTop ? { top: props.stickyTop + 'px' } : {}"
+  >
     <button
       v-for="(d, i) in days"
       :key="i"

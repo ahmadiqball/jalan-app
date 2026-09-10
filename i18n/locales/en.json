@@ -314,6 +314,9 @@
     "delTplCta": "Delete",
     "newSplitTitle": "Start a new split?",
     "newSplitMsg": "The current split will be unlinked from this trip (the old bill stays in PetePete). Syncing starts from scratch.",
-    "newSplitCta": "Start new"
+    "newSplitCta": "Start new",
+    "overlapTitle": "Schedule clash",
+    "overlapMsg": "This time overlaps with \"{title}\" ({range}). Save anyway?",
+    "overlapCta": "Save anyway"
   }
 }

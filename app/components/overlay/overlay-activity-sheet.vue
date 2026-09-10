@@ -3,7 +3,7 @@ import type { Activity, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { DUR_STEPS, durLabel, nearestDur, rp, initials } from '~/utils/format'
 import { OF_SLOTS, tone, iconFor, ofText } from '~/utils/categories'
-import { outfitFind, outfitDaySet } from '~/utils/derive'
+import { outfitFind, outfitDaySet, overlapActivity } from '~/utils/derive'
 
 const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
@@ -29,8 +29,27 @@ function set<K extends keyof Activity>(field: K, v: Activity[K]) {
 
 const durModel = computed({
   get: () => String(nearestDur(found.value?.act.dur || 0)),
-  set: (v: string) => set('dur', parseInt(v, 10)),
+  set: (v: string) => { void tryDur(parseInt(v, 10)) },
 })
+
+/* warn before committing a time/duration that collides with another activity.
+ * On cancel we don't commit — the controlled inputs snap back to the old value. */
+async function confirmOverlap(time: string, dur: number): Promise<boolean> {
+  if (!found.value || !time) return true
+  const hit = overlapActivity(found.value.day.acts, { id: found.value.act.id, time, dur })
+  if (!hit) return true
+  return confirm({
+    title: tr('confirm.overlapTitle'),
+    message: tr('confirm.overlapMsg', { title: hit.title, range: `${hit.from}–${hit.to}` }),
+    confirmLabel: tr('confirm.overlapCta'),
+  })
+}
+async function tryTime(v: string) {
+  if (await confirmOverlap(v, found.value?.act.dur || 0)) set('time', v)
+}
+async function tryDur(v: number) {
+  if (found.value && (await confirmOverlap(found.value.act.time, v))) set('dur', v)
+}
 const durOptions = DUR_STEPS.map((m) => ({ value: String(m), label: durLabel(m) }))
 const cats = [...CATEGORIES, 'Santai', 'Tempat']
 const paid = computed({
@@ -124,7 +143,7 @@ async function del() {
       <div class="grid grid-cols-2 gap-3">
         <div class="flex flex-col gap-[6px]">
           <span class="eyebrow">Jam</span>
-          <CoreTimeInput :model-value="found.act.time" @update:model-value="set('time', $event)" />
+          <CoreTimeInput :model-value="found.act.time" @update:model-value="tryTime" />
         </div>
         <label class="flex flex-col gap-[6px]">
           <span class="eyebrow">Durasi</span>

@@ -314,6 +314,9 @@
     "delTplCta": "Hapus",
     "newSplitTitle": "Buat split baru?",
     "newSplitMsg": "Split yang sekarang akan dilepas dari trip ini (bill lama tetap ada di PetePete). Sinkronisasi dimulai dari nol.",
-    "newSplitCta": "Buat baru"
+    "newSplitCta": "Buat baru",
+    "overlapTitle": "Jadwal bentrok",
+    "overlapMsg": "Waktu ini bentrok dengan \"{title}\" ({range}). Tetap simpan?",
+    "overlapCta": "Tetap simpan"
   }
 }

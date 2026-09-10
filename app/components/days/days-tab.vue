@@ -6,6 +6,26 @@ const props = withDefaults(defineProps<{ trip: Trip; template?: boolean }>(), { 
 const ui = useUiStore()
 const trips = useTripsStore()
 
+/* keep the day rail + header pinned below the app's sticky top bar (68px) and
+ * the sticky trip header, whose height varies with content — measure it. */
+const TOPBAR = 68
+const stickyTop = ref(TOPBAR + 168)
+let ro: ResizeObserver | null = null
+function measureSticky() {
+  const el = document.querySelector('[data-trip-header]') as HTMLElement | null
+  if (el) stickyTop.value = TOPBAR + el.offsetHeight
+}
+onMounted(() => {
+  measureSticky()
+  const el = document.querySelector('[data-trip-header]')
+  if (el && 'ResizeObserver' in window) { ro = new ResizeObserver(measureSticky); ro.observe(el) }
+  window.addEventListener('resize', measureSticky)
+})
+onBeforeUnmount(() => {
+  ro?.disconnect()
+  window.removeEventListener('resize', measureSticky)
+})
+
 const dayIdx = computed(() => Math.min(ui.dayIdx, Math.max(0, props.trip.days.length - 1)))
 const day = computed(() => props.trip.days[dayIdx.value])
 // treat the legacy auto-placeholder as "no name"
@@ -83,10 +103,10 @@ function addAndOpen(time = '') {
 
 <template>
   <div class="flex flex-wrap gap-5">
-    <DaysRail :days="trip.days" :selected="dayIdx" @select="selectDay" @add="addDay" />
+    <DaysRail :days="trip.days" :selected="dayIdx" :sticky-top="stickyTop" @select="selectDay" @add="addDay" />
 
     <div class="flex-1 min-w-0 flex flex-col gap-3">
-      <div class="flex items-center justify-between gap-3 flex-wrap">
+      <div class="sticky z-20 bg-paper -mx-1 px-1 pt-1 pb-[10px] flex items-center justify-between gap-3 flex-wrap border-b border-transparent" :style="{ top: stickyTop + 'px' }">
         <div class="min-w-0">
           <div class="font-display text-[24px] font-600">{{ day?.long }}</div>
           <input
@@ -110,6 +130,7 @@ function addAndOpen(time = '') {
             <DaysActivityRow
               v-if="it.type === 'act'"
               :act="it.act"
+              :trip-id="trip.id"
               :people="trip.people"
               :selected="ui.activityId === it.act.id"
             />

@@ -1,7 +1,34 @@
-import type { Budget, Day, ExpenseLine, OutfitSet, Trip } from '~/types/domain'
+import type { Activity, Budget, Day, ExpenseLine, OutfitSet, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
-import { addDays, longDate, shortDate, rp, shortRp } from '~/utils/format'
+import { addDays, longDate, shortDate, rp, shortRp, toMin, fromMin } from '~/utils/format'
 import { BAR_NEAR, BAR_OK, BAR_OVER, SEG_PALETTE, catIcon, ofItems, ofText, tone } from '~/utils/categories'
+
+/**
+ * First activity in `acts` whose time window clashes with `cand`, or null.
+ * Two activities clash when their [start, start+dur) intervals intersect; a
+ * zero-duration activity is treated as a point that clashes only when it falls
+ * strictly inside another's window. The candidate can carry an `id` to exclude
+ * itself when re-timing an existing activity.
+ */
+export function overlapActivity(
+  acts: Activity[],
+  cand: { id?: string; time: string; dur: number },
+): { title: string; from: string; to: string } | null {
+  const start = toMin(cand.time)
+  if (start == null) return null
+  const end = start + (cand.dur || 0)
+  for (const a of acts) {
+    if (a.id === cand.id) continue
+    const aStart = toMin(a.time)
+    if (aStart == null) continue
+    const aEnd = aStart + (a.dur || 0)
+    // half-open intervals intersect; equal edges (one ends as the next begins) don't clash
+    if (start < aEnd && aStart < end) {
+      return { title: a.title || a.cat, from: fromMin(aStart), to: fromMin(aEnd) }
+    }
+  }
+  return null
+}
 
 /** Generate blank days from a start ISO date. */
 export function buildDays(iso: string, len: number): Day[] {
