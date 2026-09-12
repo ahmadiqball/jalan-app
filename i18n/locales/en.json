@@ -317,6 +317,12 @@
     "newSplitCta": "Start new",
     "overlapTitle": "Schedule clash",
     "overlapMsg": "This time overlaps with \"{title}\" ({range}). Save anyway?",
-    "overlapCta": "Save anyway"
+    "overlapCta": "Save anyway",
+    "delTripTitle": "Delete trip?",
+    "delTripMsg": "\"{name}\" and all its days, activities, budget, and notes will be permanently deleted. This can't be undone.",
+    "delTripCta": "Delete trip",
+    "delDayTitle": "Delete this day?",
+    "delDayMsg": "{day} has {n} activities that will be deleted with it. The days after it shift up.",
+    "delDayCta": "Delete day"
   }
 }

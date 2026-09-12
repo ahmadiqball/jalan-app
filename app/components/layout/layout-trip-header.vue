@@ -6,10 +6,29 @@ import { tripCover } from '~/utils/categories'
 const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
 const { t } = useI18n()
+const { flash } = useToast()
 const localePath = useLocalePath()
 const { canEdit, isOwner } = useTripAccess()
+const { cloud, ensureLink } = useInvite()
 const editable = computed(() => canEdit(props.trip))
 const owner = computed(() => isOwner(props.trip))
+
+// Open the public read-only share page. In cloud mode the URL must carry the
+// trip's share *slug* (what /api/share/:id resolves), not its internal id — so
+// provision the slug first. Local mode has no server; preview by id.
+const sharing = ref(false)
+async function openShare() {
+  if (!cloud.value) return navigateTo(localePath(`/share/${props.trip.id}`))
+  sharing.value = true
+  try {
+    const slug = await ensureLink(props.trip.id)
+    await navigateTo(localePath(`/share/${slug}`))
+  } catch {
+    flash('Gagal menyiapkan tautan berbagi. Coba lagi.')
+  } finally {
+    sharing.value = false
+  }
+}
 
 const locked = computed(() => props.trip.status === 'live')
 const cover = computed(() => tripCover(props.trip))
@@ -81,9 +100,10 @@ const budgetChip = computed(() => {
           <i class="i-lucide-pencil text-[14px]" />
           {{ $t('app.header.edit') }}
         </button>
-        <NuxtLink v-if="owner" :to="localePath(`/share/${trip.id}`)" class="bg-white border border-sand-line2 text-ink-2 rounded-pill px-[14px] py-2 hover:border-teal-600">
+        <button v-if="owner" :disabled="sharing" class="bg-white border border-sand-line2 text-ink-2 rounded-pill px-[14px] py-2 hover:border-teal-600 disabled:opacity-60 flex items-center gap-[6px]" @click="openShare">
+          <i v-if="sharing" class="i-lucide-loader-circle animate-spin text-[14px]" />
           {{ $t('app.header.share') }}
-        </NuxtLink>
+        </button>
         <NuxtLink v-if="editable" :to="localePath(`/trip/${trip.id}/expenses`)" class="bg-primary text-white rounded-pill px-[16px] py-[9px] font-700 hover:bg-primary-hover">
           {{ $t('app.header.logExpense') }}
         </NuxtLink>

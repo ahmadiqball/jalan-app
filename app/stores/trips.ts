@@ -3,6 +3,7 @@ import type { Activity, Budget, ManualExpense, Member, PackItem, Trip } from '~/
 import { CATEGORIES } from '~/types/domain'
 import { seedTrips } from '~/utils/seed'
 import { buildDays } from '~/utils/derive'
+import { addDays, shortDate, longDate } from '~/utils/format'
 import { clientPersist } from '~/utils/persist'
 
 /**
@@ -57,6 +58,25 @@ export const useTripsStore = defineStore(
     }
     function setDayTitle(tripId: string, dayIdx: number, title: string) {
       patchTrip(tripId, (t) => { const d = t.days[dayIdx]; if (d) d.title = title; return t })
+    }
+    /** Remove a day (and its activities), keeping at least one. Re-derives the
+     *  remaining days' date labels so they stay in order. */
+    function removeDay(tripId: string, dayIdx: number) {
+      patchTrip(tripId, (t) => {
+        if (t.days.length <= 1) return t
+        t.days.splice(dayIdx, 1)
+        t.days.forEach((d, i) => {
+          if (t.startIso) {
+            const iso = addDays(t.startIso, i)
+            d.date = shortDate(iso)
+            d.long = longDate(iso)
+          } else if (!d.date || /^Hari \d+$/.test(d.date)) {
+            d.date = 'Hari ' + (i + 1)
+            d.long = 'Hari ' + (i + 1)
+          }
+        })
+        return t
+      })
     }
 
     /* ---- budget ---- */
@@ -318,6 +338,11 @@ export const useTripsStore = defineStore(
     function updateTrip(id: string, patch: Partial<Trip>) {
       patchTrip(id, (t) => Object.assign(t, patch))
     }
+    /** Delete a trip locally. In cloud mode the sync plugin observes the removal
+     *  and issues the server DELETE. */
+    function deleteTrip(id: string) {
+      trips.value = trips.value.filter((t) => t.id !== id)
+    }
     function setSplitBill(id: string, billId: string) {
       patchTrip(id, (t) => { t.splitBillId = billId; if (!billId) t.splitMap = {}; return t })
     }
@@ -342,13 +367,13 @@ export const useTripsStore = defineStore(
 
     return {
       trips, seq, byId, liveTrip, userTrips, templateTrips, patchTrip, nextId,
-      setActivityField, addActivity, deleteActivity, setDayTitle,
+      setActivityField, addActivity, deleteActivity, setDayTitle, removeDay,
       setActiveBudget, setAlloc, addCategory, deleteCategory, setCatIcon, addBudgetVersion,
       addManual, deleteManual, updateManual,
       togglePackItem, addPackItem,
       setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,
       addMember, removeMember, setMemberRole, setInviteRole,
-      createTrip, updateTrip, setSplitBill, setSplitMap, resetSeed, replaceAll,
+      createTrip, updateTrip, deleteTrip, setSplitBill, setSplitMap, resetSeed, replaceAll,
       addTemplate, deleteTemplate, loadTemplates, cloneTrip,
     }
   },

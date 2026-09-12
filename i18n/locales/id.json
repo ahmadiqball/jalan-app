@@ -317,6 +317,12 @@
     "newSplitCta": "Buat baru",
     "overlapTitle": "Jadwal bentrok",
     "overlapMsg": "Waktu ini bentrok dengan \"{title}\" ({range}). Tetap simpan?",
-    "overlapCta": "Tetap simpan"
+    "overlapCta": "Tetap simpan",
+    "delTripTitle": "Hapus trip?",
+    "delTripMsg": "\"{name}\" beserta semua hari, aktivitas, anggaran, dan catatannya akan dihapus permanen. Tindakan ini tidak bisa dibatalkan.",
+    "delTripCta": "Hapus trip",
+    "delDayTitle": "Hapus hari ini?",
+    "delDayMsg": "{day} punya {n} aktivitas yang akan ikut terhapus. Hari setelahnya akan digeser maju.",
+    "delDayCta": "Hapus hari"
   }
 }

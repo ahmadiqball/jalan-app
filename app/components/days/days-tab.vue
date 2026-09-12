@@ -5,6 +5,9 @@ import { rp, toMin, fromMin } from '~/utils/format'
 const props = withDefaults(defineProps<{ trip: Trip; template?: boolean }>(), { template: false })
 const ui = useUiStore()
 const trips = useTripsStore()
+const { confirm } = useConfirm()
+const { t } = useI18n()
+const { flash } = useToast()
 
 /* keep the day rail + header pinned below the app's sticky top bar (68px) and
  * the sticky trip header, whose height varies with content — measure it. */
@@ -99,6 +102,25 @@ function addAndOpen(time = '') {
   })
   ui.selectActivity(id)
 }
+/** delete the current day — confirm only when it already has activities */
+async function removeCurrentDay() {
+  if (props.trip.days.length <= 1) return
+  const d = day.value
+  const n = d?.acts.length || 0
+  if (n > 0) {
+    const ok = await confirm({
+      title: t('confirm.delDayTitle'),
+      message: t('confirm.delDayMsg', { day: d?.long || d?.date || '', n }),
+      confirmLabel: t('confirm.delDayCta'),
+      danger: true,
+    })
+    if (!ok) return
+  }
+  const idx = dayIdx.value
+  trips.removeDay(props.trip.id, idx)
+  ui.dayIdx = Math.min(idx, props.trip.days.length - 1)
+  flash('Hari dihapus')
+}
 </script>
 
 <template>
@@ -116,12 +138,33 @@ function addAndOpen(time = '') {
             @input="setTitle(($event.target as HTMLInputElement).value)"
           >
           <div class="text-[13.5px] text-muted mt-[2px]">
-            {{ (day?.acts.length || 0) }} aktivitas · {{ rp(dayPlanned) }} masuk anggaran
+            {{ (day?.acts.length || 0) }} aktivitas
           </div>
         </div>
-        <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[14px]" @click="addAndOpen(nextStart)">
-          <i class="i-lucide-plus" /> Tambah aktivitas
-        </CoreButton>
+        <div class="flex items-center gap-2 shrink-0">
+          <!-- today's money at a glance, kept visible while the list scrolls -->
+          <div
+            v-if="dayPlanned > 0 || daySpent > 0"
+            class="flex items-baseline gap-[6px] rounded-pill bg-white border border-sand-line px-[12px] py-[7px]"
+            title="Uang hari ini"
+          >
+            <i class="i-lucide-wallet text-[13px] shrink-0 self-center" :class="dayOver ? 'text-warn-fg' : 'text-teal-700'" />
+            <span class="money text-[13.5px] font-700" :class="dayOver ? 'text-warn-fg' : 'text-ink'">{{ rp(daySpent) }}</span>
+            <span class="money text-[12px] text-muted">/ {{ rp(dayPlanned) }}</span>
+          </div>
+          <button
+            v-if="trip.days.length > 1"
+            class="w-[38px] h-[38px] shrink-0 rounded-full border border-sand-line2 text-muted hover:text-warn-fg hover:border-warn-fg flex items-center justify-center transition-colors"
+            title="Hapus hari ini"
+            aria-label="Hapus hari ini"
+            @click="removeCurrentDay"
+          >
+            <i class="i-lucide-trash-2 text-[16px]" />
+          </button>
+          <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[14px]" @click="addAndOpen(nextStart)">
+            <i class="i-lucide-plus" /> Tambah aktivitas
+          </CoreButton>
+        </div>
       </div>
 
       <template v-if="sortedActs.length">

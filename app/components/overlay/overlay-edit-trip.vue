@@ -7,6 +7,12 @@ const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
 const trips = useTripsStore()
 const { flash } = useToast()
+const { confirm } = useConfirm()
+const { isOwner } = useTripAccess()
+const { t } = useI18n()
+const localePath = useLocalePath()
+
+const canDelete = computed(() => isOwner(props.trip))
 
 const name = ref('')
 const place = ref('')
@@ -64,6 +70,22 @@ function save() {
   ui.editOpen = false
   flash('Trip disimpan')
 }
+
+async function del() {
+  const ok = await confirm({
+    title: t('confirm.delTripTitle'),
+    message: t('confirm.delTripMsg', { name: props.trip.name }),
+    confirmLabel: t('confirm.delTripCta'),
+    danger: true,
+  })
+  if (!ok) return
+  const id = props.trip.id
+  ui.editOpen = false
+  // leave the trip page first, then remove — cloud sync issues the server DELETE
+  await navigateTo(localePath('/beranda'))
+  trips.deleteTrip(id)
+  flash('Trip dihapus')
+}
 </script>
 
 <template>
@@ -105,9 +127,19 @@ function save() {
     </div>
 
     <template #footer>
-      <div class="flex justify-end gap-3">
-        <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="ui.editOpen = false">Batal</CoreButton>
-        <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[13.5px]" @click="save">Simpan</CoreButton>
+      <div class="flex items-center justify-between gap-3">
+        <button
+          v-if="canDelete"
+          class="text-warn-fg text-[13.5px] font-600 flex items-center gap-2 hover:underline"
+          @click="del"
+        >
+          <i class="i-lucide-trash-2 text-[15px]" /> Hapus trip
+        </button>
+        <span v-else />
+        <div class="flex gap-3">
+          <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="ui.editOpen = false">Batal</CoreButton>
+          <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[13.5px]" @click="save">Simpan</CoreButton>
+        </div>
       </div>
     </template>
   </CoreDialog>
