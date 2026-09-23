@@ -3,7 +3,7 @@ const props = defineProps<{ tripId: string }>()
 const route = useRoute()
 const localePath = useLocalePath()
 
-const tabs = ['overview', 'days', 'budget', 'expenses', 'packing', 'outfit', 'members'] as const
+const tabs = ['overview', 'days', 'budget', 'expenses', 'packing', 'outfit', 'recommend', 'members'] as const
 
 const current = computed(() => route.params.tab as string)
 </script>

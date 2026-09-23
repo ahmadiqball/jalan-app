@@ -118,5 +118,25 @@ export function defaultContent(): ContentDoc {
       { id: 'r-antimaling', label: 'Tas selempang anti maling', groups: ['Perlengkapan'], url: 'https://www.tokopedia.com/search?q=tas+anti+maling', mats: ['kota'] },
       { id: 'r-topi', label: 'Topi', groups: ['Pakaian'], mats: ['kota'] },
     ],
+    regions: [
+      { id: 'bali', label: 'Bali', aliases: ['bali', 'ubud', 'seminyak', 'kuta', 'canggu', 'denpasar', 'uluwatu', 'sanur', 'jimbaran'] },
+      { id: 'jogja', label: 'Yogyakarta', aliases: ['yogya', 'jogja', 'yogyakarta', 'sleman', 'bantul', 'malioboro', 'prambanan', 'borobudur'] },
+      { id: 'bandung', label: 'Bandung', aliases: ['bandung', 'lembang', 'dago', 'ciwidey'] },
+      { id: 'jakarta', label: 'Jakarta', aliases: ['jakarta', 'jkt', 'depok', 'tangerang', 'bekasi', 'bsd'] },
+      { id: 'lombok', label: 'Lombok', aliases: ['lombok', 'mataram', 'senggigi', 'kuta lombok', 'gili'] },
+      { id: 'sumba', label: 'Sumba', aliases: ['sumba', 'waingapu', 'tambolaka', 'waikabubak'] },
+      { id: 'bromo', label: 'Bromo–Malang', aliases: ['bromo', 'malang', 'cemoro lawang', 'batu', 'probolinggo'] },
+      { id: 'labuanbajo', label: 'Labuan Bajo', aliases: ['labuan bajo', 'komodo', 'flores', 'manggarai'] },
+      { id: 'bandungan', label: 'Semarang', aliases: ['semarang', 'bandungan', 'ungaran'] },
+      { id: 'raja-ampat', label: 'Raja Ampat', aliases: ['raja ampat', 'sorong', 'waisai', 'papua barat'] },
+    ],
+    places: [
+      { id: 'p-bali-1', name: 'Warung Babi Guling Ibu Oka', type: 'resto', region: 'bali', area: 'Ubud', priceLevel: 2, note: 'Ikonik, datang sebelum jam 1 siang.' },
+      { id: 'p-bali-2', name: 'Revolver Espresso', type: 'cafe', region: 'bali', area: 'Seminyak', priceLevel: 2, note: 'Kopi enak di gang kecil.' },
+      { id: 'p-bali-3', name: 'Tegallalang Rice Terrace', type: 'wisata', region: 'bali', area: 'Ubud', note: 'Sawah terasering, terbaik pagi hari.' },
+      { id: 'p-jogja-1', name: 'Gudeg Yu Djum', type: 'resto', region: 'jogja', area: 'Wijilan', priceLevel: 1, note: 'Gudeg legendaris.' },
+      { id: 'p-jogja-2', name: 'Candi Prambanan', type: 'wisata', region: 'jogja', priceLevel: 2, note: 'Candi Hindu terbesar; sewa sunset ticket.' },
+      { id: 'p-bdg-1', name: 'Kopi Armor', type: 'cafe', region: 'bandung', area: 'Dago', priceLevel: 2, note: 'Ngopi di tengah hutan pinus.' },
+    ],
   }
 }

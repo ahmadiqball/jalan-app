@@ -7,5 +7,10 @@ export default defineEventHandler(async (event) => {
   if (!body || !Array.isArray(body.templates) || !Array.isArray(body.recs)) {
     throw createError({ statusCode: 400, statusMessage: 'Konten tidak valid' })
   }
-  return useRepositories(event).content.save({ templates: body.templates, recs: body.recs })
+  return useRepositories(event).content.save({
+    templates: body.templates,
+    recs: body.recs,
+    regions: Array.isArray(body.regions) ? body.regions : [],
+    places: Array.isArray(body.places) ? body.places : [],
+  })
 })

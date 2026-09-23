@@ -47,10 +47,28 @@ export interface PackRecItem {
   /** surface when the trip has activities in these categories (empty = any) */
   cats?: string[]
 }
+export interface RecRegion {
+  id: string
+  label: string
+  aliases: string[]
+}
+export interface RecPlace {
+  id: string
+  name: string
+  type: string
+  region: string
+  area?: string
+  priceLevel?: number
+  note?: string
+  url?: string
+  image?: string
+}
 export interface ContentDoc {
   /** starter templates, each a full trip document (opaque here) */
   templates: TemplateTrip[]
   recs: PackRecItem[]
+  regions?: RecRegion[]
+  places?: RecPlace[]
 }
 
 export interface ContentRepository {

@@ -6,6 +6,7 @@ import ExpensesTab from '~/components/expenses/expenses-tab.vue'
 import PackingTab from '~/components/packing/packing-tab.vue'
 import OutfitTab from '~/components/outfit/outfit-tab.vue'
 import MembersTab from '~/components/members/members-tab.vue'
+import RecommendTab from '~/components/recommend/recommend-tab.vue'
 
 const route = useRoute()
 const trips = useTripsStore()
@@ -17,6 +18,7 @@ const TAB_COMPONENTS = {
   expenses: ExpensesTab,
   packing: PackingTab,
   outfit: OutfitTab,
+  recommend: RecommendTab,
   members: MembersTab,
 } as const
 

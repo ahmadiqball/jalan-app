@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PackRecItem } from '~/types/content'
+import type { PackRecItem, RecPlace, RecRegion } from '~/types/content'
 import type { Trip } from '~/types/domain'
 import { rp } from '~/utils/format'
 
@@ -24,7 +24,7 @@ onMounted(async () => {
   if (!allowed.value) navigateTo('/beranda')
 })
 
-const menu = ref<'templates' | 'recs'>('templates')
+const menu = ref<'templates' | 'recs' | 'places'>('templates')
 
 // load templates into the store so the trip tabs can edit them
 watchEffect(() => { if (content.value) ensureLoaded() })
@@ -45,11 +45,21 @@ watchEffect(() => {
   }
 })
 
+// recommendation regions + curated places (editable local copies)
+const regions = ref<RecRegion[]>([])
+const places = ref<RecPlace[]>([])
+watchEffect(() => {
+  if (content.value) {
+    regions.value = structuredClone(toRaw(content.value.regions || []))
+    places.value = structuredClone(toRaw(content.value.places || []))
+  }
+})
+
 const saving = ref(false)
 async function saveAll() {
   saving.value = true
   try {
-    await save({ templates: trips.templateTrips as Trip[], recs: recs.value })
+    await save({ templates: trips.templateTrips as Trip[], recs: recs.value, regions: regions.value, places: places.value })
     flash('Konten disimpan')
   } catch {
     flash('Gagal menyimpan')
@@ -87,7 +97,7 @@ async function removeTemplate(id: string, name: string) {
       <!-- menu -->
       <div class="flex gap-1 border-b border-sand-line">
         <button
-          v-for="m in [['templates', 'Template'], ['recs', 'Rekomendasi barang']] as const"
+          v-for="m in [['templates', 'Template'], ['recs', 'Rekomendasi barang'], ['places', 'Rekomendasi tempat']] as const"
           :key="m[0]"
           class="px-4 pt-[10px] pb-[12px] text-[14px] border-b-[2.5px] transition-colors"
           :class="menu === m[0] ? 'border-teal-600 text-ink font-700' : 'border-transparent text-muted font-500 hover:text-ink-2'"
@@ -131,14 +141,26 @@ async function removeTemplate(id: string, name: string) {
         </ClientOnly>
       </template>
 
-      <!-- RECS -->
-      <template v-else>
+      <!-- RECS (packing) -->
+      <template v-else-if="menu === 'recs'">
         <div class="flex items-center justify-between gap-3 flex-wrap">
           <div class="font-display text-[20px] font-600">Rekomendasi barang</div>
           <CoreButton variant="primary" :disabled="saving" @click="saveAll">{{ saving ? 'Menyimpan…' : 'Simpan rekomendasi' }}</CoreButton>
         </div>
         <ClientOnly>
           <AdminRecs v-model="recs" />
+          <template #fallback><SkeletonRows :count="6" /></template>
+        </ClientOnly>
+      </template>
+
+      <!-- PLACES (destination recommendations) -->
+      <template v-else>
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="font-display text-[20px] font-600">Rekomendasi tempat</div>
+          <CoreButton variant="primary" :disabled="saving" @click="saveAll">{{ saving ? 'Menyimpan…' : 'Simpan tempat' }}</CoreButton>
+        </div>
+        <ClientOnly>
+          <AdminPlaces v-model:regions="regions" v-model:places="places" />
           <template #fallback><SkeletonRows :count="6" /></template>
         </ClientOnly>
       </template>
