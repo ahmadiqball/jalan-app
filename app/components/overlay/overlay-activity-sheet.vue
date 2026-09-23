@@ -2,7 +2,7 @@
 import type { Activity, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { DUR_STEPS, durLabel, nearestDur, rp, initials } from '~/utils/format'
-import { OF_SLOTS, tone, iconFor, ofText } from '~/utils/categories'
+import { OF_SLOTS, tone, iconFor, ofText, catLabel } from '~/utils/categories'
 import { outfitFind, outfitDaySet, overlapActivity } from '~/utils/derive'
 
 const props = defineProps<{ trip: Trip }>()
@@ -51,7 +51,16 @@ async function tryDur(v: number) {
   if (found.value && (await confirmOverlap(found.value.act.time, v))) set('dur', v)
 }
 const durOptions = DUR_STEPS.map((m) => ({ value: String(m), label: durLabel(m) }))
-const cats = [...CATEGORIES, 'Santai', 'Tempat']
+// picker = the unified budget categories; keep any legacy value (Santai/Tempat)
+// selectable so old activities still show and can be re-tagged
+const catOptions = computed(() => {
+  const opts = CATEGORIES.map((c) => ({ value: c, label: catLabel(c) }))
+  const cur = found.value?.act.cat
+  if (cur && !CATEGORIES.includes(cur as (typeof CATEGORIES)[number])) {
+    opts.unshift({ value: cur, label: catLabel(cur) })
+  }
+  return opts
+})
 const paid = computed({
   get: () => !!found.value?.act.paid,
   set: (v: boolean) => set('paid', v),
@@ -154,7 +163,7 @@ async function del() {
       <div class="grid grid-cols-2 gap-3">
         <label class="flex flex-col gap-[6px]">
           <span class="eyebrow">Kategori</span>
-          <CoreSelect :model-value="found.act.cat" :options="cats" @update:model-value="set('cat', $event)" />
+          <CoreSelect :model-value="found.act.cat" :options="catOptions" @update:model-value="set('cat', $event)" />
         </label>
         <label class="flex flex-col gap-[6px]">
           <span class="eyebrow">Biaya</span>

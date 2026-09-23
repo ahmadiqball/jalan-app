@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
 import { shuffle } from '~/utils/format'
+import { budgetCatOf } from '~/utils/categories'
 
 const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
@@ -21,7 +22,7 @@ const groupOptions = computed(() => {
 // (when tagged) the trip's activity categories — "based on activities". Shuffled
 // so the set feels fresh, and reshuffled whenever the packing list changes.
 const existingLabels = computed(() => new Set(props.trip.packing.flatMap((g) => g.items.map((i) => i.label.toLowerCase()))))
-const tripCats = computed(() => new Set(props.trip.days.flatMap((d) => d.acts.map((a) => (a.cat === 'Santai' ? 'Lain' : a.cat)))))
+const tripCats = computed(() => new Set(props.trip.days.flatMap((d) => d.acts.map((a) => budgetCatOf(a.cat)))))
 const recs = computed(() => {
   const matched = allRecs.value.filter((r) => {
     if (existingLabels.value.has(r.label.toLowerCase())) return false

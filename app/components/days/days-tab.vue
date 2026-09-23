@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
 import { rp, toMin, fromMin } from '~/utils/format'
-import { budgetCatOf, catIcon, tone } from '~/utils/categories'
+import { budgetCatOf, catIcon, catLabel, tone } from '~/utils/categories'
 
 const props = withDefaults(defineProps<{ trip: Trip; template?: boolean }>(), { template: false })
 const ui = useUiStore()
@@ -245,7 +245,7 @@ async function removeCurrentDay() {
               <span class="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center shrink-0" :style="{ background: c.tone[0], color: c.tone[1] }">
                 <i :class="c.icon" class="text-[12px]" />
               </span>
-              <span class="text-[12.5px] text-ink-2 flex-1 truncate">{{ c.name }}</span>
+              <span class="text-[12.5px] text-ink-2 flex-1 truncate">{{ catLabel(c.name) }}</span>
               <span v-if="c.spent > 0 && c.spent < c.planned" class="text-[11px] text-muted money mr-1">{{ rp(c.spent) }} terpakai</span>
               <i v-else-if="c.spent > 0 && c.spent >= c.planned" class="i-lucide-check text-[13px] text-teal-600 mr-1" />
               <span class="money text-[12.5px] font-600">{{ rp(c.planned) }}</span>

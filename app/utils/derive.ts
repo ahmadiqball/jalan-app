@@ -1,7 +1,7 @@
 import type { Activity, Budget, Day, ExpenseLine, OutfitSet, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { addDays, longDate, shortDate, rp, shortRp, toMin, fromMin } from '~/utils/format'
-import { BAR_NEAR, BAR_OK, BAR_OVER, SEG_PALETTE, budgetCatOf, catIcon, ofItems, ofText, tone } from '~/utils/categories'
+import { BAR_NEAR, BAR_OK, BAR_OVER, SEG_PALETTE, budgetCatOf, catIcon, catLabel, ofItems, ofText, tone } from '~/utils/categories'
 
 /**
  * First activity in `acts` whose time window clashes with `cand`, or null.
@@ -135,6 +135,7 @@ export function budgetSummary(trip: Trip): BudgetSummary {
 
 export interface CategoryRow {
   name: string
+  label: string
   spent: number
   spentRp: string
   spentShort: string
@@ -175,6 +176,7 @@ export function categoryRows(trip: Trip): CategoryRow[] {
     const [iconBg, iconFg] = tone(name)
     return {
       name,
+      label: catLabel(name),
       spent: cs,
       spentRp: rp(cs),
       spentShort: shortRp(cs),

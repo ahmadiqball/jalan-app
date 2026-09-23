@@ -2,8 +2,10 @@
 import type { ManualExpense, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { rp, initials } from '~/utils/format'
-import { tone, iconFor } from '~/utils/categories'
+import { tone, iconFor, catLabel, budgetCatOf } from '~/utils/categories'
 import { expenseLines } from '~/utils/derive'
+
+const catOptions = CATEGORIES.map((c) => ({ value: c, label: catLabel(c) }))
 
 const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
@@ -21,7 +23,7 @@ const unpaidPlanned = computed(() => {
   const out: { id: string; title: string; cat: string; amount: number; dayLabel: string }[] = []
   props.trip.days.forEach((d) =>
     d.acts.forEach((a) => {
-      if (a.cost > 0 && !a.paid) out.push({ id: a.id, title: a.title, cat: a.cat === 'Santai' ? 'Lain' : a.cat, amount: a.cost, dayLabel: d.date })
+      if (a.cost > 0 && !a.paid) out.push({ id: a.id, title: a.title, cat: budgetCatOf(a.cat), amount: a.cost, dayLabel: d.date })
     }),
   )
   return out
@@ -170,7 +172,7 @@ function log() {
           </div>
           <div class="flex-1 min-w-0">
             <div class="text-[13.5px] font-600 truncate">{{ a.title }}</div>
-            <div class="text-[12px] text-muted">{{ a.dayLabel }} · {{ a.cat }}</div>
+            <div class="text-[12px] text-muted">{{ a.dayLabel }} · {{ catLabel(a.cat) }}</div>
           </div>
           <div class="money text-[13.5px] text-muted shrink-0">{{ rp(a.amount) }}</div>
           <button class="rounded-pill bg-teal-100 text-teal-700 px-[13px] py-[6px] text-[12.5px] font-700 shrink-0 hover:bg-teal-deep" @click="record(a.id)">Catat</button>
@@ -202,7 +204,7 @@ function log() {
           <div class="flex-1 min-w-0">
             <div class="text-[14px] font-600 truncate">{{ l.title }}</div>
             <div class="text-[12px] text-muted">
-              {{ mode === 'Kategori' ? (trip.days[l.dayIdx]?.date || '') + ' · ' : l.cat + ' · ' }}{{ l.derived ? 'dari aktivitas ' + l.time : 'dicatat manual' }}
+              {{ mode === 'Kategori' ? (trip.days[l.dayIdx]?.date || '') + ' · ' : catLabel(l.cat) + ' · ' }}{{ l.derived ? 'dari aktivitas ' + l.time : 'dicatat manual' }}
             </div>
           </div>
           <div class="money text-[14px] font-600 shrink-0">{{ rp(l.amount) }}</div>
@@ -261,7 +263,7 @@ function log() {
       <div class="flex flex-col gap-3">
         <CoreInput v-model="editing.title" label="Judul" placeholder="mis. Oleh-oleh" />
         <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah</span><CoreMoneyInput :model-value="editAmount" @update:model-value="editAmount = $event" /></label>
-        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Kategori</span><CoreSelect v-model="editing.cat" :options="[...CATEGORIES]" /></label>
+        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Kategori</span><CoreSelect v-model="editing.cat" :options="catOptions" /></label>
         <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Hari</span><CoreSelect :model-value="String(editing.dayIdx)" :options="dayOptions" @update:model-value="editing.dayIdx = parseInt($event, 10)" /></label>
         <CoreInput v-model="editing.note" label="Catatan (opsional)" />
       </div>

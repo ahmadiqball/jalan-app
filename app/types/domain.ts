@@ -1,16 +1,20 @@
 // Domain model for Kelana. Ported from the prototype state shape.
 
-/** Budget categories that carry an allocation line. */
+/** Budget categories that carry an allocation line. Also the activity picker.
+ *  The stored key stays "Lain" (displayed as "Lainnya" via catLabel) so existing
+ *  trips' budget data keeps matching. */
 export const CATEGORIES = [
   'Makan & minum',
   'Transport',
-  'Tiket & atraksi',
   'Penginapan',
+  'Tiket & atraksi',
+  'Belanja',
   'Lain',
 ] as const
 export type Category = (typeof CATEGORIES)[number]
 
-/** Activity categories include the budget categories plus "Santai" (maps to Lain). */
+/** Legacy activity-only categories, kept so old data still resolves; they fold
+ *  into a budget line via budgetCatOf and are no longer offered in the picker. */
 export type ActivityCategory = Category | 'Santai' | 'Tempat'
 
 export type TripStatus = 'live' | 'plan' | 'draft' | 'template'

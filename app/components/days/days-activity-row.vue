@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Activity } from '~/types/domain'
-import { tone, iconFor } from '~/utils/categories'
+import { tone, iconFor, catLabel } from '~/utils/categories'
 import { durLabel, timeRange, rp } from '~/utils/format'
 
 const props = defineProps<{ act: Activity; tripId: string; people: number; selected?: boolean }>()
@@ -13,7 +13,7 @@ const { t } = useI18n()
 const tn = computed(() => tone(props.act.cat))
 const icon = computed(() => iconFor(props.act.cat))
 const meta = computed(() =>
-  props.act.cat +
+  catLabel(props.act.cat) +
   (props.act.dur ? ' · ' + durLabel(props.act.dur) : '') +
   (props.act.place ? ' · ' + props.act.place : ''),
 )

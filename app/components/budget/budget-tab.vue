@@ -115,7 +115,7 @@ function versionTotal(b: Trip['budgets'][number]) {
         <div class="flex flex-wrap gap-x-4 gap-y-1 mt-2">
           <span v-for="c in categories" :key="c.name" class="inline-flex items-center gap-[6px] text-[12px] text-ink-2">
             <span class="w-[9px] h-[9px] rounded-full" :style="{ background: c.segColor }" />
-            {{ c.name }} <span class="text-muted money">{{ c.sharePct }}%</span>
+            {{ c.label }} <span class="text-muted money">{{ c.sharePct }}%</span>
           </span>
         </div>
       </div>

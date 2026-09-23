@@ -6,9 +6,19 @@ export const TONE: Record<string, [string, string]> = {
   'Transport': ['#DEEEEC', '#0A4F55'],
   'Tiket & atraksi': ['#DEEEEC', '#2F6B54'],
   'Penginapan': ['#F1EEE1', '#6C7C7D'],
+  'Belanja': ['#EDE6F1', '#6A4C93'],
   'Lain': ['#FCE3D3', '#C85A28'],
   'Santai': ['#FCE3D3', '#C85A28'],
   'Tempat': ['#DEEEEC', '#2F6B54'],
+}
+
+/**
+ * Display label for a category key. The stored key stays stable ("Lain") so
+ * existing budget allocations keep matching; only the shown text changes.
+ */
+export const CAT_LABEL: Record<string, string> = { 'Lain': 'Lainnya' }
+export function catLabel(name: string): string {
+  return CAT_LABEL[name] || name
 }
 
 const PALETTE_TONE: [string, string][] = [
@@ -48,6 +58,7 @@ export const CAT_ICON: Record<string, string> = {
   'Transport': 'i-lucide-bus',
   'Tiket & atraksi': 'i-lucide-ticket',
   'Penginapan': 'i-lucide-bed-double',
+  'Belanja': 'i-lucide-shopping-bag',
   'Lain': 'i-lucide-ellipsis',
   'Santai': 'i-lucide-sun',
   'Tempat': 'i-lucide-map-pin',
@@ -94,7 +105,8 @@ export const SHORT_CAT: Record<string, string> = {
   'Makan & minum': 'Makan',
   'Transport': 'Transport',
   'Tiket & atraksi': 'Tiket',
-  'Lain': 'Lain',
+  'Belanja': 'Belanja',
+  'Lain': 'Lainnya',
 }
 
 export const ROLES = ['Pemilik', 'Bisa ubah', 'Hanya lihat'] as const

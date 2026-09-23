@@ -31,7 +31,7 @@ function remove(e: Event) {
       <span class="w-[9px] h-[9px] rounded-full shrink-0" :style="{ background: row.segColor }" />
       <BudgetIconPicker :icon="row.icon" :bg="row.iconBg" :fg="row.iconFg" :disabled="locked" @select="pickIcon" />
       <div class="flex-1 min-w-0">
-        <div class="text-[14px] font-600 truncate">{{ row.name }}</div>
+        <div class="text-[14px] font-600 truncate">{{ row.label }}</div>
       </div>
 
       <div v-if="!template" class="w-[120px] text-right money text-[13.5px] shrink-0" :style="{ color: row.spentFg }">{{ row.spentRp }}</div>
