@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
 import { rp, toMin, fromMin } from '~/utils/format'
+import { budgetCatOf, catIcon, tone } from '~/utils/categories'
 
 const props = withDefaults(defineProps<{ trip: Trip; template?: boolean }>(), { template: false })
 const ui = useUiStore()
@@ -62,6 +63,24 @@ const dayPct = computed(() =>
   dayPlanned.value ? Math.min(100, (daySpent.value / dayPlanned.value) * 100) : daySpent.value ? 100 : 0,
 )
 const dayOver = computed(() => daySpent.value > dayPlanned.value && dayPlanned.value > 0)
+const dayRemaining = computed(() => dayPlanned.value - daySpent.value)
+const dayPerPerson = computed(() => (props.trip.people ? daySpent.value / props.trip.people : daySpent.value))
+/** the day's money grouped by budget category — planned vs already spent */
+const dayCatRows = computed(() => {
+  const map = new Map<string, { planned: number; spent: number }>()
+  const add = (cat: string, planned: number, spent: number) => {
+    const k = budgetCatOf(cat)
+    const cur = map.get(k) || { planned: 0, spent: 0 }
+    cur.planned += planned
+    cur.spent += spent
+    map.set(k, cur)
+  }
+  for (const a of day.value?.acts || []) if (a.cost) add(a.cat, a.cost, a.paid ? a.cost : 0)
+  for (const m of (props.trip.manual || []).filter((m) => m.dayIdx === dayIdx.value)) add(m.cat, m.amount, m.amount)
+  return [...map.entries()]
+    .map(([name, v]) => ({ name, ...v, icon: catIcon(props.trip.catIcons, name), tone: tone(name) }))
+    .sort((a, b) => b.planned - a.planned)
+})
 
 /** timeline: activities with gap markers between them */
 const timeline = computed(() => {
@@ -203,12 +222,41 @@ async function removeCurrentDay() {
           <div class="eyebrow">Uang hari ini</div>
           <i class="i-lucide-arrow-up-right text-[16px] text-muted" />
         </div>
+
         <div class="flex items-baseline justify-between mt-2">
           <span class="text-[13px] text-muted">Terpakai</span>
-          <span class="money text-[18px] font-600" :style="dayOver ? { color: '#C85A28' } : {}">{{ rp(daySpent) }}</span>
+          <span class="money text-[20px] font-600" :style="dayOver ? { color: '#C85A28' } : {}">{{ rp(daySpent) }}</span>
         </div>
-        <div class="mt-3"><CoreBar :pct="dayPct" :over="dayOver" /></div>
-        <div class="text-[12.5px] text-muted mt-2 money">Rencana hari ini {{ rp(dayPlanned) }}</div>
+        <div class="mt-2"><CoreBar :pct="dayPct" :over="dayOver" /></div>
+        <div class="flex items-center justify-between mt-2 text-[12.5px]">
+          <span class="text-muted money">Rencana {{ rp(dayPlanned) }}</span>
+          <span v-if="dayPlanned > 0" class="money font-600" :style="dayOver ? { color: '#C85A28' } : { color: '#2F6B54' }">
+            {{ dayOver ? 'Lewat ' : 'Sisa ' }}{{ rp(dayOver ? -dayRemaining : dayRemaining) }}
+          </span>
+        </div>
+
+        <template v-if="dayCatRows.length">
+          <div class="border-t border-sand-100 mt-3 pt-2 flex flex-col">
+            <div
+              v-for="c in dayCatRows"
+              :key="c.name"
+              class="flex items-center gap-2 py-[5px]"
+            >
+              <span class="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center shrink-0" :style="{ background: c.tone[0], color: c.tone[1] }">
+                <i :class="c.icon" class="text-[12px]" />
+              </span>
+              <span class="text-[12.5px] text-ink-2 flex-1 truncate">{{ c.name }}</span>
+              <span v-if="c.spent > 0 && c.spent < c.planned" class="text-[11px] text-muted money mr-1">{{ rp(c.spent) }} terpakai</span>
+              <i v-else-if="c.spent > 0 && c.spent >= c.planned" class="i-lucide-check text-[13px] text-teal-600 mr-1" />
+              <span class="money text-[12.5px] font-600">{{ rp(c.planned) }}</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-sand-100 text-[12.5px]">
+            <span class="text-muted">Per orang ({{ trip.people }})</span>
+            <span class="money font-600">{{ rp(dayPerPerson) }}</span>
+          </div>
+        </template>
+        <div v-else class="text-[12.5px] text-muted mt-3 pt-3 border-t border-sand-100">Belum ada biaya di hari ini.</div>
       </NuxtLink>
 
       <MapsPanel

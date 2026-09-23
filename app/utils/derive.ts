@@ -1,7 +1,7 @@
 import type { Activity, Budget, Day, ExpenseLine, OutfitSet, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { addDays, longDate, shortDate, rp, shortRp, toMin, fromMin } from '~/utils/format'
-import { BAR_NEAR, BAR_OK, BAR_OVER, SEG_PALETTE, catIcon, ofItems, ofText, tone } from '~/utils/categories'
+import { BAR_NEAR, BAR_OK, BAR_OVER, SEG_PALETTE, budgetCatOf, catIcon, ofItems, ofText, tone } from '~/utils/categories'
 
 /**
  * First activity in `acts` whose time window clashes with `cand`, or null.
@@ -57,7 +57,7 @@ export function expenseLines(trip: Trip): ExpenseLine[] {
         out.push({
           id: a.id,
           title: a.title,
-          cat: a.cat === 'Santai' ? 'Lain' : a.cat,
+          cat: budgetCatOf(a.cat),
           dayIdx: di,
           amount: a.cost,
           derived: true,

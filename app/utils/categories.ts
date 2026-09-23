@@ -1,4 +1,4 @@
-import type { OutfitSet } from '~/types/domain'
+import type { Category, OutfitSet } from '~/types/domain'
 
 /** Category -> [bg, fg] tone, ported from prototype TONE map. */
 export const TONE: Record<string, [string, string]> = {
@@ -25,6 +25,21 @@ export function tone(name: string): [string, string] {
   let n = 0
   for (const ch of name) n += ch.charCodeAt(0)
   return PALETTE_TONE[n % PALETTE_TONE.length]!
+}
+
+/**
+ * Which budget line an activity category spends against. Budget categories map
+ * to themselves; the "activity-only" categories (Santai, Tempat) fold into a
+ * real budget line so a paid activity's cost is always represented in the
+ * budget breakdown — otherwise its spend counts in the total but appears in no
+ * category row, and the donut/rows stop summing to the total.
+ */
+export const ACT_CAT_BUDGET: Record<string, Category> = {
+  'Santai': 'Lain',
+  'Tempat': 'Tiket & atraksi',
+}
+export function budgetCatOf(cat: string): string {
+  return ACT_CAT_BUDGET[cat] || cat
 }
 
 /** Category -> Lucide icon class (presetIcons). */

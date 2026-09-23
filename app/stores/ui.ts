@@ -16,6 +16,7 @@ export const useUiStore = defineStore('ui', () => {
   const showNewTrip = ref(false)
   const showActForm = ref(false)
   const editOpen = ref(false)
+  const shareOpen = ref(false)
 
   // toast
   const toast = ref<string | null>(null)
@@ -32,7 +33,7 @@ export const useUiStore = defineStore('ui', () => {
 
   return {
     dayIdx, activityId, homeFilter, openCat, openScope,
-    showNewTrip, showActForm, editOpen,
+    showNewTrip, showActForm, editOpen, shareOpen,
     toast, flash, selectActivity,
   }
 })

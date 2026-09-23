@@ -37,6 +37,7 @@ useHead(() => ({ title: (trip.value?.name ?? 'Trip') + ' · Kelana' }))
       </div>
       <OverlayActivitySheet :trip="trip" />
       <OverlayEditTrip :trip="trip" />
+      <OverlayShare :trip="trip" />
     </div>
     <div v-else class="flex-1 flex items-center justify-center p-16 text-muted">
       Trip tidak ditemukan.
