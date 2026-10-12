@@ -16,8 +16,11 @@ const TOPBAR = 68
 const stickyTop = ref(TOPBAR + 168)
 let ro: ResizeObserver | null = null
 function measureSticky() {
+  // mobile: the trip header is static (scrolls away), so day controls pin right
+  // under the app bar. desktop: the trip header is sticky, so pin below it.
+  if (!window.matchMedia('(min-width: 768px)').matches) { stickyTop.value = TOPBAR; return }
   const el = document.querySelector('[data-trip-header]') as HTMLElement | null
-  if (el) stickyTop.value = TOPBAR + el.offsetHeight
+  stickyTop.value = TOPBAR + (el?.offsetHeight ?? 168)
 }
 onMounted(() => {
   measureSticky()

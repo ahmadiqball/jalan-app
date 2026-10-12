@@ -26,7 +26,7 @@ const budgetChip = computed(() => {
 </script>
 
 <template>
-  <div data-trip-header class="bg-white border-b border-sand-line sticky top-[68px] z-30">
+  <div data-trip-header class="bg-white border-b border-sand-line md:sticky md:top-[68px] z-30">
     <div class="max-w-[1400px] mx-auto p-[13px_16px_0] md:p-[18px_32px_0] flex flex-wrap gap-x-[14px] gap-y-[10px] md:gap-[18px] items-start">
       <NuxtLink
         :to="localePath('/beranda')"

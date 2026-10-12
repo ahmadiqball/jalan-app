@@ -23,14 +23,15 @@ async function openNewTrip() {
 
 <template>
   <header
-    class="h-[68px] shrink-0 bg-white border-b border-sand-line flex items-center gap-3 md:gap-[26px] px-4 md:px-8 sticky top-0 z-40"
+    class="h-[68px] shrink-0 bg-white border-b border-sand-line flex items-center gap-2 sm:gap-3 md:gap-[26px] px-3 sm:px-4 md:px-8 sticky top-0 z-40"
   >
     <button class="md:hidden w-9 h-9 rounded-[10px] hover:bg-sand-100 flex items-center justify-center shrink-0" @click="mobileOpen = !mobileOpen">
       <i :class="mobileOpen ? 'i-lucide-x' : 'i-lucide-menu'" class="text-[20px] text-ink-2" />
     </button>
 
     <NuxtLink :to="localePath('/beranda')" class="shrink-0">
-      <CoreLogo :size="30" :text-size="21" />
+      <CoreLogo :size="30" :text="false" class="sm:hidden" />
+      <CoreLogo :size="30" :text-size="21" class="hidden sm:flex" />
     </NuxtLink>
 
     <nav class="hidden md:flex gap-1 text-[14px] font-600">
