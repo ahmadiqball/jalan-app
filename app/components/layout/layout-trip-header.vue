@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
-import { matDef, matKey } from '~/utils/motifs'
-import { tripCover } from '~/utils/categories'
+import { matKey } from '~/utils/motifs'
 
 const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
@@ -12,7 +11,6 @@ const editable = computed(() => canEdit(props.trip))
 const owner = computed(() => isOwner(props.trip))
 
 const locked = computed(() => props.trip.status === 'live')
-const cover = computed(() => tripCover(props.trip))
 const typeLabel = computed(() => t('cat.' + matKey(props.trip.mat)))
 const activeBudget = computed(
   () => props.trip.budgets.find((b) => b.id === props.trip.activeBudget) || props.trip.budgets[0],
@@ -27,45 +25,32 @@ const budgetChip = computed(() => {
 
 <template>
   <div data-trip-header class="bg-white border-b border-sand-line md:sticky md:top-[68px] z-30">
-    <div class="max-w-[1400px] mx-auto p-[13px_16px_0] md:p-[18px_32px_0] flex flex-wrap gap-x-[14px] gap-y-[10px] md:gap-[18px] items-start">
+    <div class="max-w-[1400px] mx-auto p-[12px_16px_0] md:p-[18px_32px_0] flex flex-wrap gap-x-[12px] gap-y-[8px] md:gap-[16px] items-center">
       <NuxtLink
         :to="localePath('/beranda')"
-        class="w-[34px] h-[34px] shrink-0 rounded-full bg-paper border border-sand-line2 flex items-center justify-center mt-1 hover:border-teal-600"
+        class="w-[34px] h-[34px] shrink-0 rounded-full bg-paper border border-sand-line2 flex items-center justify-center hover:border-teal-600"
       >
         <i class="i-lucide-chevron-left text-[17px] text-ink-2" />
       </NuxtLink>
 
-      <button
-        class="w-[56px] h-[56px] md:w-[78px] md:h-[78px] shrink-0 rounded-[16px] md:rounded-[20px] overflow-hidden relative bg-cover"
-        :style="{
-          backgroundImage: cover ? `url('${cover}')` : undefined,
-          backgroundPosition: 'center 58%',
-          backgroundColor: matDef(trip.mat).bg,
-        }"
-        title="Ubah detail"
-        :disabled="!editable"
-        @click="editable && (ui.editOpen = true)"
-      >
-        <span v-if="editable" class="absolute right-[5px] bottom-[5px] w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-[0_4px_10px_-4px_rgba(16,38,43,.5)]">
-          <i class="i-lucide-pencil text-[12px] text-teal-700" />
-        </span>
-      </button>
-
-      <div class="flex-1 min-w-[150px] md:min-w-[220px]">
-        <div class="flex flex-wrap gap-[7px] md:gap-[9px] items-center">
+      <div class="flex-1 min-w-[150px] md:min-w-[220px] order-2 md:order-none w-full md:w-auto">
+        <div class="font-display text-[20px] md:text-[27px] font-600 leading-tight truncate">{{ trip.name }}</div>
+        <div class="flex items-center gap-[7px] flex-wrap text-[12.5px] md:text-[13px] text-ink-2 mt-[2px]">
+          <span class="truncate">{{ trip.place }} · {{ trip.dates }}</span>
+          <span class="hidden sm:inline text-muted">· {{ $t('app.header.people', { n: trip.people }) }}</span>
+        </div>
+        <!-- status / type / budget: a quiet chip row under the title -->
+        <div class="flex flex-wrap gap-[6px] items-center mt-[7px]">
           <CoreStatusPill :status="trip.status" />
-          <span class="rounded-pill bg-teal-100 text-teal-700 px-[11px] py-[5px] text-[12px] font-700">{{ typeLabel }}</span>
+          <span class="rounded-pill bg-teal-100 text-teal-700 px-[10px] py-[4px] text-[11.5px] font-700">{{ typeLabel }}</span>
           <NuxtLink
             :to="localePath(`/trip/${trip.id}/budget`)"
-            class="rounded-pill px-[11px] py-[5px] text-[12px] font-700"
+            class="rounded-pill px-[10px] py-[4px] text-[11.5px] font-700"
             :style="{ background: budgetChip.bg, color: budgetChip.fg }"
           >
             {{ budgetChip.copy }}
           </NuxtLink>
-          <span class="hidden sm:inline text-[13px] text-muted">{{ $t('app.header.people', { n: trip.people }) }}</span>
         </div>
-        <div class="font-display text-[21px] md:text-[28px] font-600 mt-[5px] md:mt-[7px] leading-tight">{{ trip.name }}</div>
-        <div class="text-[13px] md:text-[13.5px] text-ink-2 mt-[2px] md:mt-[3px]">{{ trip.place }} · {{ trip.dates }}</div>
       </div>
 
       <!-- actions: labels collapse to icons on mobile so they stay one row -->

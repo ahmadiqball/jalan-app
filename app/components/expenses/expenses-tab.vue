@@ -135,7 +135,8 @@ async function newSplit() {
   bagiRata()
 }
 
-/* log form */
+/* log form (in a popup) */
+const logOpen = ref(false)
 const amount = ref(0)
 const cat = ref<string>('Makan & minum')
 const dayIdx = ref('0')
@@ -146,6 +147,7 @@ function log() {
   trips.addManual(props.trip.id, { title: note.value.trim() || cat.value, cat: cat.value, dayIdx: parseInt(dayIdx.value, 10), amount: amount.value, note: note.value.trim() })
   amount.value = 0
   note.value = ''
+  logOpen.value = false
   flash('Pengeluaran dicatat')
 }
 </script>
@@ -153,8 +155,14 @@ function log() {
 <template>
   <div class="flex flex-wrap gap-5">
     <div class="flex-1 min-w-0 flex flex-col gap-4">
+      <div class="flex items-center justify-between gap-3">
+        <div class="font-display text-[24px] font-600">Pengeluaran</div>
+        <CoreButton variant="primary" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="logOpen = true">
+          <i class="i-lucide-plus" /> Catat
+        </CoreButton>
+      </div>
       <!-- filter -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
         <span class="eyebrow mr-1">Tampilkan</span>
         <button v-for="m in ['Hari', 'Kategori', 'Orang']" :key="m" :class="mode === m ? 'chip-active' : 'chip-idle'" class="!py-[7px] !px-[13px] !text-[12.5px]" @click="mode = m as typeof mode">{{ m }}</button>
       </div>
@@ -216,20 +224,10 @@ function log() {
         </div>
       </div>
 
-      <div v-if="!lines.length" class="card p-8 text-muted text-[14px]">Belum ada pengeluaran. Catat lewat form di samping.</div>
+      <div v-if="!lines.length" class="card p-8 text-center text-muted text-[14px]">Belum ada pengeluaran. Ketuk <span class="font-600 text-ink-2">Catat</span> untuk menambah.</div>
     </div>
 
     <div class="w-full lg:w-[340px] lg:shrink-0 flex flex-col gap-4">
-      <div class="card p-[18px]">
-        <div class="font-display text-[17px] font-600">Catat pengeluaran</div>
-        <div class="flex flex-col gap-3 mt-3">
-          <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah</span><CoreMoneyInput :model-value="amount" @update:model-value="amount = $event" @keydown.enter="log" /></label>
-          <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Kategori</span><CoreSelect v-model="cat" :options="[...CATEGORIES]" /></label>
-          <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Hari</span><CoreSelect v-model="dayIdx" :options="dayOptions" /></label>
-          <CoreInput v-model="note" label="Catatan (opsional)" placeholder="mis. Oleh-oleh" @keydown.enter="log" />
-          <CoreButton variant="primary" block @click="log">Catat</CoreButton>
-        </div>
-      </div>
       <div class="card p-[18px] text-[13px] text-ink-2 leading-[1.5]">
         <div class="font-600 text-ink mb-1">Cara hitung</div>
         Biaya aktivitas awalnya cuma rencana — baru masuk terpakai setelah ditandai <span class="font-600">sudah dibayar</span> (di layar Hari atau "Catat" di atas). Pengeluaran manual bisa diubah langsung di sini.
@@ -257,6 +255,22 @@ function log() {
     </div>
 
     <ExpensesSplitEmbed v-model:open="splitOpen" :url="splitUrl" />
+
+    <!-- log expense (popup) -->
+    <CoreDialog v-model:open="logOpen" side="center" :width="440" title="Catat pengeluaran">
+      <div class="flex flex-col gap-3">
+        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah</span><CoreMoneyInput :model-value="amount" @update:model-value="amount = $event" @keydown.enter="log" /></label>
+        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Kategori</span><CoreSelect v-model="cat" :options="catOptions" /></label>
+        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Hari</span><CoreSelect v-model="dayIdx" :options="dayOptions" /></label>
+        <CoreInput v-model="note" label="Catatan (opsional)" placeholder="mis. Oleh-oleh" @keydown.enter="log" />
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="logOpen = false">Batal</CoreButton>
+          <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[13.5px]" @click="log">Catat</CoreButton>
+        </div>
+      </template>
+    </CoreDialog>
 
     <!-- edit manual entry -->
     <CoreDialog v-if="editing" v-model:open="editOpen" side="center" :width="440" title="Ubah pengeluaran">

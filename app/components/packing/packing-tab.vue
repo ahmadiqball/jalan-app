@@ -9,6 +9,7 @@ const { flash } = useToast()
 const { packing } = useDerived(() => props.trip)
 const { recs: allRecs } = useContent()
 
+const addOpen = ref(false)
 const newItem = ref('')
 const newGroup = ref('Pakaian')
 const newReq = ref(false)
@@ -38,6 +39,7 @@ function add() {
   trips.addPackItem(props.trip.id, newGroup.value, { label: newItem.value.trim(), req: newReq.value, done: false })
   newItem.value = ''
   newReq.value = false
+  addOpen.value = false
   flash('Barang ditambahkan')
 }
 function addRec(r: (typeof recs.value)[number]) {
@@ -62,6 +64,12 @@ function addRec(r: (typeof recs.value)[number]) {
       <div class="w-[160px]"><CoreBar :pct="packing.total ? (packing.done / packing.total) * 100 : 0" :color="'#2F6B54'" /></div>
     </div>
 
+    <!-- header -->
+    <div class="flex items-center justify-between">
+      <div class="font-display text-[24px] font-600">Barang</div>
+      <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="addOpen = true">+ Tambah barang</CoreButton>
+    </div>
+
     <!-- groups -->
     <div v-if="packing.total" class="card p-[8px_10px] flex flex-col">
       <div v-for="(g, gi) in trip.packing" :key="gi" class="py-2 border-b border-sand-100 last:border-0">
@@ -69,17 +77,31 @@ function addRec(r: (typeof recs.value)[number]) {
         <PackingItem v-for="it in g.items" :key="it.id" :item="it" @toggle="trips.togglePackItem(trip.id, it.id)" />
       </div>
     </div>
-    <div v-else class="card p-8 text-center text-muted text-[14px]">Belum ada barang. Tambah di bawah atau pilih dari rekomendasi.</div>
+    <button
+      v-else
+      class="border border-dashed border-sand-line3 rounded-card min-h-[180px] flex flex-col items-center justify-center gap-2 text-muted hover:border-teal-600 hover:text-teal-700"
+      @click="addOpen = true"
+    >
+      <i class="i-lucide-luggage text-[26px]" />
+      <span class="text-[13.5px] font-600">Belum ada barang</span>
+    </button>
 
-    <!-- add item (no buy-link: that comes from recommendations) -->
-    <div class="card p-[14px_16px] flex gap-3 flex-wrap items-end">
-      <div class="flex-1 min-w-[180px]"><CoreInput v-model="newItem" label="Barang baru" placeholder="mis. Sunblock" @keydown.enter="add" /></div>
-      <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Grup</span><CoreSelect v-model="newGroup" :options="groupOptions" /></label>
-      <label class="flex items-center gap-2 text-[13.5px] text-ink-2 pb-[10px] cursor-pointer">
-        <CoreCheckbox :model-value="newReq" @update:model-value="newReq = $event" /> Wajib
-      </label>
-      <CoreButton variant="teal" class="!px-[18px] !py-[11px] !text-[13.5px]" @click="add">Tambah</CoreButton>
-    </div>
+    <!-- add item popup -->
+    <CoreDialog v-model:open="addOpen" side="center" :width="420" title="Tambah barang">
+      <div class="flex flex-col gap-3">
+        <CoreInput v-model="newItem" label="Barang baru" placeholder="mis. Sunblock" @keydown.enter="add" />
+        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Grup</span><CoreSelect v-model="newGroup" :options="groupOptions" /></label>
+        <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer">
+          <CoreCheckbox :model-value="newReq" @update:model-value="newReq = $event" /> Barang wajib
+        </label>
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="addOpen = false">Batal</CoreButton>
+          <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[13.5px]" @click="add">Tambah</CoreButton>
+        </div>
+      </template>
+    </CoreDialog>
 
     <!-- app recommendations -->
     <div v-if="recs.length" class="card p-[16px_18px]">
