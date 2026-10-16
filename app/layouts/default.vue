@@ -6,5 +6,6 @@
     </div>
     <CoreToast />
     <CoreConfirm />
+    <GuideAddToTrip />
   </div>
 </template>

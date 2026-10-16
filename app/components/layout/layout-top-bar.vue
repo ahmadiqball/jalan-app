@@ -5,6 +5,7 @@ const localePath = useLocalePath()
 
 const nav = [
   { key: 'home', to: '/beranda' },
+  { key: 'guides', to: '/guides' },
   { key: 'templates', to: '/template' },
   { key: 'archive', to: '/arsip' },
 ]
