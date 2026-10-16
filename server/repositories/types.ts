@@ -76,7 +76,73 @@ export interface ContentRepository {
   save(doc: ContentDoc): Promise<ContentDoc>
 }
 
+/* ── Guides: curated destinations + places catalog ── */
+export interface Destination {
+  id: string
+  slug: string
+  name: string
+  region: string
+  heroImage?: string
+  summary?: string
+  bestTime?: string
+  idealDuration?: string
+  goodFor?: string[]
+  tripTypes?: string[]
+  tips?: string[]
+  /** fuzzy-match a trip's free-text destination to this guide */
+  aliases?: string[]
+  /** template trip cloned by "Gunakan panduan untuk trip saya" */
+  itineraryTemplateId?: string
+  featured?: boolean
+  published?: boolean
+  sort?: number
+}
+export interface Place {
+  id: string
+  destinationId: string
+  name: string
+  /** hotel | makan | aktivitas | hidden_gem */
+  type: string
+  area?: string
+  priceText?: string
+  priceLevel?: number
+  rating?: number
+  ratingCount?: number
+  tags?: string[]
+  shortDesc?: string
+  longDesc?: string
+  /** self-hosted image URLs; [0] = cover */
+  gallery?: string[]
+  goodToKnow?: string[]
+  tips?: string[]
+  /** Google Maps reference — location only (deep link + coords), never images */
+  gmapsPlaceId?: string
+  lat?: number
+  lng?: number
+  openHours?: string
+  url?: string
+  badge?: string
+  featured?: boolean
+  sort?: number
+}
+
+export interface DestinationRepository {
+  list(opts?: { region?: string; includeUnpublished?: boolean }): Promise<Destination[]>
+  getBySlug(slug: string): Promise<Destination | null>
+  getById(id: string): Promise<Destination | null>
+  upsert(dest: Destination): Promise<Destination>
+  remove(id: string): Promise<boolean>
+}
+export interface PlaceRepository {
+  listByDestination(destinationId: string): Promise<Place[]>
+  getById(id: string): Promise<Place | null>
+  upsert(place: Place): Promise<Place>
+  remove(id: string): Promise<boolean>
+}
+
 export interface Repositories {
   trips: TripRepository
   content: ContentRepository
+  destinations: DestinationRepository
+  places: PlaceRepository
 }
