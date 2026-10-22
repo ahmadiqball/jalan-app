@@ -6,7 +6,6 @@ import { rp } from '~/utils/format'
 
 useHead({ title: 'Admin · Kelana' })
 const { flash } = useToast()
-const trips = useTripsStore()
 const { content, save } = useContent()
 const { list, ensureLoaded, create, remove } = useTemplates()
 const { apiFetch } = useApi()
@@ -58,7 +57,7 @@ async function removeGuide(id: string, name: string) {
 }
 
 // load templates into the store so the trip tabs can edit them
-watchEffect(() => { if (content.value) ensureLoaded() })
+watchEffect(() => ensureLoaded())
 
 const templateTotal = (tp: Trip) => {
   const b = tp.budgets?.find((x) => x.id === tp.activeBudget) || tp.budgets?.[0]
@@ -80,7 +79,7 @@ const saving = ref(false)
 async function saveAll() {
   saving.value = true
   try {
-    await save({ templates: trips.templateTrips as Trip[], recs: recs.value })
+    await save({ recs: recs.value })
     flash('Konten disimpan')
   } catch {
     flash('Gagal menyimpan')
@@ -89,8 +88,8 @@ async function saveAll() {
   }
 }
 
-function newTemplate() {
-  const id = create()
+async function newTemplate() {
+  const id = await create()
   navigateTo(`/admin/template/${id}`)
 }
 async function removeTemplate(id: string, name: string) {
@@ -101,8 +100,7 @@ async function removeTemplate(id: string, name: string) {
     danger: true,
   })
   if (!ok) return
-  remove(id)
-  await saveAll()
+  await remove(id)
 }
 </script>
 

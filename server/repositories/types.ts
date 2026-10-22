@@ -48,14 +48,20 @@ export interface PackRecItem {
   cats?: string[]
 }
 export interface ContentDoc {
-  /** starter templates, each a full trip document (opaque here) */
-  templates: TemplateTrip[]
   recs: PackRecItem[]
 }
 
 export interface ContentRepository {
   get(): Promise<ContentDoc>
   save(doc: ContentDoc): Promise<ContentDoc>
+}
+
+/** Starter templates, one row per template (data = a full trip document). */
+export interface TemplateRepository {
+  list(): Promise<TemplateTrip[]>
+  get(id: string): Promise<TemplateTrip | null>
+  upsert(tpl: TemplateTrip): Promise<TemplateTrip>
+  remove(id: string): Promise<boolean>
 }
 
 /* ── Guides: curated destinations + places catalog ── */
@@ -125,6 +131,7 @@ export interface PlaceRepository {
 export interface Repositories {
   trips: TripRepository
   content: ContentRepository
+  templates: TemplateRepository
   destinations: DestinationRepository
   places: PlaceRepository
 }

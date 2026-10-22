@@ -7,7 +7,7 @@ const trips = useTripsStore()
 const session = useSessionStore()
 const { flash } = useToast()
 const { rp } = useMoney()
-const { templates } = useContent()
+const { templates } = useTemplatesList()
 const cloud = useIsCloud()
 
 const total = (tp: Trip) => {

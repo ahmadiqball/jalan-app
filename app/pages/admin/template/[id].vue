@@ -41,7 +41,7 @@ function setCover(v: string) { trips.updateTrip(id.value, { cover: v }) }
 const saving = ref(false)
 async function save() {
   saving.value = true
-  try { await persist(); flash('Template disimpan') } catch { flash('Gagal menyimpan') } finally { saving.value = false }
+  try { await persist(id.value); flash('Template disimpan') } catch { flash('Gagal menyimpan') } finally { saving.value = false }
 }
 </script>
 

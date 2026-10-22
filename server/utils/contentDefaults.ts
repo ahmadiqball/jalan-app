@@ -53,10 +53,9 @@ function tpl(s: TplSeed): TemplateTrip {
   }
 }
 
-/** Seed content shipped with the app; the admin can override it via /admin. */
-export function defaultContent(): ContentDoc {
-  return {
-    templates: [
+/** Starter templates shipped with the app (one row each in the templates table). */
+export function defaultTemplates(): TemplateTrip[] {
+  return [
       tpl({
         id: 'tpl-sumba', name: 'Sumba 4 hari', place: 'Waingapu, Sumba Timur', mat: 'pantai', cover: '/img/photo-sumba.jpg',
         days: [
@@ -98,7 +97,12 @@ export function defaultContent(): ContentDoc {
           { groups: ['Perlengkapan'], items: [{ label: 'Masker debu', req: true }, { label: 'Senter kepala' }] },
         ],
       }),
-    ],
+  ]
+}
+
+/** Seed content shipped with the app; the admin can override it via /admin. */
+export function defaultContent(): ContentDoc {
+  return {
     recs: [
       { id: 'r-ktp', label: 'KTP dan kartu vaksin', groups: ['Dokumen'], req: true },
       { id: 'r-obat', label: 'Obat pribadi', groups: ['Dokumen'], req: true, url: 'https://www.halodoc.com/kategori/obat-obatan' },

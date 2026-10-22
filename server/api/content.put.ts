@@ -4,8 +4,8 @@ import type { ContentDoc } from '../repositories/types'
 export default defineEventHandler(async (event) => {
   await requireAdmin(event)
   const body = await readBody<ContentDoc>(event)
-  if (!body || !Array.isArray(body.templates) || !Array.isArray(body.recs)) {
+  if (!body || !Array.isArray(body.recs)) {
     throw createError({ statusCode: 400, statusMessage: 'Konten tidak valid' })
   }
-  return useRepositories(event).content.save({ templates: body.templates, recs: body.recs })
+  return useRepositories(event).content.save({ recs: body.recs })
 })

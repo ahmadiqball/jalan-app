@@ -4,6 +4,8 @@ import { SupabaseTripRepository } from '../repositories/supabase/tripRepository'
 import { MemoryTripRepository } from '../repositories/memory/tripRepository'
 import { SupabaseContentRepository } from '../repositories/supabase/contentRepository'
 import { MemoryContentRepository } from '../repositories/memory/contentRepository'
+import { SupabaseTemplateRepository } from '../repositories/supabase/templateRepository'
+import { MemoryTemplateRepository } from '../repositories/memory/templateRepository'
 import { SupabaseDestinationRepository } from '../repositories/supabase/destinationRepository'
 import { MemoryDestinationRepository } from '../repositories/memory/destinationRepository'
 import { SupabasePlaceRepository } from '../repositories/supabase/placeRepository'
@@ -23,6 +25,7 @@ export function useRepositories(event: H3Event): Repositories {
     return {
       trips: new SupabaseTripRepository(sb),
       content: new SupabaseContentRepository(sb),
+      templates: new SupabaseTemplateRepository(sb),
       destinations: new SupabaseDestinationRepository(sb),
       places: new SupabasePlaceRepository(sb),
     }
@@ -31,6 +34,7 @@ export function useRepositories(event: H3Event): Repositories {
     memoryRepos = {
       trips: new MemoryTripRepository(),
       content: new MemoryContentRepository(),
+      templates: new MemoryTemplateRepository(),
       destinations: new MemoryDestinationRepository(),
       places: new MemoryPlaceRepository(),
     }

@@ -17,7 +17,5 @@ export interface PackRecItem {
 }
 
 export interface ContentDoc {
-  /** starter templates, each a full trip document */
-  templates: Trip[]
   recs: PackRecItem[]
 }

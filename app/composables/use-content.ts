@@ -1,12 +1,11 @@
 import type { ContentDoc } from '~/types/content'
 
-/** App content (templates + packing recs), fetched from the server (SSR-friendly). */
+/** App content (packing recs), fetched from the server (SSR-friendly). */
 export function useContent() {
   const { data, refresh } = useFetch<ContentDoc>('/api/content', {
     key: 'app-content',
-    default: () => ({ templates: [], recs: [] }),
+    default: () => ({ recs: [] }),
   })
-  const templates = computed(() => data.value?.templates ?? [])
   const recs = computed(() => data.value?.recs ?? [])
 
   async function save(doc: ContentDoc): Promise<void> {
@@ -15,5 +14,5 @@ export function useContent() {
     data.value = res
   }
 
-  return { templates, recs, content: data, refresh, save }
+  return { recs, content: data, refresh, save }
 }

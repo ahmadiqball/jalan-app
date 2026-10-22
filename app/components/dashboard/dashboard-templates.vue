@@ -7,7 +7,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { flash } = useToast()
 const { rp } = useMoney()
-const { templates } = useContent()
+const { templates } = useTemplatesList()
 const cloud = useIsCloud()
 const picks = computed(() => templates.value.slice(0, 3))
 

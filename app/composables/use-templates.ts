@@ -1,34 +1,42 @@
 import type { Trip } from '~/types/domain'
-import type { PackRecItem } from '~/types/content'
 
 /**
- * Admin templates. A template is a full trip document stored in global content.
- * We load them into the trips store so the normal trip tabs can edit them, then
- * persist the edited template trips back to content.
+ * Admin templates. A template is a full trip document, now stored one row per
+ * template in the templates table. For editing we still load them into the
+ * trips store so the normal trip tabs can edit them, then persist each edited
+ * template back to its own row (not a single blob).
  */
 export function useTemplates() {
   const trips = useTripsStore()
-  const { content, templates: contentTemplates, save } = useContent()
+  const { apiFetch } = useApi()
+  const { templates, refresh } = useTemplatesList()
 
-  /** load content templates into the store (idempotent; only when store empty) */
+  /** load templates into the store (idempotent; only when store empty) */
   function ensureLoaded() {
-    if (trips.templateTrips.length === 0 && contentTemplates.value.length) {
-      trips.loadTemplates(contentTemplates.value as Trip[])
+    if (trips.templateTrips.length === 0 && templates.value.length) {
+      trips.loadTemplates(templates.value as Trip[])
     }
   }
 
   const list = computed(() => trips.templateTrips)
 
-  async function persist() {
-    const recs = (content.value?.recs ?? []) as PackRecItem[]
-    await save({ templates: trips.templateTrips as Trip[], recs })
+  /** persist one edited template (by id) to its row */
+  async function persist(id: string) {
+    const t = trips.byId(id)
+    if (!t) return
+    await apiFetch(`/api/admin/templates/${id}`, { method: 'PUT', body: t })
+    await refresh()
   }
-  function create(): string {
-    return trips.addTemplate()
+  async function create(): Promise<string> {
+    const id = trips.addTemplate()
+    await persist(id)
+    return id
   }
-  function remove(id: string) {
+  async function remove(id: string) {
+    await apiFetch(`/api/admin/templates/${id}`, { method: 'DELETE' })
     trips.deleteTemplate(id)
+    await refresh()
   }
 
-  return { list, ensureLoaded, persist, create, remove }
+  return { list, templates, ensureLoaded, persist, create, remove }
 }
