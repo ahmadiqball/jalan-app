@@ -163,11 +163,11 @@ async function removeCurrentDay() {
             {{ (day?.acts.length || 0) }} aktivitas
           </div>
         </div>
-        <div class="flex items-center gap-2 shrink-0">
+        <div class="flex items-center gap-2 shrink min-w-0 justify-end flex-wrap">
           <!-- today's money at a glance, kept visible while the list scrolls -->
           <div
             v-if="dayPlanned > 0 || daySpent > 0"
-            class="flex items-baseline gap-[6px] rounded-pill bg-white border border-sand-line px-[12px] py-[7px]"
+            class="flex items-baseline gap-[6px] rounded-pill bg-white border border-sand-line px-[11px] py-[7px] min-w-0"
             title="Uang hari ini"
           >
             <i class="i-lucide-wallet text-[13px] shrink-0 self-center" :class="dayOver ? 'text-warn-fg' : 'text-teal-700'" />
@@ -183,8 +183,8 @@ async function removeCurrentDay() {
           >
             <i class="i-lucide-trash-2 text-[16px]" />
           </button>
-          <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[14px]" @click="addAndOpen(nextStart)">
-            <i class="i-lucide-plus" /> Tambah aktivitas
+          <CoreButton variant="primary" class="!px-[13px] sm:!px-[18px] !py-[10px] !text-[14px] shrink-0" @click="addAndOpen(nextStart)">
+            <i class="i-lucide-plus" /> <span class="hidden sm:inline">Tambah aktivitas</span>
           </CoreButton>
         </div>
       </div>

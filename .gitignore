@@ -25,3 +25,6 @@ logs
 
 # WSL alternate-data-stream markers
 *:Zone.Identifier
+
+# mobile QA screenshots
+scratch/

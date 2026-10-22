@@ -54,6 +54,9 @@ importers:
       '@unocss/nuxt':
         specifier: ^66.8.1
         version: 66.8.1(esbuild@0.28.2)(magic-string@1.2.3)(magicast@0.5.4)(oxc-parser@0.141.0)(rolldown@1.2.6)(rollup@4.63.1)(unplugin@3.3.0(esbuild@0.28.2)(rolldown@1.2.6)(rollup@4.63.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0))(webpack@5.110.2(cssnano@8.0.10(postcss@8.5.26))(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26)))(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.0))(webpack@5.110.2(cssnano@8.0.10(postcss@8.5.26))(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.26))
+      playwright-core:
+        specifier: ^1.64.1
+        version: 1.64.1
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -3720,6 +3723,11 @@ packages:
 
   pkg-types@2.3.1:
     resolution: {integrity: sha512-y+ichcgc2LrADuhLNAx8DFjVfgz91pRxfZdI3UDhxHvcVEZsenLO+7XaU5vOp0u/7V/wZ+plyuQxtrDlZJ+yeg==}
+
+  playwright-core@1.64.1:
+    resolution: {integrity: sha512-BC4s8y6SEVA6Q1rSxZTto8hI1KUI3xXlHGZgvGqP4IqPdI/a6FX9H29IDNz7vKo9l21b6LfYosScPL6M3xxyDQ==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   postcss-calc@10.1.1:
     resolution: {integrity: sha512-NYEsLHh8DgG/PRH2+G9BTuUdtf9ViS+vdoQ0YA5OQdGsfN4ztiwtDWNtBl9EKeqNMFnIu8IKZ0cLxEQ5r5KVMw==}
@@ -8959,6 +8967,8 @@ snapshots:
       confbox: 0.2.4
       exsolve: 1.1.1
       pathe: 2.0.3
+
+  playwright-core@1.64.1: {}
 
   postcss-calc@10.1.1(postcss@8.5.26):
     dependencies:

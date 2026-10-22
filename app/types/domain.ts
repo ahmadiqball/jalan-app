@@ -145,8 +145,8 @@ export interface Trip {
   inviteRole?: MemberRole
   /** per-category custom icon (lucide class), overrides the default map */
   catIcons?: Record<string, string>
-  /** manual recommendation-region override when the destination text can't be
-   *  auto-resolved (see regionOf); an id from ContentDoc.regions */
+  /** manual guide-destination override when the trip's place text can't be
+   *  auto-matched to a Guides destination (used by in-trip recommendations) */
   region?: string
   days: Day[]
   activeBudget: string
