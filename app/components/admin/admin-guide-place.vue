@@ -20,6 +20,15 @@ const tipsStr = ref(lines(props.place.tips))
 const open = ref(!!props.startOpen)
 const saving = ref(false)
 
+const { cloud, uploading, upload } = useImageUpload()
+const galleryInput = ref<HTMLInputElement | null>(null)
+async function onPickGallery(e: Event) {
+  const input = e.target as HTMLInputElement
+  const url = await upload(input.files?.[0])
+  if (url) galleryStr.value = (galleryStr.value ? galleryStr.value + '\n' : '') + url
+  input.value = ''
+}
+
 const typeOptions = PLACE_TYPES.map((t) => ({ value: t.id, label: t.label }))
 const priceOptions = [
   { value: '0', label: '— tanpa level' }, { value: '1', label: 'Rp' }, { value: '2', label: 'Rp Rp' },
@@ -76,7 +85,14 @@ async function save() {
       <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Deskripsi singkat</span><input v-model="p.shortDesc" class="field !py-[8px]" placeholder="Satu kalimat untuk kartu"></label>
       <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tentang (panjang)</span><textarea v-model="p.longDesc" rows="3" class="field !py-[8px] resize-none" placeholder="Paragraf 'Tentang'" /></label>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-        <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Galeri — URL gambar (satu per baris)</span><textarea v-model="galleryStr" rows="3" class="field !py-[8px] resize-none" placeholder="https://…/foto.jpg" /></label>
+        <label class="flex flex-col gap-1">
+          <span class="text-[11px] text-muted font-600 flex items-center justify-between">
+            <span>Galeri — URL gambar (satu per baris)</span>
+            <button v-if="cloud" type="button" class="text-teal-700 font-600 flex items-center gap-1 disabled:opacity-50" :disabled="uploading" @click="galleryInput?.click()"><i class="i-lucide-upload text-[12px]" /> {{ uploading ? 'Mengunggah…' : 'Unggah' }}</button>
+          </span>
+          <textarea v-model="galleryStr" rows="3" class="field !py-[8px] resize-none" placeholder="https://…/foto.jpg" />
+          <input ref="galleryInput" type="file" accept="image/*" class="hidden" @change="onPickGallery">
+        </label>
         <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Good to Know (satu per baris)</span><textarea v-model="gtkStr" rows="3" class="field !py-[8px] resize-none" /></label>
         <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tips (satu per baris)</span><textarea v-model="tipsStr" rows="3" class="field !py-[8px] resize-none" /></label>
       </div>
