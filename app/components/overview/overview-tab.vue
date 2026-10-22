@@ -32,7 +32,7 @@ const allPlaces = computed(() =>
           <span class="rounded-pill px-[11px] py-[5px] text-[12px] font-700" :style="{ background: budget.statusBg, color: budget.statusFg }">{{ budget.statusCopy }}</span>
         </div>
         <div class="money text-[34px] font-600 mt-1" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</div>
-        <div class="text-[13.5px] text-muted mt-1 money">dari rencana {{ rp(budget.plan) }} · {{ rp(budget.perPerson) }} per orang</div>
+        <div class="text-[13.5px] text-muted mt-1">dari rencana <span class="money">{{ rp(budget.plan) }}</span> · <span class="money">{{ rp(budget.perPerson) }}</span> per orang</div>
         <div class="mt-3"><CoreBar :pct="budget.pct" :over="budget.over" /></div>
         <div class="flex items-center justify-between mt-[6px] text-[12.5px]">
           <span class="money" :style="{ color: budget.statusFg }">{{ Math.round(budget.pct) }}% terpakai</span>

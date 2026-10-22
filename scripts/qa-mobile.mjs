@@ -33,6 +33,7 @@ function findChromium() {
 
 const routes = [
   ['beranda', '/beranda'],
+  ['overview', '/trip/t1/overview'],
   ['days', '/trip/t1/days'],
   ['budget', '/trip/t1/budget'],
   ['expenses', '/trip/t1/expenses'],
