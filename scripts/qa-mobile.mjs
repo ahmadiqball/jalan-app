@@ -43,6 +43,7 @@ const routes = [
   ['guides', '/guides'],
   ['guide-detail', '/guides/bali'],
   ['place-detail', '/guides/bali/pl-old-island'],
+  ['tersimpan', '/tersimpan'],
 ]
 
 const browser = await chromium.launch({ executablePath: findChromium(), headless: true, args: ['--no-sandbox'] })

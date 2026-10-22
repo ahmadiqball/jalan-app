@@ -7,9 +7,11 @@ definePageMeta({ public: true })
 const route = useRoute()
 const localePath = useLocalePath()
 const { searchUrl } = useMaps()
-const { flash } = useToast()
 const { open: addToTrip } = useAddToTrip()
+const session = useSessionStore()
+const { isSaved, toggle, refresh: refreshSaved } = useSaved()
 const placeId = computed(() => route.params.placeId as string)
+onMounted(refreshSaved)
 
 const { data: place, error } = await useFetch<PlaceDetail>(() => `/api/places/${placeId.value}`, { key: `place-${placeId.value}` })
 useHead(() => ({ title: (place.value?.name ?? 'Tempat') + ' · Kelana Guides' }))
@@ -17,6 +19,13 @@ useHead(() => ({ title: (place.value?.name ?? 'Tempat') + ' · Kelana Guides' })
 const gallery = computed(() => place.value?.gallery ?? [])
 const mainImg = ref(0)
 const mapHref = computed(() => (place.value ? searchUrl({ name: place.value.name, placeId: place.value.gmapsPlaceId }, place.value.destination.name) : '#'))
+
+const saved = computed(() => (place.value ? isSaved('place', place.value.id) : false))
+function onSave() {
+  if (!place.value) return
+  if (!session.authed) return navigateTo(localePath(`/masuk?next=${encodeURIComponent(route.fullPath)}`))
+  toggle('place', place.value.id)
+}
 </script>
 
 <template>
@@ -46,7 +55,7 @@ const mapHref = computed(() => (place.value ? searchUrl({ name: place.value.name
           <div class="flex items-center gap-[7px] text-[13.5px] text-ink-2 mt-1"><i class="i-lucide-map-pin text-[15px] text-teal-700" /> {{ place.area || place.destination.name }}</div>
         </div>
         <div class="flex gap-2 shrink-0">
-          <CoreButton variant="ghost" class="!px-[15px] !py-[10px] !text-[13.5px]" @click="flash('Fitur simpan segera hadir')"><i class="i-lucide-bookmark text-[15px]" /> Simpan</CoreButton>
+          <CoreButton variant="ghost" class="!px-[15px] !py-[10px] !text-[13.5px]" :class="saved ? '!text-teal-700 !border-teal-600' : ''" @click="onSave"><i :class="saved ? 'i-lucide-bookmark-check' : 'i-lucide-bookmark'" class="text-[15px]" /> {{ saved ? 'Tersimpan' : 'Simpan' }}</CoreButton>
           <CoreButton variant="primary" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="addToTrip(place)"><i class="i-lucide-plus text-[15px]" /> Tambah ke trip</CoreButton>
         </div>
       </div>

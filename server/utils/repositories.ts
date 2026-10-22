@@ -10,6 +10,8 @@ import { SupabaseDestinationRepository } from '../repositories/supabase/destinat
 import { MemoryDestinationRepository } from '../repositories/memory/destinationRepository'
 import { SupabasePlaceRepository } from '../repositories/supabase/placeRepository'
 import { MemoryPlaceRepository } from '../repositories/memory/placeRepository'
+import { SupabaseSavedRepository } from '../repositories/supabase/savedRepository'
+import { MemorySavedRepository } from '../repositories/memory/savedRepository'
 import { cloudEnabled, useSupabase } from './supabase'
 
 let memoryRepos: Repositories | null = null
@@ -28,6 +30,7 @@ export function useRepositories(event: H3Event): Repositories {
       templates: new SupabaseTemplateRepository(sb),
       destinations: new SupabaseDestinationRepository(sb),
       places: new SupabasePlaceRepository(sb),
+      saved: new SupabaseSavedRepository(sb),
     }
   }
   if (!memoryRepos)
@@ -37,6 +40,7 @@ export function useRepositories(event: H3Event): Repositories {
       templates: new MemoryTemplateRepository(),
       destinations: new MemoryDestinationRepository(),
       places: new MemoryPlaceRepository(),
+      saved: new MemorySavedRepository(),
     }
   return memoryRepos
 }

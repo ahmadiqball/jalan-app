@@ -10,8 +10,10 @@ const { flash } = useToast()
 const trips = useTripsStore()
 const session = useSessionStore()
 const { templates } = useTemplatesList()
+const { isSaved, toggle, refresh: refreshSaved } = useSaved()
 const cloud = useIsCloud()
 const slug = computed(() => route.params.slug as string)
+onMounted(refreshSaved)
 
 const { data: guide, error } = await useFetch<GuideDetail>(() => `/api/guides/${slug.value}`, { key: `guide-${slug.value}` })
 useHead(() => ({ title: (guide.value?.name ?? 'Panduan') + ' · Kelana Guides' }))
@@ -34,6 +36,13 @@ async function useGuide() {
   } finally {
     using.value = false
   }
+}
+
+const savedGuide = computed(() => (guide.value ? isSaved('guide', guide.value.id) : false))
+function onSaveGuide() {
+  if (!guide.value) return
+  if (!session.authed) return navigateTo(localePath(`/masuk?next=${encodeURIComponent(route.fullPath)}`))
+  toggle('guide', guide.value.id)
 }
 
 const tab = ref<'ringkasan' | 'tempat' | 'peta' | 'tips'>('tempat')
@@ -82,8 +91,8 @@ const facts = computed(() => {
             <CoreButton variant="primary" class="!px-[16px] !py-[11px] !text-[13.5px]" :disabled="using" @click="useGuide">
               <i class="i-lucide-wand-sparkles text-[15px]" /> {{ using ? 'Membuat…' : 'Gunakan panduan untuk trip saya' }}
             </CoreButton>
-            <CoreButton variant="ghost" class="!px-[15px] !py-[11px] !text-[13.5px] !bg-white/90" @click="flash('Fitur simpan segera hadir')">
-              <i class="i-lucide-bookmark text-[15px]" /> Simpan
+            <CoreButton variant="ghost" class="!px-[15px] !py-[11px] !text-[13.5px] !bg-white/90" @click="onSaveGuide">
+              <i :class="savedGuide ? 'i-lucide-bookmark-check text-teal-700' : 'i-lucide-bookmark'" class="text-[15px]" /> {{ savedGuide ? 'Tersimpan' : 'Simpan' }}
             </CoreButton>
           </div>
         </div>

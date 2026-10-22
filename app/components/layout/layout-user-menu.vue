@@ -41,6 +41,12 @@ async function logout() {
         <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
 
         <DropdownMenuItem
+          class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[13.5px] text-ink cursor-pointer outline-none data-[highlighted]:bg-sand-100"
+          @select="navigateTo(localePath('/tersimpan'))"
+        >
+          <i class="i-lucide-bookmark text-[15px] text-teal-600" /> Tersimpan
+        </DropdownMenuItem>
+        <DropdownMenuItem
           v-if="showAdmin"
           class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[13.5px] text-ink cursor-pointer outline-none data-[highlighted]:bg-sand-100"
           @select="navigateTo(localePath('/admin'))"

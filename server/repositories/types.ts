@@ -128,10 +128,21 @@ export interface PlaceRepository {
   remove(id: string): Promise<boolean>
 }
 
+export interface SavedItem {
+  kind: string
+  refId: string
+}
+export interface SavedRepository {
+  list(userId: string): Promise<SavedItem[]>
+  add(userId: string, kind: string, refId: string): Promise<void>
+  remove(userId: string, kind: string, refId: string): Promise<void>
+}
+
 export interface Repositories {
   trips: TripRepository
   content: ContentRepository
   templates: TemplateRepository
   destinations: DestinationRepository
   places: PlaceRepository
+  saved: SavedRepository
 }
