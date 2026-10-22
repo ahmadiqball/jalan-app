@@ -6,7 +6,13 @@ const route = useRoute()
 const { flash } = useToast()
 const { confirm } = useConfirm()
 const { getDestination, saveDestination, savePlace, deletePlace } = useGuidesAdmin()
+const { templates } = useTemplatesList()
 const id = route.params.id as string
+
+const templateOptions = computed(() => [
+  { value: '', label: '— Tidak ada —' },
+  ...templates.value.map((t) => ({ value: t.id, label: t.name })),
+])
 
 const csv = (a?: string[]) => (a || []).join(', ')
 const linesOf = (a?: string[]) => (a || []).join('\n')
@@ -131,6 +137,7 @@ async function onRemovePlace(p: Place) {
           <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Alias untuk cocokkan trip (koma)</span><input v-model="aliasesStr" class="field !py-[9px]" placeholder="bali, ubud, kuta, seminyak"></label>
         </div>
         <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Tips perjalanan (satu per baris)</span><textarea v-model="tipsStr" rows="3" class="field !py-[9px] resize-none" /></label>
+        <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Itinerary template — dipakai saat "Gunakan panduan untuk trip saya"</span><CoreSelect :model-value="dest.itineraryTemplateId || ''" :options="templateOptions" @update:model-value="dest.itineraryTemplateId = $event || undefined" /></label>
         <div class="flex flex-wrap items-center gap-5 pt-1">
           <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.published" @update:model-value="dest.published = $event" /> Tayangkan (publik)</label>
           <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.featured" @update:model-value="dest.featured = $event" /> Unggulan di beranda Guides</label>

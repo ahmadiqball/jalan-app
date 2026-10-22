@@ -6,10 +6,35 @@ definePageMeta({ public: true })
 const route = useRoute()
 const localePath = useLocalePath()
 const { searchUrl } = useMaps()
+const { flash } = useToast()
+const trips = useTripsStore()
+const session = useSessionStore()
+const { templates } = useTemplatesList()
+const cloud = useIsCloud()
 const slug = computed(() => route.params.slug as string)
 
 const { data: guide, error } = await useFetch<GuideDetail>(() => `/api/guides/${slug.value}`, { key: `guide-${slug.value}` })
 useHead(() => ({ title: (guide.value?.name ?? 'Panduan') + ' · Kelana Guides' }))
+
+// "Gunakan panduan" — clone the linked itinerary template into a new trip, or
+// start a trip seeded with the destination when none is linked. Auth-gated.
+const using = ref(false)
+async function useGuide() {
+  if (!guide.value) return
+  if (!session.authed) return navigateTo(localePath(`/masuk?next=${encodeURIComponent(route.fullPath)}`))
+  using.value = true
+  try {
+    const owner = cloud ? { name: session.name, email: session.email } : undefined
+    const tpl = guide.value.itineraryTemplateId ? templates.value.find((t) => t.id === guide.value!.itineraryTemplateId) : null
+    const id = tpl
+      ? trips.cloneTrip(tpl, { owner })
+      : trips.createTrip({ name: guide.value.name, place: guide.value.name, owner })
+    flash('Trip dibuat dari panduan')
+    await navigateTo(localePath(`/trip/${id}/days`))
+  } finally {
+    using.value = false
+  }
+}
 
 const tab = ref<'ringkasan' | 'tempat' | 'peta' | 'tips'>('tempat')
 const TABS = [
@@ -53,6 +78,14 @@ const facts = computed(() => {
           <NuxtLink :to="localePath('/guides')" class="inline-flex items-center gap-1 text-[12.5px] font-600 text-white/90 mb-2 hover:text-white"><i class="i-lucide-chevron-left text-[15px]" /> Semua panduan</NuxtLink>
           <div class="font-display text-[clamp(28px,6vw,44px)] font-800 text-white leading-[1.02]">{{ guide.name }}</div>
           <div class="text-[13.5px] text-white/85 mt-1">{{ guide.region }} · {{ places.length }} rekomendasi tempat</div>
+          <div class="flex gap-2 mt-4 flex-wrap">
+            <CoreButton variant="primary" class="!px-[16px] !py-[11px] !text-[13.5px]" :disabled="using" @click="useGuide">
+              <i class="i-lucide-wand-sparkles text-[15px]" /> {{ using ? 'Membuat…' : 'Gunakan panduan untuk trip saya' }}
+            </CoreButton>
+            <CoreButton variant="ghost" class="!px-[15px] !py-[11px] !text-[13.5px] !bg-white/90" @click="flash('Fitur simpan segera hadir')">
+              <i class="i-lucide-bookmark text-[15px]" /> Simpan
+            </CoreButton>
+          </div>
         </div>
       </div>
 
