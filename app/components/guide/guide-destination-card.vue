@@ -8,21 +8,24 @@ const localePath = useLocalePath()
 <template>
   <NuxtLink :to="localePath(`/guides/${destination.slug}`)" class="card overflow-hidden flex flex-col group hover:shadow-lift transition-shadow">
     <div
-      class="h-[150px] bg-cover bg-center relative"
+      class="h-[158px] bg-cover bg-center relative shrink-0"
       :style="{ backgroundImage: destination.heroImage ? `url('${destination.heroImage}')` : undefined, backgroundColor: '#DEEEEC' }"
     >
-      <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(16,38,43,0) 42%,rgba(16,38,43,.55))" />
-      <div class="absolute left-[14px] bottom-[11px] right-[14px]">
-        <div class="font-display text-[21px] font-700 text-white leading-tight">{{ destination.name }}</div>
-        <div class="text-[12.5px] text-white/85">{{ destination.region }}</div>
-      </div>
+      <!-- FREE badge for featured/free guides (premium lock comes in the paywall phase) -->
+      <span v-if="destination.featured" class="absolute top-[10px] right-[10px] rounded-pill bg-teal-600 text-white px-[10px] py-[4px] text-[10.5px] font-700 tracking-[.06em]">FREE</span>
     </div>
-    <div class="p-[14px_16px] flex flex-col gap-[9px] flex-1">
-      <p v-if="destination.summary" class="text-[12.5px] text-ink-2 leading-snug line-clamp-2">{{ destination.summary }}</p>
-      <div v-if="destination.tripTypes?.length" class="flex gap-[6px] flex-wrap">
-        <span v-for="t in destination.tripTypes.slice(0, 3)" :key="t" class="rounded-pill bg-paper text-ink-2 px-[9px] py-[3px] text-[11.5px] font-600">{{ t }}</span>
+
+    <div class="p-[14px_16px] flex items-end gap-3 flex-1">
+      <div class="flex-1 min-w-0">
+        <div class="font-display text-[19px] font-700 leading-tight truncate">{{ destination.name }}</div>
+        <div class="text-[12px] font-600 text-teal-700 mt-[2px]">
+          {{ destination.idealDuration ? 'Itinerary ' + destination.idealDuration : destination.region }}
+        </div>
+        <p v-if="destination.summary" class="text-[12.5px] text-muted leading-snug line-clamp-2 mt-[6px]">{{ destination.summary }}</p>
       </div>
-      <div class="mt-auto pt-1 text-[12.5px] font-600 text-teal-700 flex items-center gap-1">Lihat panduan <i class="i-lucide-arrow-up-right text-[14px]" /></div>
+      <span class="w-[36px] h-[36px] rounded-full border border-teal-600 text-teal-700 flex items-center justify-center shrink-0 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+        <i class="i-lucide-arrow-right text-[17px]" />
+      </span>
     </div>
   </NuxtLink>
 </template>

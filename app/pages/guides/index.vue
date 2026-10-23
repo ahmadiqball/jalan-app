@@ -2,8 +2,7 @@
 import type { Destination } from '~/types/guide'
 
 definePageMeta({ public: true })
-useHead({ title: 'Guides · Kelana' })
-const localePath = useLocalePath()
+useHead({ title: 'Kelana Guides' })
 
 const { data } = await useFetch<Destination[]>('/api/guides', { key: 'guides-list' })
 const destinations = computed(() => data.value ?? [])
@@ -11,7 +10,6 @@ const destinations = computed(() => data.value ?? [])
 const q = ref('')
 const region = ref('Semua')
 const regions = computed(() => ['Semua', ...Array.from(new Set(destinations.value.map((d) => d.region).filter(Boolean)))])
-const featured = computed(() => destinations.value.filter((d) => d.featured))
 
 const shown = computed(() => {
   const term = q.value.trim().toLowerCase()
@@ -25,30 +23,22 @@ const shown = computed(() => {
 
 <template>
   <div class="flex-1 w-full anim-rise">
-    <!-- hero -->
-    <div class="bg-sand-100 border-b border-sand-line">
-      <div class="max-w-[1100px] mx-auto p-[40px_20px_34px] md:p-[52px_32px_40px]">
-        <div class="eyebrow text-teal-700">Rekomendasi dari Kelana</div>
-        <h1 class="font-display text-[clamp(30px,6vw,46px)] font-700 leading-[1.04] mt-2 max-w-[18ch]">Panduan destinasi yang dikurasi, untuk trip yang lebih bermakna.</h1>
-        <div class="mt-5 max-w-[460px] relative">
-          <i class="i-lucide-search absolute left-[15px] top-1/2 -translate-y-1/2 text-[17px] text-muted" />
-          <input v-model="q" placeholder="Cari destinasi atau negara…" class="field !pl-[42px] !py-[13px] bg-white">
-        </div>
+    <!-- hero banner — swap the background for the supplied asset (e.g. /img/guides-hero.jpg) -->
+    <div class="relative overflow-hidden">
+      <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('/img/photo-sumba.jpg')" />
+      <div class="absolute inset-0" style="background:linear-gradient(104deg,rgba(16,38,43,.86) 0%,rgba(16,38,43,.6) 44%,rgba(16,38,43,.22) 100%)" />
+      <div class="relative max-w-[1100px] mx-auto p-[46px_20px_42px] md:p-[66px_32px_56px]">
+        <h1 class="font-display text-[clamp(32px,7vw,52px)] font-700 text-white leading-[1.02]">Kelana Guides</h1>
+        <p class="text-[14.5px] md:text-[16.5px] text-white/90 mt-3 max-w-[46ch] leading-snug">
+          Panduan destinasi yang dikurasi dengan teliti, untuk perjalanan yang lebih mudah dan berkesan.
+        </p>
       </div>
     </div>
 
-    <div class="max-w-[1100px] mx-auto p-[26px_20px_64px] md:p-[30px_32px_72px] flex flex-col gap-7">
-      <!-- featured -->
-      <section v-if="featured.length && region === 'Semua' && !q">
-        <div class="font-display text-[20px] font-600 mb-3">Panduan pilihan</div>
-        <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))">
-          <GuideDestinationCard v-for="d in featured" :key="d.id" :destination="d" />
-        </div>
-      </section>
-
-      <!-- region filter + grid -->
-      <section>
-        <div class="flex gap-2 flex-wrap mb-4">
+    <div class="max-w-[1100px] mx-auto p-[20px_20px_64px] md:p-[26px_32px_72px] flex flex-col gap-6">
+      <!-- region filter + search -->
+      <div class="flex items-center gap-3 flex-wrap">
+        <div class="flex gap-2 flex-wrap flex-1 min-w-0">
           <button
             v-for="r in regions"
             :key="r"
@@ -57,11 +47,19 @@ const shown = computed(() => {
             @click="region = r"
           >{{ r }}</button>
         </div>
-        <div v-if="shown.length" class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))">
-          <GuideDestinationCard v-for="d in shown" :key="d.id" :destination="d" />
+        <div class="relative w-full sm:w-[260px] shrink-0">
+          <i class="i-lucide-search absolute left-[13px] top-1/2 -translate-y-1/2 text-[16px] text-muted" />
+          <input v-model="q" placeholder="Cari destinasi atau tempat…" class="field !pl-[38px] !py-[10px] bg-white w-full">
         </div>
-        <div v-else class="card p-10 text-center text-muted text-[14px]">Belum ada panduan yang cocok.</div>
-      </section>
+      </div>
+
+      <!-- destinations grid -->
+      <div v-if="shown.length" class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr))">
+        <GuideDestinationCard v-for="d in shown" :key="d.id" :destination="d" />
+      </div>
+      <div v-else class="card p-10 text-center text-muted text-[14px]">
+        {{ destinations.length ? 'Belum ada panduan yang cocok.' : 'Panduan akan segera hadir.' }}
+      </div>
     </div>
   </div>
 </template>

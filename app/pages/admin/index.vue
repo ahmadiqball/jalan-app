@@ -34,6 +34,19 @@ const destinations = ref<Destination[]>([])
 async function loadDestinations() {
   try { destinations.value = await listDestinations() } catch { /* ignore */ }
 }
+const seeding = ref(false)
+async function seedExamples() {
+  seeding.value = true
+  try {
+    const r = await apiFetch<{ destinations: number; places: number }>('/api/admin/guides/seed', { method: 'POST' })
+    await loadDestinations()
+    flash(`Contoh panduan diisi — ${r.destinations} destinasi, ${r.places} tempat`)
+  } catch {
+    flash('Gagal mengisi contoh panduan')
+  } finally {
+    seeding.value = false
+  }
+}
 async function newGuide() {
   const id = 'dest-' + rid()
   try {
@@ -176,7 +189,10 @@ async function removeTemplate(id: string, name: string) {
       <template v-else>
         <div class="flex items-center justify-between gap-3 flex-wrap">
           <div class="text-[13.5px] text-ink-2 max-w-[560px]">Panduan destinasi dengan rekomendasi tempat (hotel, makan, aktivitas, hidden gem) yang tampil publik di <span class="money">/guides</span>.</div>
-          <CoreButton variant="primary" @click="newGuide">+ Panduan baru</CoreButton>
+          <div class="flex items-center gap-2 shrink-0 flex-wrap">
+            <CoreButton v-if="!destinations.length" variant="ghost" :disabled="seeding" @click="seedExamples">{{ seeding ? 'Mengisi…' : 'Isi contoh (Bali & Banda Neira)' }}</CoreButton>
+            <CoreButton variant="primary" @click="newGuide">+ Panduan baru</CoreButton>
+          </div>
         </div>
         <ClientOnly>
           <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))">

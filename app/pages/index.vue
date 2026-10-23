@@ -6,6 +6,10 @@ const session = useSessionStore()
 const localePath = useLocalePath()
 const appHref = computed(() => localePath(session.authed ? '/beranda' : '/masuk'))
 
+// public guides teaser (hidden when none published)
+const { data: guidesData } = await useFetch('/api/guides', { key: 'landing-guides' })
+const guides = computed(() => (guidesData.value || []).slice(0, 4))
+
 const places = [
   { name: 'Sumba Timur', photo: '/img/photo-sumba.jpg', tag: 'sumba', days: 4, people: 3, price: 'Rp 3,1jt' },
   { name: 'Ubud & Tegallalang', photo: '/img/photo-ubud.jpg', tag: 'ubud', days: 3, people: 2, price: 'Rp 1,85jt' },
@@ -72,6 +76,7 @@ function nav(i: number) { paused = true; go(i) }
           <a href="#dalam" class="hover:text-brand-amber">{{ $t('landing.nav.inside') }}</a>
           <a href="#cerita" class="hover:text-brand-amber">{{ $t('landing.nav.stories') }}</a>
           <a href="#harga" class="hover:text-brand-amber">{{ $t('landing.nav.pricing') }}</a>
+          <NuxtLink :to="localePath('/guides')" class="hover:text-brand-amber">Guides</NuxtLink>
         </nav>
         <div class="ml-auto md:ml-0 flex gap-2 sm:gap-[10px] items-center shrink-0">
           <LayoutLangSwitch />
@@ -161,6 +166,20 @@ function nav(i: number) { paused = true; go(i) }
       </div>
       <img src="/img/teal-hills.svg" alt="" class="block w-screen ml-[calc(50%-50vw)] mt-[26px] mb-[-2px] pointer-events-none">
     </div>
+
+    <!-- guides teaser -->
+    <section v-if="guides.length" class="max-w-[1200px] mx-auto px-6 pt-[18px] pb-[6px]">
+      <div class="flex items-end justify-between gap-3 mb-4">
+        <div>
+          <div class="eyebrow text-teal-700">Kelana Guides</div>
+          <h2 class="font-display text-[clamp(24px,4vw,34px)] font-700 mt-1 leading-tight">Panduan destinasi yang dikurasi</h2>
+        </div>
+        <NuxtLink :to="localePath('/guides')" class="text-[13.5px] font-700 text-teal-700 hover:text-teal-800 flex items-center gap-1 shrink-0">Lihat semua <i class="i-lucide-arrow-right text-[15px]" /></NuxtLink>
+      </div>
+      <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr))">
+        <GuideDestinationCard v-for="d in guides" :key="d.id" :destination="d" />
+      </div>
+    </section>
 
     <!-- feature rail -->
     <div id="fitur" class="bg-sand-100 px-6 pt-[34px] pb-[54px] scroll-mt-[80px]">
