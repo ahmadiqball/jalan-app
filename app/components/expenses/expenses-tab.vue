@@ -211,16 +211,18 @@ function log() {
           </div>
           <div class="flex-1 min-w-0">
             <div class="text-[14px] font-600 truncate">{{ l.title }}</div>
-            <div class="text-[12px] text-muted">
+            <div class="text-[12px] text-muted truncate">
               {{ mode === 'Kategori' ? (trip.days[l.dayIdx]?.date || '') + ' · ' : catLabel(l.cat) + ' · ' }}{{ l.derived ? 'dari aktivitas ' + l.time : 'dicatat manual' }}
             </div>
           </div>
-          <div class="money text-[14px] font-600 shrink-0">{{ rp(l.amount) }}</div>
-          <template v-if="!l.derived">
-            <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-teal-700 hover:bg-teal-100 flex items-center justify-center shrink-0" title="Ubah" @click="openEdit(l)"><i class="i-lucide-pencil text-[14px]" /></button>
-            <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center shrink-0" title="Hapus" @click="removeLine(l)"><i class="i-lucide-x text-[15px]" /></button>
-          </template>
-          <span v-else class="text-[11px] text-muted shrink-0 w-[92px] text-right">dari aktivitas</span>
+          <div class="flex flex-col items-end gap-[3px] shrink-0">
+            <div class="money text-[14px] font-600">{{ rp(l.amount) }}</div>
+            <div v-if="!l.derived" class="flex items-center gap-1">
+              <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-teal-700 hover:bg-teal-100 flex items-center justify-center" title="Ubah" @click="openEdit(l)"><i class="i-lucide-pencil text-[14px]" /></button>
+              <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center" title="Hapus" @click="removeLine(l)"><i class="i-lucide-x text-[15px]" /></button>
+            </div>
+            <span v-else class="text-[11px] text-muted">dari aktivitas</span>
+          </div>
         </div>
       </div>
 

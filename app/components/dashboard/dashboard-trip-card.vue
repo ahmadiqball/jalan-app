@@ -54,12 +54,12 @@ const badgeColor = computed(() => {
         <span class="bg-paper rounded-pill px-3 py-[6px] text-ink-2 money">{{ trip.dates || $t('app.card.notSet') }}</span>
         <span class="bg-paper rounded-pill px-3 py-[6px] text-ink-2">{{ $t('app.card.activities', { n: actCount }) }}</span>
       </div>
-      <div class="border-t border-sand-line pt-[13px] flex justify-between items-center">
-        <div class="text-left">
+      <div class="border-t border-sand-line pt-[13px] flex justify-between items-end gap-3">
+        <div class="text-left shrink-0">
           <div class="eyebrow">{{ $t('app.card.plan') }}</div>
-          <div class="money text-[17px] font-600 mt-[2px]">{{ rp(trip.plan) }}</div>
+          <div class="money text-[16px] font-600 mt-[2px]">{{ rp(trip.plan) }}</div>
         </div>
-        <div class="text-[12px] text-muted money text-right">{{ packCopy }}</div>
+        <div class="text-[12px] text-muted money text-right min-w-0 truncate">{{ packCopy }}</div>
       </div>
     </div>
   </NuxtLink>

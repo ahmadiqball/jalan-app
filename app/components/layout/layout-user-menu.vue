@@ -5,11 +5,34 @@ import {
 } from 'reka-ui'
 
 const session = useSessionStore()
+const ui = useUiStore()
+const route = useRoute()
 const { signOut } = useAuth()
 const { isAdmin } = useMe()
 const showAdmin = computed(() => isAdmin.value && !session.guest)
 
 const localePath = useLocalePath()
+const { locale } = useI18n()
+const switchLocalePath = useSwitchLocalePath()
+
+// mobile nav (on desktop these live in the top bar)
+const nav = [
+  { key: 'home', to: '/beranda' },
+  { key: 'guides', to: '/guides' },
+  { key: 'templates', to: '/template' },
+  { key: 'archive', to: '/arsip' },
+]
+const isActive = (to: string) => {
+  const p = localePath(to)
+  return route.path === p || route.path.startsWith(p + '/')
+}
+async function newTrip() {
+  if (!isActive('/beranda')) await navigateTo(localePath('/beranda'))
+  ui.showNewTrip = true
+}
+function setLocale(code: 'id' | 'en') {
+  if (code !== locale.value) navigateTo(switchLocalePath(code))
+}
 
 async function logout() {
   const wasGuest = session.guest
@@ -40,6 +63,27 @@ async function logout() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
 
+        <!-- mobile-only: primary nav + new trip (lives in the top bar on desktop) -->
+        <div class="md:hidden">
+          <DropdownMenuItem
+            class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[14px] font-700 text-white bg-primary cursor-pointer outline-none data-[highlighted]:bg-primary-hover mb-[2px]"
+            @select="newTrip"
+          >
+            <i class="i-lucide-plus text-[16px]" /> {{ $t('nav.newTrip') }}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            v-for="n in nav"
+            :key="n.to"
+            class="flex items-center justify-between px-[10px] py-[9px] rounded-[9px] text-[13.5px] cursor-pointer outline-none data-[highlighted]:bg-sand-100"
+            :class="isActive(n.to) ? 'text-teal-700 font-700' : 'text-ink'"
+            @select="navigateTo(localePath(n.to))"
+          >
+            {{ $t('nav.' + n.key) }}
+            <i v-if="isActive(n.to)" class="i-lucide-check text-[15px] text-teal-600" />
+          </DropdownMenuItem>
+          <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
+        </div>
+
         <DropdownMenuItem
           class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[13.5px] text-ink cursor-pointer outline-none data-[highlighted]:bg-sand-100"
           @select="navigateTo(localePath('/tersimpan'))"
@@ -53,6 +97,28 @@ async function logout() {
         >
           <i class="i-lucide-shield text-[15px] text-teal-600" /> {{ $t('menu.admin') }}
         </DropdownMenuItem>
+        <!-- mobile-only: language -->
+        <div class="md:hidden px-[10px] py-[8px]">
+          <div class="text-[11.5px] text-muted font-600 mb-[6px]">{{ $t('menu.language') }}</div>
+          <div class="flex items-center gap-[3px] bg-sand-100 rounded-pill p-[3px]">
+            <button
+              class="flex-1 flex items-center justify-center gap-[6px] rounded-pill px-[9px] py-[7px] text-[12.5px] font-700 transition-colors"
+              :class="locale === 'id' ? 'bg-white text-ink shadow-[0_1px_3px_rgba(16,38,43,.14)]' : 'text-muted'"
+              @click="setLocale('id')"
+            >
+              <i class="i-circle-flags-id text-[16px]" /> ID
+            </button>
+            <button
+              class="flex-1 flex items-center justify-center gap-[6px] rounded-pill px-[9px] py-[7px] text-[12.5px] font-700 transition-colors"
+              :class="locale === 'en' ? 'bg-white text-ink shadow-[0_1px_3px_rgba(16,38,43,.14)]' : 'text-muted'"
+              @click="setLocale('en')"
+            >
+              <i class="i-circle-flags-us text-[16px]" /> EN
+            </button>
+          </div>
+        </div>
+        <DropdownMenuSeparator class="md:hidden h-px bg-sand-line my-[5px]" />
+
         <DropdownMenuItem
           class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[13.5px] text-warn-fg cursor-pointer outline-none data-[highlighted]:bg-warn-bg"
           @select="logout"

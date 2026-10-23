@@ -80,10 +80,10 @@ function open(tab: string) {
 
       <!-- budget: figure + bar together -->
       <div class="bg-paper rounded-card p-[16px_18px]">
-        <div class="flex items-baseline justify-between gap-3 flex-wrap">
-          <div class="flex items-baseline gap-2">
+        <div class="flex items-baseline justify-between gap-x-3 gap-y-1 flex-wrap">
+          <div class="flex items-baseline gap-2 flex-wrap min-w-0">
             <span class="eyebrow">{{ $t('app.hero.used') }}</span>
-            <span class="money text-[26px] font-600" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</span>
+            <span class="money text-[22px] sm:text-[26px] font-600" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</span>
             <span class="text-[13px] text-muted money">/ {{ rp(budget.plan) }}</span>
           </div>
           <span class="money text-[13px] text-muted">{{ pctCopy }}</span>

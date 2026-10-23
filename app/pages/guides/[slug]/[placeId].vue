@@ -99,7 +99,7 @@ function onSave() {
         <!-- map -->
         <div class="card p-[16px_18px] h-fit md:sticky md:top-[84px]">
           <div class="font-display text-[15px] font-600 mb-1">Lokasi</div>
-          <div class="text-[13px] text-ink-2">{{ place.area || place.destination.name }}</div>
+          <div class="text-[13px] text-ink-2 line-clamp-2 break-words" :title="place.area || place.destination.name">{{ place.area || place.destination.name }}</div>
           <a :href="mapHref" target="_blank" rel="noopener" class="mt-3 block"><CoreButton variant="ghost" block class="!py-[11px] !text-[13.5px]"><i class="i-lucide-map text-[15px]" /> Lihat di Maps</CoreButton></a>
           <a v-if="place.url" :href="place.url" target="_blank" rel="noopener" class="mt-2 block"><CoreButton variant="ghost" block class="!py-[11px] !text-[13.5px]"><i class="i-lucide-external-link text-[15px]" /> Situs</CoreButton></a>
         </div>

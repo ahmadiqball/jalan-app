@@ -57,7 +57,7 @@ const budgetChip = computed(() => {
       <div class="flex gap-[8px] md:gap-[10px] items-center text-[13px] font-600 mt-[2px] md:mt-1 flex-wrap ml-auto md:ml-0">
         <span v-if="!editable" class="bg-sand-100 text-ink-2 rounded-pill px-[11px] md:px-[13px] py-2 flex items-center gap-[6px]">
           <i class="i-lucide-eye text-[14px]" />
-          <span class="hidden sm:inline">{{ $t('app.header.viewOnly') }}</span>
+          <span>{{ $t('app.header.viewOnly') }}</span>
         </span>
         <button
           v-if="editable"

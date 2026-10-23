@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = withDefaults(
-  defineProps<{ size?: number; text?: boolean; textSize?: number; variant?: 'brand' | 'ink' | 'light'; weight?: number }>(),
+  defineProps<{ size?: number; text?: boolean; textSize?: number; textClass?: string; variant?: 'brand' | 'ink' | 'light'; weight?: number }>(),
   { size: 30, text: true, textSize: 21, variant: 'brand', weight: 600 },
 )
 
@@ -28,6 +28,7 @@ const textColor = computed(() => {
     <div
       v-if="text"
       class="font-display"
+      :class="textClass"
       :style="{ fontSize: textSize + 'px', color: textColor, fontWeight: weight, letterSpacing: '-.02em' }"
     >
       Kelana

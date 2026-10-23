@@ -27,49 +27,52 @@ function remove(e: Event) {
 
 <template>
   <div :id="catSlug(row.name)" class="border-b border-sand-100 scroll-mt-[160px]">
-    <div class="flex items-center gap-3 py-[11px]" :class="template ? '' : 'cursor-pointer'" @click="toggle">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-2 py-[11px]" :class="template ? '' : 'cursor-pointer'" @click="toggle">
       <span class="w-[9px] h-[9px] rounded-full shrink-0" :style="{ background: row.segColor }" />
       <BudgetIconPicker :icon="row.icon" :bg="row.iconBg" :fg="row.iconFg" :disabled="locked" @select="pickIcon" />
       <div class="flex-1 min-w-0">
-        <div class="text-[14px] font-600 truncate">{{ row.label }}</div>
+        <div class="text-[14px] font-600 break-words sm:truncate">{{ row.label }}</div>
       </div>
 
-      <div v-if="!template" class="w-[120px] text-right money text-[13.5px] shrink-0" :style="{ color: row.spentFg }">{{ row.spentRp }}</div>
+      <div v-if="!template" class="money text-[13.5px] text-right shrink-0 sm:w-[120px]" :style="{ color: row.spentFg }">{{ row.spentRp }}</div>
 
-      <div class="w-[130px] text-right shrink-0" @click.stop>
-        <span v-if="locked" class="money text-[13.5px] text-ink-2">{{ row.allocRp }}</span>
-        <CoreMoneyInput
-          v-else
-          :model-value="row.alloc"
-          input-class="w-[120px] text-right money text-[13.5px] bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[7px] outline-none focus:border-teal-600"
-          @update:model-value="onAlloc"
-        />
-      </div>
-
-      <div v-if="!template" class="w-[96px] shrink-0">
-        <CoreBar :pct="row.pct" :color="row.barColor" :height="8" />
-        <div v-if="row.over" class="flex items-center gap-1 mt-[3px] text-[10.5px] font-600 text-warn-fg">
-          <i class="i-lucide-alert-triangle text-[11px]" /> lewat {{ row.exceedShort }}
+      <!-- controls: own line on mobile, inline on desktop -->
+      <div class="flex items-center justify-end gap-3 basis-full sm:basis-auto">
+        <div class="w-[130px] text-right shrink-0" @click.stop>
+          <span v-if="locked" class="money text-[13.5px] text-ink-2">{{ row.allocRp }}</span>
+          <CoreMoneyInput
+            v-else
+            :model-value="row.alloc"
+            input-class="w-[120px] text-right money text-[13.5px] bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[7px] outline-none focus:border-teal-600"
+            @update:model-value="onAlloc"
+          />
         </div>
-      </div>
 
-      <div class="w-[30px] shrink-0 flex justify-end">
-        <button
-          v-if="row.canDelete"
-          class="w-[30px] h-[30px] rounded-full bg-paper border border-sand-line flex items-center justify-center text-muted hover:text-warn-fg hover:border-warn-fg"
-          title="Hapus kategori"
-          @click="remove"
-        >
-          <i class="i-lucide-trash-2 text-[14px]" />
-        </button>
+        <div v-if="!template" class="w-[96px] shrink-0">
+          <CoreBar :pct="row.pct" :color="row.barColor" :height="8" />
+          <div v-if="row.over" class="flex items-center gap-1 mt-[3px] text-[10.5px] font-600 text-warn-fg">
+            <i class="i-lucide-alert-triangle text-[11px]" /> lewat {{ row.exceedShort }}
+          </div>
+        </div>
+
+        <div class="w-[30px] shrink-0 flex justify-end">
+          <button
+            v-if="row.canDelete"
+            class="w-[30px] h-[30px] rounded-full bg-paper border border-sand-line flex items-center justify-center text-muted hover:text-warn-fg hover:border-warn-fg"
+            title="Hapus kategori"
+            @click="remove"
+          >
+            <i class="i-lucide-trash-2 text-[14px]" />
+          </button>
+        </div>
       </div>
     </div>
 
     <div v-if="open && row.lines.length" class="pb-3">
-      <div v-for="(l, i) in row.lines" :key="i" class="flex items-center justify-between pl-[64px] py-[6px]">
-        <span class="text-[13px] text-ink-2 truncate flex items-center gap-2">
-          <i :class="l.derived ? 'i-lucide-corner-down-right' : 'i-lucide-square'" class="text-[13px] text-muted" />
-          {{ l.title }}
+      <div v-for="(l, i) in row.lines" :key="i" class="flex items-center justify-between gap-3 pl-[44px] sm:pl-[64px] py-[6px]">
+        <span class="flex items-center gap-2 min-w-0 flex-1 text-[13px] text-ink-2">
+          <i :class="l.derived ? 'i-lucide-corner-down-right' : 'i-lucide-square'" class="text-[13px] text-muted shrink-0" />
+          <span class="truncate">{{ l.title }}</span>
         </span>
         <span class="money text-[13px] shrink-0">{{ l.amountRp }}</span>
       </div>

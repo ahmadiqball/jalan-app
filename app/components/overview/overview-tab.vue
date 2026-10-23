@@ -31,12 +31,21 @@ const allPlaces = computed(() =>
           <div class="eyebrow">Terpakai sampai hari ini</div>
           <span class="rounded-pill px-[11px] py-[5px] text-[12px] font-700" :style="{ background: budget.statusBg, color: budget.statusFg }">{{ budget.statusCopy }}</span>
         </div>
-        <div class="money text-[34px] font-600 mt-1" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</div>
-        <div class="text-[13.5px] text-muted mt-1">dari rencana <span class="money">{{ rp(budget.plan) }}</span> · <span class="money">{{ rp(budget.perPerson) }}</span> per orang</div>
+        <div class="money text-[30px] sm:text-[34px] font-600 mt-1 leading-tight" :style="{ color: budget.statusFg }">{{ rp(budget.spent) }}</div>
         <div class="mt-3"><CoreBar :pct="budget.pct" :over="budget.over" /></div>
         <div class="flex items-center justify-between mt-[6px] text-[12.5px]">
           <span class="money" :style="{ color: budget.statusFg }">{{ Math.round(budget.pct) }}% terpakai</span>
           <span v-if="budget.over" class="flex items-center gap-1 text-warn-fg font-600"><i class="i-lucide-alert-triangle text-[13px]" /> Lewat anggaran</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mt-3">
+          <div class="bg-paper rounded-field p-[10px_12px]">
+            <div class="text-[11.5px] text-muted">Rencana</div>
+            <div class="money text-[15px] font-600 mt-[1px]">{{ rp(budget.plan) }}</div>
+          </div>
+          <div class="bg-paper rounded-field p-[10px_12px]">
+            <div class="text-[11.5px] text-muted">Per orang</div>
+            <div class="money text-[15px] font-600 mt-[1px]">{{ rp(budget.perPerson) }}</div>
+          </div>
         </div>
 
         <div class="grid gap-3 mt-4" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
@@ -91,13 +100,6 @@ const allPlaces = computed(() =>
         </div>
       </div>
 
-      <MapsPanel
-        heading="Peta trip"
-        :single="{ name: trip.place, placeId: trip.placeId }"
-        :stops="allPlaces"
-        :context="trip.place"
-        :height="260"
-      />
     </div>
 
     <!-- rail -->
@@ -142,5 +144,15 @@ const allPlaces = computed(() =>
         </div>
       </NuxtLink>
     </div>
+
+    <!-- map: full-width, below everything (on mobile it falls under "Berikutnya") -->
+    <MapsPanel
+      class="w-full"
+      heading="Peta trip"
+      :single="{ name: trip.place, placeId: trip.placeId }"
+      :stops="allPlaces"
+      :context="trip.place"
+      :height="260"
+    />
   </div>
 </template>
