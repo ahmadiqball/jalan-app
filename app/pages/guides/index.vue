@@ -4,8 +4,9 @@ import type { Destination } from '~/types/guide'
 definePageMeta({ public: true })
 useHead({ title: 'Kelana Guides' })
 
-const { data } = await useFetch<Destination[]>('/api/guides', { key: 'guides-list' })
+const { data, status } = useFetch<Destination[]>('/api/guides', { key: 'guides-list', lazy: true })
 const destinations = computed(() => data.value ?? [])
+const loading = computed(() => status.value === 'pending')
 
 const q = ref('')
 const region = ref('Semua')
@@ -54,7 +55,8 @@ const shown = computed(() => {
       </div>
 
       <!-- destinations grid -->
-      <div v-if="shown.length" class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr))">
+      <SkeletonCards v-if="loading" :count="8" />
+      <div v-else-if="shown.length" class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr))">
         <GuideDestinationCard v-for="d in shown" :key="d.id" :destination="d" />
       </div>
       <div v-else class="card p-10 text-center text-muted text-[14px]">

@@ -13,7 +13,7 @@ const { isSaved, toggle, refresh: refreshSaved } = useSaved()
 const placeId = computed(() => route.params.placeId as string)
 onMounted(refreshSaved)
 
-const { data: place, error } = await useFetch<PlaceDetail>(() => `/api/places/${placeId.value}`, { key: `place-${placeId.value}` })
+const { data: place, error, status } = useFetch<PlaceDetail>(() => `/api/places/${placeId.value}`, { key: `place-${placeId.value}`, lazy: true })
 useHead(() => ({ title: (place.value?.name ?? 'Tempat') + ' · Kelana Guides' }))
 
 const gallery = computed(() => place.value?.gallery ?? [])
@@ -30,7 +30,13 @@ function onSave() {
 
 <template>
   <div class="flex-1 w-full anim-rise">
-    <div v-if="error || !place" class="max-w-[700px] mx-auto p-16 text-center text-muted">
+    <div v-if="status === 'pending' && !place" class="max-w-[1000px] mx-auto p-[20px_20px_64px] md:p-[26px_32px_72px] flex flex-col gap-5">
+      <CoreSkeleton class="h-[240px] md:h-[340px] w-full" rounded="rounded-card" />
+      <CoreSkeleton class="h-8 w-1/2" />
+      <CoreSkeleton class="h-4 w-2/3" />
+      <SkeletonRows :count="3" />
+    </div>
+    <div v-else-if="error || !place" class="max-w-[700px] mx-auto p-16 text-center text-muted">
       Tempat tidak ditemukan. <NuxtLink :to="localePath('/guides')" class="text-teal-600 font-600">Kembali ke Guides</NuxtLink>
     </div>
 

@@ -119,11 +119,15 @@ async function removeTemplate(id: string, name: string) {
 
 <template>
   <div class="flex-1 w-full max-w-[1100px] mx-auto p-[30px_20px_60px] md:p-[30px_32px_60px] flex flex-col gap-6 anim-rise">
-    <div v-if="checking" class="text-muted">Memeriksa akses…</div>
+    <div v-if="checking" class="flex flex-col gap-5">
+      <CoreSkeleton class="h-9 w-1/2" />
+      <CoreSkeleton class="h-10 w-full" rounded="rounded-field" />
+      <SkeletonCards :count="4" />
+    </div>
     <template v-else-if="allowed">
       <div>
-        <div class="font-display text-[32px] font-600">Admin</div>
-        <div class="text-[14px] text-ink-2 mt-[4px]">Kelola template kurasi dan rekomendasi barang untuk semua pengguna.</div>
+        <div class="font-display text-[32px] font-600">Kelola aplikasi & konten</div>
+        <div class="text-[14px] text-ink-2 mt-[4px]">Dashboard admin untuk mengatur template kurasi, rekomendasi barang, dan panduan destinasi yang tampil untuk semua pengguna. Pembuatan trip ada di beranda.</div>
       </div>
 
       <!-- menu -->

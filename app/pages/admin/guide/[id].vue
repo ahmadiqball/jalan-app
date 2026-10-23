@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Destination, GuideDetail, Place } from '~/types/guide'
+import { PLACE_TYPES } from '~/utils/guide'
 
 useHead({ title: 'Atur panduan · Kelana' })
 const route = useRoute()
@@ -79,13 +80,26 @@ async function saveDest() {
 }
 
 const newPlaceId = ref<string | null>(null)
-async function addPlace() {
+const typeOptions = PLACE_TYPES.map((t) => ({ value: t.id, label: t.label }))
+const placeModalOpen = ref(false)
+const draft = reactive({ name: '', type: 'aktivitas', area: '' })
+function openAddPlace() {
+  draft.name = ''
+  draft.type = 'aktivitas'
+  draft.area = ''
+  placeModalOpen.value = true
+}
+async function createPlace() {
+  const name = draft.name.trim()
+  if (!name) return
   const pid = 'pl-' + rid()
-  const p: Place = { id: pid, destinationId: id, name: 'Tempat baru', type: 'aktivitas' }
+  const p: Place = { id: pid, destinationId: id, name, type: draft.type, area: draft.area.trim() || undefined }
   try {
     const saved = await savePlace(p)
     places.value = [...places.value, saved]
     newPlaceId.value = pid
+    placeModalOpen.value = false
+    flash('Tempat ditambahkan — lengkapi detailnya di bawah')
   } catch {
     flash('Gagal menambah tempat')
   }
@@ -116,7 +130,15 @@ async function onRemovePlace(p: Place) {
   <div class="flex-1 w-full max-w-[1000px] mx-auto p-[26px_20px_64px] md:p-[30px_32px_72px] flex flex-col gap-6 anim-rise">
     <NuxtLink to="/admin" class="inline-flex items-center gap-1 text-[13px] font-600 text-muted hover:text-teal-700 w-fit"><i class="i-lucide-chevron-left text-[16px]" /> Kembali ke Admin</NuxtLink>
 
-    <div v-if="loading" class="text-muted">Memuat…</div>
+    <div v-if="loading" class="flex flex-col gap-6">
+      <CoreSkeleton class="h-8 w-1/3" />
+      <div class="card p-[18px_20px] flex flex-col gap-3">
+        <CoreSkeleton class="h-10 w-full" />
+        <CoreSkeleton class="h-20 w-full" />
+        <CoreSkeleton class="h-10 w-2/3" />
+      </div>
+      <SkeletonRows :count="4" />
+    </div>
 
     <template v-else>
       <!-- destination form -->
@@ -163,7 +185,7 @@ async function onRemovePlace(p: Place) {
       <!-- places -->
       <div class="flex items-center justify-between gap-3">
         <div class="font-display text-[20px] font-600">Tempat <span class="text-muted font-500">({{ places.length }})</span></div>
-        <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="addPlace">+ Tambah tempat</CoreButton>
+        <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="openAddPlace">+ Tambah tempat</CoreButton>
       </div>
       <div v-if="places.length" class="flex flex-col gap-2">
         <AdminGuidePlace
@@ -175,9 +197,25 @@ async function onRemovePlace(p: Place) {
           @remove="onRemovePlace(p)"
         />
       </div>
-      <button v-else class="border border-dashed border-sand-line3 rounded-card min-h-[120px] flex flex-col items-center justify-center gap-2 text-muted hover:border-teal-600 hover:text-teal-700" @click="addPlace">
+      <button v-else class="border border-dashed border-sand-line3 rounded-card min-h-[120px] flex flex-col items-center justify-center gap-2 text-muted hover:border-teal-600 hover:text-teal-700" @click="openAddPlace">
         <i class="i-lucide-plus text-[22px]" /> <span class="text-[13px] font-600">Tambah tempat pertama</span>
       </button>
+
+      <!-- add place (popup) -->
+      <CoreDialog v-model:open="placeModalOpen" side="center" :width="440" title="Tambah tempat">
+        <div class="flex flex-col gap-3">
+          <CoreInput v-model="draft.name" label="Nama tempat" placeholder="mis. Pantai Kelingking" @keydown.enter="createPlace" />
+          <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jenis</span><CoreSelect v-model="draft.type" :options="typeOptions" /></label>
+          <CoreInput v-model="draft.area" label="Area (opsional)" placeholder="mis. Ubud" @keydown.enter="createPlace" />
+          <p class="text-[12px] text-muted">Harga, foto, dan deskripsi lengkap bisa diisi setelah tempat dibuat.</p>
+        </div>
+        <template #footer>
+          <div class="flex justify-end gap-3">
+            <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="placeModalOpen = false">Batal</CoreButton>
+            <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[13.5px]" :disabled="!draft.name.trim()" @click="createPlace">Tambah tempat</CoreButton>
+          </div>
+        </template>
+      </CoreDialog>
     </template>
   </div>
 </template>

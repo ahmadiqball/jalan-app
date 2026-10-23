@@ -15,7 +15,7 @@ const cloud = useIsCloud()
 const slug = computed(() => route.params.slug as string)
 onMounted(refreshSaved)
 
-const { data: guide, error } = await useFetch<GuideDetail>(() => `/api/guides/${slug.value}`, { key: `guide-${slug.value}` })
+const { data: guide, error, status } = useFetch<GuideDetail>(() => `/api/guides/${slug.value}`, { key: `guide-${slug.value}`, lazy: true })
 useHead(() => ({ title: (guide.value?.name ?? 'Panduan') + ' · Kelana Guides' }))
 
 // "Gunakan panduan" — clone the linked itinerary template into a new trip, or
@@ -73,7 +73,15 @@ const facts = computed(() => {
 
 <template>
   <div class="flex-1 w-full anim-rise">
-    <div v-if="error || !guide" class="max-w-[700px] mx-auto p-16 text-center text-muted">
+    <div v-if="status === 'pending' && !guide">
+      <div class="h-[230px] md:h-[280px] bg-sand-line animate-pulse" />
+      <div class="max-w-[1000px] mx-auto p-[26px_20px_64px] md:p-[30px_32px_72px] flex flex-col gap-4">
+        <CoreSkeleton class="h-7 w-1/3" />
+        <CoreSkeleton class="h-4 w-1/2" />
+        <SkeletonCards :count="6" />
+      </div>
+    </div>
+    <div v-else-if="error || !guide" class="max-w-[700px] mx-auto p-16 text-center text-muted">
       Panduan tidak ditemukan. <NuxtLink :to="localePath('/guides')" class="text-teal-600 font-600">Kembali ke Guides</NuxtLink>
     </div>
 
