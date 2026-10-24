@@ -14,6 +14,7 @@ export function defaultDestinations(): Destination[] {
       name: 'Bali',
       region: 'Indonesia',
       heroImage: '/img/art-bali.webp',
+      cardImage: '/img/photo-ubud.jpg',
       summary:
         'Bali menawarkan perpaduan pantai yang indah, budaya yang kaya, kuliner beragam, dan alam yang menakjubkan — dari Ubud sampai Nusa Lembongan.',
       bestTime: 'Apr–Okt',
@@ -36,6 +37,7 @@ export function defaultDestinations(): Destination[] {
       name: 'Banda Neira',
       region: 'Indonesia',
       heroImage: '/img/photo-sumba.jpg',
+      cardImage: '/img/photo-sumba.jpg',
       summary:
         'Kepulauan rempah di Maluku — sejarah pala, benteng kolonial, dan laut paling jernih di Indonesia timur. Surga sunyi untuk penyelam dan pecinta sejarah.',
       bestTime: 'Sep–Nov',

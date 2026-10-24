@@ -9,7 +9,7 @@ const localePath = useLocalePath()
   <NuxtLink :to="localePath(`/guides/${destination.slug}`)" class="card overflow-hidden flex flex-col group hover:shadow-lift transition-shadow">
     <div
       class="h-[158px] bg-cover bg-center relative shrink-0"
-      :style="{ backgroundImage: destination.heroImage ? `url('${destination.heroImage}')` : undefined, backgroundColor: '#DEEEEC' }"
+      :style="{ backgroundImage: (destination.cardImage || destination.heroImage) ? `url('${destination.cardImage || destination.heroImage}')` : undefined, backgroundColor: '#DEEEEC' }"
     >
       <!-- FREE badge for featured/free guides (premium lock comes in the paywall phase) -->
       <span v-if="destination.featured" class="absolute top-[10px] right-[10px] rounded-pill bg-teal-600 text-white px-[10px] py-[4px] text-[10.5px] font-700 tracking-[.06em]">FREE</span>

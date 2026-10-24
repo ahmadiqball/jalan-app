@@ -15,14 +15,6 @@ const templateOptions = computed(() => [
   ...templates.value.map((t) => ({ value: t.id, label: t.name })),
 ])
 
-const { cloud: canUpload, uploading: heroUploading, upload: uploadImg } = useImageUpload()
-const heroInput = ref<HTMLInputElement | null>(null)
-async function onPickHero(e: Event) {
-  const input = e.target as HTMLInputElement
-  const url = await uploadImg(input.files?.[0])
-  if (url) dest.heroImage = url
-  input.value = ''
-}
 
 const csv = (a?: string[]) => (a || []).join(', ')
 const linesOf = (a?: string[]) => (a || []).join('\n')
@@ -156,14 +148,10 @@ async function onRemovePlace(p: Place) {
           <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Slug (URL)</span><input v-model="dest.slug" class="field !py-[9px] money" placeholder="bali"></label>
           <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Region</span><input v-model="dest.region" class="field !py-[9px]" placeholder="Indonesia"></label>
         </div>
-        <label class="flex flex-col gap-1">
-          <span class="text-[11.5px] text-muted font-600 flex items-center justify-between">
-            <span>Gambar hero</span>
-            <button v-if="canUpload" type="button" class="text-teal-700 font-600 flex items-center gap-1 disabled:opacity-50" :disabled="heroUploading" @click="heroInput?.click()"><i class="i-lucide-upload text-[12px]" /> {{ heroUploading ? 'Mengunggah…' : 'Unggah' }}</button>
-          </span>
-          <input v-model="dest.heroImage" class="field !py-[9px]" placeholder="https://…/bali.jpg atau unggah">
-          <input ref="heroInput" type="file" accept="image/*" class="hidden" @change="onPickHero">
-        </label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <AdminImageField label="Gambar hero (seni / ilustrasi)" hint="Tampil besar & menyatu dengan halaman panduan. Pakai ilustrasi/seni." :model-value="dest.heroImage || ''" @update:model-value="dest.heroImage = $event" />
+          <AdminImageField label="Gambar kartu (foto)" hint="Tampil di kartu daftar Guides. Sebaiknya foto landscape." :model-value="dest.cardImage || ''" @update:model-value="dest.cardImage = $event" />
+        </div>
         <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Ringkasan</span><textarea v-model="dest.summary" rows="3" class="field !py-[9px] resize-none" placeholder="Sekilas tentang destinasi…" /></label>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Waktu terbaik</span><input v-model="dest.bestTime" class="field !py-[9px]" placeholder="Apr–Okt"></label>

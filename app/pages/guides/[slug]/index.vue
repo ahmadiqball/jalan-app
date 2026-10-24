@@ -89,7 +89,7 @@ const facts = computed(() => {
       <!-- hero: destination art blended into the page; title left, big, in-flow so never clipped -->
       <div class="bg-paper overflow-x-clip">
         <div class="max-w-[1160px] mx-auto px-[20px] md:px-[32px] flex flex-col md:flex-row md:items-center">
-          <div class="relative z-[2] md:w-[44%] md:shrink-0 pt-[24px] pb-3 md:py-[64px]">
+          <div class="relative z-[2] md:w-[40%] md:shrink-0 pt-[24px] pb-3 md:py-[64px]">
             <NuxtLink :to="localePath('/guides')" class="inline-flex items-center gap-1 text-[12.5px] font-600 text-muted mb-3 hover:text-teal-700"><i class="i-lucide-chevron-left text-[15px]" /> Semua panduan</NuxtLink>
             <h1 class="font-display text-[clamp(34px,7vw,56px)] font-800 text-ink leading-[1.0]">{{ guide.name }}</h1>
             <div class="text-[13.5px] text-ink-2 mt-2">{{ guide.region }} · {{ places.length }} rekomendasi tempat</div>
@@ -102,8 +102,8 @@ const facts = computed(() => {
               </CoreButton>
             </div>
           </div>
-          <div class="md:flex-1 md:min-w-0 flex justify-center md:justify-end md:-mr-[4%] pb-4 md:pb-0">
-            <img v-if="guide.heroImage" :src="guide.heroImage" :alt="guide.name" style="mix-blend-mode:multiply" class="w-full max-w-[720px] h-auto object-contain select-none pointer-events-none">
+          <div class="md:flex-1 md:min-w-0 flex justify-center md:justify-end pb-4 md:pb-0">
+            <img v-if="guide.heroImage" :src="guide.heroImage" :alt="guide.name" style="mix-blend-mode:multiply" class="w-full max-w-[680px] h-auto object-contain select-none pointer-events-none">
             <div v-else class="w-full max-w-[460px] h-[180px] md:h-[240px] rounded-card bg-sand-100 flex items-center justify-center text-muted"><i class="i-lucide-image text-[28px]" /></div>
           </div>
         </div>

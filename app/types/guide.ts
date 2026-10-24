@@ -5,6 +5,7 @@ export interface Destination {
   name: string
   region: string
   heroImage?: string
+  cardImage?: string
   summary?: string
   bestTime?: string
   idealDuration?: string
