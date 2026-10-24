@@ -13,7 +13,7 @@ export function defaultDestinations(): Destination[] {
       slug: 'bali',
       name: 'Bali',
       region: 'Indonesia',
-      heroImage: '/img/photo-ubud.jpg',
+      heroImage: '/img/art-bali.webp',
       summary:
         'Bali menawarkan perpaduan pantai yang indah, budaya yang kaya, kuliner beragam, dan alam yang menakjubkan — dari Ubud sampai Nusa Lembongan.',
       bestTime: 'Apr–Okt',

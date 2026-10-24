@@ -86,22 +86,25 @@ const facts = computed(() => {
     </div>
 
     <template v-else>
-      <!-- hero -->
-      <div
-        class="h-[230px] md:h-[280px] relative flex items-end"
-        :style="{ backgroundColor: '#DEEEEC', backgroundImage: guide.heroImage ? `linear-gradient(180deg,rgba(16,38,43,.05) 30%,rgba(16,38,43,.6)), url('${guide.heroImage}')` : undefined, backgroundSize: 'cover', backgroundPosition: 'center 54%' }"
-      >
-        <div class="max-w-[1000px] w-full mx-auto p-[0_20px_22px] md:p-[0_32px_26px]">
-          <NuxtLink :to="localePath('/guides')" class="inline-flex items-center gap-1 text-[12.5px] font-600 text-white/90 mb-2 hover:text-white"><i class="i-lucide-chevron-left text-[15px]" /> Semua panduan</NuxtLink>
-          <div class="font-display text-[clamp(28px,6vw,44px)] font-800 text-white leading-[1.02]">{{ guide.name }}</div>
-          <div class="text-[13.5px] text-white/85 mt-1">{{ guide.region }} · {{ places.length }} rekomendasi tempat</div>
-          <div class="flex gap-2 mt-4 flex-wrap">
-            <CoreButton variant="primary" class="!px-[16px] !py-[11px] !text-[13.5px]" :disabled="using" @click="useGuide">
-              <i class="i-lucide-wand-sparkles text-[15px]" /> {{ using ? 'Membuat…' : 'Gunakan panduan untuk trip saya' }}
-            </CoreButton>
-            <CoreButton variant="ghost" class="!px-[15px] !py-[11px] !text-[13.5px] !bg-white/90" @click="onSaveGuide">
-              <i :class="savedGuide ? 'i-lucide-bookmark-check text-teal-700' : 'i-lucide-bookmark'" class="text-[15px]" /> {{ savedGuide ? 'Tersimpan' : 'Simpan' }}
-            </CoreButton>
+      <!-- hero: title left, destination art attached right on a light canvas -->
+      <div class="bg-white border-b border-sand-line overflow-hidden">
+        <div class="max-w-[1120px] mx-auto px-[20px] md:px-[32px] flex flex-col md:flex-row md:items-center">
+          <div class="relative z-[2] md:w-[42%] md:shrink-0 pt-[26px] pb-2 md:py-[56px]">
+            <NuxtLink :to="localePath('/guides')" class="inline-flex items-center gap-1 text-[12.5px] font-600 text-muted mb-3 hover:text-teal-700"><i class="i-lucide-chevron-left text-[15px]" /> Semua panduan</NuxtLink>
+            <h1 class="font-display text-[clamp(30px,6vw,50px)] font-800 text-ink leading-[1.0]">{{ guide.name }}</h1>
+            <div class="text-[13.5px] text-ink-2 mt-2">{{ guide.region }} · {{ places.length }} rekomendasi tempat</div>
+            <div class="flex gap-2 mt-5 flex-wrap">
+              <CoreButton variant="primary" class="!px-[16px] !py-[11px] !text-[13.5px]" :disabled="using" @click="useGuide">
+                <i class="i-lucide-wand-sparkles text-[15px]" /> {{ using ? 'Membuat…' : 'Gunakan panduan untuk trip saya' }}
+              </CoreButton>
+              <CoreButton variant="ghost" class="!px-[15px] !py-[11px] !text-[13.5px]" @click="onSaveGuide">
+                <i :class="savedGuide ? 'i-lucide-bookmark-check text-teal-700' : 'i-lucide-bookmark'" class="text-[15px]" /> {{ savedGuide ? 'Tersimpan' : 'Simpan' }}
+              </CoreButton>
+            </div>
+          </div>
+          <div class="md:flex-1 md:min-w-0 flex items-end justify-center md:justify-end pb-5 md:pb-0 md:pl-4">
+            <img v-if="guide.heroImage" :src="guide.heroImage" :alt="guide.name" class="w-full h-auto max-w-[640px] object-contain select-none pointer-events-none" >
+            <div v-else class="w-full max-w-[520px] h-[180px] md:h-[260px] rounded-card bg-sand-100 flex items-center justify-center text-muted"><i class="i-lucide-image text-[28px]" /></div>
           </div>
         </div>
       </div>

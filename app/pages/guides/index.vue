@@ -24,15 +24,18 @@ const shown = computed(() => {
 
 <template>
   <div class="flex-1 w-full anim-rise">
-    <!-- hero banner — swap the background for the supplied asset (e.g. /img/guides-hero.jpg) -->
-    <div class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('/img/photo-sumba.jpg')" />
-      <div class="absolute inset-0" style="background:linear-gradient(104deg,rgba(16,38,43,.86) 0%,rgba(16,38,43,.6) 44%,rgba(16,38,43,.22) 100%)" />
-      <div class="relative max-w-[1100px] mx-auto p-[46px_20px_42px] md:p-[66px_32px_56px]">
-        <h1 class="font-display text-[clamp(32px,7vw,52px)] font-700 text-white leading-[1.02]">Kelana Guides</h1>
-        <p class="text-[14.5px] md:text-[16.5px] text-white/90 mt-3 max-w-[46ch] leading-snug">
-          Panduan destinasi yang dikurasi dengan teliti, untuk perjalanan yang lebih mudah dan berkesan.
-        </p>
+    <!-- hero: title left, static brand art attached right on a light canvas (replace /img/guides-hero.webp with the generated asset) -->
+    <div class="bg-white border-b border-sand-line overflow-hidden">
+      <div class="max-w-[1200px] mx-auto px-[20px] md:px-[32px] flex flex-col md:flex-row md:items-center">
+        <div class="relative z-[2] md:w-[44%] md:shrink-0 pt-[38px] pb-2 md:py-[72px]">
+          <h1 class="font-display text-[clamp(36px,7vw,60px)] font-700 text-ink leading-[0.98]">Kelana Guides</h1>
+          <p class="text-[15px] md:text-[17px] text-ink-2 mt-3 max-w-[40ch] leading-snug">
+            Panduan destinasi yang dikurasi dengan teliti, untuk perjalanan yang lebih mudah dan berkesan.
+          </p>
+        </div>
+        <div class="md:flex-1 md:min-w-0 flex items-end justify-center md:justify-end pb-6 md:pb-0 md:pl-4">
+          <img src="/img/guides-hero.webp" alt="Kelana Guides" class="w-full h-auto max-w-[680px] object-contain select-none pointer-events-none">
+        </div>
       </div>
     </div>
 
