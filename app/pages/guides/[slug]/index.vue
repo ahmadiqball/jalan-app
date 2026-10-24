@@ -20,21 +20,21 @@ useHead(() => ({ title: (guide.value?.name ?? 'Panduan') + ' · Kelana Guides' }
 
 // "Gunakan panduan" — clone the linked itinerary template into a new trip, or
 // start a trip seeded with the destination when none is linked. Auth-gated.
-const using = ref(false)
-async function useGuide() {
-  if (!guide.value) return
+// a guide can link an itinerary template (admin-set); surfaced here, templates stay their own module
+const linkedTemplate = computed(() => (guide.value?.itineraryTemplateId ? (templates.value.find((t) => t.id === guide.value!.itineraryTemplateId) || null) : null))
+const usingTemplate = ref(false)
+async function useTemplate() {
+  const tpl = linkedTemplate.value
+  if (!tpl) return
   if (!session.authed) return navigateTo(localePath(`/masuk?next=${encodeURIComponent(route.fullPath)}`))
-  using.value = true
+  usingTemplate.value = true
   try {
     const owner = cloud ? { name: session.name, email: session.email } : undefined
-    const tpl = guide.value.itineraryTemplateId ? templates.value.find((t) => t.id === guide.value!.itineraryTemplateId) : null
-    const id = tpl
-      ? trips.cloneTrip(tpl, { owner })
-      : trips.createTrip({ name: guide.value.name, place: guide.value.name, owner })
-    flash('Trip dibuat dari panduan')
+    const id = trips.cloneTrip(tpl, { owner })
+    flash('Trip dibuat dari template')
     await navigateTo(localePath(`/trip/${id}/days`))
   } finally {
-    using.value = false
+    usingTemplate.value = false
   }
 }
 
@@ -94,8 +94,8 @@ const facts = computed(() => {
             <h1 class="font-display text-[clamp(34px,7vw,56px)] font-800 text-ink leading-[1.0]">{{ guide.name }}</h1>
             <div class="text-[13.5px] text-ink-2 mt-2">{{ guide.region }} · {{ places.length }} rekomendasi tempat</div>
             <div class="flex gap-2 mt-5 flex-wrap">
-              <CoreButton variant="primary" class="!px-[16px] !py-[11px] !text-[13.5px]" :disabled="using" @click="useGuide">
-                <i class="i-lucide-wand-sparkles text-[15px]" /> {{ using ? 'Membuat…' : 'Gunakan panduan untuk trip saya' }}
+              <CoreButton v-if="linkedTemplate" variant="primary" class="!px-[16px] !py-[11px] !text-[13.5px]" :disabled="usingTemplate" @click="useTemplate">
+                <i class="i-lucide-wand-sparkles text-[15px]" /> {{ usingTemplate ? 'Membuat…' : 'Pakai template perjalanan' }}
               </CoreButton>
               <CoreButton variant="ghost" class="!px-[15px] !py-[11px] !text-[13.5px]" @click="onSaveGuide">
                 <i :class="savedGuide ? 'i-lucide-bookmark-check text-teal-700' : 'i-lucide-bookmark'" class="text-[15px]" /> {{ savedGuide ? 'Tersimpan' : 'Simpan' }}
@@ -134,6 +134,19 @@ const facts = computed(() => {
               <i :class="f[0]" class="text-[18px] text-teal-700 mt-[1px]" />
               <div><div class="text-[12px] text-muted font-600">{{ f[1] }}</div><div class="text-[14px] font-600 mt-[1px]">{{ f[2] }}</div></div>
             </div>
+          </div>
+
+          <!-- linked itinerary template (optional) -->
+          <div v-if="linkedTemplate" class="card p-[16px_18px] flex items-center gap-4 flex-wrap">
+            <span class="w-[42px] h-[42px] rounded-[12px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0"><i class="i-lucide-map text-[20px]" /></span>
+            <div class="flex-1 min-w-[180px]">
+              <div class="text-[12px] text-muted font-600">Template perjalanan</div>
+              <div class="font-display text-[18px] font-600 mt-[1px]">{{ linkedTemplate.name }}</div>
+              <div class="text-[12.5px] text-muted mt-[1px] money">{{ linkedTemplate.days.length }} hari · siap pakai</div>
+            </div>
+            <CoreButton variant="primary" class="!px-[16px] !py-[10px] !text-[13.5px] shrink-0" :disabled="usingTemplate" @click="useTemplate">
+              <i class="i-lucide-wand-sparkles text-[15px]" /> {{ usingTemplate ? 'Membuat…' : 'Pakai template' }}
+            </CoreButton>
           </div>
         </div>
 
