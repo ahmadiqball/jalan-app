@@ -24,18 +24,19 @@ const shown = computed(() => {
 
 <template>
   <div class="flex-1 w-full anim-rise">
-    <!-- hero: brand art blended into the page (multiply drops the white backdrop); big, bleeds right -->
-    <div class="relative overflow-hidden bg-paper">
-      <img src="/img/guides-hero.webp" alt="" aria-hidden="true" style="mix-blend-mode:multiply" class="hidden md:block pointer-events-none select-none absolute right-[-1%] top-1/2 -translate-y-1/2 h-[118%] w-auto max-w-[68%] object-contain object-right">
-      <div class="relative z-[2] max-w-[1200px] mx-auto px-[20px] md:px-[32px] py-[40px] md:py-[112px]">
-        <div class="max-w-[540px]">
+    <!-- hero: art blended into the page (multiply); big, slight bleed past the container, in-flow so never clipped -->
+    <div class="bg-paper overflow-x-clip">
+      <div class="max-w-[1240px] mx-auto px-[20px] md:px-[32px] flex flex-col md:flex-row md:items-center">
+        <div class="relative z-[2] md:w-[46%] md:shrink-0 py-[36px] md:py-[76px]">
           <h1 class="font-display text-[clamp(40px,8vw,68px)] font-700 text-ink leading-[0.96]">Kelana Guides</h1>
           <p class="text-[15.5px] md:text-[18px] text-ink-2 mt-4 max-w-[42ch] leading-snug">
             Panduan destinasi yang dikurasi dengan teliti, untuk perjalanan yang lebih mudah dan berkesan.
           </p>
         </div>
+        <div class="md:flex-1 md:min-w-0 flex justify-center md:justify-end md:-mr-[4%] pb-4 md:pb-0">
+          <img src="/img/guides-hero.webp" alt="Kelana Guides" style="mix-blend-mode:multiply" class="w-full max-w-[760px] h-auto object-contain select-none pointer-events-none">
+        </div>
       </div>
-      <img src="/img/guides-hero.webp" alt="" aria-hidden="true" style="mix-blend-mode:multiply" class="md:hidden w-full h-auto object-contain -mt-2 pointer-events-none select-none">
     </div>
 
     <div class="max-w-[1100px] mx-auto p-[20px_20px_64px] md:p-[26px_32px_72px] flex flex-col gap-6">
