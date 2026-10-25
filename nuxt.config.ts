@@ -8,6 +8,15 @@ export default defineNuxtConfig({
   // is a later, clean addition.
   ssr: true,
 
+  // Cache public, read-only content on the server/CDN (swr: serve fast, revalidate
+  // in the background). User- and admin-specific routes are never cached.
+  routeRules: {
+    '/api/guides': { cache: { maxAge: 120, swr: true } },
+    '/api/guides/**': { cache: { maxAge: 120, swr: true } },
+    '/api/places/**': { cache: { maxAge: 120, swr: true } },
+    '/api/templates': { cache: { maxAge: 120, swr: true } },
+  },
+
   modules: [
     '@unocss/nuxt',
     '@nuxt/fonts',

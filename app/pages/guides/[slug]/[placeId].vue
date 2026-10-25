@@ -13,7 +13,7 @@ const { isSaved, toggle, refresh: refreshSaved } = useSaved()
 const placeId = computed(() => route.params.placeId as string)
 onMounted(refreshSaved)
 
-const { data: place, error, status } = useFetch<PlaceDetail>(() => `/api/places/${placeId.value}`, { key: `place-${placeId.value}`, lazy: true })
+const { data: place, error, status } = useFetch<PlaceDetail>(() => `/api/places/${placeId.value}`, { key: `place-${placeId.value}`, lazy: true, getCachedData: payloadCache })
 useHead(() => ({ title: (place.value?.name ?? 'Tempat') + ' · Kelana Guides' }))
 
 const gallery = computed(() => place.value?.gallery ?? [])

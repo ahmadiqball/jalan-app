@@ -15,7 +15,7 @@ const cloud = useIsCloud()
 const slug = computed(() => route.params.slug as string)
 onMounted(refreshSaved)
 
-const { data: guide, error, status } = useFetch<GuideDetail>(() => `/api/guides/${slug.value}`, { key: `guide-${slug.value}`, lazy: true })
+const { data: guide, error, status } = useFetch<GuideDetail>(() => `/api/guides/${slug.value}`, { key: `guide-${slug.value}`, lazy: true, getCachedData: payloadCache })
 useHead(() => ({ title: (guide.value?.name ?? 'Panduan') + ' · Kelana Guides' }))
 
 // "Gunakan panduan" — clone the linked itinerary template into a new trip, or

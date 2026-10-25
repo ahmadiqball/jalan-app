@@ -4,7 +4,7 @@ import type { Destination } from '~/types/guide'
 definePageMeta({ public: true })
 useHead({ title: 'Kelana Guides' })
 
-const { data, status } = useFetch<Destination[]>('/api/guides', { key: 'guides-list', lazy: true })
+const { data, status } = useFetch<Destination[]>('/api/guides', { key: 'guides-list', lazy: true, getCachedData: payloadCache })
 const destinations = computed(() => data.value ?? [])
 const loading = computed(() => status.value === 'pending')
 
