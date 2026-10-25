@@ -52,7 +52,7 @@ function copyLink() {
       >
         <div class="max-w-[880px] w-full mx-auto p-[0_24px_24px]">
           <div class="flex items-center gap-2 mb-2">
-            <CoreLogo :size="26" :text-size="18" :class="cover ? '[&_*]:!text-white' : ''" />
+            <CoreLogo :size="26" :text-size="18" :variant="cover ? 'light' : 'brand'" />
           </div>
           <div class="font-display text-[34px] font-600" :class="cover ? 'text-white' : 'text-ink'">{{ trip.name }}</div>
           <div class="text-[14px] mt-1" :class="cover ? 'text-white/85' : 'text-ink-2'">{{ trip.place }} · {{ trip.dates }}</div>

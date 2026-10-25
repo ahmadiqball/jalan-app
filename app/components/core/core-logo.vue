@@ -1,37 +1,23 @@
 <script setup lang="ts">
-const props = withDefaults(
+/**
+ * Brand logo. Renders the PNG lockup:
+ *  - text (default): full mark + wordmark (img-logo-full)
+ *  - text=false:     mark only (img-logo-mark, transparent)
+ * `size` is the rendered height in px. `variant="light"` whitens it (for dark
+ * backgrounds). textSize/textClass/weight kept for backward-compatible callers.
+ */
+withDefaults(
   defineProps<{ size?: number; text?: boolean; textSize?: number; textClass?: string; variant?: 'brand' | 'ink' | 'light'; weight?: number }>(),
-  { size: 30, text: true, textSize: 21, variant: 'brand', weight: 600 },
+  { size: 30, text: true, variant: 'brand' },
 )
-
-// only the wordmark colour is theme-aware; the mark is the real brand tile
-const textColor = computed(() => {
-  switch (props.variant) {
-    case 'ink':
-      return '#10262B'
-    case 'light':
-      return '#ffffff'
-    default:
-      return '#10262B'
-  }
-})
 </script>
 
 <template>
-  <div class="flex items-center gap-[10px] select-none">
-    <img
-      src="/img/img-logo-square.png"
-      alt="Kelana"
-      class="shrink-0 block"
-      :style="{ width: size + 'px', height: size + 'px' }"
-    >
-    <div
-      v-if="text"
-      class="font-display"
-      :class="textClass"
-      :style="{ fontSize: textSize + 'px', color: textColor, fontWeight: weight, letterSpacing: '-.02em' }"
-    >
-      Kelana
-    </div>
-  </div>
+  <img
+    :src="text ? '/img/img-logo-full.png' : '/img/img-logo-mark.png'"
+    alt="Kelana"
+    class="w-auto max-w-none select-none shrink-0"
+    :class="textClass"
+    :style="{ height: size + 'px', ...(variant === 'light' ? { filter: 'brightness(0) invert(1)' } : {}) }"
+  >
 </template>
