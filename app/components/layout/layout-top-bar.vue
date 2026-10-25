@@ -25,8 +25,8 @@ async function openNewTrip() {
     class="h-[68px] shrink-0 bg-white border-b border-sand-line flex items-center gap-2 sm:gap-3 md:gap-[26px] px-3 sm:px-4 md:px-8 sticky top-0 z-40"
   >
     <NuxtLink :to="localePath('/beranda')" class="shrink-0 flex items-center">
-      <CoreLogo :size="28" :text="false" class="sm:hidden" />
-      <CoreLogo :size="30" class="hidden sm:block" />
+      <CoreLogo :size="34" :text="false" class="sm:hidden" />
+      <CoreLogo :size="40" class="hidden sm:block" />
     </NuxtLink>
 
     <nav class="hidden md:flex gap-1 text-[14px] font-600">
