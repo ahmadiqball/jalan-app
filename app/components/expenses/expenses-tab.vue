@@ -52,6 +52,7 @@ watch(planOpen, (v) => { if (!v) recordId.value = null })
 // nothing left to record: the entry point disappears, so close the popup too
 watch(() => unpaidPlanned.value.length, (n) => { if (!n) planOpen.value = false })
 function record(id: string) {
+  trips.setActivityField(props.trip.id, id, 'actual', undefined)
   trips.setActivityField(props.trip.id, id, 'paid', true)
   flash('Dicatat sebagai pengeluaran')
 }
@@ -141,15 +142,37 @@ function saveEdit() {
   editing.value = null
   flash('Pengeluaran diperbarui')
 }
-async function removeLine(line: { id: string; title: string; amount: number }) {
+/* edit a recorded planned activity: only the actual changes, never the plan */
+const actualLine = ref<ExpenseLine | null>(null)
+const actualOpen = computed({ get: () => !!actualLine.value, set: (v) => { if (!v) actualLine.value = null } })
+const actualAmount = ref(0)
+const actualDelta = computed(() => actualAmount.value - (actualLine.value?.planned ?? 0))
+function openActual(l: ExpenseLine) {
+  actualLine.value = l
+  actualAmount.value = l.amount
+}
+function saveActual() {
+  const l = actualLine.value
+  if (!l) return
+  trips.setActivityField(props.trip.id, l.id, 'actual', actualDelta.value === 0 ? undefined : actualAmount.value)
+  actualLine.value = null
+  flash('Pengeluaran diperbarui')
+}
+async function removeLine(line: ExpenseLine) {
   const ok = await confirm({
     title: t('confirm.delExpTitle'),
-    message: t('confirm.delExpMsg', { title: line.title, amount: rp(line.amount) }),
+    message: t(line.derived ? 'confirm.delPlannedExpMsg' : 'confirm.delExpMsg', { title: line.title, amount: rp(line.amount) }),
     confirmLabel: t('confirm.delExpCta'),
     danger: true,
   })
   if (!ok) return
-  trips.deleteManual(props.trip.id, line.id)
+  if (line.derived) {
+    // the activity stays: it just goes back to the not-yet-recorded list
+    trips.setActivityField(props.trip.id, line.id, 'paid', false)
+    trips.setActivityField(props.trip.id, line.id, 'actual', undefined)
+  } else {
+    trips.deleteManual(props.trip.id, line.id)
+  }
   flash('Pengeluaran dihapus')
 }
 
@@ -267,28 +290,27 @@ function log() {
           </div>
           <div class="flex-1 min-w-0">
             <div class="text-[14px] font-600 truncate">{{ l.title }}</div>
-            <div class="flex items-center gap-[6px] min-w-0 mt-[2px]">
-              <span class="text-[12px] text-muted truncate">{{ mode === 'Kategori' ? trip.days[l.dayIdx]?.date : catLabel(l.cat) }}</span>
+            <div class="flex flex-wrap items-center gap-x-[6px] gap-y-[3px] min-w-0 mt-[2px]">
+              <span class="text-[12px] text-muted">{{ mode === 'Kategori' ? trip.days[l.dayIdx]?.date : catLabel(l.cat) }}</span>
               <span v-if="l.derived" class="shrink-0 rounded-pill bg-teal-100 text-teal-700 px-[7px] py-[3px] text-[10.5px] font-700 leading-none">Terencana</span>
             </div>
           </div>
           <div class="flex flex-col items-end gap-[3px] shrink-0">
             <div class="money text-[14px] font-600">{{ rp(l.amount) }}</div>
-            <div v-if="!l.derived" class="flex items-center gap-1">
-              <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-teal-700 hover:bg-teal-100 flex items-center justify-center" title="Ubah" @click="openEdit(l)"><i class="i-lucide-pencil text-[14px]" /></button>
-              <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center" title="Hapus" @click="removeLine(l)"><i class="i-lucide-x text-[15px]" /></button>
-            </div>
-            <!-- actual differs from the planned activity cost: show the gap -->
-            <template v-else-if="l.planned != null && l.amount !== l.planned">
+            <span v-if="l.planned != null && l.amount !== l.planned" class="text-[10.5px] text-muted leading-none">rencana <span class="money line-through">{{ rp(l.planned) }}</span></span>
+            <div class="flex items-center gap-1">
+              <!-- actual differs from the planned activity cost: show the gap -->
               <span
+                v-if="l.planned != null && l.amount !== l.planned"
                 class="flex items-center gap-[2px] rounded-pill px-[7px] py-[2px] text-[10.5px] font-700 leading-none"
                 :class="l.amount > l.planned ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
               >
                 <i :class="l.amount > l.planned ? 'i-lucide-trending-up' : 'i-lucide-trending-down'" class="text-[11px]" />
                 {{ l.amount > l.planned ? '+' : '−' }}{{ shortRp(Math.abs(l.amount - l.planned)) }}
               </span>
-              <span class="text-[10.5px] text-muted leading-none">rencana <span class="money line-through">{{ rp(l.planned) }}</span></span>
-            </template>
+              <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-teal-700 hover:bg-teal-100 flex items-center justify-center" title="Ubah" aria-label="Ubah" @click="l.derived ? openActual(l) : openEdit(l)"><i class="i-lucide-pencil text-[14px]" /></button>
+              <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center" title="Hapus" aria-label="Hapus" @click="removeLine(l)"><i class="i-lucide-x text-[15px]" /></button>
+            </div>
           </div>
         </div>
         </div>
@@ -356,6 +378,31 @@ function log() {
           </div>
         </div>
       </div>
+    </CoreDialog>
+
+    <!-- edit the amount recorded for a planned activity -->
+    <CoreDialog v-if="actualLine" v-model:open="actualOpen" side="center" :width="420" title="Ubah pengeluaran">
+      <div class="flex flex-col gap-3">
+        <div class="text-[13.5px] font-600">{{ actualLine.title }}</div>
+        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah sebenarnya</span><CoreMoneyInput :model-value="actualAmount" @update:model-value="actualAmount = $event" @keydown.enter="saveActual" /></label>
+        <div class="flex items-center gap-2 text-[12px]">
+          <span class="text-muted">Rencana <span class="money">{{ rp(actualLine.planned ?? 0) }}</span></span>
+          <span
+            v-if="actualDelta !== 0"
+            class="flex items-center gap-[2px] rounded-pill px-[8px] py-[3px] font-700 leading-none"
+            :class="actualDelta > 0 ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
+          >
+            <i :class="actualDelta > 0 ? 'i-lucide-trending-up' : 'i-lucide-trending-down'" class="text-[12px]" />
+            {{ actualDelta > 0 ? '+' : '−' }}{{ shortRp(Math.abs(actualDelta)) }}
+          </span>
+        </div>
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="actualLine = null">Batal</CoreButton>
+          <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[13.5px]" @click="saveActual">Simpan</CoreButton>
+        </div>
+      </template>
     </CoreDialog>
 
     <!-- log expense (popup) -->

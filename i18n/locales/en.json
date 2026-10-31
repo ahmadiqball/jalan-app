@@ -310,6 +310,7 @@
     "delActCta": "Delete",
     "delExpTitle": "Delete expense?",
     "delExpMsg": "\"{title}\" ({amount}) will be removed from the expense log.",
+    "delPlannedExpMsg": "\"{title}\" ({amount}) will be removed from expenses and go back to the not-yet-recorded list. The activity stays.",
     "delExpCta": "Delete",
     "delTplTitle": "Delete template?",
     "delTplMsg": "The \"{name}\" template will be permanently deleted. Trips already created from it are unaffected.",

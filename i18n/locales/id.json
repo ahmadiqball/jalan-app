@@ -310,6 +310,7 @@
     "delActCta": "Hapus",
     "delExpTitle": "Hapus pengeluaran?",
     "delExpMsg": "\"{title}\" ({amount}) akan dihapus dari catatan pengeluaran.",
+    "delPlannedExpMsg": "\"{title}\" ({amount}) akan dihapus dari pengeluaran dan kembali ke daftar rencana belum dicatat. Aktivitasnya tetap ada.",
     "delExpCta": "Hapus",
     "delTplTitle": "Hapus template?",
     "delTplMsg": "Template \"{name}\" akan dihapus permanen. Trip yang sudah pakai template ini tidak terpengaruh.",
