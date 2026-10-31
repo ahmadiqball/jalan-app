@@ -60,7 +60,7 @@ function dayDateFull(i: number): string {
 }
 // group by day
 const byDay = computed(() => {
-  const map: Record<number, { key: string; dayIdx: number; label: string; sub: string; total: number; items: typeof lines.value }> = {}
+  const map: Record<number, { key: string; dayIdx: number; label: string; sub: string; total: number; planned: number; items: typeof lines.value }> = {}
   for (const l of lines.value) {
     const g = (map[l.dayIdx] ||= {
       key: 'd' + l.dayIdx,
@@ -68,9 +68,11 @@ const byDay = computed(() => {
       label: 'Hari ' + (l.dayIdx + 1),
       sub: dayDateFull(l.dayIdx),
       total: 0,
+      planned: 0,
       items: [],
     })
     g.total += l.amount
+    g.planned += l.planned ?? 0 // only planned activities carry a plan; manual spends don't
     g.items.push(l)
   }
   return Object.values(map).sort((a, b) => a.dayIdx - b.dayIdx)
@@ -241,7 +243,20 @@ function log() {
               <span v-if="mode === 'Hari' && 'sub' in g && g.sub" class="block text-[11.5px] text-muted leading-tight truncate">{{ g.sub }}</span>
             </span>
           </span>
-          <span class="money text-[13.5px] text-ink-2 shrink-0">{{ rp(g.total) }}</span>
+          <span class="shrink-0 flex flex-col items-end gap-[3px]">
+            <span class="money text-[13.5px] text-ink-2">{{ rp(g.total) }}</span>
+            <!-- day-level gap vs what was planned for the day -->
+            <template v-if="mode === 'Hari' && 'planned' in g && g.planned && g.total !== g.planned">
+              <span
+                class="flex items-center gap-[2px] rounded-pill px-[7px] py-[2px] text-[10.5px] font-700 leading-none"
+                :class="g.total > g.planned ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
+              >
+                <i :class="g.total > g.planned ? 'i-lucide-trending-up' : 'i-lucide-trending-down'" class="text-[11px]" />
+                {{ g.total > g.planned ? '+' : '−' }}{{ shortRp(Math.abs(g.total - g.planned)) }} vs rencana
+              </span>
+              <span class="text-[10.5px] text-muted leading-none">rencana <span class="money line-through">{{ rp(g.planned) }}</span></span>
+            </template>
+          </span>
         </div>
         <div v-for="l in g.items" :key="l.id" class="flex items-center gap-3 py-[10px]">
           <div class="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center shrink-0" :style="{ background: tone(l.cat)[0], color: tone(l.cat)[1] }">
