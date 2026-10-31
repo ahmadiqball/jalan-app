@@ -34,6 +34,8 @@ export function isBillingPeriod(v: unknown): v is BillingPeriod {
 export interface Subscription {
   plan: PlanId
   expiresAt: string
+  /** set when the user cancels; access still runs until expiresAt */
+  cancelledAt?: string | null
 }
 
 export interface Entitlement {
@@ -41,6 +43,7 @@ export interface Entitlement {
   status: 'unlimited' | 'active' | 'none'
   plan: PlanId | null
   expiresAt: string | null
+  cancelledAt: string | null
   /** null = unlimited */
   maxTrips: number | null
   maxMembers: number | null
@@ -48,13 +51,13 @@ export interface Entitlement {
   guides: boolean
 }
 
-export const UNLIMITED: Entitlement = { status: 'unlimited', plan: null, expiresAt: null, maxTrips: null, maxMembers: null, maxBudgetVersions: null, guides: true }
-export const NO_PLAN: Entitlement = { status: 'none', plan: null, expiresAt: null, maxTrips: 0, maxMembers: 0, maxBudgetVersions: 0, guides: false }
+export const UNLIMITED: Entitlement = { status: 'unlimited', plan: null, expiresAt: null, cancelledAt: null, maxTrips: null, maxMembers: null, maxBudgetVersions: null, guides: true }
+export const NO_PLAN: Entitlement = { status: 'none', plan: null, expiresAt: null, cancelledAt: null, maxTrips: 0, maxMembers: 0, maxBudgetVersions: 0, guides: false }
 
 export function entitlementOf(sub: Subscription | null, now = new Date()): Entitlement {
   if (!sub || new Date(sub.expiresAt) <= now) return NO_PLAN
   const p = PLANS[sub.plan]
-  return { status: 'active', plan: p.id, expiresAt: sub.expiresAt, maxTrips: p.maxTrips, maxMembers: p.maxMembers, maxBudgetVersions: p.maxBudgetVersions, guides: p.guides }
+  return { status: 'active', plan: p.id, expiresAt: sub.expiresAt, cancelledAt: sub.cancelledAt ?? null, maxTrips: p.maxTrips, maxMembers: p.maxMembers, maxBudgetVersions: p.maxBudgetVersions, guides: p.guides }
 }
 
 /** Calendar months from `from`; a day that doesn't exist lands on the month's last day. */

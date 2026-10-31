@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   const paid = n.status_code === '200'
     && (n.transaction_status === 'settlement' || (n.transaction_status === 'capture' && n.fraud_status === 'accept'))
   if (paid) {
-    if (await repo.markPaid(order.id)) {
+    if (await repo.markPaid(order.id, n.payment_type)) {
       const sub = await repo.getSubscription(order.userId)
       const now = new Date()
       // same plan extends what's left; an upgrade starts now

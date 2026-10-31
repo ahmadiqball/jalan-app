@@ -31,6 +31,7 @@ export interface MidtransNotification {
   signature_key?: string
   transaction_status?: string
   fraud_status?: string
+  payment_type?: string
 }
 
 /** Midtrans signs order_id + status_code + gross_amount + server key with SHA-512. */

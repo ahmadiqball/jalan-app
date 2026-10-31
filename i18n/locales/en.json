@@ -331,6 +331,30 @@
     "pending": "Payment is still processing. Your plan activates automatically once received.",
     "failed": "Could not start payment. Please try again later.",
     "fineprint": "Prices in rupiah. When you upgrade, the new plan starts that day and time left on the old plan is not carried over. When a plan ends, trips stay saved and become read-only.",
-    "lockedTrip": "This trip is read-only because it is outside the plan limits. See plans"
+    "lockedTrip": "This trip is read-only because it is outside the plan limits. See plans",
+    "mine": {
+      "title": "My subscription",
+      "activeUntil": "Active until {date}",
+      "endsOn": "Cancelled, stays active until {date}",
+      "statusCancelled": "Cancelled",
+      "manage": "Extend or change plan",
+      "tripsUsed": "Active trips",
+      "membersLimit": "Members per trip",
+      "cancelCta": "Cancel subscription",
+      "cancelTitle": "Cancel subscription?",
+      "cancelMsg": "Your plan stays active until {date}. Payments already made are not refunded.",
+      "cancelled": "Subscription cancelled",
+      "cancelFailed": "Could not cancel. Please try again.",
+      "noPlan": "You have no active plan",
+      "history": "Payment history",
+      "loading": "Loading…",
+      "loadFailed": "Could not load payment history",
+      "noOrders": "No payments yet.",
+      "order": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "failed": "Failed"
+      }
+    }
   }
 }

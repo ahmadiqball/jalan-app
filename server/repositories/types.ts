@@ -149,14 +149,20 @@ export interface BillingOrder {
   period: BillingPeriod
   amount: number
   status: 'pending' | 'paid' | 'failed'
+  paymentType?: string | null
+  createdAt?: string
+  paidAt?: string | null
 }
 export interface BillingRepository {
   getSubscription(userId: string): Promise<Subscription | null>
+  /** Replaces the plan, clearing any earlier cancellation. */
   saveSubscription(userId: string, sub: Subscription): Promise<void>
+  cancelSubscription(userId: string): Promise<void>
   createOrder(order: Omit<BillingOrder, 'status'>): Promise<void>
   getOrder(id: string): Promise<BillingOrder | null>
+  listOrders(userId: string): Promise<BillingOrder[]>
   /** Pending -> paid. False if it already happened, so a retried webhook is a no-op. */
-  markPaid(id: string): Promise<boolean>
+  markPaid(id: string, paymentType?: string): Promise<boolean>
   markFailed(id: string): Promise<void>
 }
 

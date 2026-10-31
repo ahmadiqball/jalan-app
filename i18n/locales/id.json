@@ -331,6 +331,30 @@
     "pending": "Pembayaran masih diproses. Paketmu aktif otomatis setelah diterima.",
     "failed": "Pembayaran belum bisa dimulai. Coba lagi nanti.",
     "fineprint": "Harga dalam rupiah. Saat naik paket, paket baru mulai hari itu dan sisa paket lama tidak terbawa. Saat paket berakhir, trip tetap tersimpan dan hanya bisa dibaca.",
-    "lockedTrip": "Trip ini hanya bisa dibaca karena di luar batas paket. Lihat paket"
+    "lockedTrip": "Trip ini hanya bisa dibaca karena di luar batas paket. Lihat paket",
+    "mine": {
+      "title": "Langganan saya",
+      "activeUntil": "Aktif sampai {date}",
+      "endsOn": "Dibatalkan, tetap aktif sampai {date}",
+      "statusCancelled": "Dibatalkan",
+      "manage": "Perpanjang atau ganti paket",
+      "tripsUsed": "Trip aktif",
+      "membersLimit": "Anggota per trip",
+      "cancelCta": "Batalkan langganan",
+      "cancelTitle": "Batalkan langganan?",
+      "cancelMsg": "Paketmu tetap aktif sampai {date}. Pembayaran yang sudah masuk tidak dikembalikan.",
+      "cancelled": "Langganan dibatalkan",
+      "cancelFailed": "Gagal membatalkan. Coba lagi.",
+      "noPlan": "Kamu belum punya paket aktif",
+      "history": "Riwayat pembayaran",
+      "loading": "Memuat…",
+      "loadFailed": "Gagal memuat riwayat pembayaran",
+      "noOrders": "Belum ada pembayaran.",
+      "order": {
+        "paid": "Lunas",
+        "pending": "Menunggu",
+        "failed": "Gagal"
+      }
+    }
   }
 }

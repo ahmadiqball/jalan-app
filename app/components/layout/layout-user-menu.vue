@@ -13,6 +13,7 @@ const { isAdmin } = useMe()
 const showAdmin = computed(() => isAdmin.value)
 const { sub } = useSubscription()
 const planName = computed(() => (sub.value.plan ? PLANS[sub.value.plan].name : ''))
+const planBadge = computed(() => planName.value.replace('Kelana ', ''))
 
 const localePath = useLocalePath()
 const { locale } = useI18n()
@@ -46,10 +47,11 @@ async function logout() {
 <template>
   <DropdownMenuRoot>
     <DropdownMenuTrigger
-      class="w-9 h-9 rounded-full bg-sand-100 hover:bg-sand-line flex items-center justify-center text-[13px] font-700 text-ink-2 transition-colors shrink-0 outline-none data-[state=open]:ring-2 data-[state=open]:ring-teal-600"
+      class="relative w-9 h-9 rounded-full bg-sand-100 hover:bg-sand-line flex items-center justify-center text-[13px] font-700 text-ink-2 transition-colors shrink-0 outline-none data-[state=open]:ring-2 data-[state=open]:ring-teal-600"
       :title="session.name"
     >
       {{ session.initials }}
+      <span v-if="planBadge" class="absolute -bottom-[5px] left-1/2 -translate-x-1/2 rounded-pill bg-teal-600 text-white px-[5px] py-[2px] text-[8.5px] font-700 leading-none">{{ planBadge }}</span>
     </DropdownMenuTrigger>
     <DropdownMenuPortal>
       <DropdownMenuContent
@@ -60,6 +62,7 @@ async function logout() {
         <DropdownMenuLabel class="px-[10px] py-[8px]">
           <div class="text-[13.5px] font-700 text-ink truncate">{{ session.name }}</div>
           <div class="text-[12px] text-muted truncate">{{ session.email }}</div>
+          <span v-if="planName" class="inline-block mt-[6px] rounded-pill bg-teal-100 text-teal-700 px-[9px] py-[3px] text-[11px] font-700">{{ planName }}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
 
@@ -92,10 +95,9 @@ async function logout() {
         </DropdownMenuItem>
         <DropdownMenuItem
           class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[13.5px] text-ink cursor-pointer outline-none data-[highlighted]:bg-sand-100"
-          @select="navigateTo(localePath('/langganan'))"
+          @select="navigateTo(localePath('/langganan/saya'))"
         >
           <i class="i-lucide-crown text-[15px] text-teal-600" /> {{ $t('menu.subscription') }}
-          <span v-if="planName" class="ml-auto text-[11.5px] text-muted">{{ planName }}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           v-if="showAdmin"
