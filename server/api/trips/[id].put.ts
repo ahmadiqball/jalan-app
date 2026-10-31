@@ -1,3 +1,4 @@
+import { isTripActive, tripWriteViolation } from '../../../shared/utils/plans'
 import type { TripData } from '../../repositories/types'
 
 /** PUT /api/trips/:id — create (new) or replace (owner/editor only). */
@@ -15,6 +16,9 @@ export default defineEventHandler(async (event) => {
   const existing = await repo.get(id)
   let row
   if (!existing) {
+    const { ent, rows } = await ownerUsage(event, actor.id, actor)
+    const violation = tripWriteViolation(ent, null, trip, { activeOwned: rows.filter((r) => isTripActive(r.data)).length, locked: false })
+    if (violation) throw planError(violation)
     row = await repo.create(actor.id, trip as TripData)
   } else {
     const role = roleFor(existing, actor)
@@ -29,6 +33,12 @@ export default defineEventHandler(async (event) => {
         throw createError({ statusCode: 403, statusMessage: 'Hanya pemilik yang bisa mengeluarkan anggota atau mengubah peran' })
       }
     }
+    const { ent, rows, locked } = await ownerUsage(event, existing.ownerId, actor)
+    const violation = tripWriteViolation(ent, existing.data, trip, {
+      activeOwned: rows.filter((r) => isTripActive(r.data)).length,
+      locked: locked.includes(id),
+    })
+    if (violation) throw planError(violation)
     row = await repo.replace(id, trip as TripData)
   }
   if (!row) throw createError({ statusCode: 404, statusMessage: 'Trip tidak ditemukan' })

@@ -20,16 +20,14 @@
   "menu": {
     "admin": "Admin",
     "logout": "Sign out",
-    "guest": "Guest mode · not saved",
-    "language": "Language"
+    "language": "Language",
+    "subscription": "Subscription"
   },
   "login": {
     "title": "Sign in",
     "subtitle": "Pick up the trip you're planning.",
     "google": "Continue with Google",
     "local": "Enter (local mode)",
-    "guest": "Try without an account",
-    "guestNote": "Guest mode stays on this device only — nothing is saved.",
     "cloudNote": "Sign in with your Google account — fast and secure.",
     "localNote": "Local mode — data is stored on this device.",
     "busy": "One sec…",
@@ -119,7 +117,7 @@
       "stories": "Stories",
       "pricing": "Pricing",
       "signin": "Sign in",
-      "tryFree": "Try free"
+      "tryFree": "Get started"
     },
     "units": {
       "days": "days",
@@ -130,7 +128,7 @@
       "title1": "Plan it neatly.",
       "title2": "Enjoy the journey.",
       "blurb": "Itinerary, budget, spending, packing, even outfits. All in one trip, ready to open with friends — even when there's no signal.",
-      "tryFree": "Try free",
+      "tryFree": "Get started",
       "seeInside": "See inside the app",
       "stat1": "trips planned",
       "stat2": "first trip",
@@ -255,43 +253,14 @@
     },
     "pricing": {
       "eyebrow": "Pricing",
-      "title": "Start free, pay when you travel often",
-      "monthly": "Monthly",
-      "yearly": "Yearly · save 2 months",
-      "popular": "Most popular",
-      "forever": "forever",
-      "perYear": "per year",
-      "perMonth": "per month",
-      "fineprint": "Prices in rupiah, tax included. Cancel anytime — old trips stay readable.",
-      "freeName": "Kelana Free",
-      "freeNote": "One active trip, no time limit.",
-      "freeCta": "Start free",
-      "freeF1": "One active trip",
-      "freeF2": "Daily schedule and costs",
-      "freeF3": "Packing list and outfits",
-      "freeF4": "Invite 1 member",
-      "plusName": "Kelana Plus",
-      "plusNote": "For those who travel every few months.",
-      "plusCta": "Try 14 days",
-      "plusF1": "Unlimited active trips",
-      "plusF2": "Multiple budget versions",
-      "plusF3": "Log spending offline",
-      "plusF4": "Invite 8 members",
-      "plusF5": "Read-only links",
-      "groupName": "Groups",
-      "groupNote": "Office trips, communities, big families.",
-      "groupCta": "Contact us",
-      "groupF1": "Everything in Kelana Plus",
-      "groupF2": "Unlimited members",
-      "groupF3": "Export spending summary",
-      "groupF4": "Your own trip templates",
-      "groupF5": "Priority support"
+      "title": "Clear pricing that fits your group",
+      "fineprint": "Prices in rupiah. Prepaid, with no automatic renewal."
     },
     "finalCta": {
       "eyebrow": "Start now",
       "title": "Your next trip can start tonight",
       "body": "Create a trip, set the dates, invite friends. The rest you can tidy up as you go.",
-      "tryFree": "Try free",
+      "tryFree": "Get started",
       "seePricing": "See pricing"
     },
     "footer": {
@@ -327,5 +296,44 @@
     "delDayTitle": "Delete this day?",
     "delDayMsg": "{day} has {n} activities that will be deleted with it. The days after it shift up.",
     "delDayCta": "Delete day"
+  },
+  "billing": {
+    "title": "Subscription",
+    "subtitle": "Choose a plan that fits your group. Prepaid, with no automatic renewal.",
+    "choose": "Choose plan",
+    "extend": "Extend",
+    "opening": "Opening payment…",
+    "active": "Active plan",
+    "popular": "Most popular",
+    "period": {
+      "1m": "1 month",
+      "3m": "3 months",
+      "12m": "1 year"
+    },
+    "per": {
+      "1m": "per month",
+      "3m": "per 3 months",
+      "12m": "per year"
+    },
+    "feat": {
+      "tripOne": "1 active trip",
+      "trips": "{n} active trips",
+      "members": "Up to {n} members per trip",
+      "tools": "Schedule, packing, outfits and expenses",
+      "versionOne": "1 budget version",
+      "versions": "Unlimited budget versions",
+      "publicGuides": "Public guides",
+      "guides": "All Kelana Guides, always updated",
+      "newsletter": "Email newsletter"
+    },
+    "currentUntil": "You are on {plan}, active until {date}.",
+    "unlimited": "Your account has full access.",
+    "checking": "Checking your payment…",
+    "paid": "Payment received, your plan is active",
+    "notPaid": "Payment was not completed",
+    "pending": "Payment is still processing. Your plan activates automatically once received.",
+    "failed": "Could not start payment. Please try again later.",
+    "fineprint": "Prices in rupiah. When you upgrade, the new plan starts that day and time left on the old plan is not carried over. When a plan ends, trips stay saved and become read-only.",
+    "lockedTrip": "This trip is read-only because it is outside the plan limits. See plans"
   }
 }

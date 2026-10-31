@@ -43,7 +43,9 @@ function addCategory() {
   newCatAmount.value = 0
   newCatIcon.value = 'i-lucide-ellipsis'
 }
+const { canAddBudgetVersion, promptUpgrade } = useSubscription()
 function newVersion() {
+  if (!canAddBudgetVersion(props.trip)) return promptUpgrade('Versi anggaran tambahan ada di Kelana Plus')
   trips.addBudgetVersion(props.trip.id)
   flash('Versi anggaran baru dibuat')
 }

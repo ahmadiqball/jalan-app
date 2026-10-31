@@ -16,6 +16,7 @@ export interface Destination {
   itineraryTemplateId?: string
   featured?: boolean
   published?: boolean
+  isPublic?: boolean
   sort?: number
 }
 

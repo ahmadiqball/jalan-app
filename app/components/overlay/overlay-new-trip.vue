@@ -16,10 +16,12 @@ const cover = ref(coverForMat('pantai'))
 const startIso = ref('')
 const len = ref(4)
 const budgetCap = ref(0)
+const { requireTripSlot } = useSubscription()
 
 watch(
   () => ui.showNewTrip,
   (o) => {
+    if (o && !requireTripSlot()) { ui.showNewTrip = false; return }
     if (o) {
       name.value = ''; place.value = ''; placeId.value = undefined
       mat.value = 'pantai'; cover.value = coverForMat('pantai')

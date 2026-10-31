@@ -9,7 +9,9 @@ const ui = useUiStore()
 const route = useRoute()
 const { signOut } = useAuth()
 const { isAdmin } = useMe()
-const showAdmin = computed(() => isAdmin.value && !session.guest)
+const showAdmin = computed(() => isAdmin.value)
+const { sub } = useSubscription()
+const planName = computed(() => (sub.value.plan ? PLANS[sub.value.plan].name : ''))
 
 const localePath = useLocalePath()
 const { locale } = useI18n()
@@ -35,11 +37,8 @@ function setLocale(code: 'id' | 'en') {
 }
 
 async function logout() {
-  const wasGuest = session.guest
   await signOut()
-  // hard-reload after a guest trial so ephemeral in-memory data is cleared
-  if (wasGuest && import.meta.client) window.location.href = localePath('/masuk')
-  else navigateTo(localePath('/masuk'))
+  navigateTo(localePath('/masuk'))
 }
 </script>
 
@@ -59,7 +58,7 @@ async function logout() {
       >
         <DropdownMenuLabel class="px-[10px] py-[8px]">
           <div class="text-[13.5px] font-700 text-ink truncate">{{ session.name }}</div>
-          <div class="text-[12px] text-muted truncate">{{ session.guest ? $t('menu.guest') : session.email }}</div>
+          <div class="text-[12px] text-muted truncate">{{ session.email }}</div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
 
@@ -89,6 +88,13 @@ async function logout() {
           @select="navigateTo(localePath('/tersimpan'))"
         >
           <i class="i-lucide-bookmark text-[15px] text-teal-600" /> Tersimpan
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[13.5px] text-ink cursor-pointer outline-none data-[highlighted]:bg-sand-100"
+          @select="navigateTo(localePath('/langganan'))"
+        >
+          <i class="i-lucide-crown text-[15px] text-teal-600" /> {{ $t('menu.subscription') }}
+          <span v-if="planName" class="ml-auto text-[11.5px] text-muted">{{ planName }}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           v-if="showAdmin"

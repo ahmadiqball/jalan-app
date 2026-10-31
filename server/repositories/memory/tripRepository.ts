@@ -17,6 +17,10 @@ export class MemoryTripRepository implements TripRepository {
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
   }
 
+  async listOwned(ownerId: string): Promise<TripRow[]> {
+    return [...this.rows.values()].filter((r) => r.ownerId === ownerId)
+  }
+
   async get(id: string): Promise<TripRow | null> {
     return this.rows.get(id) ?? null
   }

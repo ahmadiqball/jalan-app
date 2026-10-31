@@ -2,11 +2,9 @@
  * Auth facade. Cloud mode → Supabase Auth; local mode → the offline stub.
  * UI (login) calls these without knowing which mode is active.
  */
-import { setGuestPersist } from '~/utils/persist'
 
 export function useAuth() {
   const session = useSessionStore()
-  const trips = useTripsStore()
   const client = useSupabaseClient()
   const cloud = computed(() => useIsCloud())
 
@@ -44,7 +42,6 @@ export function useAuth() {
 
   async function signOut() {
     if (cloud.value && client) await client.auth.signOut()
-    setGuestPersist(false)
     session.signOut()
   }
 
@@ -56,12 +53,5 @@ export function useAuth() {
     return { ok: true } // browser redirects to Google; session resolves on return
   }
 
-  /** Guest trial: fresh demo data, local + ephemeral, never synced to cloud. */
-  function guest() {
-    setGuestPersist(true) // stop persisting — guest edits stay in memory only
-    trips.resetSeed() // start the trial from clean demo data
-    session.signInGuest()
-  }
-
-  return { cloud, signIn, signUp, signInGoogle, signOut, guest }
+  return { cloud, signIn, signUp, signInGoogle, signOut }
 }

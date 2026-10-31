@@ -7,6 +7,7 @@ const ui = useUiStore()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const { canEdit, isOwner } = useTripAccess()
+const { isLocked } = useSubscription()
 const editable = computed(() => canEdit(props.trip))
 const owner = computed(() => isOwner(props.trip))
 
@@ -25,6 +26,9 @@ const budgetChip = computed(() => {
 
 <template>
   <div data-trip-header class="bg-white border-b border-sand-line md:sticky md:top-[68px] z-30">
+    <NuxtLink v-if="isLocked(trip.id)" :to="localePath('/langganan')" class="flex items-center justify-center gap-2 bg-warn-bg text-warn-fg px-4 py-[8px] text-[12.5px] font-600 text-center">
+      <i class="i-lucide-lock text-[14px] shrink-0" /> {{ $t('billing.lockedTrip') }}
+    </NuxtLink>
     <div class="max-w-[1400px] mx-auto p-[12px_16px_0] md:p-[18px_32px_0] flex flex-wrap gap-x-[12px] gap-y-[8px] md:gap-[16px] items-center">
       <NuxtLink
         :to="localePath('/beranda')"

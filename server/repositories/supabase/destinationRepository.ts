@@ -21,6 +21,7 @@ function mapRow(r: Record<string, unknown>): Destination {
     itineraryTemplateId: (r.itinerary_template_id as string) ?? undefined,
     featured: !!r.featured,
     published: !!r.published,
+    isPublic: !!r.is_public,
     sort: (r.sort as number) ?? 0,
   }
 }
@@ -42,6 +43,7 @@ function toRow(d: Destination): Record<string, unknown> {
     itinerary_template_id: d.itineraryTemplateId ?? null,
     featured: !!d.featured,
     published: !!d.published,
+    is_public: !!d.isPublic,
     sort: d.sort ?? 0,
     updated_at: new Date().toISOString(),
   }

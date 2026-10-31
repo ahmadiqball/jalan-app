@@ -39,6 +39,12 @@ export class SupabaseTripRepository implements TripRepository {
     return [...byId.values()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
   }
 
+  async listOwned(ownerId: string): Promise<TripRow[]> {
+    const { data, error } = await this.sb.from(TABLE).select('*').eq('owner_id', ownerId)
+    if (error) throw error
+    return (data ?? []).map(mapRow)
+  }
+
   async get(id: string): Promise<TripRow | null> {
     const { data, error } = await this.sb.from(TABLE).select('*').eq('id', id).maybeSingle()
     if (error) throw error

@@ -1,4 +1,5 @@
 import type { Trip } from '~/types/domain'
+import type { MeResponse } from '~/composables/use-subscription'
 
 /**
  * Cloud sync (client-only). No-op in local mode. In cloud mode:
@@ -16,6 +17,8 @@ export default defineNuxtPlugin(() => {
   const trips = useTripsStore()
   const { apiFetch } = useApi()
   const pete = usePetePete()
+  const subscription = useSubscription()
+  const { flash } = useToast()
 
   const snapshot = new Map<string, string>() // id -> JSON of last-synced trip
   const pushQueue = new Set<string>()
@@ -57,7 +60,15 @@ export default defineNuxtPlugin(() => {
         await apiFetch(`/api/trips/${id}`, { method: 'PUT', body: t })
         snapshot.set(id, json(t))
         pushQueue.delete(id)
-      } catch { /* keep queued */ }
+      } catch (e) {
+        // the plan rejected it, so retrying can't help: restore what the server has
+        if ((e as { statusCode?: number }).statusCode === 402) {
+          pushQueue.delete(id)
+          flash((e as { data?: { message?: string } }).data?.message || 'Perubahan melebihi batas paket')
+          refreshMe()
+          await pull()
+        }
+      }
     }
     for (const id of [...delQueue]) {
       try {
@@ -78,7 +89,7 @@ export default defineNuxtPlugin(() => {
     peteTimer = setTimeout(reconcilePete, 1200)
   }
   async function reconcilePete() {
-    if (!pete.enabled.value || !session.authed || session.guest || !loaded) return
+    if (!pete.enabled.value || !session.authed || !loaded) return
     if (typeof navigator !== 'undefined' && navigator.onLine === false) return
     for (const t of trips.userTrips) {
       // only mirror trips that already opted into a bill and that this user may edit
@@ -97,12 +108,12 @@ export default defineNuxtPlugin(() => {
   }
 
   function schedule() {
-    if (!session.authed || session.guest || !loaded) return
+    if (!session.authed || !loaded) return
     const ids = new Set(trips.userTrips.map((t) => t.id))
     for (const t of trips.userTrips) {
       // templates live in global content, never as user trips; skip them.
       // only push trips this user may edit — a viewer's local edits stay local
-      if (snapshot.get(t.id) !== json(t) && tripRole(t, session.email, true) !== 'viewer') pushQueue.add(t.id)
+      if (snapshot.get(t.id) !== json(t) && tripRole(t, session.email, true) !== 'viewer' && !subscription.isLocked(t.id)) pushQueue.add(t.id)
     }
     for (const id of snapshot.keys()) {
       if (!ids.has(id)) delQueue.add(id)
@@ -120,8 +131,9 @@ export default defineNuxtPlugin(() => {
   const isAdmin = useState<boolean>('me-admin', () => false)
   async function refreshMe() {
     try {
-      const me = await apiFetch<{ isAdmin: boolean }>('/api/me')
+      const me = await apiFetch<MeResponse>('/api/me')
       isAdmin.value = me.isAdmin
+      subscription.apply(me)
     } catch {
       isAdmin.value = false
     }
@@ -152,6 +164,7 @@ export default defineNuxtPlugin(() => {
     } else if (eventName === 'SIGNED_OUT') {
       session.signOut()
       isAdmin.value = false
+      subscription.apply({ subscription: NO_PLAN, lockedTripIds: [] })
       applyingRemote = true
       trips.replaceAll([])
       snapshot.clear()

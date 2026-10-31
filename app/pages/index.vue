@@ -30,22 +30,7 @@ const stories = [
   { k: 's3', who: 'Sari H.', ini: 'SR' },
 ]
 
-const annual = ref(false)
-const irp = (n: number) => (n === 0 ? 'Rp 0' : 'Rp ' + n.toLocaleString('id-ID'))
-const plans = computed(() =>
-  [
-    { key: 'free', m: 0, y: 0, featured: false, feats: ['freeF1', 'freeF2', 'freeF3', 'freeF4'] },
-    { key: 'plus', m: 29000, y: 290000, featured: true, feats: ['plusF1', 'plusF2', 'plusF3', 'plusF4', 'plusF5'] },
-    { key: 'group', m: 79000, y: 790000, featured: false, feats: ['groupF1', 'groupF2', 'groupF3', 'groupF4', 'groupF5'] },
-  ].map((p) => ({
-    ...p,
-    name: t('landing.pricing.' + p.key + 'Name'),
-    note: t('landing.pricing.' + p.key + 'Note'),
-    cta: t('landing.pricing.' + p.key + 'Cta'),
-    price: annual.value ? irp(p.y) : irp(p.m),
-    per: p.m === 0 ? t('landing.pricing.forever') : annual.value ? t('landing.pricing.perYear') : t('landing.pricing.perMonth'),
-  })),
-)
+const period = ref<BillingPeriod>('1m')
 
 // destination carousel
 const railEl = ref<HTMLElement | null>(null)
@@ -426,33 +411,9 @@ function nav(i: number) { paused = true; go(i) }
           <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.pricing.eyebrow') }}</div>
           <div class="text-[clamp(26px,3.2vw,38px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px]">{{ $t('landing.pricing.title') }}</div>
         </div>
-        <div class="bg-white border border-sand-line rounded-pill p-[5px] flex gap-1">
-          <button class="rounded-pill px-[17px] py-[9px] text-[13px] font-700 whitespace-nowrap" :class="!annual ? 'bg-ink text-white' : 'text-ink-2'" @click="annual = false">{{ $t('landing.pricing.monthly') }}</button>
-          <button class="rounded-pill px-[17px] py-[9px] text-[13px] font-700 whitespace-nowrap" :class="annual ? 'bg-ink text-white' : 'text-ink-2'" @click="annual = true">{{ $t('landing.pricing.yearly') }}</button>
-        </div>
+        <BillingPeriodSwitch v-model="period" />
       </div>
-      <div class="grid gap-[18px] mt-[26px]" style="grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))">
-        <div v-for="p in plans" :key="p.key" class="rounded-hero p-[22px] flex flex-col gap-[15px] border-[1.5px]" :class="p.featured ? 'bg-ink text-white border-ink' : 'bg-white text-ink border-sand-line'">
-          <div class="flex justify-between items-center gap-[10px]">
-            <div class="text-[19px] font-800 tracking-[-.02em]">{{ p.name }}</div>
-            <span v-if="p.featured" class="bg-primary text-white rounded-pill px-[11px] py-[5px] text-[11px] font-700 whitespace-nowrap">{{ $t('landing.pricing.popular') }}</span>
-          </div>
-          <div>
-            <div class="flex gap-[7px] items-baseline">
-              <span class="font-mono text-[31px] font-600 tracking-[-.02em]">{{ p.price }}</span>
-              <span class="text-[13px]" :class="p.featured ? 'text-teal-deep' : 'text-ink-2'">{{ p.per }}</span>
-            </div>
-            <div class="text-[13px] mt-[6px]" :class="p.featured ? 'text-teal-deep' : 'text-ink-2'">{{ p.note }}</div>
-          </div>
-          <div class="flex flex-col gap-[9px]">
-            <div v-for="f in p.feats" :key="f" class="flex gap-[9px] items-start text-[13.5px] leading-[1.5]">
-              <i class="i-lucide-check text-[15px] mt-[2px] shrink-0" :class="p.featured ? 'text-teal-deep' : 'text-teal-600'" />
-              <span>{{ $t('landing.pricing.' + f) }}</span>
-            </div>
-          </div>
-          <NuxtLink :to="appHref" class="mt-auto text-center rounded-pill py-[13px] text-[14px] font-700" :class="p.featured ? 'bg-teal-600 text-ink' : 'bg-teal-100 text-ink'">{{ p.cta }}</NuxtLink>
-        </div>
-      </div>
+      <BillingPlanCards class="mt-[26px]" :period="period" @select="navigateTo(localePath('/langganan'))" />
       <div class="text-[12.5px] text-ink-2 mt-[13px]">{{ $t('landing.pricing.fineprint') }}</div>
     </div>
 

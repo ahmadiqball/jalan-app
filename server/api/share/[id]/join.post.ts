@@ -23,6 +23,9 @@ export default defineEventHandler(async (event) => {
   // owner or already a member → nothing to do
   const already = row.ownerId === actor.id || members.some((m) => (m.email || '').toLowerCase() === email)
   if (!already) {
+    const { ent, locked } = await ownerUsage(event, row.ownerId)
+    if (locked.includes(row.id)) throw planError('Paket pemilik trip ini sudah berakhir')
+    if (ent.maxMembers != null && members.length >= ent.maxMembers) throw planError(`Trip ini sudah penuh (maksimal ${ent.maxMembers} anggota)`)
     const role: MemberRole = data.inviteRole === 'Hanya lihat' ? 'Hanya lihat' : 'Bisa ubah'
     members.push({
       id: 'u' + Math.random().toString(36).slice(2, 8),

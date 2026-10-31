@@ -29,6 +29,7 @@ export function defaultDestinations(): Destination[] {
       aliases: ['bali', 'ubud', 'seminyak', 'kuta', 'canggu', 'denpasar', 'uluwatu', 'sanur', 'jimbaran', 'lembongan'],
       featured: true,
       published: true,
+      isPublic: true,
       sort: 1,
     },
     {

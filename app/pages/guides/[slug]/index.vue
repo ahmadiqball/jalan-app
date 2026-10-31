@@ -15,18 +15,20 @@ const cloud = useIsCloud()
 const slug = computed(() => route.params.slug as string)
 onMounted(refreshSaved)
 
-const { data: guide, error, status } = useFetch<GuideDetail>(() => `/api/guides/${slug.value}`, { key: `guide-${slug.value}`, lazy: true, getCachedData: payloadCache })
+const { data: guide, error, status } = useGuideResource<GuideDetail>(() => `/api/guides/${slug.value}`, () => `/api/member/guides/${slug.value}`, `guide-${slug.value}`)
 useHead(() => ({ title: (guide.value?.name ?? 'Panduan') + ' · Kelana Guides' }))
 
 // "Gunakan panduan" — clone the linked itinerary template into a new trip, or
 // start a trip seeded with the destination when none is linked. Auth-gated.
 // a guide can link an itinerary template (admin-set); surfaced here, templates stay their own module
 const linkedTemplate = computed(() => (guide.value?.itineraryTemplateId ? (templates.value.find((t) => t.id === guide.value!.itineraryTemplateId) || null) : null))
+const { requireTripSlot } = useSubscription()
 const usingTemplate = ref(false)
 async function useTemplate() {
   const tpl = linkedTemplate.value
   if (!tpl) return
   if (!session.authed) return navigateTo(localePath(`/masuk?next=${encodeURIComponent(route.fullPath)}`))
+  if (!requireTripSlot()) return
   usingTemplate.value = true
   try {
     const owner = cloud ? { name: session.name, email: session.email } : undefined

@@ -49,6 +49,8 @@ export default defineNuxtConfig({
     supabaseUrl: '', // NUXT_SUPABASE_URL
     supabaseServiceKey: '', // NUXT_SUPABASE_SERVICE_KEY (secret, never client)
     adminEmails: '', // NUXT_ADMIN_EMAILS — comma-separated admin emails
+    midtransServerKey: '', // NUXT_MIDTRANS_SERVER_KEY (secret, never client)
+    midtransProduction: false, // NUXT_MIDTRANS_PRODUCTION — true for live payments
     public: {
       // pete-pete handoff base URL. Empty => the "Bagi rata di PetePete" action
       // is hidden. Override with NUXT_PUBLIC_PETE_PETE_URL.

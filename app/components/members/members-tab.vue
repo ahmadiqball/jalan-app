@@ -59,6 +59,12 @@ function addManual() {
   flash('Ditambahkan ke anggota')
 }
 
+const { sub, canAddMember, promptUpgrade } = useSubscription()
+function openInvite() {
+  if (!canAddMember(props.trip)) return promptUpgrade(`Paketmu maksimal ${sub.value.maxMembers} anggota per trip`)
+  addOpen.value = true
+}
+
 // make the link as soon as the popup opens (cloud mode)
 watch(addOpen, (o) => { if (o && cloud.value && !link.value) makeLink() })
 </script>
@@ -74,7 +80,7 @@ watch(addOpen, (o) => { if (o && cloud.value && !link.value) makeLink() })
             biaya dibagi otomatis
           </div>
         </div>
-        <CoreButton v-if="canInvite" variant="primary" class="!px-[16px] !py-[10px] !text-[13.5px] shrink-0" @click="addOpen = true">
+        <CoreButton v-if="canInvite" variant="primary" class="!px-[16px] !py-[10px] !text-[13.5px] shrink-0" @click="openInvite">
           <i class="i-lucide-user-plus" /> <span class="hidden sm:inline">Undang</span>
         </CoreButton>
       </div>

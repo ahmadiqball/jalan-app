@@ -6,7 +6,7 @@ useHead({ title: () => t('login.title') + ' · Kelana' })
 const session = useSessionStore()
 const route = useRoute()
 const localePath = useLocalePath()
-const { cloud, signIn, signInGoogle, guest } = useAuth()
+const { cloud, signIn, signInGoogle } = useAuth()
 
 const err = ref('')
 const busy = ref(false)
@@ -38,10 +38,6 @@ async function localSignIn() {
   const r = await signIn('kamu@kelana.id', 'local')
   busy.value = false
   if (r.ok) navigateTo(localePath(next.value))
-}
-function signInGuest() {
-  guest()
-  navigateTo(localePath('/beranda'))
 }
 </script>
 
@@ -85,13 +81,6 @@ function signInGuest() {
           <CoreButton v-else variant="primary" block :disabled="busy" @click="localSignIn">
             {{ busy ? $t('login.busy') : $t('login.local') }}
           </CoreButton>
-
-          <div class="flex items-center gap-3 text-[12px] text-muted my-1">
-            <span class="flex-1 h-px bg-sand-line" /> {{ $t('login.or') }} <span class="flex-1 h-px bg-sand-line" />
-          </div>
-
-          <CoreButton variant="ghost" block @click="signInGuest">{{ $t('login.guest') }}</CoreButton>
-          <div class="text-[12px] text-muted text-center">{{ $t('login.guestNote') }}</div>
         </div>
 
         <div class="border-t border-sand-line pt-4 text-[13px] text-muted">

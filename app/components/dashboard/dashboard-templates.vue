@@ -16,7 +16,9 @@ const total = (tp: Trip) => {
   return Object.values(b?.alloc || {}).reduce((n, v) => n + v, 0) || tp.plan || 0
 }
 
+const { requireTripSlot } = useSubscription()
 function use(tp: Trip) {
+  if (!requireTripSlot()) return
   const id = trips.cloneTrip(tp, { owner: cloud ? { name: session.name, email: session.email } : undefined })
   flash(t('app.templates.used'))
   navigateTo(`/trip/${id}/days`)

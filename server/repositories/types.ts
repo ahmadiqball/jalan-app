@@ -4,6 +4,8 @@
  * document (`data`) keyed by its client-generated id and scoped to an owner —
  * the natural realization of "JSONB whole-doc + patchTrip".
  */
+import type { BillingPeriod, PlanId, Subscription } from '../../shared/utils/plans'
+
 export type TripData = Record<string, unknown> & { id: string }
 
 export interface TripRow {
@@ -18,6 +20,8 @@ export interface TripRow {
 export interface TripRepository {
   /** Trips a user can see: owned OR a member (by email). Newest first. */
   listForUser(userId: string, email: string): Promise<TripRow[]>
+  /** Trips this user owns (for plan limits). */
+  listOwned(ownerId: string): Promise<TripRow[]>
   /** One trip by id, regardless of owner (route enforces access). */
   get(id: string): Promise<TripRow | null>
   /** Public read: a trip exposed under a share slug. */
@@ -84,6 +88,8 @@ export interface Destination {
   itineraryTemplateId?: string
   featured?: boolean
   published?: boolean
+  /** free for everyone; otherwise needs a plan that includes guides */
+  isPublic?: boolean
   sort?: number
 }
 export interface Place {
@@ -136,6 +142,24 @@ export interface SavedRepository {
   remove(userId: string, kind: string, refId: string): Promise<void>
 }
 
+export interface BillingOrder {
+  id: string
+  userId: string
+  plan: PlanId
+  period: BillingPeriod
+  amount: number
+  status: 'pending' | 'paid' | 'failed'
+}
+export interface BillingRepository {
+  getSubscription(userId: string): Promise<Subscription | null>
+  saveSubscription(userId: string, sub: Subscription): Promise<void>
+  createOrder(order: Omit<BillingOrder, 'status'>): Promise<void>
+  getOrder(id: string): Promise<BillingOrder | null>
+  /** Pending -> paid. False if it already happened, so a retried webhook is a no-op. */
+  markPaid(id: string): Promise<boolean>
+  markFailed(id: string): Promise<void>
+}
+
 export interface Repositories {
   trips: TripRepository
   content: ContentRepository
@@ -143,4 +167,5 @@ export interface Repositories {
   destinations: DestinationRepository
   places: PlaceRepository
   saved: SavedRepository
+  billing: BillingRepository
 }

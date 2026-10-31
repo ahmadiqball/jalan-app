@@ -20,16 +20,14 @@
   "menu": {
     "admin": "Admin",
     "logout": "Keluar",
-    "guest": "Mode tamu · tidak disimpan",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "subscription": "Langganan"
   },
   "login": {
     "title": "Masuk",
     "subtitle": "Lanjutkan trip yang sedang jalan.",
     "google": "Lanjut dengan Google",
     "local": "Masuk (mode lokal)",
-    "guest": "Coba tanpa akun",
-    "guestNote": "Mode tamu dicoba di perangkat ini saja — tidak disimpan.",
     "cloudNote": "Masuk pakai akun Google kamu — cepat dan aman.",
     "localNote": "Mode lokal — data tersimpan di perangkat ini.",
     "busy": "Sebentar…",
@@ -119,7 +117,7 @@
       "stories": "Cerita",
       "pricing": "Harga",
       "signin": "Masuk",
-      "tryFree": "Coba gratis"
+      "tryFree": "Mulai sekarang"
     },
     "units": {
       "days": "hari",
@@ -130,7 +128,7 @@
       "title1": "Rapikan rencananya.",
       "title2": "Nikmatin jalannya.",
       "blurb": "Itinerary, budget, pengeluaran, packing, sampai outfit. Semua tersusun dalam satu trip, siap dibuka bareng teman, bahkan saat sinyal nggak ada.",
-      "tryFree": "Coba gratis",
+      "tryFree": "Mulai sekarang",
       "seeInside": "Lihat isi aplikasi",
       "stat1": "trip tersusun",
       "stat2": "trip pertama",
@@ -255,43 +253,14 @@
     },
     "pricing": {
       "eyebrow": "Harga",
-      "title": "Mulai gratis, bayar kalau sering jalan",
-      "monthly": "Bulanan",
-      "yearly": "Tahunan · hemat 2 bulan",
-      "popular": "Paling dipakai",
-      "forever": "selamanya",
-      "perYear": "per tahun",
-      "perMonth": "per bulan",
-      "fineprint": "Harga dalam rupiah, sudah termasuk pajak. Berhenti kapan saja — trip lama tetap bisa dibaca.",
-      "freeName": "Kelana Gratis",
-      "freeNote": "Satu trip aktif, tanpa batas waktu.",
-      "freeCta": "Mulai gratis",
-      "freeF1": "Satu trip aktif",
-      "freeF2": "Jadwal harian dan biaya",
-      "freeF3": "Daftar barang dan outfit",
-      "freeF4": "Undang 1 anggota",
-      "plusName": "Kelana Plus",
-      "plusNote": "Untuk yang jalan tiap beberapa bulan.",
-      "plusCta": "Coba 14 hari",
-      "plusF1": "Trip aktif tanpa batas",
-      "plusF2": "Beberapa versi anggaran",
-      "plusF3": "Catat pengeluaran offline",
-      "plusF4": "Undang 8 anggota",
-      "plusF5": "Tautan hanya-baca",
-      "groupName": "Rombongan",
-      "groupNote": "Trip kantor, komunitas, keluarga besar.",
-      "groupCta": "Hubungi kami",
-      "groupF1": "Semua di Kelana Plus",
-      "groupF2": "Anggota tanpa batas",
-      "groupF3": "Ekspor rekap pengeluaran",
-      "groupF4": "Template trip sendiri",
-      "groupF5": "Bantuan prioritas"
+      "title": "Satu harga jelas, sesuai ukuran rombongan",
+      "fineprint": "Harga dalam rupiah. Dibayar di muka, tanpa perpanjangan otomatis."
     },
     "finalCta": {
       "eyebrow": "Mulai sekarang",
       "title": "Trip berikutnya bisa mulai malam ini",
       "body": "Buat trip, isi tanggalnya, undang teman. Sisanya bisa dirapikan sambil jalan.",
-      "tryFree": "Coba gratis",
+      "tryFree": "Mulai sekarang",
       "seePricing": "Lihat harga"
     },
     "footer": {
@@ -327,5 +296,44 @@
     "delDayTitle": "Hapus hari ini?",
     "delDayMsg": "{day} punya {n} aktivitas yang akan ikut terhapus. Hari setelahnya akan digeser maju.",
     "delDayCta": "Hapus hari"
+  },
+  "billing": {
+    "title": "Langganan",
+    "subtitle": "Pilih paket sesuai ukuran rombonganmu. Dibayar di muka, tanpa perpanjangan otomatis.",
+    "choose": "Pilih paket",
+    "extend": "Perpanjang",
+    "opening": "Membuka pembayaran…",
+    "active": "Paket aktif",
+    "popular": "Paling dipakai",
+    "period": {
+      "1m": "1 bulan",
+      "3m": "3 bulan",
+      "12m": "1 tahun"
+    },
+    "per": {
+      "1m": "per bulan",
+      "3m": "per 3 bulan",
+      "12m": "per tahun"
+    },
+    "feat": {
+      "tripOne": "1 trip aktif",
+      "trips": "{n} trip aktif",
+      "members": "Maksimal {n} anggota per trip",
+      "tools": "Jadwal, barang, outfit, dan pengeluaran",
+      "versionOne": "1 versi anggaran",
+      "versions": "Versi anggaran tanpa batas",
+      "publicGuides": "Panduan publik",
+      "guides": "Semua Kelana Guides, selalu diperbarui",
+      "newsletter": "Newsletter email"
+    },
+    "currentUntil": "Paketmu {plan}, aktif sampai {date}.",
+    "unlimited": "Akunmu punya akses penuh.",
+    "checking": "Memeriksa pembayaran…",
+    "paid": "Pembayaran diterima, paketmu aktif",
+    "notPaid": "Pembayaran tidak selesai",
+    "pending": "Pembayaran masih diproses. Paketmu aktif otomatis setelah diterima.",
+    "failed": "Pembayaran belum bisa dimulai. Coba lagi nanti.",
+    "fineprint": "Harga dalam rupiah. Saat naik paket, paket baru mulai hari itu dan sisa paket lama tidak terbawa. Saat paket berakhir, trip tetap tersimpan dan hanya bisa dibaca.",
+    "lockedTrip": "Trip ini hanya bisa dibaca karena di luar batas paket. Lihat paket"
   }
 }

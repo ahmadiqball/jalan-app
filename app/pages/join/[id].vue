@@ -11,16 +11,17 @@ const state = ref<'working' | 'error'>('working')
 const message = ref('Menyiapkan undangan…')
 
 onMounted(async () => {
-  // guests can't join a shared trip — they must sign in first
-  if (!session.authed || session.guest) {
+  // joining needs an account — send them to sign in first
+  if (!session.authed) {
     return navigateTo(`/masuk?next=${encodeURIComponent('/join/' + shareId.value)}`)
   }
   try {
     const { id } = await apiFetch<{ id: string }>(`/api/share/${shareId.value}/join`, { method: 'POST' })
     await navigateTo(`/trip/${id}`)
-  } catch {
+  } catch (e) {
+    const err = e as { statusCode?: number; data?: { message?: string } }
     state.value = 'error'
-    message.value = 'Link undangan tidak berlaku atau sudah dicabut.'
+    message.value = (err.statusCode === 402 && err.data?.message) || 'Link undangan tidak berlaku atau sudah dicabut.'
   }
 })
 </script>

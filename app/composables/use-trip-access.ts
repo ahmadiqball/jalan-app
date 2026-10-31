@@ -16,8 +16,10 @@ export function tripRole(trip: Pick<Trip, 'members'>, email: string, cloud: bool
 export function useTripAccess() {
   const session = useSessionStore()
   const cloud = useIsCloud()
+  const { isLocked } = useSubscription()
   const roleOf = (trip: Pick<Trip, 'members'>): TripRole => tripRole(trip, session.email, cloud)
-  const canEdit = (trip: Pick<Trip, 'members'>): boolean => {
+  const canEdit = (trip: Pick<Trip, 'members' | 'id'>): boolean => {
+    if (isLocked(trip.id)) return false
     const r = roleOf(trip)
     return r === 'owner' || r === 'editor'
   }

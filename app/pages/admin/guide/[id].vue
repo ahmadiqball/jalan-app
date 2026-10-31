@@ -167,6 +167,7 @@ async function onRemovePlace(p: Place) {
         <div class="flex flex-wrap items-center gap-5 pt-1">
           <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.published" @update:model-value="dest.published = $event" /> Tayangkan (publik)</label>
           <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.featured" @update:model-value="dest.featured = $event" /> Unggulan di beranda Guides</label>
+          <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.isPublic" @update:model-value="dest.isPublic = $event" /> Panduan publik (tanpa paket)</label>
         </div>
       </div>
 
