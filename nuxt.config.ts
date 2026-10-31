@@ -38,6 +38,11 @@ export default defineNuxtConfig({
     bundle: { optimizeTranslationDirective: false },
   },
 
+  // dev only: let Midtrans reach the local server through a Cloudflare tunnel
+  vite: {
+    server: { allowedHosts: ['.trycloudflare.com'] },
+  },
+
   css: [
     '@unocss/reset/tailwind.css',
     '~/designs/tokens.css',
