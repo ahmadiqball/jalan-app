@@ -2,6 +2,7 @@
 import type { Trip } from '~/types/domain'
 import { rp, shortRp, toMin, fromMin } from '~/utils/format'
 import { budgetCatOf, catIcon, catLabel, tone } from '~/utils/categories'
+import { planRows } from '~/utils/derive'
 
 const props = withDefaults(defineProps<{ trip: Trip; template?: boolean }>(), { template: false })
 const ui = useUiStore()
@@ -9,7 +10,11 @@ const trips = useTripsStore()
 const { confirm } = useConfirm()
 const { t } = useI18n()
 const { flash } = useToast()
-const { budget, categories } = useDerived(() => props.trip)
+const { budget } = useDerived(() => props.trip)
+const catPlans = computed(() => planRows(props.trip))
+const tripPlanned = computed(() => catPlans.value.reduce((n, r) => n + r.planned, 0))
+const tripPlanOver = computed(() => tripPlanned.value > budget.value.plan)
+const tripPlanPct = computed(() => (budget.value.plan ? (tripPlanned.value / budget.value.plan) * 100 : 0))
 const sumView = ref<'trip' | 'today'>('trip')
 
 /* keep the day rail + header pinned below the app's sticky top bar (68px) and
@@ -224,7 +229,7 @@ async function removeCurrentDay() {
     <div v-if="!template" class="w-full md:w-[300px] md:shrink-0 flex flex-col gap-4">
       <div class="card p-[18px] flex flex-col gap-3">
         <div class="flex items-center justify-between gap-2 flex-wrap">
-          <div class="font-display text-[16px] font-600">Ringkasan pengeluaran</div>
+          <div class="font-display text-[16px] font-600">Ringkasan anggaran</div>
           <div class="flex items-center gap-[2px] bg-sand-100 rounded-pill p-[3px] text-[12px] font-700 shrink-0">
             <button class="rounded-pill px-[11px] py-[5px] transition-colors" :class="sumView === 'today' ? 'bg-white text-ink shadow-[0_1px_3px_rgba(16,38,43,.14)]' : 'text-muted'" @click="sumView = 'today'">Hari ini</button>
             <button class="rounded-pill px-[11px] py-[5px] transition-colors" :class="sumView === 'trip' ? 'bg-teal-600 text-white' : 'text-muted'" @click="sumView = 'trip'">Total trip</button>
@@ -234,25 +239,29 @@ async function removeCurrentDay() {
         <!-- TOTAL TRIP -->
         <template v-if="sumView === 'trip'">
           <div class="grid grid-cols-3 gap-2">
-            <div><div class="text-[11px] text-muted">Total terpakai</div><div class="money text-[14.5px] font-700" :style="{ color: budget.statusFg }">{{ shortRp(budget.spent) }}</div></div>
-            <div><div class="text-[11px] text-muted">Total anggaran</div><div class="money text-[14.5px] font-700">{{ shortRp(budget.plan) }}</div></div>
-            <div><div class="text-[11px] text-muted">Sisa anggaran</div><div class="money text-[14.5px] font-700" :style="{ color: budget.over ? '#C85A28' : '#2F6B54' }">{{ shortRp(budget.plan - budget.spent) }}</div></div>
+            <div><div class="text-[11px] text-muted">Direncanakan</div><div class="money text-[14.5px] font-700" :class="tripPlanOver ? 'text-warn-fg' : ''">{{ shortRp(tripPlanned) }}</div></div>
+            <div><div class="text-[11px] text-muted">Anggaran</div><div class="money text-[14.5px] font-700">{{ shortRp(budget.plan) }}</div></div>
+            <div><div class="text-[11px] text-muted">{{ tripPlanOver ? 'Lewat' : 'Sisa' }}</div><div class="money text-[14.5px] font-700" :class="tripPlanOver ? 'text-warn-fg' : 'text-teal-700'">{{ shortRp(Math.abs(budget.plan - tripPlanned)) }}</div></div>
           </div>
-          <div>
-            <CoreBar :pct="budget.pct" :over="budget.over" />
-            <div class="text-[11.5px] text-muted mt-1 text-right money">{{ Math.round(budget.pct) }}% terpakai</div>
+          <div v-if="budget.plan">
+            <CoreBar :pct="tripPlanPct" :over="tripPlanOver" />
+            <div class="text-[11.5px] text-muted mt-1 text-right money">{{ Math.round(tripPlanPct) }}% direncanakan</div>
           </div>
 
-          <div v-if="categories.length" class="flex flex-col gap-[7px] pt-1">
-            <div class="eyebrow">Pengeluaran per kategori (akumulasi)</div>
-            <div v-for="c in categories" :key="c.name" class="flex items-center gap-2">
+          <div v-if="catPlans.length" class="flex flex-col gap-[10px] pt-1">
+            <div class="eyebrow">Rencana per kategori</div>
+            <div v-for="c in catPlans" :key="c.name" class="flex items-start gap-2">
               <span class="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center shrink-0" :style="{ background: tone(c.name)[0], color: tone(c.name)[1] }"><i :class="catIcon(trip.catIcons, c.name)" class="text-[12px]" /></span>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between gap-2">
                   <span class="text-[12.5px] text-ink-2 truncate">{{ catLabel(c.name) }}</span>
-                  <span class="money text-[12px] font-600 shrink-0">{{ rp(c.spent) }} <span class="text-muted font-500">{{ Math.round(c.sharePct) }}%</span></span>
+                  <span class="money text-[12px] font-600 shrink-0">{{ rp(c.planned) }}</span>
                 </div>
-                <div class="h-[5px] rounded-pill bg-sand-100 mt-[3px] overflow-hidden"><div class="h-full rounded-pill" :style="{ width: Math.max(2, c.sharePct) + '%', background: tone(c.name)[1] }" /></div>
+                <div v-if="c.alloc" class="h-[5px] rounded-pill bg-sand-100 mt-[3px] overflow-hidden"><div class="h-full rounded-pill" :style="{ width: c.pct + '%', background: c.barColor }" /></div>
+                <div class="flex items-center justify-between gap-2 mt-[3px] text-[11px] leading-tight">
+                  <span class="text-muted"><template v-if="c.alloc">dari <span class="money">{{ rp(c.alloc) }}</span></template></span>
+                  <span class="font-600 shrink-0" :class="c.over || !c.alloc ? 'text-warn-fg' : 'text-teal-700'">{{ c.leftCopy }}</span>
+                </div>
               </div>
             </div>
           </div>

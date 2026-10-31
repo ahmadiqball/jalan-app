@@ -210,6 +210,50 @@ export function categoryRows(trip: Trip): CategoryRow[] {
   })
 }
 
+export interface PlanRow {
+  name: string
+  planned: number
+  alloc: number
+  over: boolean
+  pct: number
+  barColor: string
+  leftCopy: string
+}
+
+/**
+ * How much of each category's budget the itinerary already commits: every
+ * activity cost, recorded or not, against the active allocation. Uses the
+ * planned cost, so recording a different actual doesn't move it.
+ */
+export function planRows(trip: Trip): PlanRow[] {
+  const { alloc } = budgetSummary(trip)
+  const planned: Record<string, number> = {}
+  for (const d of trip.days || [])
+    for (const a of d.acts || []) {
+      if (!a.cost) continue
+      const cat = budgetCatOf(a.cat)
+      planned[cat] = (planned[cat] || 0) + a.cost
+    }
+  const names = [...new Set([...Object.keys(alloc), ...Object.keys(planned)])]
+  return names
+    .map((name) => {
+      const p = planned[name] || 0
+      const catAlloc = alloc[name] || 0
+      const pct = catAlloc ? Math.min(100, (p / catAlloc) * 100) : 0
+      const over = catAlloc > 0 && p > catAlloc
+      return {
+        name,
+        planned: p,
+        alloc: catAlloc,
+        over,
+        pct,
+        barColor: over ? BAR_OVER : pct >= 80 ? BAR_NEAR : BAR_OK,
+        leftCopy: !catAlloc ? 'tanpa anggaran' : over ? 'Lewat ' + shortRp(p - catAlloc) : 'Sisa ' + shortRp(catAlloc - p),
+      }
+    })
+    .filter((r) => r.planned || r.alloc)
+}
+
 /** conic-gradient stops for the donut, matching prototype. */
 export function donutStops(trip: Trip): string {
   const rows = categoryRows(trip)
