@@ -16,8 +16,9 @@ onMounted(refreshSaved)
 const { data: place, error, status } = useFetch<PlaceDetail>(() => `/api/places/${placeId.value}`, { key: `place-${placeId.value}`, lazy: true, getCachedData: payloadCache })
 useHead(() => ({ title: (place.value?.name ?? 'Tempat') + ' · Kelana Guides' }))
 
-const gallery = computed(() => place.value?.gallery ?? [])
+const gallery = computed(() => (place.value?.gallery ?? []).slice(0, 5))
 const mainImg = ref(0)
+watch(() => place.value?.id, () => { mainImg.value = 0 })
 const mapHref = computed(() => (place.value ? searchUrl({ name: place.value.name, placeId: place.value.gmapsPlaceId }, place.value.destination.name) : '#'))
 
 const saved = computed(() => (place.value ? isSaved('place', place.value.id) : false))
@@ -43,12 +44,17 @@ function onSave() {
     <div v-else class="max-w-[1000px] mx-auto p-[20px_20px_64px] md:p-[26px_32px_72px] flex flex-col gap-5">
       <NuxtLink :to="localePath(`/guides/${place.destination.slug}`)" class="inline-flex items-center gap-1 text-[13px] font-600 text-muted hover:text-teal-700 w-fit"><i class="i-lucide-chevron-left text-[16px]" /> Kembali ke {{ place.destination.name }}</NuxtLink>
 
-      <!-- gallery -->
-      <div v-if="gallery.length" class="grid gap-2" :class="gallery.length > 1 ? 'md:grid-cols-[1.7fr_1fr]' : ''">
-        <div class="h-[240px] md:h-[340px] rounded-card bg-cover bg-center" :style="{ backgroundImage: `url('${gallery[mainImg]}')` }" />
-        <div v-if="gallery.length > 1" class="hidden md:grid grid-rows-2 gap-2">
-          <div v-for="(g, i) in gallery.slice(1, 3)" :key="i" class="rounded-card bg-cover bg-center cursor-pointer" :style="{ backgroundImage: `url('${g}')` }" @click="mainImg = i + 1" />
-        </div>
+      <!-- gallery carousel (max 5) -->
+      <div v-if="gallery.length" class="relative rounded-card overflow-hidden h-[240px] md:h-[380px] bg-sand-100">
+        <div class="w-full h-full bg-cover bg-center" :style="{ backgroundImage: `url('${gallery[Math.min(mainImg, gallery.length - 1)]}')` }" />
+        <template v-if="gallery.length > 1">
+          <button type="button" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-ink-2 hover:bg-white" @click="mainImg = (mainImg - 1 + gallery.length) % gallery.length"><i class="i-lucide-chevron-left text-[20px]" /></button>
+          <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-ink-2 hover:bg-white" @click="mainImg = (mainImg + 1) % gallery.length"><i class="i-lucide-chevron-right text-[20px]" /></button>
+          <div class="absolute top-3 right-3 rounded-pill bg-black/45 text-white text-[11.5px] font-700 px-[9px] py-[3px] money">{{ (mainImg % gallery.length) + 1 }}/{{ gallery.length }}</div>
+          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-[6px]">
+            <button v-for="(g, i) in gallery" :key="i" type="button" class="h-[7px] rounded-full transition-all" :class="i === mainImg ? 'bg-white w-[20px]' : 'bg-white/60 w-[7px]'" @click="mainImg = i" />
+          </div>
+        </template>
       </div>
       <div v-else class="h-[220px] md:h-[300px] rounded-card flex items-center justify-center" :style="{ background: tone(placeTypeToCat(place.type))[0] }">
         <i :class="placeTypeIcon(place.type)" class="text-[56px]" :style="{ color: tone(placeTypeToCat(place.type))[1] }" />

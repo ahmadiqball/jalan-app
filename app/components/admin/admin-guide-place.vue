@@ -14,7 +14,8 @@ const num = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && 
 // loose model: number inputs bind as strings; save() coerces back
 const p = reactive<Record<string, any>>({ ...props.place })
 const tagsStr = ref(csv(props.place.tags))
-const galleryStr = ref(lines(props.place.gallery))
+const gallery = ref<string[]>([...(props.place.gallery || [])].slice(0, 5))
+const galleryUrl = ref('')
 const gtk = ref<string[]>([...(props.place.goodToKnow || [])])
 const tipsStr = ref(lines(props.place.tips))
 const open = ref(!!props.startOpen)
@@ -25,8 +26,12 @@ const galleryInput = ref<HTMLInputElement | null>(null)
 async function onPickGallery(e: Event) {
   const input = e.target as HTMLInputElement
   const url = await upload(input.files?.[0])
-  if (url) galleryStr.value = (galleryStr.value ? galleryStr.value + '\n' : '') + url
+  if (url && gallery.value.length < 5) gallery.value.push(url)
   input.value = ''
+}
+function addGalleryUrl() {
+  const u = galleryUrl.value.trim()
+  if (u && gallery.value.length < 5) { gallery.value.push(u); galleryUrl.value = '' }
 }
 
 const typeOptions = PLACE_TYPES.map((t) => ({ value: t.id, label: t.label }))
@@ -39,7 +44,7 @@ async function save() {
       lat: num(p.lat),
       lng: num(p.lng),
       tags: fromCsv(tagsStr.value),
-      gallery: fromLines(galleryStr.value),
+      gallery: gallery.value.map((x) => x.trim()).filter(Boolean).slice(0, 5),
       goodToKnow: gtk.value.map((x) => x.trim()).filter(Boolean),
       tips: fromLines(tipsStr.value),
     })
@@ -72,17 +77,26 @@ async function save() {
       <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tag (pisah koma)</span><input v-model="tagsStr" class="field !py-[8px]" placeholder="Pantai, Suasana tenang, Cocok pasangan"></label>
       <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Deskripsi singkat</span><input v-model="p.shortDesc" class="field !py-[8px]" placeholder="Satu kalimat untuk kartu"></label>
       <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tentang (panjang)</span><textarea v-model="p.longDesc" rows="3" class="field !py-[8px] resize-none" placeholder="Paragraf 'Tentang'" /></label>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-        <label class="flex flex-col gap-1">
-          <span class="text-[11px] text-muted font-600 flex items-center justify-between">
-            <span>Galeri — URL gambar (satu per baris)</span>
-            <button v-if="cloud" type="button" class="text-teal-700 font-600 flex items-center gap-1 disabled:opacity-50" :disabled="uploading" @click="galleryInput?.click()"><i class="i-lucide-upload text-[12px]" /> {{ uploading ? 'Mengunggah…' : 'Unggah' }}</button>
-          </span>
-          <textarea v-model="galleryStr" rows="3" class="field !py-[8px] resize-none" placeholder="https://…/foto.jpg" />
-          <input ref="galleryInput" type="file" accept="image/*" class="hidden" @change="onPickGallery">
-        </label>
-        <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tips (satu per baris)</span><textarea v-model="tipsStr" rows="3" class="field !py-[8px] resize-none" /></label>
+      <!-- gallery (max 5; foto pertama = sampul) -->
+      <div class="flex flex-col gap-[6px]">
+        <span class="text-[11px] text-muted font-600 flex items-center justify-between"><span>Galeri foto (maks 5) — foto pertama jadi sampul kartu</span><span>{{ gallery.length }}/5</span></span>
+        <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+          <div v-for="(g, i) in gallery" :key="i" class="relative aspect-[4/3] rounded-[10px] overflow-hidden border border-sand-line2 bg-paper">
+            <img :src="g" alt="" class="w-full h-full object-cover">
+            <span v-if="i === 0" class="absolute top-1 left-1 rounded-pill bg-teal-600 text-white text-[9.5px] font-700 px-[6px] py-[2px]">Sampul</span>
+            <button type="button" class="absolute top-1 right-1 w-[20px] h-[20px] rounded-full bg-white/90 flex items-center justify-center text-muted hover:text-warn-fg shadow" title="Hapus" @click="gallery.splice(i, 1)"><i class="i-lucide-x text-[12px]" /></button>
+          </div>
+          <button v-if="gallery.length < 5 && cloud" type="button" class="aspect-[4/3] rounded-[10px] border border-dashed border-sand-line3 flex flex-col items-center justify-center gap-1 text-muted hover:border-teal-600 hover:text-teal-700 disabled:opacity-50" :disabled="uploading" @click="galleryInput?.click()">
+            <i class="i-lucide-image-plus text-[20px]" /><span class="text-[10.5px] font-600">{{ uploading ? '…' : 'Unggah' }}</span>
+          </button>
+        </div>
+        <div v-if="gallery.length < 5" class="flex items-center gap-2">
+          <input v-model="galleryUrl" class="field !py-[7px] flex-1 !text-[12px]" placeholder="atau tempel URL gambar lalu Tambah" @keydown.enter.prevent="addGalleryUrl">
+          <CoreButton variant="ghost" class="!px-[12px] !py-[8px] !text-[12px] shrink-0" @click="addGalleryUrl">Tambah</CoreButton>
+        </div>
+        <input ref="galleryInput" type="file" accept="image/*" class="hidden" @change="onPickGallery">
       </div>
+      <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tips (satu per baris)</span><textarea v-model="tipsStr" rows="3" class="field !py-[8px] resize-none" /></label>
       <div class="flex flex-col gap-1">
         <span class="text-[11px] text-muted font-600">Good to Know — satu kotak = satu poin checklist</span>
         <div class="flex flex-col gap-[6px]">
