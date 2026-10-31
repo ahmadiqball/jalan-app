@@ -8,11 +8,13 @@ export default defineEventHandler(async (event) => {
   const name = (body.name || '').trim()
   const slug = (body.slug || '').trim() || id
   if (!name) throw createError({ statusCode: 400, statusMessage: 'Nama wajib diisi' })
-  return useRepositories(event).destinations.upsert({
+  const saved = await useRepositories(event).destinations.upsert({
     ...(body as Destination),
     id,
     name,
     slug,
     region: body.region || '',
   })
+  await bustContentCache()
+  return saved
 })

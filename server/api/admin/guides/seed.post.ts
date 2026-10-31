@@ -9,5 +9,6 @@ export default defineEventHandler(async (event) => {
   const places = defaultPlaces()
   for (const d of dests) await repo.destinations.upsert(d)
   for (const p of places) await repo.places.upsert(p)
+  await bustContentCache()
   return { ok: true, destinations: dests.length, places: places.length }
 })

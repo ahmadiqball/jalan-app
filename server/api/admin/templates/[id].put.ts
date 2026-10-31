@@ -7,5 +7,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody<TemplateTrip>(event)
   if (!body || typeof body !== 'object') throw createError({ statusCode: 400, statusMessage: 'Template tidak valid' })
   // force the row id onto the document so they can't diverge
-  return useRepositories(event).templates.upsert({ ...(body as object), id } as TemplateTrip)
+  const saved = await useRepositories(event).templates.upsert({ ...(body as object), id } as TemplateTrip)
+  await bustContentCache()
+  return saved
 })

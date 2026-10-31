@@ -16,7 +16,10 @@ const { open } = useAddToTrip()
         :style="place.gallery && place.gallery[0] ? { backgroundImage: `url('${place.gallery[0]}')` } : { background: tone(placeTypeToCat(place.type))[0] }"
       >
         <i v-if="!(place.gallery && place.gallery[0])" :class="placeTypeIcon(place.type)" class="text-[32px]" :style="{ color: tone(placeTypeToCat(place.type))[1] }" />
-        <span v-if="place.badge" class="absolute top-[10px] left-[10px] rounded-pill bg-white/92 text-ink px-[10px] py-[4px] text-[11px] font-700 flex items-center gap-1 shadow">
+        <span v-if="place.featured" class="absolute top-[10px] left-[10px] rounded-pill bg-teal-600 text-white px-[10px] py-[4px] text-[11px] font-700 flex items-center gap-1 shadow">
+          <i class="i-lucide-sparkles text-[12px]" /> Direkomendasikan
+        </span>
+        <span v-if="place.badge" class="absolute top-[10px] right-[10px] rounded-pill bg-white/92 text-ink px-[10px] py-[4px] text-[11px] font-700 flex items-center gap-1 shadow">
           <i class="i-lucide-crown text-[12px] text-warn-fg" /> {{ place.badge }}
         </span>
       </div>

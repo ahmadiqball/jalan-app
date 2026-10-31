@@ -56,7 +56,12 @@ const TABS = [
 const typeFilter = ref('all')
 const places = computed(() => guide.value?.places ?? [])
 const presentTypes = computed(() => PLACE_TYPES.filter((t) => places.value.some((p) => p.type === t.id)))
-const shownPlaces = computed(() => (typeFilter.value === 'all' ? places.value : places.value.filter((p) => p.type === typeFilter.value)))
+const featuredCount = computed(() => places.value.filter((p) => p.featured).length)
+const shownPlaces = computed(() => {
+  if (typeFilter.value === 'all') return places.value
+  if (typeFilter.value === 'featured') return places.value.filter((p) => p.featured)
+  return places.value.filter((p) => p.type === typeFilter.value)
+})
 const placesWithLocation = computed(() => places.value.filter((p) => p.gmapsPlaceId || p.area || p.name))
 
 const facts = computed(() => {
@@ -154,6 +159,7 @@ const facts = computed(() => {
         <div v-else-if="tab === 'tempat'" class="flex flex-col gap-4 anim-rise-fast">
           <div class="flex gap-2 flex-wrap">
             <button class="rounded-pill px-[13px] py-[7px] text-[12.5px] font-600 border transition-colors" :class="typeFilter === 'all' ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'" @click="typeFilter = 'all'">Semua ({{ places.length }})</button>
+            <button v-if="featuredCount" class="rounded-pill px-[13px] py-[7px] text-[12.5px] font-600 border transition-colors flex items-center gap-[6px]" :class="typeFilter === 'featured' ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'" @click="typeFilter = 'featured'"><i class="i-lucide-sparkles text-[14px]" /> Direkomendasikan ({{ featuredCount }})</button>
             <button
               v-for="t in presentTypes"
               :key="t.id"
