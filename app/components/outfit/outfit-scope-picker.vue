@@ -6,7 +6,7 @@ const props = defineProps<{ trip: Trip; modelValue: string }>()
 const emit = defineEmits<{ 'update:modelValue': [string] }>()
 
 const options = computed(() =>
-  scopeOptions(props.trip).map((o) => ({ value: o.value, label: (o.child ? '↳ ' : '') + o.label })),
+  scopeOptions(props.trip).map((o) => ({ value: o.value, label: (o.child ? '↳ ' : '') + o.label, selectedLabel: o.selectedLabel })),
 )
 </script>
 

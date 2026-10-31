@@ -321,12 +321,17 @@ export function resolveActivityOutfit(trip: Trip, actId: string, dayIdx: number)
 
 /** Options for the outfit scope picker: every day and every activity. */
 export function scopeOptions(trip: Trip) {
-  return (trip.days || []).reduce<{ value: string; label: string; child: boolean }[]>((acc, d, i) => {
-    acc.push({ value: 'day:' + i, label: 'Hari ' + (i + 1) + ' · ' + (d.title || d.date), child: false })
+  return (trip.days || []).reduce<{ value: string; label: string; child: boolean; selectedLabel: string }[]>((acc, d, i) => {
+    const dayLabel = 'Hari ' + (i + 1)
+    const label = dayLabel + ' · ' + (d.title || d.date)
+    acc.push({ value: 'day:' + i, label, child: false, selectedLabel: label })
     ;(d.acts || [])
       .slice()
       .sort((a, b) => (a.time || '99').localeCompare(b.time || '99'))
-      .forEach((a) => acc.push({ value: 'act:' + a.id, label: (a.time || '') + ' ' + a.title, child: true }))
+      .forEach((a) => {
+        const label = ((a.time || '') + ' ' + a.title).trim()
+        acc.push({ value: 'act:' + a.id, label, child: true, selectedLabel: dayLabel + ' · ' + label })
+      })
     return acc
   }, [])
 }
