@@ -53,12 +53,20 @@ async function del() {
         <div class="text-[12.5px] md:text-[13px] text-muted truncate mt-[1px]">{{ meta }}</div>
       </div>
       <div class="text-right shrink-0">
-        <div class="money text-[13.5px] md:text-[14px] font-600" :class="act.cost && act.paid ? 'text-ink' : 'text-muted'">
-          {{ act.cost ? rp(act.cost) : '–' }}
-        </div>
-        <div v-if="act.cost" class="text-[10.5px] md:text-[11px] font-600 mt-[1px]" :class="act.paid ? 'text-teal-700' : 'text-muted'">
-          {{ act.paid ? 'Dibayar' : 'Rencana' }}
-        </div>
+        <!-- actual spend differs from the plan: show actual, plan struck-through -->
+        <template v-if="act.paid && act.actual != null && act.actual !== act.cost">
+          <div class="money text-[11px] text-muted line-through leading-tight">{{ rp(act.cost) }}</div>
+          <div class="money text-[13.5px] md:text-[14px] font-600 text-ink leading-tight">{{ rp(act.actual) }}</div>
+          <div class="text-[10.5px] md:text-[11px] font-600 mt-[1px] text-teal-700">Dibayar</div>
+        </template>
+        <template v-else>
+          <div class="money text-[13.5px] md:text-[14px] font-600" :class="act.cost && act.paid ? 'text-ink' : 'text-muted'">
+            {{ act.cost ? rp(act.cost) : '–' }}
+          </div>
+          <div v-if="act.cost" class="text-[10.5px] md:text-[11px] font-600 mt-[1px]" :class="act.paid ? 'text-teal-700' : 'text-muted'">
+            {{ act.paid ? 'Dibayar' : 'Rencana' }}
+          </div>
+        </template>
       </div>
       <!-- delete: revealed on hover / focus, always tappable on touch -->
       <button
