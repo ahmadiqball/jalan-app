@@ -2,7 +2,7 @@
 import type { ExpenseLine, ManualExpense, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { rp, shortRp, initials, addDays, DOW_LONG, MON_LONG } from '~/utils/format'
-import { tone, iconFor, catLabel, budgetCatOf } from '~/utils/categories'
+import { BAR_NEAR, BAR_OK, BAR_OVER, tone, iconFor, catLabel, budgetCatOf } from '~/utils/categories'
 import { budgetSummary, expenseLines } from '~/utils/derive'
 
 const catOptions = CATEGORIES.map((c) => ({ value: c, label: catLabel(c) }))
@@ -91,6 +91,10 @@ const byCat = computed(() => {
     .map((g) => ({ ...g, sub: g.items.length + ' pengeluaran' }))
     .sort((a, b) => b.total - a.total)
 })
+function barColor(g: ExpenseGroup): string {
+  const pct = (g.total / g.plan) * 100
+  return pct > 100 ? BAR_OVER : pct >= 80 ? BAR_NEAR : BAR_OK
+}
 // accordion: groups start collapsed so the page stays a scannable summary
 const openGroups = ref(new Set<string>())
 function toggleGroup(key: string) {
@@ -232,29 +236,29 @@ function log() {
 
       <!-- by day / category -->
       <div v-for="g in (mode === 'Kategori' ? byCat : byDay)" v-else :key="g.key" class="card overflow-hidden">
-        <button class="w-full flex items-center justify-between gap-3 p-[14px_16px] md:p-[16px_20px] text-left" :aria-expanded="openGroups.has(g.key)" @click="toggleGroup(g.key)">
-          <span class="min-w-0 flex items-center gap-2">
+        <button class="w-full flex flex-col gap-[8px] p-[14px_16px] md:p-[16px_20px] text-left" :aria-expanded="openGroups.has(g.key)" @click="toggleGroup(g.key)">
+          <span class="w-full flex items-center gap-2">
             <span v-if="mode === 'Kategori'" class="w-[10px] h-[10px] rounded-full shrink-0" :style="{ background: tone(g.key)[1] }" />
-            <span class="min-w-0">
+            <span class="flex-1 min-w-0">
               <span class="block text-[14px] font-700 leading-tight truncate">{{ g.label }}</span>
-              <span class="block text-[11.5px] text-muted leading-tight mt-[2px]">{{ g.sub }}</span>
+              <span class="block text-[11.5px] text-muted leading-tight truncate mt-[2px]">{{ g.sub }}</span>
             </span>
+            <span class="money text-[14px] font-600 shrink-0">{{ rp(g.total) }}</span>
+            <i class="i-lucide-chevron-down text-[17px] text-muted shrink-0 transition-transform" :class="openGroups.has(g.key) ? 'rotate-180' : ''" />
           </span>
-          <span class="ml-auto shrink-0 flex flex-col items-end gap-[4px]">
-            <span class="money text-[14px] font-600">{{ rp(g.total) }}</span>
-            <!-- gap against the day's plan / the category's allocation -->
-            <span
-              class="rounded-pill px-[7px] py-[3px] text-[10.5px] font-700 leading-none"
-              :class="g.total > g.plan ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
-            >
+          <!-- progress against the day's plan / the category's allocation -->
+          <span v-if="g.plan" class="block w-full h-[6px] rounded-full bg-sand-100 overflow-hidden">
+            <span class="block h-full rounded-full" :style="{ width: Math.min(100, (g.total / g.plan) * 100) + '%', background: barColor(g) }" />
+          </span>
+          <span class="w-full flex items-center justify-between gap-2 text-[11.5px] leading-none">
+            <span class="font-700" :class="g.total > g.plan ? 'text-warn-fg' : 'text-teal-700'">
               {{ g.total > g.plan ? 'Lewat ' + shortRp(g.total - g.plan) : g.total < g.plan ? 'Sisa ' + shortRp(g.plan - g.total) : 'Pas' }}
             </span>
-            <span class="text-[10.5px] text-muted leading-none">
-              <template v-if="g.plan">dari {{ mode === 'Kategori' ? 'anggaran' : 'rencana' }} <span class="money">{{ rp(g.plan) }}</span></template>
+            <span class="text-muted">
+              <template v-if="g.plan">dari <span class="money">{{ rp(g.plan) }}</span></template>
               <template v-else>tanpa {{ mode === 'Kategori' ? 'anggaran' : 'rencana' }}</template>
             </span>
           </span>
-          <i class="i-lucide-chevron-down text-[17px] text-muted shrink-0 transition-transform" :class="openGroups.has(g.key) ? 'rotate-180' : ''" />
         </button>
         <div v-if="openGroups.has(g.key)" class="px-[16px] md:px-[20px] pb-[6px] border-t border-sand-100">
         <div v-for="l in g.items" :key="l.id" class="flex items-center gap-3 py-[10px]">
