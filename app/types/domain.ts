@@ -167,6 +167,8 @@ export interface ExpenseLine {
   cat: string
   dayIdx: number
   amount: number
+  /** for derived lines, the planned activity cost (amount may differ when actual was recorded) */
+  planned?: number
   derived: boolean
   time: string
   dayLabel: string

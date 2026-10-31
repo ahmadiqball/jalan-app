@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ManualExpense, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
-import { rp, initials } from '~/utils/format'
+import { rp, shortRp, initials, addDays, DOW_LONG, MON_LONG } from '~/utils/format'
 import { tone, iconFor, catLabel, budgetCatOf } from '~/utils/categories'
 import { expenseLines } from '~/utils/derive'
 
@@ -36,6 +36,7 @@ function openRecord(a: { id: string; title: string; cat: string; amount: number 
   recordAmount.value = a.amount
   recordOpen.value = true
 }
+const recordDelta = computed(() => recordAmount.value - (recordTarget.value?.amount ?? 0))
 function confirmRecord() {
   const t = recordTarget.value
   if (!t) return
@@ -49,15 +50,30 @@ function record(id: string) {
   flash('Dicatat sebagai pengeluaran')
 }
 
+// full "Jumat, 14 Oktober 2026" for a day index (falls back to the stored long label)
+function dayDateFull(i: number): string {
+  if (props.trip.startIso) {
+    const d = addDays(props.trip.startIso, i)
+    return `${DOW_LONG[d.getDay()]}, ${d.getDate()} ${MON_LONG[d.getMonth()]} ${d.getFullYear()}`
+  }
+  return props.trip.days[i]?.long || ''
+}
 // group by day
 const byDay = computed(() => {
-  const map: Record<number, { key: string; label: string; total: number; items: typeof lines.value }> = {}
+  const map: Record<number, { key: string; dayIdx: number; label: string; sub: string; total: number; items: typeof lines.value }> = {}
   for (const l of lines.value) {
-    const g = (map[l.dayIdx] ||= { key: 'd' + l.dayIdx, label: props.trip.days[l.dayIdx]?.long || 'Tanpa hari', total: 0, items: [] })
+    const g = (map[l.dayIdx] ||= {
+      key: 'd' + l.dayIdx,
+      dayIdx: l.dayIdx,
+      label: 'Hari ' + (l.dayIdx + 1),
+      sub: dayDateFull(l.dayIdx),
+      total: 0,
+      items: [],
+    })
     g.total += l.amount
     g.items.push(l)
   }
-  return Object.values(map).sort((a, b) => Number(b.key.slice(1)) - Number(a.key.slice(1)))
+  return Object.values(map).sort((a, b) => a.dayIdx - b.dayIdx)
 })
 // group by category
 const byCat = computed(() => {
@@ -217,12 +233,15 @@ function log() {
 
       <!-- by day / category -->
       <div v-for="g in (mode === 'Kategori' ? byCat : byDay)" v-else :key="g.key" class="card p-[16px_20px]">
-        <div class="flex items-center justify-between pb-2 border-b border-sand-100">
-          <span class="text-[14px] font-700 flex items-center gap-2">
-            <span v-if="mode === 'Kategori'" class="w-[10px] h-[10px] rounded-full" :style="{ background: tone(g.label)[1] }" />
-            {{ g.label }}
+        <div class="flex items-center justify-between gap-3 pb-2 border-b border-sand-100">
+          <span class="min-w-0 flex items-center gap-2">
+            <span v-if="mode === 'Kategori'" class="w-[10px] h-[10px] rounded-full shrink-0" :style="{ background: tone(g.label)[1] }" />
+            <span class="min-w-0">
+              <span class="block text-[14px] font-700 leading-tight truncate">{{ g.label }}</span>
+              <span v-if="mode === 'Hari' && 'sub' in g && g.sub" class="block text-[11.5px] text-muted leading-tight truncate">{{ g.sub }}</span>
+            </span>
           </span>
-          <span class="money text-[13.5px] text-ink-2">{{ rp(g.total) }}</span>
+          <span class="money text-[13.5px] text-ink-2 shrink-0">{{ rp(g.total) }}</span>
         </div>
         <div v-for="l in g.items" :key="l.id" class="flex items-center gap-3 py-[10px]">
           <div class="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center shrink-0" :style="{ background: tone(l.cat)[0], color: tone(l.cat)[1] }">
@@ -240,6 +259,17 @@ function log() {
               <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-teal-700 hover:bg-teal-100 flex items-center justify-center" title="Ubah" @click="openEdit(l)"><i class="i-lucide-pencil text-[14px]" /></button>
               <button class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center" title="Hapus" @click="removeLine(l)"><i class="i-lucide-x text-[15px]" /></button>
             </div>
+            <!-- actual differs from the planned activity cost: show the gap -->
+            <template v-else-if="l.planned != null && l.amount !== l.planned">
+              <span
+                class="flex items-center gap-[2px] rounded-pill px-[7px] py-[2px] text-[10.5px] font-700 leading-none"
+                :class="l.amount > l.planned ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
+              >
+                <i :class="l.amount > l.planned ? 'i-lucide-trending-up' : 'i-lucide-trending-down'" class="text-[11px]" />
+                {{ l.amount > l.planned ? '+' : '−' }}{{ shortRp(Math.abs(l.amount - l.planned)) }}
+              </span>
+              <span class="text-[10.5px] text-muted leading-none">rencana <span class="money line-through">{{ rp(l.planned) }}</span></span>
+            </template>
             <span v-else class="text-[11px] text-muted">dari aktivitas</span>
           </div>
         </div>
@@ -282,7 +312,17 @@ function log() {
       <div class="flex flex-col gap-3">
         <div class="text-[13.5px] font-600">{{ recordTarget?.title }}</div>
         <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah sebenarnya</span><CoreMoneyInput :model-value="recordAmount" @update:model-value="recordAmount = $event" @keydown.enter="confirmRecord" /></label>
-        <div class="text-[12px] text-muted leading-snug">Rencana: <span class="money">{{ recordTarget ? rp(recordTarget.amount) : '' }}</span>. Jumlah ini hanya dicatat sebagai pengeluaran — anggaran rencana tidak ikut berubah.</div>
+        <div v-if="recordDelta !== 0" class="flex items-center gap-2 text-[12px]">
+          <span class="text-muted">Rencana <span class="money line-through">{{ recordTarget ? rp(recordTarget.amount) : '' }}</span></span>
+          <span
+            class="flex items-center gap-[2px] rounded-pill px-[8px] py-[3px] font-700 leading-none"
+            :class="recordDelta > 0 ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
+          >
+            <i :class="recordDelta > 0 ? 'i-lucide-trending-up' : 'i-lucide-trending-down'" class="text-[12px]" />
+            {{ recordDelta > 0 ? '+' : '−' }}{{ shortRp(Math.abs(recordDelta)) }} dari rencana
+          </span>
+        </div>
+        <div class="text-[12px] text-muted leading-snug">Jumlah ini hanya dicatat sebagai pengeluaran — anggaran rencana tidak ikut berubah.</div>
       </div>
       <template #footer>
         <div class="flex justify-end gap-3">
