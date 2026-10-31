@@ -267,8 +267,9 @@ function log() {
           </div>
           <div class="flex-1 min-w-0">
             <div class="text-[14px] font-600 truncate">{{ l.title }}</div>
-            <div class="text-[12px] text-muted truncate">
-              {{ mode === 'Kategori' ? (trip.days[l.dayIdx]?.date || '') + ' · ' : catLabel(l.cat) + ' · ' }}{{ l.derived ? 'dari aktivitas ' + l.time : 'dicatat manual' }}
+            <div class="flex items-center gap-[6px] min-w-0 mt-[2px]">
+              <span v-if="l.derived" class="shrink-0 rounded-pill bg-teal-100 text-teal-700 px-[7px] py-[3px] text-[10.5px] font-700 leading-none">Terencana</span>
+              <span class="text-[12px] text-muted truncate">{{ [l.time, mode === 'Kategori' ? trip.days[l.dayIdx]?.date : catLabel(l.cat), l.derived ? '' : 'dicatat manual'].filter(Boolean).join(' · ') }}</span>
             </div>
           </div>
           <div class="flex flex-col items-end gap-[3px] shrink-0">
@@ -288,7 +289,6 @@ function log() {
               </span>
               <span class="text-[10.5px] text-muted leading-none">rencana <span class="money line-through">{{ rp(l.planned) }}</span></span>
             </template>
-            <span v-else class="text-[11px] text-muted">dari aktivitas</span>
           </div>
         </div>
         </div>
