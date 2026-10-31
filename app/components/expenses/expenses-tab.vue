@@ -268,8 +268,8 @@ function log() {
           <div class="flex-1 min-w-0">
             <div class="text-[14px] font-600 truncate">{{ l.title }}</div>
             <div class="flex items-center gap-[6px] min-w-0 mt-[2px]">
+              <span class="text-[12px] text-muted truncate">{{ [mode === 'Kategori' ? trip.days[l.dayIdx]?.date : catLabel(l.cat), l.derived ? '' : 'dicatat manual'].filter(Boolean).join(' · ') }}</span>
               <span v-if="l.derived" class="shrink-0 rounded-pill bg-teal-100 text-teal-700 px-[7px] py-[3px] text-[10.5px] font-700 leading-none">Terencana</span>
-              <span class="text-[12px] text-muted truncate">{{ [l.time, mode === 'Kategori' ? trip.days[l.dayIdx]?.date : catLabel(l.cat), l.derived ? '' : 'dicatat manual'].filter(Boolean).join(' · ') }}</span>
             </div>
           </div>
           <div class="flex flex-col items-end gap-[3px] shrink-0">
