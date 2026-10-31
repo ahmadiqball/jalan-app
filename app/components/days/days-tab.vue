@@ -239,13 +239,13 @@ async function removeCurrentDay() {
         <!-- TOTAL TRIP -->
         <template v-if="sumView === 'trip'">
           <div class="grid grid-cols-3 gap-2">
-            <div><div class="text-[11px] text-muted">Direncanakan</div><div class="money text-[14.5px] font-700" :class="tripPlanOver ? 'text-warn-fg' : ''">{{ shortRp(tripPlanned) }}</div></div>
+            <div><div class="text-[11px] text-muted">Terpakai</div><div class="money text-[14.5px] font-700" :class="tripPlanOver ? 'text-warn-fg' : ''">{{ shortRp(tripPlanned) }}</div></div>
             <div><div class="text-[11px] text-muted">Anggaran</div><div class="money text-[14.5px] font-700">{{ shortRp(budget.plan) }}</div></div>
             <div><div class="text-[11px] text-muted">{{ tripPlanOver ? 'Lewat' : 'Sisa' }}</div><div class="money text-[14.5px] font-700" :class="tripPlanOver ? 'text-warn-fg' : 'text-teal-700'">{{ shortRp(Math.abs(budget.plan - tripPlanned)) }}</div></div>
           </div>
           <div v-if="budget.plan">
             <CoreBar :pct="tripPlanPct" :over="tripPlanOver" />
-            <div class="text-[11.5px] text-muted mt-1 text-right money">{{ Math.round(tripPlanPct) }}% direncanakan</div>
+            <div class="text-[11.5px] text-muted mt-1 text-right money">{{ Math.round(tripPlanPct) }}% terpakai</div>
           </div>
 
           <div v-if="catPlans.length" class="flex flex-col gap-[10px] pt-1">
