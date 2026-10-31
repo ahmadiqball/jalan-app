@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import type { BillingPeriod } from '#shared/utils/plans'
+
 definePageMeta({ layout: 'blank', public: true })
 const { t } = useI18n()
 useHead({ title: () => t('landing.metaTitle') })
 const session = useSessionStore()
 const localePath = useLocalePath()
 const appHref = computed(() => localePath(session.authed ? '/beranda' : '/masuk'))
+const { busy, start } = useCheckout()
 
 // public guides teaser (hidden when none published)
 const { data: guidesData } = await useFetch('/api/guides', { key: 'landing-guides' })
@@ -413,7 +416,7 @@ function nav(i: number) { paused = true; go(i) }
         </div>
         <BillingPeriodSwitch v-model="period" />
       </div>
-      <BillingPlanCards class="mt-[26px]" :period="period" @select="navigateTo(localePath('/langganan'))" />
+      <BillingPlanCards class="mt-[26px]" :period="period" :busy="busy" @select="start($event, period)" />
       <div class="text-[12.5px] text-ink-2 mt-[13px]">{{ $t('landing.pricing.fineprint') }}</div>
     </div>
 

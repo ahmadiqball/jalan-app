@@ -8,7 +8,6 @@ const localePath = useLocalePath()
 const { flash } = useToast()
 const { rp } = useMoney()
 const { templates } = useTemplatesList()
-const cloud = useIsCloud()
 const picks = computed(() => templates.value.slice(0, 3))
 
 const total = (tp: Trip) => {
@@ -19,7 +18,7 @@ const total = (tp: Trip) => {
 const { requireTripSlot } = useSubscription()
 function use(tp: Trip) {
   if (!requireTripSlot()) return
-  const id = trips.cloneTrip(tp, { owner: cloud ? { name: session.name, email: session.email } : undefined })
+  const id = trips.cloneTrip(tp, { owner: { name: session.name, email: session.email } })
   flash(t('app.templates.used'))
   navigateTo(`/trip/${id}/days`)
 }

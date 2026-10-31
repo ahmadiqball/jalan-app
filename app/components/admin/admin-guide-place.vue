@@ -21,7 +21,7 @@ const tipsStr = ref(lines(props.place.tips))
 const open = ref(!!props.startOpen)
 const saving = ref(false)
 
-const { cloud, uploading, upload } = useImageUpload()
+const { uploading, upload } = useImageUpload()
 const galleryInput = ref<HTMLInputElement | null>(null)
 async function onPickGallery(e: Event) {
   const input = e.target as HTMLInputElement
@@ -86,7 +86,7 @@ async function save() {
             <span v-if="i === 0" class="absolute top-1 left-1 rounded-pill bg-teal-600 text-white text-[9.5px] font-700 px-[6px] py-[2px]">Sampul</span>
             <button type="button" class="absolute top-1 right-1 w-[20px] h-[20px] rounded-full bg-white/90 flex items-center justify-center text-muted hover:text-warn-fg shadow" title="Hapus" @click="gallery.splice(i, 1)"><i class="i-lucide-x text-[12px]" /></button>
           </div>
-          <button v-if="gallery.length < 5 && cloud" type="button" class="aspect-[4/3] rounded-[10px] border border-dashed border-sand-line3 flex flex-col items-center justify-center gap-1 text-muted hover:border-teal-600 hover:text-teal-700 disabled:opacity-50" :disabled="uploading" @click="galleryInput?.click()">
+          <button v-if="gallery.length < 5" type="button" class="aspect-[4/3] rounded-[10px] border border-dashed border-sand-line3 flex flex-col items-center justify-center gap-1 text-muted hover:border-teal-600 hover:text-teal-700 disabled:opacity-50" :disabled="uploading" @click="galleryInput?.click()">
             <i class="i-lucide-image-plus text-[20px]" /><span class="text-[10.5px] font-600">{{ uploading ? '…' : 'Unggah' }}</span>
           </button>
         </div>

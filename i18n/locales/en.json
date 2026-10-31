@@ -27,11 +27,8 @@
     "title": "Sign in",
     "subtitle": "Pick up the trip you're planning.",
     "google": "Continue with Google",
-    "local": "Enter (local mode)",
     "cloudNote": "Sign in with your Google account — fast and secure.",
-    "localNote": "Local mode — data is stored on this device.",
     "busy": "One sec…",
-    "or": "or",
     "headline": "Your itinerary, budget, and packing in one place.",
     "blurb": "Log spending as you go, so you know what's left before the last day.",
     "googleError": "Google sign-in failed."

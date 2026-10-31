@@ -1,5 +1,5 @@
 /**
- * Auth stub guard. `authed` lives in localStorage (client only), so we enforce
+ * Auth guard. `authed` lives in localStorage (client only), so we enforce
  * on the client and let the server render the shell. Public routes: landing,
  * login, and the read-only share view.
  */

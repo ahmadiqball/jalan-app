@@ -45,7 +45,7 @@ export default defineNuxtConfig({
   ],
 
   runtimeConfig: {
-    // server-only (service role). Empty => local mode (memory repo, no cloud).
+    // server-only (service role). Required, in dev too.
     supabaseUrl: '', // NUXT_SUPABASE_URL
     supabaseServiceKey: '', // NUXT_SUPABASE_SERVICE_KEY (secret, never client)
     adminEmails: '', // NUXT_ADMIN_EMAILS — comma-separated admin emails
@@ -56,7 +56,7 @@ export default defineNuxtConfig({
       // is hidden. Override with NUXT_PUBLIC_PETE_PETE_URL.
       // canonical host — the apex 308-redirects to www
       petePeteUrl: 'https://www.petepete.in',
-      // client auth (cloud mode). Empty => local mode (stub auth, localStorage).
+      // client auth. Required, in dev too.
       supabaseUrl: '', // NUXT_PUBLIC_SUPABASE_URL
       supabaseAnonKey: '', // NUXT_PUBLIC_SUPABASE_ANON_KEY
       // Google Maps Embed API key. Empty => embeds fall back to free "open in

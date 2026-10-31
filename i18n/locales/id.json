@@ -27,11 +27,8 @@
     "title": "Masuk",
     "subtitle": "Lanjutkan trip yang sedang jalan.",
     "google": "Lanjut dengan Google",
-    "local": "Masuk (mode lokal)",
     "cloudNote": "Masuk pakai akun Google kamu — cepat dan aman.",
-    "localNote": "Mode lokal — data tersimpan di perangkat ini.",
     "busy": "Sebentar…",
-    "or": "atau",
     "headline": "Rencana jalan, anggaran, dan barang di satu tempat.",
     "blurb": "Catat pengeluaran sambil jalan, biar tahu sisa anggaran sebelum hari terakhir.",
     "googleError": "Gagal masuk dengan Google."

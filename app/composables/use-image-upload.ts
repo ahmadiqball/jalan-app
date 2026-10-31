@@ -1,8 +1,7 @@
-/** Admin image upload → Supabase Storage, returns the public URL (cloud only). */
+/** Admin image upload → Supabase Storage, returns the public URL. */
 export function useImageUpload() {
   const { apiFetch } = useApi()
   const { flash } = useToast()
-  const cloud = useIsCloud()
   const uploading = ref(false)
 
   async function upload(file: File | undefined | null): Promise<string | null> {
@@ -21,5 +20,5 @@ export function useImageUpload() {
       uploading.value = false
     }
   }
-  return { cloud, uploading, upload }
+  return { uploading, upload }
 }

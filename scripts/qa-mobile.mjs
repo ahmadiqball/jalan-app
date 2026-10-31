@@ -2,12 +2,13 @@
  * Mobile visual QA — screenshots key routes at 390px and flags any horizontal
  * overflow (the usual mobile bug) with the offending elements.
  *
- * Prereqs: a running server + headless Chromium.
+ * Prereqs: a running server (Supabase env set) + headless Chromium.
  *   pnpm build && node .output/server/index.mjs &   # or: pnpm dev
  *   pnpm dlx playwright install chromium            # one-time browser download
  *
  * Usage:  BASE_URL=http://localhost:3000 node scripts/qa-mobile.mjs [outDir]
- * Auth:   seeds a stub session in localStorage so in-app pages render.
+ * Auth:   public routes need nothing. For in-app pages, save a signed-in Playwright
+ *         storage state and set QA_STORAGE_STATE=<file> and QA_TRIP_ID=<trip id>.
  * Exit:   non-zero if any route overflows — usable as a CI/regression gate.
  */
 import { chromium } from 'playwright-core'
@@ -31,26 +32,25 @@ function findChromium() {
   throw new Error('No Chromium found under ~/.cache/ms-playwright')
 }
 
+const STORAGE_STATE = process.env.QA_STORAGE_STATE
+const TRIP = process.env.QA_TRIP_ID
+
 const routes = [
-  ['beranda', '/beranda'],
-  ['overview', '/trip/t1/overview'],
-  ['days', '/trip/t1/days'],
-  ['budget', '/trip/t1/budget'],
-  ['expenses', '/trip/t1/expenses'],
-  ['packing', '/trip/t1/packing'],
-  ['outfit', '/trip/t1/outfit'],
-  ['members', '/trip/t1/members'],
+  ['landing', '/'],
+  ['masuk', '/masuk'],
+  ['langganan', '/langganan'],
   ['guides', '/guides'],
-  ['guide-detail', '/guides/bali'],
-  ['place-detail', '/guides/bali/pl-old-island'],
-  ['tersimpan', '/tersimpan'],
+  ...(STORAGE_STATE && TRIP
+    ? [
+        ['beranda', '/beranda'],
+        ...['overview', 'days', 'budget', 'expenses', 'packing', 'outfit', 'members'].map((t) => [t, `/trip/${TRIP}/${t}`]),
+        ['tersimpan', '/tersimpan'],
+      ]
+    : []),
 ]
 
 const browser = await chromium.launch({ executablePath: findChromium(), headless: true, args: ['--no-sandbox'] })
-const ctx = await browser.newContext({ viewport: { width: WIDTH, height: 844 }, deviceScaleFactor: 2 })
-await ctx.addInitScript(() => {
-  try { localStorage.setItem('session', JSON.stringify({ authed: true, email: 'dev@local.id', name: 'Dev QA' })) } catch {}
-})
+const ctx = await browser.newContext({ viewport: { width: WIDTH, height: 844 }, deviceScaleFactor: 2, storageState: STORAGE_STATE })
 const page = await ctx.newPage()
 fs.mkdirSync(OUT, { recursive: true })
 

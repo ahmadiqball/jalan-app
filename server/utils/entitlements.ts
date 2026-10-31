@@ -1,11 +1,9 @@
 import type { H3Event } from 'h3'
 import { entitlementOf, lockedTripIds, NO_PLAN, UNLIMITED, type Entitlement } from '../../shared/utils/plans'
 import type { Actor } from './auth'
-import { cloudEnabled } from './supabase'
 
 /** Plan limits for a user. Pass the actor when they are that user, so admins skip limits. */
 export async function entitlementFor(event: H3Event, userId: string, actor?: Actor): Promise<Entitlement> {
-  if (!cloudEnabled(event)) return UNLIMITED
   if (actor && actor.id === userId && isAdminActor(event, actor)) return UNLIMITED
   const sub = await useRepositories(event).billing.getSubscription(userId)
   return sub ? entitlementOf(sub) : NO_PLAN

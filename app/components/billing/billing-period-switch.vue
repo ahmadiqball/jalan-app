@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { BillingPeriod } from '#shared/utils/plans'
+
 const period = defineModel<BillingPeriod>({ required: true })
 const options: BillingPeriod[] = ['1m', '3m', '12m']
 </script>

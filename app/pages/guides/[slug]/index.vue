@@ -11,7 +11,6 @@ const trips = useTripsStore()
 const session = useSessionStore()
 const { templates } = useTemplatesList()
 const { isSaved, toggle, refresh: refreshSaved } = useSaved()
-const cloud = useIsCloud()
 const slug = computed(() => route.params.slug as string)
 onMounted(refreshSaved)
 
@@ -31,7 +30,7 @@ async function useTemplate() {
   if (!requireTripSlot()) return
   usingTemplate.value = true
   try {
-    const owner = cloud ? { name: session.name, email: session.email } : undefined
+    const owner = { name: session.name, email: session.email }
     const id = trips.cloneTrip(tpl, { owner })
     flash('Trip dibuat dari template')
     await navigateTo(localePath(`/trip/${id}/days`))

@@ -13,14 +13,12 @@ const { confirm } = useConfirm()
 const { t } = useI18n()
 const { listDestinations, saveDestination, deleteDestination } = useGuidesAdmin()
 
-// authoritative admin gate (token-attached in cloud)
-const allowed = ref(!useIsCloud())
+// authoritative admin gate
+const allowed = ref(false)
 const checking = ref(true)
 onMounted(async () => {
-  if (useIsCloud()) {
-    try { allowed.value = (await apiFetch<{ isAdmin: boolean }>('/api/me')).isAdmin }
-    catch { allowed.value = false }
-  }
+  try { allowed.value = (await apiFetch<{ isAdmin: boolean }>('/api/me')).isAdmin }
+  catch { allowed.value = false }
   checking.value = false
   if (!allowed.value) { navigateTo('/beranda'); return }
   loadDestinations()

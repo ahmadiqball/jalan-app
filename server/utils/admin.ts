@@ -1,7 +1,6 @@
 import type { H3Event } from 'h3'
 import type { Actor } from './auth'
 import { requireActor } from './auth'
-import { cloudEnabled } from './supabase'
 
 /** Built-in owner(s) — always admin, even without NUXT_ADMIN_EMAILS set. */
 const OWNER_EMAILS = ['ahmadiqbalshinichi@gmail.com']
@@ -13,10 +12,8 @@ function adminEmails(event: H3Event): string[] {
     .filter(Boolean)
 }
 
-/** Local mode → the single dev user is admin. Cloud → the built-in owner, or an
- *  email in NUXT_ADMIN_EMAILS. */
+/** The built-in owner, or an email in NUXT_ADMIN_EMAILS. */
 export function isAdminActor(event: H3Event, actor: Actor): boolean {
-  if (!cloudEnabled(event)) return true
   const email = actor.email.toLowerCase()
   return OWNER_EMAILS.includes(email) || adminEmails(event).includes(email)
 }

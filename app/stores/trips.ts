@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Activity, Budget, ManualExpense, Member, PackItem, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
-import { seedTrips } from '~/utils/seed'
 import { buildDays } from '~/utils/derive'
 import { addDays, shortDate, longDate } from '~/utils/format'
 import { clientPersist } from '~/utils/persist'
@@ -14,7 +13,7 @@ import { clientPersist } from '~/utils/persist'
 export const useTripsStore = defineStore(
   'trips',
   () => {
-    const trips = ref<Trip[]>(seedTrips())
+    const trips = ref<Trip[]>([])
     const seq = ref(100)
 
     const byId = (id: string) => trips.value.find((t) => t.id === id)
@@ -338,7 +337,7 @@ export const useTripsStore = defineStore(
     function updateTrip(id: string, patch: Partial<Trip>) {
       patchTrip(id, (t) => Object.assign(t, patch))
     }
-    /** Delete a trip locally. In cloud mode the sync plugin observes the removal
+    /** Delete a trip locally. The sync plugin observes the removal
      *  and issues the server DELETE. */
     function deleteTrip(id: string) {
       trips.value = trips.value.filter((t) => t.id !== id)
@@ -350,10 +349,6 @@ export const useTripsStore = defineStore(
       patchTrip(id, (t) => { t.splitMap = map; return t })
     }
 
-    function resetSeed() {
-      trips.value = seedTrips()
-      seq.value = 100
-    }
     /** Replace all trips (used by cloud sync on pull). Strips server meta,
      *  preserves in-store templates (they live in global content, not user trips). */
     function replaceAll(list: Trip[]) {
@@ -373,7 +368,7 @@ export const useTripsStore = defineStore(
       togglePackItem, addPackItem,
       setOutfitSlot, setOutfitScope, addOutfitSet, removeOutfitScope, removeOutfit, setOutfitPerson,
       addMember, removeMember, setMemberRole, setInviteRole,
-      createTrip, updateTrip, deleteTrip, setSplitBill, setSplitMap, resetSeed, replaceAll,
+      createTrip, updateTrip, deleteTrip, setSplitBill, setSplitMap, replaceAll,
       addTemplate, deleteTemplate, loadTemplates, cloneTrip,
     }
   },

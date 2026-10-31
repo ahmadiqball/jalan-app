@@ -1,23 +1,23 @@
 import type { Trip } from '~/types/domain'
+import { NO_PLAN, isTripActive, type Entitlement } from '#shared/utils/plans'
 
 export interface MeResponse { isAdmin: boolean; subscription: Entitlement; lockedTripIds: string[] }
 
 /**
  * The current user's plan, for gating the UI. The server enforces the same limits;
- * these checks just explain them before a change is rejected. Local mode is unlimited.
+ * these checks just explain them before a change is rejected.
  */
 export function useSubscription() {
-  const cloud = useIsCloud()
-  const sub = useState<Entitlement>('me-sub', () => (cloud ? NO_PLAN : UNLIMITED))
+  const sub = useState<Entitlement>('me-sub', () => NO_PLAN)
   const lockedIds = useState<string[]>('me-locked', () => [])
-  const loaded = useState<boolean>('me-sub-loaded', () => !cloud)
+  const loaded = useState<boolean>('me-sub-loaded', () => false)
   const trips = useTripsStore()
   const session = useSessionStore()
   const localePath = useLocalePath()
   const { flash } = useToast()
   const { apiFetch } = useApi()
 
-  const isOwn = (t: Pick<Trip, 'members'>) => tripRole(t, session.email, cloud) === 'owner'
+  const isOwn = (t: Pick<Trip, 'members'>) => tripRole(t, session.email) === 'owner'
 
   function apply(me: Pick<MeResponse, 'subscription' | 'lockedTripIds'>) {
     sub.value = me.subscription
@@ -25,7 +25,6 @@ export function useSubscription() {
     loaded.value = true
   }
   async function refresh() {
-    if (!cloud) return
     apply(await apiFetch<MeResponse>('/api/me'))
   }
 

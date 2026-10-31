@@ -1,15 +1,12 @@
-import { cloudEnabled, useSupabase } from '../../utils/supabase'
+import { useSupabase } from '../../utils/supabase'
 
 const BUCKET = 'guides'
 const MAX = 6 * 1024 * 1024 // 6MB
 
 /** POST /api/admin/upload — admin image upload to Supabase Storage (public
- *  bucket), returns the public URL. Cloud only; local mode pastes URLs. */
+ *  bucket), returns the public URL. */
 export default defineEventHandler(async (event) => {
   await requireAdmin(event)
-  if (!cloudEnabled(event)) {
-    throw createError({ statusCode: 400, statusMessage: 'Upload gambar hanya tersedia di mode cloud. Tempel URL gambar sebagai gantinya.' })
-  }
 
   const parts = await readMultipartFormData(event)
   const file = parts?.find((p) => p.name === 'file' && p.filename)

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PLAN_LIST, PLANS, type BillingPeriod, type Plan, type PlanId } from '#shared/utils/plans'
+
 const props = defineProps<{ period: BillingPeriod; current?: PlanId | null; busy?: string }>()
 const emit = defineEmits<{ select: [PlanId] }>()
 const { t } = useI18n()

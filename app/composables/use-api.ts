@@ -1,6 +1,6 @@
 type ApiOpts = { method?: string; body?: unknown; headers?: Record<string, string> }
 
-/** $fetch wrapper that attaches the Supabase bearer token in cloud mode. */
+/** $fetch wrapper that attaches the Supabase bearer token. */
 export function useApi() {
   const client = useSupabaseClient()
 

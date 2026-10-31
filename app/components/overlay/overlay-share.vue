@@ -5,7 +5,7 @@ const props = defineProps<{ trip: Trip }>()
 const ui = useUiStore()
 const trips = useTripsStore()
 const { flash } = useToast()
-const { cloud, busy, ensureLink, joinUrl, waUrl } = useInvite()
+const { busy, ensureLink, joinUrl, waUrl } = useInvite()
 
 const open = computed({ get: () => ui.shareOpen, set: (v: boolean) => (ui.shareOpen = v) })
 
@@ -19,7 +19,7 @@ const inviteRole = computed<string>({
 })
 
 async function makeLink() {
-  if (!cloud.value || link.value) return
+  if (link.value) return
   try {
     link.value = joinUrl(await ensureLink(props.trip.id))
   } catch {
@@ -70,7 +70,6 @@ async function nativeShare() {
         Bagikan satu link undangan — siapa pun yang membukanya dan masuk langsung gabung ke trip ini.
       </p>
 
-      <template v-if="cloud">
         <label class="flex flex-col gap-[7px]">
           <span class="text-[12.5px] font-600 text-ink-2">Peran untuk yang gabung</span>
           <CoreSelect v-model="inviteRole" :options="['Bisa ubah', 'Hanya lihat']" />
@@ -117,12 +116,6 @@ async function nativeShare() {
         <div class="text-[11.5px] text-muted">
           Link memberi peran <span class="font-600">{{ inviteRole }}</span>. Ganti di atas sebelum membagikan kalau perlu.
         </div>
-      </template>
-
-      <!-- local mode: no server, so no shareable link -->
-      <div v-else class="bg-sand-100 rounded-field px-[13px] py-[12px] text-[12.5px] text-ink-2">
-        Link undangan aktif saat kamu masuk dengan akun (mode cloud). Di mode lokal, tambahkan anggota manual dari tab Anggota.
-      </div>
     </div>
 
     <template #footer>

@@ -1,35 +1,24 @@
 <script setup lang="ts">
+import { isBillingPeriod, isPlanId, PLANS, type BillingPeriod } from '#shared/utils/plans'
+
 definePageMeta({ public: true })
 const { t } = useI18n()
 useHead({ title: () => t('billing.title') + ' · Kelana' })
 
 const route = useRoute()
 const session = useSessionStore()
-const localePath = useLocalePath()
 const { flash } = useToast()
 const { apiFetch } = useApi()
 const { sub, refresh } = useSubscription()
 
 const period = ref<BillingPeriod>('1m')
-const busy = ref('')
+const { busy, start } = useCheckout()
 const checking = ref(false)
 
 const planName = computed(() => (sub.value.plan ? PLANS[sub.value.plan].name : ''))
 const until = computed(() => (sub.value.expiresAt
   ? new Date(sub.value.expiresAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
   : ''))
-
-async function choose(plan: PlanId) {
-  if (!session.authed) return navigateTo(localePath(`/masuk?next=${encodeURIComponent('/langganan')}`))
-  busy.value = plan
-  try {
-    const { redirectUrl } = await apiFetch<{ redirectUrl: string }>('/api/billing/checkout', { method: 'POST', body: { plan, period: period.value } })
-    window.location.href = redirectUrl
-  } catch (e) {
-    busy.value = ''
-    flash((e as { data?: { message?: string } }).data?.message || t('billing.failed'))
-  }
-}
 
 /** Back from Midtrans: the webhook activates the plan, usually within seconds. */
 async function awaitOrder(id: string) {
@@ -57,8 +46,14 @@ async function awaitOrder(id: string) {
 }
 
 onMounted(() => {
-  const id = route.query.order_id
+  const { order_id: id, plan, period: chosen } = route.query
   if (session.authed && typeof id === 'string') awaitOrder(id)
+  // came from a plan card before logging in: pick up where they left off
+  if (session.authed && isPlanId(plan) && isBillingPeriod(chosen)) {
+    period.value = chosen
+    navigateTo({ query: {} }, { replace: true })
+    start(plan, chosen)
+  }
 })
 </script>
 
@@ -83,7 +78,7 @@ onMounted(() => {
       <div v-else-if="sub.status === 'unlimited' && session.authed" class="card p-[14px_18px] text-[13.5px] text-ink-2">{{ $t('billing.unlimited') }}</div>
     </ClientOnly>
 
-    <BillingPlanCards :period="period" :current="sub.plan" :busy="busy" @select="choose" />
+    <BillingPlanCards :period="period" :current="sub.plan" :busy="busy" @select="start($event, period)" />
 
     <div class="text-[12.5px] text-ink-2 leading-[1.6]">{{ $t('billing.fineprint') }}</div>
   </div>

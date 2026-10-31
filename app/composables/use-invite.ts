@@ -1,11 +1,10 @@
 /**
  * Invite links. Reuses the trip's public share slug as the invite token; the
  * granted role lives on the trip (owner-controlled), so a link can't be
- * escalated via the URL. Cloud-only: needs the trip persisted server-side.
+ * escalated via the URL. Needs the trip persisted server-side.
  */
 export function useInvite() {
   const { apiFetch } = useApi()
-  const cloud = computed(() => useIsCloud())
   const busy = ref(false)
 
   /** ensure the trip has a share slug and return it (idempotent) */
@@ -29,5 +28,5 @@ export function useInvite() {
     return `https://wa.me/?text=${encodeURIComponent(text)}`
   }
 
-  return { cloud, busy, ensureLink, joinUrl, waUrl }
+  return { busy, ensureLink, joinUrl, waUrl }
 }

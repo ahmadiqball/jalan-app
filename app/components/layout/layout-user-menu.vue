@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PLANS } from '#shared/utils/plans'
 import {
   DropdownMenuRoot, DropdownMenuTrigger, DropdownMenuPortal, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,

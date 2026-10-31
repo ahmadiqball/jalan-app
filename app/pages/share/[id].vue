@@ -10,7 +10,7 @@ const trips = useTripsStore()
 const { flash } = useToast()
 
 // Owner viewing their own trip resolves from the local store; a public viewer
-// (cloud mode, not signed in) has no local data, so fetch the shared copy.
+// (not signed in) has no local data, so fetch the shared copy.
 const remote = ref<Trip | null>(null)
 const local = computed(() => trips.byId(route.params.id as string))
 const trip = computed(() => local.value ?? remote.value)

@@ -11,12 +11,10 @@ const { ensureLoaded, persist } = useTemplates()
 const { apiFetch } = useApi()
 
 // admin gate
-const allowed = ref(!useIsCloud())
+const allowed = ref(false)
 const checking = ref(true)
 onMounted(async () => {
-  if (useIsCloud()) {
-    try { allowed.value = (await apiFetch<{ isAdmin: boolean }>('/api/me')).isAdmin } catch { allowed.value = false }
-  }
+  try { allowed.value = (await apiFetch<{ isAdmin: boolean }>('/api/me')).isAdmin } catch { allowed.value = false }
   checking.value = false
   if (!allowed.value) navigateTo('/beranda')
 })

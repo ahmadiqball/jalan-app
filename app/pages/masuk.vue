@@ -6,7 +6,7 @@ useHead({ title: () => t('login.title') + ' · Kelana' })
 const session = useSessionStore()
 const route = useRoute()
 const localePath = useLocalePath()
-const { cloud, signIn, signInGoogle } = useAuth()
+const { signInGoogle } = useAuth()
 
 const err = ref('')
 const busy = ref(false)
@@ -28,16 +28,9 @@ watch(
 async function google() {
   if (busy.value) return
   busy.value = true
-  const r = await signInGoogle()
+  const r = await signInGoogle(next.value)
   busy.value = false
   if (!r.ok) err.value = r.error || t('login.googleError')
-}
-async function localSignIn() {
-  if (busy.value) return
-  busy.value = true
-  const r = await signIn('kamu@kelana.id', 'local')
-  busy.value = false
-  if (r.ok) navigateTo(localePath(next.value))
 }
 </script>
 
@@ -75,16 +68,13 @@ async function localSignIn() {
         <div v-if="err" class="bg-warn-bg text-warn-fg rounded-banner px-[14px] py-[10px] text-[13px] font-600">{{ err }}</div>
 
         <div class="flex flex-col gap-[11px]">
-          <CoreButton v-if="cloud" variant="primary" block :disabled="busy" @click="google">
+          <CoreButton variant="primary" block :disabled="busy" @click="google">
             <i class="i-lucide-chrome text-[16px]" /> {{ busy ? $t('login.busy') : $t('login.google') }}
-          </CoreButton>
-          <CoreButton v-else variant="primary" block :disabled="busy" @click="localSignIn">
-            {{ busy ? $t('login.busy') : $t('login.local') }}
           </CoreButton>
         </div>
 
         <div class="border-t border-sand-line pt-4 text-[13px] text-muted">
-          {{ cloud ? $t('login.cloudNote') : $t('login.localNote') }}
+          {{ $t('login.cloudNote') }}
         </div>
       </div>
     </div>

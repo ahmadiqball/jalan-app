@@ -1,15 +1,15 @@
 import type { Trip } from '~/types/domain'
+import { NO_PLAN } from '#shared/utils/plans'
 import type { MeResponse } from '~/composables/use-subscription'
 
 /**
- * Cloud sync (client-only). No-op in local mode. In cloud mode:
+ * Cloud sync (client-only):
  *  - restores the Supabase session and pulls the user's trips on sign-in
  *  - mirrors local trip changes to the server (debounced diff: PUT changed,
  *    DELETE removed), with an offline queue flushed on reconnect
  * A snapshot + `applyingRemote` guard prevents pull→watch→push loops.
  */
 export default defineNuxtPlugin(() => {
-  if (!useIsCloud()) return
   const client = useSupabaseClient()
   if (!client) return
 
@@ -93,7 +93,7 @@ export default defineNuxtPlugin(() => {
     if (typeof navigator !== 'undefined' && navigator.onLine === false) return
     for (const t of trips.userTrips) {
       // only mirror trips that already opted into a bill and that this user may edit
-      if (!t.splitBillId || tripRole(t, session.email, true) === 'viewer') continue
+      if (!t.splitBillId || tripRole(t, session.email) === 'viewer') continue
       const sig = pete.entriesSig(t)
       if (peteSig.get(t.id) === sig) continue
       try {
@@ -113,7 +113,7 @@ export default defineNuxtPlugin(() => {
     for (const t of trips.userTrips) {
       // templates live in global content, never as user trips; skip them.
       // only push trips this user may edit — a viewer's local edits stay local
-      if (snapshot.get(t.id) !== json(t) && tripRole(t, session.email, true) !== 'viewer' && !subscription.isLocked(t.id)) pushQueue.add(t.id)
+      if (snapshot.get(t.id) !== json(t) && tripRole(t, session.email) !== 'viewer' && !subscription.isLocked(t.id)) pushQueue.add(t.id)
     }
     for (const id of snapshot.keys()) {
       if (!ids.has(id)) delQueue.add(id)
@@ -157,11 +157,16 @@ export default defineNuxtPlugin(() => {
       // page). If we're still on the login screen once signed in, forward on —
       // the route middleware only runs on navigation, so it can't do this.
       const cur = router.currentRoute.value
-      if (cur.path.replace(/^\/en(?=\/|$)/, '') === '/masuk') {
+      const pending = sessionStorage.getItem('post-login-next')
+      if (pending) {
+        sessionStorage.removeItem('post-login-next')
+        navigateTo(localePath(pending))
+      } else if (cur.path.replace(/^\/en(?=\/|$)/, '') === '/masuk') {
         const q = typeof cur.query.next === 'string' ? cur.query.next.replace(/^\/en(?=\/|$)/, '') : ''
         navigateTo(localePath(q.startsWith('/') ? q : '/beranda'))
       }
-    } else if (eventName === 'SIGNED_OUT') {
+    } else if (eventName === 'SIGNED_OUT' || eventName === 'INITIAL_SESSION') {
+      // INITIAL_SESSION without a user: a stale persisted `authed` has no real session
       session.signOut()
       isAdmin.value = false
       subscription.apply({ subscription: NO_PLAN, lockedTripIds: [] })

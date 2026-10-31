@@ -1,57 +1,24 @@
-/**
- * Auth facade. Cloud mode → Supabase Auth; local mode → the offline stub.
- * UI (login) calls these without knowing which mode is active.
- */
-
+/** Auth facade over Supabase Auth, so the UI doesn't touch the client directly. */
 export function useAuth() {
   const session = useSessionStore()
   const client = useSupabaseClient()
-  const cloud = computed(() => useIsCloud())
 
-  type Result = { ok: boolean; error?: string; needConfirm?: boolean }
-
-  function applyUser(u: { id: string; email?: string | null; user_metadata?: Record<string, unknown> }) {
-    session.setUser({
-      id: u.id,
-      email: u.email || undefined,
-      name: (u.user_metadata?.name as string) || u.email?.split('@')[0] || 'Kamu',
-    })
-  }
-
-  async function signIn(email: string, pw: string): Promise<Result> {
-    if (!cloud.value || !client) {
-      session.signIn({ email })
-      return { ok: true }
-    }
-    const { data, error } = await client.auth.signInWithPassword({ email, password: pw })
-    if (error) return { ok: false, error: error.message }
-    if (data.user) applyUser(data.user)
-    return { ok: true }
-  }
-
-  async function signUp(email: string, pw: string, name: string): Promise<Result> {
-    if (!cloud.value || !client) {
-      session.signIn({ email, name })
-      return { ok: true }
-    }
-    const { data, error } = await client.auth.signUp({ email, password: pw, options: { data: { name } } })
-    if (error) return { ok: false, error: error.message }
-    if (data.user && data.session) applyUser(data.user)
-    return { ok: true, needConfirm: !data.session }
-  }
+  type Result = { ok: boolean; error?: string }
 
   async function signOut() {
-    if (cloud.value && client) await client.auth.signOut()
+    await client?.auth.signOut()
     session.signOut()
   }
 
-  async function signInGoogle(): Promise<Result> {
-    if (!cloud.value || !client) return { ok: false, error: 'Google hanya di mode cloud' }
+  /** `next` survives the OAuth round trip, which always lands on /beranda. */
+  async function signInGoogle(next?: string): Promise<Result> {
+    if (!client) return { ok: false, error: 'Auth belum siap' }
+    if (next) sessionStorage.setItem('post-login-next', next)
     const redirectTo = `${window.location.origin}/beranda`
     const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } })
     if (error) return { ok: false, error: error.message }
     return { ok: true } // browser redirects to Google; session resolves on return
   }
 
-  return { cloud, signIn, signUp, signInGoogle, signOut }
+  return { signInGoogle, signOut }
 }

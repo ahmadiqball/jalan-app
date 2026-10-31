@@ -1,21 +1,16 @@
 import { defineStore } from 'pinia'
 import { clientPersist } from '~/utils/persist'
 
-/** Auth stub. `authed` (and the current user) persist so a refresh keeps you in. */
+/** `authed` and the current user persist so a refresh keeps you in. */
 export const useSessionStore = defineStore(
   'session',
   () => {
     const authed = ref(false)
-    const email = ref('rina@kelana.id')
-    const name = ref('Rina Kartika')
-    /** Supabase user id in cloud mode; null in local/guest mode. */
+    const email = ref('')
+    const name = ref('')
+    /** Supabase user id. */
     const userId = ref<string | null>(null)
 
-    function signIn(as?: { email?: string; name?: string }) {
-      if (as?.email) email.value = as.email
-      if (as?.name) name.value = as.name
-      authed.value = true
-    }
     /** Populate from a real (Supabase) user. */
     function setUser(u: { id: string; email?: string; name?: string }) {
       userId.value = u.id
@@ -38,7 +33,7 @@ export const useSessionStore = defineStore(
         .toUpperCase(),
     )
 
-    return { authed, email, name, userId, initials, signIn, setUser, signOut }
+    return { authed, email, name, userId, initials, setUser, signOut }
   },
   { persist: { pick: ['authed', 'email', 'name'], storage: clientPersist } },
 )

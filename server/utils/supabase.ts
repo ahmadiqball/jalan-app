@@ -1,12 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import type { H3Event } from 'h3'
 
-/** True when Supabase (cloud mode) is configured. */
-export function cloudEnabled(event: H3Event): boolean {
-  const cfg = useRuntimeConfig(event)
-  return !!(cfg.supabaseUrl && cfg.supabaseServiceKey)
-}
-
 /**
  * Server-only Supabase client (service-role key). Never imported by app/ code.
  * Bypasses RLS; per-owner authorization is enforced in repositories/routes.

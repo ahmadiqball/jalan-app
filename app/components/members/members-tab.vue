@@ -6,7 +6,7 @@ import { budgetSummary } from '~/utils/derive'
 const props = defineProps<{ trip: Trip }>()
 const trips = useTripsStore()
 const { flash } = useToast()
-const { cloud, busy, ensureLink, joinUrl, waUrl } = useInvite()
+const { busy, ensureLink, joinUrl, waUrl } = useInvite()
 const { isOwner, canEdit } = useTripAccess()
 
 // only the owner may revoke access or change roles
@@ -47,7 +47,7 @@ async function copyLink() {
 }
 const whatsapp = computed(() => (link.value ? waUrl(link.value, props.trip.name) : '#'))
 
-// manual add (fallback / local mode) — same as before
+// manual add
 const manualEmail = ref('')
 function addManual() {
   const email = manualEmail.value.trim()
@@ -65,8 +65,8 @@ function openInvite() {
   addOpen.value = true
 }
 
-// make the link as soon as the popup opens (cloud mode)
-watch(addOpen, (o) => { if (o && cloud.value && !link.value) makeLink() })
+// make the link as soon as the popup opens
+watch(addOpen, (o) => { if (o && !link.value) makeLink() })
 </script>
 
 <template>
@@ -106,7 +106,6 @@ watch(addOpen, (o) => { if (o && cloud.value && !link.value) makeLink() })
         </label>
 
         <!-- invite link -->
-        <template v-if="cloud">
           <div>
             <div class="text-[12.5px] font-600 text-ink-2 mb-[7px]">Link undangan</div>
             <CoreButton v-if="!link" variant="primary" block :disabled="busy" @click="makeLink">
@@ -129,10 +128,6 @@ watch(addOpen, (o) => { if (o && cloud.value && !link.value) makeLink() })
               <div class="text-[11.5px] text-muted">Link memberi peran <span class="font-600">{{ inviteRole }}</span>.</div>
             </div>
           </div>
-        </template>
-        <div v-else class="bg-sand-100 rounded-field px-[13px] py-[11px] text-[12.5px] text-ink-2">
-          Link undangan aktif saat kamu pakai akun (mode cloud). Di mode lokal, tambah anggota manual di bawah.
-        </div>
 
         <div class="border-t border-sand-line pt-4">
           <div class="text-[12.5px] font-600 text-ink-2 mb-[7px]">Atau tambah manual</div>
