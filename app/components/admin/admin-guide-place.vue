@@ -15,7 +15,7 @@ const num = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && 
 const p = reactive<Record<string, any>>({ ...props.place })
 const tagsStr = ref(csv(props.place.tags))
 const galleryStr = ref(lines(props.place.gallery))
-const gtkStr = ref(lines(props.place.goodToKnow))
+const gtk = ref<string[]>([...(props.place.goodToKnow || [])])
 const tipsStr = ref(lines(props.place.tips))
 const open = ref(!!props.startOpen)
 const saving = ref(false)
@@ -30,24 +30,17 @@ async function onPickGallery(e: Event) {
 }
 
 const typeOptions = PLACE_TYPES.map((t) => ({ value: t.id, label: t.label }))
-const priceOptions = [
-  { value: '0', label: '— tanpa level' }, { value: '1', label: 'Rp' }, { value: '2', label: 'Rp Rp' },
-  { value: '3', label: 'Rp Rp Rp' }, { value: '4', label: 'Rp Rp Rp Rp' },
-]
 
 async function save() {
   saving.value = true
   try {
     emit('save', {
       ...(p as Place),
-      priceLevel: num(p.priceLevel),
-      rating: num(p.rating),
-      ratingCount: num(p.ratingCount),
       lat: num(p.lat),
       lng: num(p.lng),
       tags: fromCsv(tagsStr.value),
       gallery: fromLines(galleryStr.value),
-      goodToKnow: fromLines(gtkStr.value),
+      goodToKnow: gtk.value.map((x) => x.trim()).filter(Boolean),
       tips: fromLines(tipsStr.value),
     })
   } finally {
@@ -75,16 +68,11 @@ async function save() {
         <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Jenis</span><CoreSelect :model-value="p.type" :options="typeOptions" @update:model-value="p.type = $event" /></label>
         <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Area</span><input v-model="p.area" class="field !py-[8px]" placeholder="mis. Ubud"></label>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-        <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Harga (teks)</span><input v-model="p.priceText" class="field !py-[8px]" placeholder="Rp 750rb / malam"></label>
-        <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Level harga</span><CoreSelect :model-value="String(p.priceLevel || 0)" :options="priceOptions" @update:model-value="p.priceLevel = parseInt($event, 10)" /></label>
-        <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Rating</span><input v-model="p.rating" type="number" step="0.1" min="0" max="5" class="field !py-[8px] money" placeholder="4.7"></label>
-        <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Jumlah ulasan</span><input v-model="p.ratingCount" type="number" min="0" class="field !py-[8px] money" placeholder="128"></label>
-      </div>
+      <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Perkiraan harga</span><input v-model="p.priceText" class="field !py-[8px]" placeholder="mis. Rp 750rb / malam · Rp 80–150rb/orang"></label>
       <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tag (pisah koma)</span><input v-model="tagsStr" class="field !py-[8px]" placeholder="Pantai, Suasana tenang, Cocok pasangan"></label>
       <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Deskripsi singkat</span><input v-model="p.shortDesc" class="field !py-[8px]" placeholder="Satu kalimat untuk kartu"></label>
       <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tentang (panjang)</span><textarea v-model="p.longDesc" rows="3" class="field !py-[8px] resize-none" placeholder="Paragraf 'Tentang'" /></label>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <label class="flex flex-col gap-1">
           <span class="text-[11px] text-muted font-600 flex items-center justify-between">
             <span>Galeri — URL gambar (satu per baris)</span>
@@ -93,8 +81,18 @@ async function save() {
           <textarea v-model="galleryStr" rows="3" class="field !py-[8px] resize-none" placeholder="https://…/foto.jpg" />
           <input ref="galleryInput" type="file" accept="image/*" class="hidden" @change="onPickGallery">
         </label>
-        <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Good to Know (satu per baris)</span><textarea v-model="gtkStr" rows="3" class="field !py-[8px] resize-none" /></label>
         <label class="flex flex-col gap-1"><span class="text-[11px] text-muted font-600">Tips (satu per baris)</span><textarea v-model="tipsStr" rows="3" class="field !py-[8px] resize-none" /></label>
+      </div>
+      <div class="flex flex-col gap-1">
+        <span class="text-[11px] text-muted font-600">Good to Know — satu kotak = satu poin checklist</span>
+        <div class="flex flex-col gap-[6px]">
+          <div v-for="(g, i) in gtk" :key="i" class="flex items-center gap-2">
+            <i class="i-lucide-check text-teal-600 text-[14px] shrink-0" />
+            <input v-model="gtk[i]" class="field !py-[7px] flex-1" placeholder="mis. Pesan jauh hari saat high season">
+            <button type="button" class="w-[28px] h-[28px] rounded-full text-muted hover:text-warn-fg hover:bg-warn-bg flex items-center justify-center shrink-0" title="Hapus" @click="gtk.splice(i, 1)"><i class="i-lucide-x text-[14px]" /></button>
+          </div>
+          <button type="button" class="text-teal-700 font-600 text-[12.5px] flex items-center gap-1 w-fit mt-[2px]" @click="gtk.push('')"><i class="i-lucide-plus text-[13px]" /> Tambah poin</button>
+        </div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
         <label class="flex flex-col gap-1 md:col-span-2"><span class="text-[11px] text-muted font-600">Google Maps place_id</span><input v-model="p.gmapsPlaceId" class="field !py-[8px]" placeholder="ChIJ…"></label>

@@ -76,7 +76,6 @@ function onSave() {
       <div class="grid gap-3" style="grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr))">
         <div v-if="place.priceText" class="card p-[14px_16px] flex items-center gap-3"><i class="i-lucide-tag text-[18px] text-teal-700" /><div><div class="money text-[15px] font-700">{{ place.priceText }}</div><div class="text-[12px] text-muted">perkiraan harga</div></div></div>
         <div v-if="place.openHours" class="card p-[14px_16px] flex items-center gap-3"><i class="i-lucide-clock text-[18px] text-teal-700" /><div><div class="text-[14px] font-600">{{ place.openHours }}</div><div class="text-[12px] text-muted">jam buka</div></div></div>
-        <div v-if="place.rating" class="card p-[14px_16px] flex items-center gap-3"><i class="i-lucide-star text-[18px] text-warn-fg" /><div><div class="text-[14px] font-600">{{ place.rating }} <span class="text-muted font-500">({{ place.ratingCount }} ulasan)</span></div><div class="text-[12px] text-muted">rating</div></div></div>
       </div>
 
       <div class="grid gap-5 md:grid-cols-[1.6fr_1fr]">

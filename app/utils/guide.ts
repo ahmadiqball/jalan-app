@@ -30,7 +30,3 @@ export function placeTypeToCat(type: string): string {
   }
 }
 
-/** "Rp"×level price indicator, or '' when unpriced */
-export function priceDots(level?: number): string {
-  return level && level > 0 ? 'Rp'.repeat(Math.min(4, level)) : ''
-}

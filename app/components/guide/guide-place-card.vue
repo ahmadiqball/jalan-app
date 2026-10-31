@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Place } from '~/types/guide'
-import { placeTypeLabel, placeTypeIcon, placeTypeToCat, priceDots } from '~/utils/guide'
+import { placeTypeLabel, placeTypeIcon, placeTypeToCat } from '~/utils/guide'
 import { tone } from '~/utils/categories'
 
 const props = defineProps<{ place: Place; slug: string }>()
@@ -24,12 +24,10 @@ const { open } = useAddToTrip()
     <div class="p-[14px_16px] flex flex-col gap-[8px] flex-1">
       <div class="flex items-start justify-between gap-2">
         <NuxtLink :to="localePath(`/guides/${slug}/${place.id}`)" class="font-display text-[16.5px] font-600 leading-tight hover:text-teal-700">{{ place.name }}</NuxtLink>
-        <span v-if="priceDots(place.priceLevel)" class="money text-[12px] text-teal-700 font-700 shrink-0">{{ priceDots(place.priceLevel) }}</span>
       </div>
       <div class="flex items-center gap-2 text-[12px] text-muted flex-wrap">
         <span class="inline-flex items-center gap-1 rounded-pill bg-paper px-[9px] py-[3px] font-600"><i :class="placeTypeIcon(place.type)" class="text-[12px]" /> {{ placeTypeLabel(place.type) }}</span>
         <span v-if="place.area" class="truncate">· {{ place.area }}</span>
-        <span v-if="place.rating" class="flex items-center gap-[3px]"><i class="i-lucide-star text-[12px] text-warn-fg" /> {{ place.rating }}</span>
       </div>
       <p v-if="place.shortDesc" class="text-[12.5px] text-ink-2 leading-snug line-clamp-2">{{ place.shortDesc }}</p>
       <div class="mt-auto pt-1 flex items-center justify-between gap-2">

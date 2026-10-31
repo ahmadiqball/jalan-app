@@ -26,9 +26,6 @@ export interface Place {
   type: string
   area?: string
   priceText?: string
-  priceLevel?: number
-  rating?: number
-  ratingCount?: number
   tags?: string[]
   shortDesc?: string
   longDesc?: string
