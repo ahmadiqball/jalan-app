@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { ManualExpense, Trip } from '~/types/domain'
+import type { ExpenseLine, ManualExpense, Trip } from '~/types/domain'
 import { CATEGORIES } from '~/types/domain'
 import { rp, shortRp, initials, addDays, DOW_LONG, MON_LONG } from '~/utils/format'
 import { tone, iconFor, catLabel, budgetCatOf } from '~/utils/categories'
-import { expenseLines } from '~/utils/derive'
+import { budgetSummary, expenseLines } from '~/utils/derive'
 
 const catOptions = CATEGORIES.map((c) => ({ value: c, label: catLabel(c) }))
 
@@ -17,6 +17,7 @@ const mode = ref<'Hari' | 'Kategori' | 'Orang'>('Hari')
 const allIds = computed(() => props.trip.members.map((m) => m.id))
 
 const lines = computed(() => expenseLines(props.trip))
+interface ExpenseGroup { key: string; label: string; sub: string; total: number; plan: number; items: ExpenseLine[] }
 
 // planned activity costs not yet recorded as spent (opt-in from here)
 const unpaidPlanned = computed(() => {
@@ -28,23 +29,28 @@ const unpaidPlanned = computed(() => {
   )
   return out
 })
-const recordOpen = ref(false)
-const recordTarget = ref<{ id: string; title: string; cat: string; amount: number } | null>(null)
+// popup listing the planned costs; a row can expand to record a different amount
+const planOpen = ref(false)
+const plannedTotal = computed(() => unpaidPlanned.value.reduce((n, a) => n + a.amount, 0))
+const recordId = ref<string | null>(null)
 const recordAmount = ref(0)
-function openRecord(a: { id: string; title: string; cat: string; amount: number }) {
-  recordTarget.value = a
-  recordAmount.value = a.amount
-  recordOpen.value = true
-}
+const recordTarget = computed(() => unpaidPlanned.value.find((a) => a.id === recordId.value) ?? null)
 const recordDelta = computed(() => recordAmount.value - (recordTarget.value?.amount ?? 0))
+function openRecord(a: { id: string; amount: number }) {
+  recordId.value = recordId.value === a.id ? null : a.id
+  recordAmount.value = a.amount
+}
 function confirmRecord() {
   const t = recordTarget.value
   if (!t) return
   trips.setActivityField(props.trip.id, t.id, 'actual', recordAmount.value)
   trips.setActivityField(props.trip.id, t.id, 'paid', true)
-  recordOpen.value = false
+  recordId.value = null
   flash('Dicatat sebagai pengeluaran')
 }
+watch(planOpen, (v) => { if (!v) recordId.value = null })
+// nothing left to record: the entry point disappears, so close the popup too
+watch(() => unpaidPlanned.value.length, (n) => { if (!n) planOpen.value = false })
 function record(id: string) {
   trips.setActivityField(props.trip.id, id, 'paid', true)
   flash('Dicatat sebagai pengeluaran')
@@ -58,35 +64,39 @@ function dayDateFull(i: number): string {
   }
   return props.trip.days[i]?.long || ''
 }
+// a day's plan is every activity cost that day, recorded or not
+function dayPlan(i: number): number {
+  return (props.trip.days[i]?.acts || []).reduce((n, a) => n + (a.cost || 0), 0)
+}
 // group by day
 const byDay = computed(() => {
-  const map: Record<number, { key: string; dayIdx: number; label: string; sub: string; total: number; planned: number; items: typeof lines.value }> = {}
+  const map: Record<number, ExpenseGroup & { dayIdx: number }> = {}
   for (const l of lines.value) {
-    const g = (map[l.dayIdx] ||= {
-      key: 'd' + l.dayIdx,
-      dayIdx: l.dayIdx,
-      label: 'Hari ' + (l.dayIdx + 1),
-      sub: dayDateFull(l.dayIdx),
-      total: 0,
-      planned: 0,
-      items: [],
-    })
+    const g = (map[l.dayIdx] ||= { key: 'd' + l.dayIdx, dayIdx: l.dayIdx, label: 'Hari ' + (l.dayIdx + 1), sub: dayDateFull(l.dayIdx), total: 0, plan: dayPlan(l.dayIdx), items: [] })
     g.total += l.amount
-    g.planned += l.planned ?? 0 // only planned activities carry a plan; manual spends don't
     g.items.push(l)
   }
   return Object.values(map).sort((a, b) => a.dayIdx - b.dayIdx)
 })
-// group by category
+// group by category, compared against the active budget's allocation
 const byCat = computed(() => {
-  const map: Record<string, { key: string; label: string; total: number; items: typeof lines.value }> = {}
+  const { alloc } = budgetSummary(props.trip)
+  const map: Record<string, ExpenseGroup> = {}
   for (const l of lines.value) {
-    const g = (map[l.cat] ||= { key: l.cat, label: l.cat, total: 0, items: [] })
+    const g = (map[l.cat] ||= { key: l.cat, label: catLabel(l.cat), sub: '', total: 0, plan: alloc[l.cat] || 0, items: [] })
     g.total += l.amount
     g.items.push(l)
   }
-  return Object.values(map).sort((a, b) => b.total - a.total)
+  return Object.values(map)
+    .map((g) => ({ ...g, sub: g.items.length + ' pengeluaran' }))
+    .sort((a, b) => b.total - a.total)
 })
+// accordion: groups start collapsed so the page stays a scannable summary
+const openGroups = ref(new Set<string>())
+function toggleGroup(key: string) {
+  if (!openGroups.value.delete(key)) openGroups.value.add(key)
+}
+
 // per-person shares (activities split by participants; manual split across everyone)
 const byPerson = computed(() => {
   const people = props.trip.members.length || props.trip.people || 1
@@ -201,28 +211,15 @@ function log() {
         <button v-for="m in ['Hari', 'Kategori', 'Orang']" :key="m" :class="mode === m ? 'chip-active' : 'chip-idle'" class="!py-[7px] !px-[13px] !text-[12.5px]" @click="mode = m as typeof mode">{{ m }}</button>
       </div>
 
-      <!-- planned costs waiting to be recorded as spent -->
-      <div v-if="unpaidPlanned.length" class="card p-[16px_20px] border-dashed">
-        <div class="flex items-center gap-2">
-          <i class="i-lucide-clock text-teal-600 text-[16px]" />
-          <div class="font-display text-[16px] font-600">Dari rencana — belum dicatat</div>
-        </div>
-        <div class="text-[12.5px] text-muted mt-[2px]">Biaya aktivitas baru jadi pengeluaran setelah ditandai sudah dibayar.</div>
-        <div v-for="a in unpaidPlanned" :key="a.id" class="flex items-center gap-3 py-[9px]">
-          <div class="w-[32px] h-[32px] rounded-[10px] flex items-center justify-center shrink-0" :style="{ background: tone(a.cat)[0], color: tone(a.cat)[1] }">
-            <i :class="iconFor(a.cat)" class="text-[15px]" />
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="text-[13.5px] font-600 truncate">{{ a.title }}</div>
-            <div class="text-[12px] text-muted">{{ a.dayLabel }} · {{ catLabel(a.cat) }}</div>
-          </div>
-          <div class="money text-[13.5px] text-muted shrink-0">{{ rp(a.amount) }}</div>
-          <div class="flex items-center gap-1 shrink-0">
-            <button class="rounded-pill bg-teal-100 text-teal-700 px-[13px] py-[6px] text-[12.5px] font-700 hover:bg-teal-deep" @click="record(a.id)">Catat</button>
-            <button class="w-[30px] h-[30px] rounded-full border border-sand-line2 text-muted hover:text-teal-700 hover:border-teal-600 flex items-center justify-center" title="Catat dengan jumlah berbeda" @click="openRecord(a)"><i class="i-lucide-pencil text-[13px]" /></button>
-          </div>
-        </div>
-      </div>
+      <!-- planned costs waiting to be recorded as spent: the list lives in a popup -->
+      <button v-if="unpaidPlanned.length" class="card border-dashed p-[12px_16px] flex items-center gap-3 text-left hover:border-teal-600" @click="planOpen = true">
+        <i class="i-lucide-clock text-teal-600 text-[18px] shrink-0" />
+        <span class="flex-1 min-w-0">
+          <span class="block text-[14px] font-700 leading-tight">{{ unpaidPlanned.length }} rencana belum dicatat</span>
+          <span class="block money text-[12px] text-muted mt-[2px]">{{ rp(plannedTotal) }}</span>
+        </span>
+        <span class="rounded-pill bg-teal-100 text-teal-700 px-[13px] py-[6px] text-[12.5px] font-700 shrink-0">Catat</span>
+      </button>
 
       <!-- by person -->
       <div v-if="mode === 'Orang'" class="card p-[6px_18px]">
@@ -234,30 +231,32 @@ function log() {
       </div>
 
       <!-- by day / category -->
-      <div v-for="g in (mode === 'Kategori' ? byCat : byDay)" v-else :key="g.key" class="card p-[16px_20px]">
-        <div class="flex items-center justify-between gap-3 pb-2 border-b border-sand-100">
+      <div v-for="g in (mode === 'Kategori' ? byCat : byDay)" v-else :key="g.key" class="card overflow-hidden">
+        <button class="w-full flex items-center justify-between gap-3 p-[14px_16px] md:p-[16px_20px] text-left" :aria-expanded="openGroups.has(g.key)" @click="toggleGroup(g.key)">
           <span class="min-w-0 flex items-center gap-2">
-            <span v-if="mode === 'Kategori'" class="w-[10px] h-[10px] rounded-full shrink-0" :style="{ background: tone(g.label)[1] }" />
+            <span v-if="mode === 'Kategori'" class="w-[10px] h-[10px] rounded-full shrink-0" :style="{ background: tone(g.key)[1] }" />
             <span class="min-w-0">
               <span class="block text-[14px] font-700 leading-tight truncate">{{ g.label }}</span>
-              <span v-if="mode === 'Hari' && 'sub' in g && g.sub" class="block text-[11.5px] text-muted leading-tight truncate">{{ g.sub }}</span>
+              <span class="block text-[11.5px] text-muted leading-tight mt-[2px]">{{ g.sub }}</span>
             </span>
           </span>
-          <span class="shrink-0 flex flex-col items-end gap-[3px]">
-            <span class="money text-[13.5px] text-ink-2">{{ rp(g.total) }}</span>
-            <!-- day-level gap vs what was planned for the day -->
-            <template v-if="mode === 'Hari' && 'planned' in g && g.planned && g.total !== g.planned">
-              <span
-                class="flex items-center gap-[2px] rounded-pill px-[7px] py-[2px] text-[10.5px] font-700 leading-none"
-                :class="g.total > g.planned ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
-              >
-                <i :class="g.total > g.planned ? 'i-lucide-trending-up' : 'i-lucide-trending-down'" class="text-[11px]" />
-                {{ g.total > g.planned ? '+' : '−' }}{{ shortRp(Math.abs(g.total - g.planned)) }} vs rencana
-              </span>
-              <span class="text-[10.5px] text-muted leading-none">rencana <span class="money line-through">{{ rp(g.planned) }}</span></span>
-            </template>
+          <span class="ml-auto shrink-0 flex flex-col items-end gap-[4px]">
+            <span class="money text-[14px] font-600">{{ rp(g.total) }}</span>
+            <!-- gap against the day's plan / the category's allocation -->
+            <span
+              class="rounded-pill px-[7px] py-[3px] text-[10.5px] font-700 leading-none"
+              :class="g.total > g.plan ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
+            >
+              {{ g.total > g.plan ? 'Lewat ' + shortRp(g.total - g.plan) : g.total < g.plan ? 'Sisa ' + shortRp(g.plan - g.total) : 'Pas' }}
+            </span>
+            <span class="text-[10.5px] text-muted leading-none">
+              <template v-if="g.plan">dari {{ mode === 'Kategori' ? 'anggaran' : 'rencana' }} <span class="money">{{ rp(g.plan) }}</span></template>
+              <template v-else>tanpa {{ mode === 'Kategori' ? 'anggaran' : 'rencana' }}</template>
+            </span>
           </span>
-        </div>
+          <i class="i-lucide-chevron-down text-[17px] text-muted shrink-0 transition-transform" :class="openGroups.has(g.key) ? 'rotate-180' : ''" />
+        </button>
+        <div v-if="openGroups.has(g.key)" class="px-[16px] md:px-[20px] pb-[6px] border-t border-sand-100">
         <div v-for="l in g.items" :key="l.id" class="flex items-center gap-3 py-[10px]">
           <div class="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center shrink-0" :style="{ background: tone(l.cat)[0], color: tone(l.cat)[1] }">
             <i :class="iconFor(l.cat)" class="text-[16px]" />
@@ -287,6 +286,7 @@ function log() {
             </template>
             <span v-else class="text-[11px] text-muted">dari aktivitas</span>
           </div>
+        </div>
         </div>
       </div>
 
@@ -322,29 +322,36 @@ function log() {
 
     <ExpensesSplitEmbed v-model:open="splitOpen" :url="splitUrl" />
 
-    <!-- record a planned activity with a different actual amount -->
-    <CoreDialog v-model:open="recordOpen" side="center" :width="420" title="Catat pengeluaran">
-      <div class="flex flex-col gap-3">
-        <div class="text-[13.5px] font-600">{{ recordTarget?.title }}</div>
-        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah sebenarnya</span><CoreMoneyInput :model-value="recordAmount" @update:model-value="recordAmount = $event" @keydown.enter="confirmRecord" /></label>
-        <div v-if="recordDelta !== 0" class="flex items-center gap-2 text-[12px]">
-          <span class="text-muted">Rencana <span class="money line-through">{{ recordTarget ? rp(recordTarget.amount) : '' }}</span></span>
-          <span
-            class="flex items-center gap-[2px] rounded-pill px-[8px] py-[3px] font-700 leading-none"
-            :class="recordDelta > 0 ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
-          >
-            <i :class="recordDelta > 0 ? 'i-lucide-trending-up' : 'i-lucide-trending-down'" class="text-[12px]" />
-            {{ recordDelta > 0 ? '+' : '−' }}{{ shortRp(Math.abs(recordDelta)) }} dari rencana
-          </span>
+    <!-- planned costs: record as planned, or expand a row for a different amount -->
+    <CoreDialog v-model:open="planOpen" side="center" :width="520" title="Catat dari rencana">
+      <div class="text-[12.5px] text-muted mb-1">Biaya aktivitas baru jadi pengeluaran setelah dicatat. Anggaran rencana tidak ikut berubah.</div>
+      <div v-for="a in unpaidPlanned" :key="a.id" class="py-[10px] border-b border-sand-100 last:border-0">
+        <div class="flex items-center gap-3">
+          <div class="w-[32px] h-[32px] rounded-[10px] flex items-center justify-center shrink-0" :style="{ background: tone(a.cat)[0], color: tone(a.cat)[1] }">
+            <i :class="iconFor(a.cat)" class="text-[15px]" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-[13.5px] font-600 truncate">{{ a.title }}</div>
+            <div class="text-[12px] text-muted truncate">{{ a.dayLabel }} · <span class="money">{{ rp(a.amount) }}</span></div>
+          </div>
+          <button class="w-[30px] h-[30px] rounded-full border border-sand-line2 text-muted hover:text-teal-700 hover:border-teal-600 flex items-center justify-center shrink-0" title="Catat dengan jumlah berbeda" aria-label="Catat dengan jumlah berbeda" @click="openRecord(a)"><i class="i-lucide-pencil text-[13px]" /></button>
+          <button class="rounded-pill bg-teal-100 text-teal-700 px-[13px] py-[6px] text-[12.5px] font-700 hover:bg-teal-deep shrink-0" @click="record(a.id)">Catat</button>
         </div>
-        <div class="text-[12px] text-muted leading-snug">Jumlah ini hanya dicatat sebagai pengeluaran — anggaran rencana tidak ikut berubah.</div>
+        <div v-if="recordId === a.id" class="mt-3 flex flex-col gap-2">
+          <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah sebenarnya</span><CoreMoneyInput :model-value="recordAmount" @update:model-value="recordAmount = $event" @keydown.enter="confirmRecord" /></label>
+          <div class="flex items-center justify-between gap-2">
+            <span
+              v-if="recordDelta !== 0"
+              class="flex items-center gap-[2px] rounded-pill px-[8px] py-[3px] text-[12px] font-700 leading-none"
+              :class="recordDelta > 0 ? 'bg-warn-bg text-warn-fg' : 'bg-teal-100 text-teal-700'"
+            >
+              <i :class="recordDelta > 0 ? 'i-lucide-trending-up' : 'i-lucide-trending-down'" class="text-[12px]" />
+              {{ recordDelta > 0 ? '+' : '−' }}{{ shortRp(Math.abs(recordDelta)) }} dari rencana
+            </span>
+            <CoreButton variant="primary" class="ml-auto !px-[16px] !py-[8px] !text-[13px]" @click="confirmRecord">Simpan</CoreButton>
+          </div>
+        </div>
       </div>
-      <template #footer>
-        <div class="flex justify-end gap-3">
-          <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="recordOpen = false">Batal</CoreButton>
-          <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[13.5px]" @click="confirmRecord">Catat</CoreButton>
-        </div>
-      </template>
     </CoreDialog>
 
     <!-- log expense (popup) -->
