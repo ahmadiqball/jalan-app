@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Trip } from '~/types/domain'
-import { rp, toMin, fromMin } from '~/utils/format'
+import { rp, shortRp, toMin, fromMin } from '~/utils/format'
 import { budgetCatOf, catIcon, catLabel, tone } from '~/utils/categories'
 
 const props = withDefaults(defineProps<{ trip: Trip; template?: boolean }>(), { template: false })
@@ -9,6 +9,8 @@ const trips = useTripsStore()
 const { confirm } = useConfirm()
 const { t } = useI18n()
 const { flash } = useToast()
+const { budget, categories } = useDerived(() => props.trip)
+const sumView = ref<'trip' | 'today'>('trip')
 
 /* keep the day rail + header pinned below the app's sticky top bar (68px) and
  * the sticky trip header, whose height varies with content — measure it. */
@@ -220,47 +222,84 @@ async function removeCurrentDay() {
     </div>
 
     <div v-if="!template" class="w-full md:w-[300px] md:shrink-0 flex flex-col gap-4">
-      <NuxtLink :to="`/trip/${trip.id}/expenses`" class="card p-[18px] block hover:shadow-lift transition-shadow">
-        <div class="flex items-center justify-between">
-          <div class="eyebrow">Uang hari ini</div>
-          <i class="i-lucide-arrow-up-right text-[16px] text-muted" />
+      <div class="card p-[18px] flex flex-col gap-3">
+        <div class="flex items-center justify-between gap-2 flex-wrap">
+          <div class="font-display text-[16px] font-600">Ringkasan pengeluaran</div>
+          <div class="flex items-center gap-[2px] bg-sand-100 rounded-pill p-[3px] text-[12px] font-700 shrink-0">
+            <button class="rounded-pill px-[11px] py-[5px] transition-colors" :class="sumView === 'today' ? 'bg-white text-ink shadow-[0_1px_3px_rgba(16,38,43,.14)]' : 'text-muted'" @click="sumView = 'today'">Hari ini</button>
+            <button class="rounded-pill px-[11px] py-[5px] transition-colors" :class="sumView === 'trip' ? 'bg-teal-600 text-white' : 'text-muted'" @click="sumView = 'trip'">Total trip</button>
+          </div>
         </div>
 
-        <div class="flex items-baseline justify-between mt-2">
-          <span class="text-[13px] text-muted">Terpakai</span>
-          <span class="money text-[20px] font-600" :style="dayOver ? { color: '#C85A28' } : {}">{{ rp(daySpent) }}</span>
-        </div>
-        <div class="mt-2"><CoreBar :pct="dayPct" :over="dayOver" /></div>
-        <div class="flex items-center justify-between mt-2 text-[12.5px]">
-          <span class="text-muted money">Rencana {{ rp(dayPlanned) }}</span>
-          <span v-if="dayPlanned > 0" class="money font-600" :style="dayOver ? { color: '#C85A28' } : { color: '#2F6B54' }">
-            {{ dayOver ? 'Lewat ' : 'Sisa ' }}{{ rp(dayOver ? -dayRemaining : dayRemaining) }}
-          </span>
-        </div>
+        <!-- TOTAL TRIP -->
+        <template v-if="sumView === 'trip'">
+          <div class="grid grid-cols-3 gap-2">
+            <div><div class="text-[11px] text-muted">Total terpakai</div><div class="money text-[14.5px] font-700" :style="{ color: budget.statusFg }">{{ shortRp(budget.spent) }}</div></div>
+            <div><div class="text-[11px] text-muted">Total anggaran</div><div class="money text-[14.5px] font-700">{{ shortRp(budget.plan) }}</div></div>
+            <div><div class="text-[11px] text-muted">Sisa anggaran</div><div class="money text-[14.5px] font-700" :style="{ color: budget.over ? '#C85A28' : '#2F6B54' }">{{ shortRp(budget.plan - budget.spent) }}</div></div>
+          </div>
+          <div>
+            <CoreBar :pct="budget.pct" :over="budget.over" />
+            <div class="text-[11.5px] text-muted mt-1 text-right money">{{ Math.round(budget.pct) }}% terpakai</div>
+          </div>
 
-        <template v-if="dayCatRows.length">
-          <div class="border-t border-sand-100 mt-3 pt-2 flex flex-col">
-            <div
-              v-for="c in dayCatRows"
-              :key="c.name"
-              class="flex items-center gap-2 py-[5px]"
-            >
-              <span class="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center shrink-0" :style="{ background: c.tone[0], color: c.tone[1] }">
-                <i :class="c.icon" class="text-[12px]" />
-              </span>
-              <span class="text-[12.5px] text-ink-2 flex-1 truncate">{{ catLabel(c.name) }}</span>
-              <span v-if="c.spent > 0 && c.spent < c.planned" class="text-[11px] text-muted money mr-1">{{ rp(c.spent) }} terpakai</span>
-              <i v-else-if="c.spent > 0 && c.spent >= c.planned" class="i-lucide-check text-[13px] text-teal-600 mr-1" />
-              <span class="money text-[12.5px] font-600">{{ rp(c.planned) }}</span>
+          <div v-if="categories.length" class="flex flex-col gap-[7px] pt-1">
+            <div class="eyebrow">Pengeluaran per kategori (akumulasi)</div>
+            <div v-for="c in categories" :key="c.name" class="flex items-center gap-2">
+              <span class="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center shrink-0" :style="{ background: tone(c.name)[0], color: tone(c.name)[1] }"><i :class="catIcon(trip.catIcons, c.name)" class="text-[12px]" /></span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[12.5px] text-ink-2 truncate">{{ catLabel(c.name) }}</span>
+                  <span class="money text-[12px] font-600 shrink-0">{{ rp(c.spent) }} <span class="text-muted font-500">{{ Math.round(c.sharePct) }}%</span></span>
+                </div>
+                <div class="h-[5px] rounded-pill bg-sand-100 mt-[3px] overflow-hidden"><div class="h-full rounded-pill" :style="{ width: Math.max(2, c.sharePct) + '%', background: tone(c.name)[1] }" /></div>
+              </div>
             </div>
           </div>
-          <div class="flex items-center justify-between mt-2 pt-2 border-t border-sand-100 text-[12.5px]">
-            <span class="text-muted">Per orang ({{ trip.people }})</span>
-            <span class="money font-600">{{ rp(dayPerPerson) }}</span>
+
+          <div class="border-t border-sand-100 pt-3 mt-1">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[12.5px] font-700 truncate">{{ day?.long }}<span v-if="dayName" class="text-muted font-500"> · {{ dayName }}</span></span>
+              <button class="text-[12px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1 shrink-0" @click="sumView = 'today'">Lihat detail harian <i class="i-lucide-arrow-right text-[13px]" /></button>
+            </div>
+            <div class="grid grid-cols-3 gap-2 mt-2">
+              <div><div class="text-[11px] text-muted">Terpakai</div><div class="money text-[13.5px] font-600">{{ shortRp(daySpent) }}</div></div>
+              <div><div class="text-[11px] text-muted">Rencana</div><div class="money text-[13.5px] font-600">{{ shortRp(dayPlanned) }}</div></div>
+              <div><div class="text-[11px] text-muted">Sisa</div><div class="money text-[13.5px] font-600" :style="{ color: dayOver ? '#C85A28' : '#2F6B54' }">{{ shortRp(dayRemaining) }}</div></div>
+            </div>
           </div>
         </template>
-        <div v-else class="text-[12.5px] text-muted mt-3 pt-3 border-t border-sand-100">Belum ada biaya di hari ini.</div>
-      </NuxtLink>
+
+        <!-- HARI INI -->
+        <template v-else>
+          <div class="flex items-baseline justify-between">
+            <span class="text-[13px] text-muted">Terpakai hari ini</span>
+            <span class="money text-[20px] font-600" :style="dayOver ? { color: '#C85A28' } : {}">{{ rp(daySpent) }}</span>
+          </div>
+          <CoreBar :pct="dayPct" :over="dayOver" />
+          <div class="flex items-center justify-between text-[12.5px]">
+            <span class="text-muted money">Rencana {{ rp(dayPlanned) }}</span>
+            <span v-if="dayPlanned > 0" class="money font-600" :style="dayOver ? { color: '#C85A28' } : { color: '#2F6B54' }">{{ dayOver ? 'Lewat ' : 'Sisa ' }}{{ rp(dayOver ? -dayRemaining : dayRemaining) }}</span>
+          </div>
+          <template v-if="dayCatRows.length">
+            <div class="border-t border-sand-100 pt-2 flex flex-col">
+              <div v-for="c in dayCatRows" :key="c.name" class="flex items-center gap-2 py-[5px]">
+                <span class="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center shrink-0" :style="{ background: c.tone[0], color: c.tone[1] }"><i :class="c.icon" class="text-[12px]" /></span>
+                <span class="text-[12.5px] text-ink-2 flex-1 truncate">{{ catLabel(c.name) }}</span>
+                <span v-if="c.spent > 0 && c.spent < c.planned" class="text-[11px] text-muted money mr-1">{{ rp(c.spent) }} terpakai</span>
+                <i v-else-if="c.spent > 0 && c.spent >= c.planned" class="i-lucide-check text-[13px] text-teal-600 mr-1" />
+                <span class="money text-[12.5px] font-600">{{ rp(c.planned) }}</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-sand-100 text-[12.5px]">
+              <span class="text-muted">Per orang ({{ trip.people }})</span>
+              <span class="money font-600">{{ rp(dayPerPerson) }}</span>
+            </div>
+          </template>
+          <div v-else class="text-[12.5px] text-muted">Belum ada biaya di hari ini.</div>
+          <NuxtLink :to="`/trip/${trip.id}/expenses`" class="text-[12.5px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1">Buka pengeluaran <i class="i-lucide-arrow-up-right text-[13px]" /></NuxtLink>
+        </template>
+      </div>
 
       <MapsPanel
         heading="Peta hari ini"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { rangeLabel } from '~/utils/format'
+import { rangeLabel, rp } from '~/utils/format'
 import { coverForMat } from '~/utils/categories'
 
 const ui = useUiStore()
@@ -15,6 +15,7 @@ const mat = ref('pantai')
 const cover = ref(coverForMat('pantai'))
 const startIso = ref('')
 const len = ref(4)
+const budgetCap = ref(0)
 
 watch(
   () => ui.showNewTrip,
@@ -22,13 +23,14 @@ watch(
     if (o) {
       name.value = ''; place.value = ''; placeId.value = undefined
       mat.value = 'pantai'; cover.value = coverForMat('pantai')
-      startIso.value = ''; len.value = 4
+      startIso.value = ''; len.value = 4; budgetCap.value = 0
     }
   },
 )
 
 const open = computed({ get: () => ui.showNewTrip, set: (v: boolean) => (ui.showNewTrip = v) })
 const dateLabel = computed(() => rangeLabel(startIso.value, len.value))
+const perDayHint = computed(() => (budgetCap.value && len.value ? rp(Math.round(budgetCap.value / Math.max(1, len.value))) : ''))
 
 function create() {
   if (!name.value.trim()) return
@@ -40,6 +42,7 @@ function create() {
     cover: cover.value,
     startIso: startIso.value,
     len: Math.max(1, len.value),
+    plan: budgetCap.value || undefined,
     dates: rangeLabel(startIso.value, Math.max(1, len.value)) === 'belum diatur' ? '' : rangeLabel(startIso.value, Math.max(1, len.value)),
     owner: cloud ? { name: session.name, email: session.email } : undefined,
   })
@@ -69,6 +72,12 @@ function create() {
         <label class="flex flex-col gap-[6px]"><span class="eyebrow">Jumlah hari</span><input v-model.number="len" type="number" min="1" class="field money"></label>
       </div>
       <div class="text-[13px] text-ink-2 -mt-1">Rentang: <span class="money font-600">{{ dateLabel }}</span></div>
+
+      <label class="flex flex-col gap-[6px]">
+        <span class="eyebrow">Anggaran (perkiraan)</span>
+        <CoreMoneyInput :model-value="budgetCap" @update:model-value="budgetCap = $event" />
+        <span v-if="perDayHint" class="text-[12px] text-muted">≈ <span class="money">{{ perDayHint }}</span> / hari</span>
+      </label>
 
       <CoreCategoryPicker v-model:mat="mat" v-model:cover="cover" />
     </div>
