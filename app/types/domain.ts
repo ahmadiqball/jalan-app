@@ -50,6 +50,9 @@ export interface Activity {
   /** true once the cost has actually been spent — only then is it an expense.
    *  Until then the cost is just a plan and does not count as "terpakai". */
   paid?: boolean
+  /** actual amount spent when it differs from the planned cost; used as the
+   *  expense amount while the planned cost stays as the budget plan. */
+  actual?: number
 }
 
 export interface Day {

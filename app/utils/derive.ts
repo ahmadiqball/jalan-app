@@ -59,7 +59,7 @@ export function expenseLines(trip: Trip): ExpenseLine[] {
           title: a.title,
           cat: budgetCatOf(a.cat),
           dayIdx: di,
-          amount: a.cost,
+          amount: a.actual ?? a.cost,
           derived: true,
           time: a.time,
           dayLabel: d.date,

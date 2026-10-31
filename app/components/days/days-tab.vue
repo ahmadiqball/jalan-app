@@ -61,7 +61,7 @@ const nextStart = computed(() => {
 const dayPlanned = computed(() => (day.value?.acts || []).reduce((n, a) => n + a.cost, 0))
 const daySpent = computed(
   () =>
-    (day.value?.acts || []).reduce((n, a) => n + (a.paid ? a.cost : 0), 0) +
+    (day.value?.acts || []).reduce((n, a) => n + (a.paid ? (a.actual ?? a.cost) : 0), 0) +
     (props.trip.manual || []).filter((m) => m.dayIdx === dayIdx.value).reduce((n, m) => n + m.amount, 0),
 )
 const dayPct = computed(() =>
@@ -80,7 +80,7 @@ const dayCatRows = computed(() => {
     cur.spent += spent
     map.set(k, cur)
   }
-  for (const a of day.value?.acts || []) if (a.cost) add(a.cat, a.cost, a.paid ? a.cost : 0)
+  for (const a of day.value?.acts || []) if (a.cost) add(a.cat, a.cost, a.paid ? (a.actual ?? a.cost) : 0)
   for (const m of (props.trip.manual || []).filter((m) => m.dayIdx === dayIdx.value)) add(m.cat, m.amount, m.amount)
   return [...map.entries()]
     .map(([name, v]) => ({ name, ...v, icon: catIcon(props.trip.catIcons, name), tone: tone(name) }))

@@ -308,7 +308,7 @@ export const useTripsStore = defineStore(
       const activeBudget = budgets[0]?.id || id + '-awal'
       const days = src.days.map((d) => ({
         ...d,
-        acts: d.acts.map((a) => ({ ...a, paid: false })), // costs become plans again
+        acts: d.acts.map((a) => ({ ...a, paid: false, actual: undefined })), // costs become plans again
       }))
       const packing = src.packing.map((g) => ({ ...g, items: g.items.map((it) => ({ ...it, done: false })) }))
       const trip: Trip = {

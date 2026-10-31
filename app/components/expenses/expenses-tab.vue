@@ -28,6 +28,22 @@ const unpaidPlanned = computed(() => {
   )
   return out
 })
+const recordOpen = ref(false)
+const recordTarget = ref<{ id: string; title: string; cat: string; amount: number } | null>(null)
+const recordAmount = ref(0)
+function openRecord(a: { id: string; title: string; cat: string; amount: number }) {
+  recordTarget.value = a
+  recordAmount.value = a.amount
+  recordOpen.value = true
+}
+function confirmRecord() {
+  const t = recordTarget.value
+  if (!t) return
+  trips.setActivityField(props.trip.id, t.id, 'actual', recordAmount.value)
+  trips.setActivityField(props.trip.id, t.id, 'paid', true)
+  recordOpen.value = false
+  flash('Dicatat sebagai pengeluaran')
+}
 function record(id: string) {
   trips.setActivityField(props.trip.id, id, 'paid', true)
   flash('Dicatat sebagai pengeluaran')
@@ -183,7 +199,10 @@ function log() {
             <div class="text-[12px] text-muted">{{ a.dayLabel }} · {{ catLabel(a.cat) }}</div>
           </div>
           <div class="money text-[13.5px] text-muted shrink-0">{{ rp(a.amount) }}</div>
-          <button class="rounded-pill bg-teal-100 text-teal-700 px-[13px] py-[6px] text-[12.5px] font-700 shrink-0 hover:bg-teal-deep" @click="record(a.id)">Catat</button>
+          <div class="flex items-center gap-1 shrink-0">
+            <button class="rounded-pill bg-teal-100 text-teal-700 px-[13px] py-[6px] text-[12.5px] font-700 hover:bg-teal-deep" @click="record(a.id)">Catat</button>
+            <button class="w-[30px] h-[30px] rounded-full border border-sand-line2 text-muted hover:text-teal-700 hover:border-teal-600 flex items-center justify-center" title="Catat dengan jumlah berbeda" @click="openRecord(a)"><i class="i-lucide-pencil text-[13px]" /></button>
+          </div>
         </div>
       </div>
 
@@ -257,6 +276,21 @@ function log() {
     </div>
 
     <ExpensesSplitEmbed v-model:open="splitOpen" :url="splitUrl" />
+
+    <!-- record a planned activity with a different actual amount -->
+    <CoreDialog v-model:open="recordOpen" side="center" :width="420" title="Catat pengeluaran">
+      <div class="flex flex-col gap-3">
+        <div class="text-[13.5px] font-600">{{ recordTarget?.title }}</div>
+        <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jumlah sebenarnya</span><CoreMoneyInput :model-value="recordAmount" @update:model-value="recordAmount = $event" @keydown.enter="confirmRecord" /></label>
+        <div class="text-[12px] text-muted leading-snug">Rencana: <span class="money">{{ recordTarget ? rp(recordTarget.amount) : '' }}</span>. Jumlah ini hanya dicatat sebagai pengeluaran — anggaran rencana tidak ikut berubah.</div>
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-3">
+          <CoreButton variant="ghost" class="!px-[16px] !py-[10px] !text-[13.5px]" @click="recordOpen = false">Batal</CoreButton>
+          <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[13.5px]" @click="confirmRecord">Catat</CoreButton>
+        </div>
+      </template>
+    </CoreDialog>
 
     <!-- log expense (popup) -->
     <CoreDialog v-model:open="logOpen" side="center" :width="440" title="Catat pengeluaran">
