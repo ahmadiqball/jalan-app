@@ -69,26 +69,17 @@ const daySpent = computed(
     (day.value?.acts || []).reduce((n, a) => n + (a.paid ? (a.actual ?? a.cost) : 0), 0) +
     (props.trip.manual || []).filter((m) => m.dayIdx === dayIdx.value).reduce((n, m) => n + m.amount, 0),
 )
-const dayPct = computed(() =>
-  dayPlanned.value ? Math.min(100, (daySpent.value / dayPlanned.value) * 100) : daySpent.value ? 100 : 0,
-)
 const dayOver = computed(() => daySpent.value > dayPlanned.value && dayPlanned.value > 0)
-const dayRemaining = computed(() => dayPlanned.value - daySpent.value)
-const dayPerPerson = computed(() => (props.trip.people ? daySpent.value / props.trip.people : daySpent.value))
-/** the day's money grouped by budget category — planned vs already spent */
+/** the day's planned activity costs grouped by budget category */
 const dayCatRows = computed(() => {
-  const map = new Map<string, { planned: number; spent: number }>()
-  const add = (cat: string, planned: number, spent: number) => {
-    const k = budgetCatOf(cat)
-    const cur = map.get(k) || { planned: 0, spent: 0 }
-    cur.planned += planned
-    cur.spent += spent
-    map.set(k, cur)
+  const map = new Map<string, number>()
+  for (const a of day.value?.acts || []) {
+    if (!a.cost) continue
+    const k = budgetCatOf(a.cat)
+    map.set(k, (map.get(k) || 0) + a.cost)
   }
-  for (const a of day.value?.acts || []) if (a.cost) add(a.cat, a.cost, a.paid ? (a.actual ?? a.cost) : 0)
-  for (const m of (props.trip.manual || []).filter((m) => m.dayIdx === dayIdx.value)) add(m.cat, m.amount, m.amount)
   return [...map.entries()]
-    .map(([name, v]) => ({ name, ...v, icon: catIcon(props.trip.catIcons, name), tone: tone(name) }))
+    .map(([name, planned]) => ({ name, planned, icon: catIcon(props.trip.catIcons, name), tone: tone(name) }))
     .sort((a, b) => b.planned - a.planned)
 })
 
@@ -271,10 +262,9 @@ async function removeCurrentDay() {
               <span class="text-[12.5px] font-700 truncate">{{ day?.long }}<span v-if="dayName" class="text-muted font-500"> · {{ dayName }}</span></span>
               <button class="text-[12px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1 shrink-0" @click="sumView = 'today'">Lihat detail harian <i class="i-lucide-arrow-right text-[13px]" /></button>
             </div>
-            <div class="grid grid-cols-3 gap-2 mt-2">
-              <div><div class="text-[11px] text-muted">Terpakai</div><div class="money text-[13.5px] font-600">{{ shortRp(daySpent) }}</div></div>
-              <div><div class="text-[11px] text-muted">Rencana</div><div class="money text-[13.5px] font-600">{{ shortRp(dayPlanned) }}</div></div>
-              <div><div class="text-[11px] text-muted">Sisa</div><div class="money text-[13.5px] font-600" :style="{ color: dayOver ? '#C85A28' : '#2F6B54' }">{{ shortRp(dayRemaining) }}</div></div>
+            <div class="flex items-baseline justify-between mt-2">
+              <span class="text-[12.5px] text-muted">Terpakai hari ini</span>
+              <span class="money text-[13.5px] font-600">{{ rp(dayPlanned) }}</span>
             </div>
           </div>
         </template>
@@ -283,30 +273,16 @@ async function removeCurrentDay() {
         <template v-else>
           <div class="flex items-baseline justify-between">
             <span class="text-[13px] text-muted">Terpakai hari ini</span>
-            <span class="money text-[20px] font-600" :style="dayOver ? { color: '#C85A28' } : {}">{{ rp(daySpent) }}</span>
+            <span class="money text-[20px] font-600">{{ rp(dayPlanned) }}</span>
           </div>
-          <CoreBar :pct="dayPct" :over="dayOver" />
-          <div class="flex items-center justify-between text-[12.5px]">
-            <span class="text-muted money">Rencana {{ rp(dayPlanned) }}</span>
-            <span v-if="dayPlanned > 0" class="money font-600" :style="dayOver ? { color: '#C85A28' } : { color: '#2F6B54' }">{{ dayOver ? 'Lewat ' : 'Sisa ' }}{{ rp(dayOver ? -dayRemaining : dayRemaining) }}</span>
+          <div v-if="dayCatRows.length" class="border-t border-sand-100 pt-2 flex flex-col">
+            <div v-for="c in dayCatRows" :key="c.name" class="flex items-center gap-2 py-[5px]">
+              <span class="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center shrink-0" :style="{ background: c.tone[0], color: c.tone[1] }"><i :class="c.icon" class="text-[12px]" /></span>
+              <span class="text-[12.5px] text-ink-2 flex-1 truncate">{{ catLabel(c.name) }}</span>
+              <span class="money text-[12.5px] font-600">{{ rp(c.planned) }}</span>
+            </div>
           </div>
-          <template v-if="dayCatRows.length">
-            <div class="border-t border-sand-100 pt-2 flex flex-col">
-              <div v-for="c in dayCatRows" :key="c.name" class="flex items-center gap-2 py-[5px]">
-                <span class="w-[22px] h-[22px] rounded-[7px] flex items-center justify-center shrink-0" :style="{ background: c.tone[0], color: c.tone[1] }"><i :class="c.icon" class="text-[12px]" /></span>
-                <span class="text-[12.5px] text-ink-2 flex-1 truncate">{{ catLabel(c.name) }}</span>
-                <span v-if="c.spent > 0 && c.spent < c.planned" class="text-[11px] text-muted money mr-1">{{ rp(c.spent) }} terpakai</span>
-                <i v-else-if="c.spent > 0 && c.spent >= c.planned" class="i-lucide-check text-[13px] text-teal-600 mr-1" />
-                <span class="money text-[12.5px] font-600">{{ rp(c.planned) }}</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-2 border-t border-sand-100 text-[12.5px]">
-              <span class="text-muted">Per orang ({{ trip.people }})</span>
-              <span class="money font-600">{{ rp(dayPerPerson) }}</span>
-            </div>
-          </template>
           <div v-else class="text-[12.5px] text-muted">Belum ada biaya di hari ini.</div>
-          <NuxtLink :to="`/trip/${trip.id}/expenses`" class="text-[12.5px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1">Buka pengeluaran <i class="i-lucide-arrow-up-right text-[13px]" /></NuxtLink>
         </template>
       </div>
 
