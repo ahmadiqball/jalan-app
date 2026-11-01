@@ -337,6 +337,20 @@
     "pending": "Pembayaran masih diproses. Paketmu aktif otomatis setelah diterima.",
     "failed": "Pembayaran belum bisa dimulai. Coba lagi nanti.",
     "fineprint": "Harga dalam rupiah. Saat naik paket, paket baru mulai hari itu dan sisa paket lama dikonversi jadi hari tambahan. Saat paket berakhir, trip tetap tersimpan dan hanya bisa dibaca.",
+    "guideInfo": {
+      "title": "Apa itu Kelana Guides?",
+      "intro": "Panduan destinasi yang kami susun untuk membantumu merencanakan trip, dari kapan sebaiknya berangkat sampai tempat yang layak dikunjungi.",
+      "cta": "Lihat Kelana Guides",
+      "whenTitle": "Waktu dan durasi",
+      "when": "Waktu terbaik berkunjung dan lama trip yang ideal untuk tiap destinasi.",
+      "placesTitle": "Tempat pilihan",
+      "places": "Tempat makan, wisata, dan lainnya, lengkap dengan kisaran harga, jam buka, dan peta.",
+      "tipsTitle": "Tips lapangan",
+      "tips": "Hal yang perlu kamu tahu sebelum datang, supaya tidak kaget di lokasi.",
+      "planTitle": "Masuk ke rencana",
+      "plan": "Tambahkan tempat dari panduan langsung ke trip kamu.",
+      "access": "Kelana Lite membuka panduan publik. Kelana Plus dan Premium membuka semua panduan, dan isinya terus kami perbarui."
+    },
     "memberLimit": {
       "title": "Anggota trip sudah penuh",
       "noPlanTitle": "Pilih paket dulu",

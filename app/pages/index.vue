@@ -417,6 +417,7 @@ function nav(i: number) { paused = true; go(i) }
         <BillingPeriodSwitch v-model="period" />
       </div>
       <BillingPlanCards class="mt-[26px]" :period="period" :busy="busy" @select="start($event, period)" />
+      <BillingGuideInfo class="mt-[22px]" />
       <div class="text-[12.5px] text-ink-2 mt-[13px]">{{ $t('landing.pricing.fineprint') }}</div>
     </div>
 
