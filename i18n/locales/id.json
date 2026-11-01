@@ -50,6 +50,7 @@
     "lainnya": "Lainnya"
   },
   "app": {
+    "accountLoading": "Memuat akunmu…",
     "home": {
       "hello": "Halo, {name}",
       "subLive": "Satu trip sedang jalan dan {n} rencana menunggu tanggal.",

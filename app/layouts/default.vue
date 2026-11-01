@@ -4,6 +4,7 @@
     <div class="flex-1 flex flex-col">
       <slot />
     </div>
+    <CoreAccountLoading />
     <CoreToast />
     <CoreConfirm />
     <GuideAddToTrip />

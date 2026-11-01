@@ -2,6 +2,8 @@ import type { Trip } from '~/types/domain'
 import { NO_PLAN } from '#shared/utils/plans'
 import type { MeResponse } from '~/composables/use-subscription'
 
+const ACCOUNT_LOAD_LIMIT_MS = 10000
+
 /**
  * Cloud sync (client-only):
  *  - restores the Supabase session and pulls the user's trips on sign-in
@@ -42,8 +44,9 @@ export default defineNuxtPlugin(() => {
       for (const t of trips.userTrips) snapshot.set(t.id, json(t))
       loaded = true
       schedulePete()
+      return true
     } catch {
-      // offline / not reachable — keep local cache, try again later
+      return false
     } finally {
       applyingRemote = false
     }
@@ -129,14 +132,26 @@ export default defineNuxtPlugin(() => {
   )
 
   const isAdmin = useState<boolean>('me-admin', () => false)
+  const accountReady = useState<boolean>('account-ready', () => false)
   async function refreshMe() {
     try {
       const me = await apiFetch<MeResponse>('/api/me')
       isAdmin.value = me.isAdmin
       subscription.apply(me)
+      return true
     } catch {
       isAdmin.value = false
+      return false
     }
+  }
+
+  /** First load after sign-in. The app can't be used safely without this data. */
+  async function loadAccount() {
+    const data = Promise.all([pull(), refreshMe()]).then((r) => r.every(Boolean))
+    const limit = new Promise<boolean>((r) => setTimeout(() => r(false), ACCOUNT_LOAD_LIMIT_MS))
+    if (await Promise.race([data, limit])) accountReady.value = true
+    // a later sign-in event (e.g. returning to the tab) must not break a working page
+    else if (!accountReady.value) showError(createError({ statusCode: 500, statusMessage: 'Akun gagal dimuat', fatal: true }))
   }
 
   const router = useRouter()
@@ -150,8 +165,7 @@ export default defineNuxtPlugin(() => {
         name: (s.user.user_metadata?.name as string) || s.user.email?.split('@')[0] || 'Kamu',
       })
       if (eventName === 'SIGNED_IN' || eventName === 'INITIAL_SESSION') {
-        pull()
-        refreshMe()
+        loadAccount()
       }
       // Auth resolves asynchronously (e.g. after the OAuth redirect lands on a
       // page). If we're still on the login screen once signed in, forward on —
@@ -168,6 +182,7 @@ export default defineNuxtPlugin(() => {
     } else if (eventName === 'SIGNED_OUT' || eventName === 'INITIAL_SESSION') {
       // INITIAL_SESSION without a user: a stale persisted `authed` has no real session
       session.signOut()
+      accountReady.value = false
       isAdmin.value = false
       subscription.apply({ subscription: NO_PLAN, lockedTripIds: [] })
       applyingRemote = true

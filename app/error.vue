@@ -3,6 +3,12 @@ import type { NuxtError } from '#app'
 
 const props = defineProps<{ error: NuxtError }>()
 const is404 = computed(() => props.error?.statusCode === 404)
+
+/** A full load, because the account data is only fetched when the app starts. */
+function reloadApp(to?: string) {
+  if (to) window.location.assign(to)
+  else window.location.reload()
+}
 </script>
 
 <template>
@@ -13,8 +19,8 @@ const is404 = computed(() => props.error?.statusCode === 404)
       {{ is404 ? 'Tautan yang kamu buka mungkin sudah berubah atau tidak ada.' : 'Coba muat ulang halaman. Kalau masih bermasalah, kembali ke beranda.' }}
     </p>
     <div class="flex gap-3">
-      <CoreButton variant="primary" @click="clearError({ redirect: '/beranda' })">Ke Beranda</CoreButton>
-      <CoreButton variant="ghost" @click="clearError({ redirect: '/' })">Ke halaman utama</CoreButton>
+      <CoreButton v-if="!is404" variant="primary" @click="reloadApp()">Muat ulang</CoreButton>
+      <CoreButton :variant="is404 ? 'primary' : 'ghost'" @click="reloadApp('/beranda')">Ke Beranda</CoreButton>
     </div>
   </div>
 </template>

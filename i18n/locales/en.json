@@ -50,6 +50,7 @@
     "lainnya": "Other"
   },
   "app": {
+    "accountLoading": "Loading your account…",
     "home": {
       "hello": "Hi, {name}",
       "subLive": "One trip in progress and {n} plans waiting on dates.",
