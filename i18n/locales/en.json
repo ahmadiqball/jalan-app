@@ -51,6 +51,11 @@
   },
   "app": {
     "accountLoading": "Loading your account…",
+    "loadingSteps": {
+      "packing": "Packing your bags…",
+      "map": "Checking the map…",
+      "plan": "Lining up your plans…"
+    },
     "home": {
       "hello": "Hi, {name}",
       "subLive": "One trip in progress and {n} plans waiting on dates.",
