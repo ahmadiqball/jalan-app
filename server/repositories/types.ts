@@ -164,6 +164,8 @@ export interface BillingRepository {
   /** Pending -> paid. False if it already happened, so a retried webhook is a no-op. */
   markPaid(id: string, paymentType?: string): Promise<boolean>
   markFailed(id: string): Promise<void>
+  /** Paid -> pending, for when the plan could not be saved after payment. */
+  reopenOrder(id: string): Promise<void>
 }
 
 export interface Repositories {

@@ -60,4 +60,8 @@ export class SupabaseBillingRepository implements BillingRepository {
     const { error } = await this.sb.from('billing_orders').update({ status: 'failed' }).eq('id', id).eq('status', 'pending')
     if (error) throw error
   }
+  async reopenOrder(id: string): Promise<void> {
+    const { error } = await this.sb.from('billing_orders').update({ status: 'pending', paid_at: null, payment_type: null }).eq('id', id)
+    if (error) throw error
+  }
 }
