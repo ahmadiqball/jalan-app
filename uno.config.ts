@@ -40,7 +40,7 @@ export default defineConfig({
     },
     fontFamily: {
       sans: "'Plus Jakarta Sans', system-ui, sans-serif",
-      display: "'Fraunces', Georgia, serif",
+      display: "'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif",
       mono: "'IBM Plex Mono', ui-monospace, monospace",
     },
     borderRadius: {

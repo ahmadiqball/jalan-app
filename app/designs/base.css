@@ -20,7 +20,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Fraunces optical sizing when used as display */
+/* Bricolage Grotesque optical sizing when used as display */
 .font-display,
 [class*='font-display'] {
   font-optical-sizing: auto;
