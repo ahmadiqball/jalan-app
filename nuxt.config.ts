@@ -74,7 +74,6 @@ export default defineNuxtConfig({
     families: [
       { name: 'Plus Jakarta Sans', provider: 'google', weights: [400, 500, 600, 700, 800] },
       { name: 'Bricolage Grotesque', provider: 'google', weights: [400, 500, 600, 700] },
-      { name: 'IBM Plex Mono', provider: 'google', weights: [400, 500, 600] },
     ],
   },
 

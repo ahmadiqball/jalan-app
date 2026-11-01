@@ -96,11 +96,11 @@ function nav(i: number) { paused = true; go(i) }
             <a href="#dalam" class="bg-white border border-sand-line text-ink rounded-pill px-[22px] py-[14px] text-[14.5px] font-700">{{ $t('landing.hero.seeInside') }}</a>
           </div>
           <div class="flex gap-5 flex-wrap mt-7">
-            <div><div class="font-mono text-[20px] font-600">12.400</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat1') }}</div></div>
+            <div><div class="text-[20px] font-600">12.400</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat1') }}</div></div>
             <div class="w-px bg-sand-line" />
-            <div><div class="font-mono text-[20px] font-600">Rp 0</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat2') }}</div></div>
+            <div><div class="text-[20px] font-600">Rp 0</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat2') }}</div></div>
             <div class="w-px bg-sand-line" />
-            <div><div class="font-mono text-[20px] font-600">4,9</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat3') }}</div></div>
+            <div><div class="text-[20px] font-600">4,9</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat3') }}</div></div>
           </div>
         </div>
 
@@ -117,7 +117,7 @@ function nav(i: number) { paused = true; go(i) }
             <div class="rounded-[16px] overflow-hidden bg-sand-100"><img src="/img/screen-hari.png" alt="" class="w-full block"></div>
           </div>
           <div class="absolute right-0 bottom-[44px] w-[27%] aspect-square rounded-[18px] overflow-hidden rotate-[6deg] shadow-[0_26px_44px_-26px_rgba(16,38,43,.5)] bg-cover bg-center" style="background-image:url('/img/photo-bromo.jpg')" />
-          <div class="absolute left-[14%] top-[6px] bg-ink text-teal-100 rounded-pill px-[14px] py-2 font-mono text-[12px] font-600 rotate-[-3deg] shadow-[0_14px_26px_-16px_rgba(16,38,43,.6)]">{{ $t('landing.hero.collageToday') }}</div>
+          <div class="absolute left-[14%] top-[6px] bg-ink text-teal-100 rounded-pill px-[14px] py-2 text-[12px] font-600 rotate-[-3deg] shadow-[0_14px_26px_-16px_rgba(16,38,43,.6)]">{{ $t('landing.hero.collageToday') }}</div>
         </div>
       </div>
 
@@ -126,7 +126,7 @@ function nav(i: number) { paused = true; go(i) }
         <div class="flex gap-3 items-baseline justify-between flex-wrap px-[2px] pb-3">
           <div class="flex gap-[10px] items-center">
             <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.carousel.heading') }}</div>
-            <div class="font-mono text-[12px] text-ink-2">{{ slide + 1 }} / {{ places.length }}</div>
+            <div class="text-[12px] text-ink-2">{{ slide + 1 }} / {{ places.length }}</div>
           </div>
           <div class="flex gap-2 items-center">
             <button class="w-[34px] h-[34px] rounded-full bg-white border border-sand-line flex items-center justify-center hover:border-brand-amber" @click="nav(slide - 1)"><i class="i-lucide-chevron-left text-[16px]" /></button>
@@ -142,7 +142,7 @@ function nav(i: number) { paused = true; go(i) }
                 <div class="text-[17px] font-800 tracking-[-.02em]">{{ pl.name }}</div>
                 <div class="flex gap-[10px] items-center justify-between mt-1">
                   <span class="text-[12.5px] text-teal-deep">{{ pl.days }} {{ $t('landing.units.days') }} · {{ pl.people }} {{ $t('landing.units.people') }}</span>
-                  <span class="font-mono text-[12.5px] font-600">{{ pl.price }}</span>
+                  <span class="text-[12.5px] font-600">{{ pl.price }}</span>
                 </div>
               </div>
             </div>
@@ -195,25 +195,25 @@ function nav(i: number) { paused = true; go(i) }
           <div class="text-[27px] font-800 tracking-[-.025em] leading-[1.16] mt-[13px]">{{ $t('landing.hari.title') }}</div>
           <p class="text-[14.5px] leading-[1.65] text-ink-2 mt-[11px]">{{ $t('landing.hari.body') }}</p>
           <div class="flex flex-col gap-2 mt-[14px] text-[14px] text-ink-2">
-            <div class="flex gap-[9px]"><span class="font-mono text-teal-700 font-700">↳</span> {{ $t('landing.hari.p1') }}</div>
-            <div class="flex gap-[9px]"><span class="font-mono text-teal-700 font-700">↳</span> {{ $t('landing.hari.p2') }}</div>
+            <div class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.hari.p1') }}</div>
+            <div class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.hari.p2') }}</div>
           </div>
         </div>
         <div class="flex-1 basis-[320px] min-w-[300px] bg-paper border border-sand-line rounded-[20px] p-[15px] flex flex-col gap-[9px]">
-          <div class="flex justify-between items-baseline"><div class="text-[15px] font-700">{{ $t('landing.hari.demoDate') }}</div><div class="font-mono text-[13px] font-600 text-teal-700">Rp 745.000</div></div>
+          <div class="flex justify-between items-baseline"><div class="text-[15px] font-700">{{ $t('landing.hari.demoDate') }}</div><div class="text-[13px] font-600 text-teal-700">Rp 745.000</div></div>
           <div class="bg-white border border-sand-line rounded-[15px] p-[11px_13px] flex gap-[11px] items-center">
             <div class="w-[36px] h-[36px] rounded-[11px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0"><i class="i-lucide-ticket text-[17px]" /></div>
-            <div class="w-[44px] shrink-0 font-mono text-[12.5px] font-600 text-ink-2">05.30</div>
+            <div class="w-[44px] shrink-0 text-[12.5px] font-600 text-ink-2">05.30</div>
             <div class="flex-1 min-w-0"><div class="text-[13.5px] font-600">{{ $t('landing.hari.demoAct1') }}</div><div class="text-[11.5px] text-ink-2 mt-[1px]">{{ $t('landing.hari.demoAct1sub') }}</div></div>
-            <div class="font-mono text-[13px] font-600 whitespace-nowrap">150rb</div>
+            <div class="text-[13px] font-600 whitespace-nowrap">150rb</div>
           </div>
           <div class="bg-white border border-sand-line rounded-[15px] p-[11px_13px] flex gap-[11px] items-center">
             <div class="w-[36px] h-[36px] rounded-[11px] bg-sand-100 text-ink-2 flex items-center justify-center shrink-0"><i class="i-lucide-utensils text-[17px]" /></div>
-            <div class="w-[44px] shrink-0 font-mono text-[12.5px] font-600 text-ink-2">12.30</div>
+            <div class="w-[44px] shrink-0 text-[12.5px] font-600 text-ink-2">12.30</div>
             <div class="flex-1 min-w-0"><div class="text-[13.5px] font-600">{{ $t('landing.hari.demoAct2') }}</div><div class="text-[11.5px] text-ink-2 mt-[1px]">{{ $t('landing.hari.demoAct2sub') }}</div></div>
-            <div class="font-mono text-[13px] font-600 whitespace-nowrap">185rb</div>
+            <div class="text-[13px] font-600 whitespace-nowrap">185rb</div>
           </div>
-          <div class="bg-teal-100 rounded-[13px] p-[10px_12px] text-[12.5px] text-teal-700 flex gap-[9px] items-center"><span class="font-mono font-700">↳</span> {{ $t('landing.hari.demoNote') }}</div>
+          <div class="bg-teal-100 rounded-[13px] p-[10px_12px] text-[12.5px] text-teal-700 flex gap-[9px] items-center"><span class="font-700">↳</span> {{ $t('landing.hari.demoNote') }}</div>
         </div>
       </div>
 
@@ -222,14 +222,14 @@ function nav(i: number) { paused = true; go(i) }
         <div class="flex-1 basis-[320px] min-w-[300px] bg-paper border border-sand-line rounded-[20px] p-[17px] flex gap-[18px] flex-wrap items-center">
           <div class="w-[144px] h-[144px] shrink-0 rounded-full flex items-center justify-center" style="background:conic-gradient(#0E6E76 0% 34%,#2F6B54 34% 58%,#D98F3B 58% 74%,#8FC2BE 74% 92%,#EDE9DA 92% 100%)">
             <div class="w-[92px] h-[92px] rounded-full bg-paper flex flex-col items-center justify-center">
-              <div class="font-mono text-[18px] font-600">Rp 2,4jt</div>
+              <div class="text-[18px] font-600">Rp 2,4jt</div>
               <div class="text-[10.5px] text-ink-2 mt-[2px]">{{ $t('landing.anggaran.of') }} Rp 3,1jt</div>
             </div>
           </div>
           <div class="flex-1 min-w-[160px] flex flex-col gap-[9px]">
             <div v-for="[c, col, v] in [[$t('landing.anggaran.cat1'), '#0E6E76', '1,4jt'], [$t('landing.anggaran.cat2'), '#2F6B54', '780rb'], [$t('landing.anggaran.cat3'), '#D98F3B', '450rb'], [$t('landing.anggaran.cat4'), '#8FC2BE', '900rb']]" :key="c" class="flex justify-between text-[12.5px]">
               <span class="flex gap-[7px] items-center"><span class="w-[9px] h-[9px] rounded-[3px]" :style="{ background: col }" />{{ c }}</span>
-              <span class="font-mono font-600">{{ v }}</span>
+              <span class="font-600">{{ v }}</span>
             </div>
             <div class="bg-teal-100 text-teal-700 rounded-[11px] p-[9px_11px] text-[12px] font-700">{{ $t('landing.anggaran.versionNote') }}</div>
           </div>
@@ -239,8 +239,8 @@ function nav(i: number) { paused = true; go(i) }
           <div class="text-[27px] font-800 tracking-[-.025em] leading-[1.16] mt-[13px]">{{ $t('landing.anggaran.title') }}</div>
           <p class="text-[14.5px] leading-[1.65] text-ink-2 mt-[11px]">{{ $t('landing.anggaran.body') }}</p>
           <div class="flex flex-col gap-2 mt-[14px] text-[14px] text-ink-2">
-            <div class="flex gap-[9px]"><span class="font-mono text-teal-700 font-700">↳</span> {{ $t('landing.anggaran.p1') }}</div>
-            <div class="flex gap-[9px]"><span class="font-mono text-teal-700 font-700">↳</span> {{ $t('landing.anggaran.p2') }}</div>
+            <div class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.anggaran.p1') }}</div>
+            <div class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.anggaran.p2') }}</div>
           </div>
         </div>
       </div>
@@ -257,7 +257,7 @@ function nav(i: number) { paused = true; go(i) }
             </div>
             <div class="bg-paper border border-sand-line rounded-card p-[13px] flex flex-col gap-2">
               <div v-for="[m, tx, v] in [['↳', $t('landing.expenses.row1'), '700rb'], ['□', $t('landing.expenses.row2'), '48rb'], ['□', $t('landing.expenses.row3'), '20rb']]" :key="tx" class="flex gap-[10px] items-center text-[13px]">
-                <span class="font-mono font-700" :class="m === '↳' ? 'text-teal-700' : 'text-ink-2'">{{ m }}</span><span class="flex-1">{{ tx }}</span><span class="font-mono font-600 whitespace-nowrap">{{ v }}</span>
+                <span class="font-700" :class="m === '↳' ? 'text-teal-700' : 'text-ink-2'">{{ m }}</span><span class="flex-1">{{ tx }}</span><span class="font-600 whitespace-nowrap">{{ v }}</span>
               </div>
             </div>
           </div>
@@ -304,7 +304,7 @@ function nav(i: number) { paused = true; go(i) }
             </div>
             <div class="bg-white/10 rounded-card p-[13px] flex flex-col gap-[10px]">
               <div class="flex gap-[10px] items-center">
-                <div class="flex-1 min-w-0 bg-black/25 rounded-[11px] px-[11px] py-[9px] font-mono text-[12px] text-teal-deep truncate">kelana.id/t/sumba-4h</div>
+                <div class="flex-1 min-w-0 bg-black/25 rounded-[11px] px-[11px] py-[9px] text-[12px] text-teal-deep truncate">kelana.id/t/sumba-4h</div>
                 <div class="bg-primary text-white rounded-pill px-[14px] py-2 text-[12px] font-700 whitespace-nowrap">{{ $t('landing.sharing.copy') }}</div>
               </div>
               <div v-for="m in [['DP', 'Dimas Prayoga', $t('landing.sharing.m1sub'), $t('landing.sharing.m1role')], ['AL', 'Ayu Larasati', $t('landing.sharing.m2sub'), $t('landing.sharing.m2role')]]" :key="m[0]" class="flex gap-[10px] items-center">
@@ -338,7 +338,7 @@ function nav(i: number) { paused = true; go(i) }
               <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap1') }}</div>
             </div>
             <div class="bg-teal-100 rounded-[18px] p-[15px] rotate-[1.4deg]">
-              <div class="font-mono text-[11px] font-600 text-teal-700">{{ $t('landing.inside.note1') }}</div>
+              <div class="text-[11px] font-600 text-teal-700">{{ $t('landing.inside.note1') }}</div>
               <div class="text-[14.5px] font-700 leading-[1.35] mt-[6px]">{{ $t('landing.inside.note1body') }}</div>
             </div>
             <div class="h-[130px] rounded-[18px] overflow-hidden rotate-[-1.4deg] bg-cover bg-center shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)]" style="background-image:url('/img/photo-bromo.jpg')" />
@@ -362,7 +362,7 @@ function nav(i: number) { paused = true; go(i) }
               <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap4') }}</div>
             </div>
             <div class="bg-ink text-teal-100 rounded-[18px] p-4 rotate-[-2.2deg]">
-              <div class="font-mono text-[20px] font-600">Rp 685.000</div>
+              <div class="text-[20px] font-600">Rp 685.000</div>
               <div class="text-[12px] text-teal-deep mt-[5px]">{{ $t('landing.inside.note2sub') }}</div>
             </div>
             <div class="h-[120px] rounded-[18px] overflow-hidden rotate-[1.2deg] bg-cover bg-center shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)]" style="background-image:url('/img/photo-sumba.jpg')" />
@@ -378,7 +378,7 @@ function nav(i: number) { paused = true; go(i) }
               <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap6') }}</div>
             </div>
             <div class="bg-peach-bg rounded-[18px] p-[15px] rotate-[1.6deg]">
-              <div class="font-mono text-[11px] font-600 text-peach-fg">{{ $t('landing.inside.note3label') }}</div>
+              <div class="text-[11px] font-600 text-peach-fg">{{ $t('landing.inside.note3label') }}</div>
               <div class="text-[14.5px] font-700 leading-[1.35] mt-[6px]">{{ $t('landing.inside.note3body') }}</div>
             </div>
           </div>

@@ -5,12 +5,11 @@ const props = withDefaults(
     type?: string
     placeholder?: string
     label?: string
-    /** uppercase mono eyebrow label style (login form) vs plain label */
+    /** uppercase eyebrow label style (login form) vs plain label */
     eyebrow?: boolean
-    mono?: boolean
     error?: boolean
   }>(),
-  { type: 'text', eyebrow: false, mono: false, error: false },
+  { type: 'text', eyebrow: false, error: false },
 )
 const emit = defineEmits<{
   'update:modelValue': [string]
@@ -18,7 +17,7 @@ const emit = defineEmits<{
 }>()
 
 const inputCls = computed(() =>
-  cn('field', props.mono && 'font-mono', props.error && 'border-warn-fg'),
+  cn('field', props.error && 'border-warn-fg'),
 )
 </script>
 

@@ -33,7 +33,7 @@ function cta(p: Plan) {
         <span v-else-if="p.id === 'plus'" class="bg-primary text-white rounded-pill px-[11px] py-[5px] text-[11px] font-700 whitespace-nowrap">{{ $t('billing.popular') }}</span>
       </div>
       <div class="flex gap-[7px] items-baseline flex-wrap">
-        <span class="font-mono text-[28px] font-600 tracking-[-.02em] whitespace-nowrap">{{ rp(p.prices[period]) }}</span>
+        <span class="text-[28px] font-600 tracking-[-.02em] whitespace-nowrap">{{ rp(p.prices[period]) }}</span>
         <span class="text-[13px]" :class="p.id === 'plus' ? 'text-teal-deep' : 'text-ink-2'">{{ $t('billing.per.' + period) }}</span>
       </div>
       <div class="flex flex-col gap-[9px]">

@@ -32,7 +32,7 @@ const value = computed<DateValue | undefined>({
   <DatePickerRoot v-model="value" locale="id-ID">
     <DatePickerField
       v-slot="{ segments }"
-      class="flex items-center justify-between gap-2 bg-white border border-sand-line2 rounded-field px-[13px] py-[11px] text-[14px] font-mono text-ink data-[focused]:border-teal-600"
+      class="flex items-center justify-between gap-2 bg-white border border-sand-line2 rounded-field px-[13px] py-[11px] text-[14px] text-ink data-[focused]:border-teal-600"
     >
       <div class="flex items-center">
         <template v-for="item in segments" :key="item.part">
@@ -69,7 +69,7 @@ const value = computed<DateValue | undefined>({
                 <DatePickerCellTrigger
                   :day="wd"
                   :month="month.value"
-                  class="w-[34px] h-[34px] rounded-full flex items-center justify-center text-[13px] font-mono outline-none hover:bg-sand-100 data-[selected]:bg-teal-600 data-[selected]:text-white data-[today]:font-700 data-[outside-view]:text-muted/50 data-[disabled]:opacity-40"
+                  class="w-[34px] h-[34px] rounded-full flex items-center justify-center text-[13px] outline-none hover:bg-sand-100 data-[selected]:bg-teal-600 data-[selected]:text-white data-[today]:font-700 data-[outside-view]:text-muted/50 data-[disabled]:opacity-40"
                 />
               </DatePickerCell>
             </DatePickerGridRow>

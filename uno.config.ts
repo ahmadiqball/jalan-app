@@ -41,7 +41,6 @@ export default defineConfig({
     fontFamily: {
       sans: "'Plus Jakarta Sans', system-ui, sans-serif",
       display: "'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif",
-      mono: "'IBM Plex Mono', ui-monospace, monospace",
     },
     borderRadius: {
       cb: '6px',
@@ -66,8 +65,8 @@ export default defineConfig({
   shortcuts: {
     // typography helpers
     'font-display': 'font-display tracking-[-.02em]',
-    'money': 'font-mono tabular-nums whitespace-nowrap',
-    'eyebrow': 'font-mono text-[12px] font-700 tracking-[.08em] uppercase text-muted',
+    'money': 'tabular-nums whitespace-nowrap',
+    'eyebrow': 'text-[12px] font-700 tracking-[.08em] uppercase text-muted',
 
     // surfaces
     'card': 'bg-white border border-sand-line rounded-card shadow-card',
