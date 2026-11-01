@@ -9,7 +9,7 @@ const localePath = useLocalePath()
 const appHref = computed(() => localePath(session.authed ? '/beranda' : '/masuk'))
 const { busy, start } = useCheckout()
 
-// public guides teaser (hidden when none published)
+// public guides for the guides feature (cards hidden when none published)
 const { data: guidesData } = await useFetch('/api/guides', { key: 'landing-guides' })
 const guides = computed(() => (guidesData.value || []).slice(0, 4))
 
@@ -26,6 +26,7 @@ const rail = [
   { label: 'tabs.packing', href: '#barang', desc: 'landing.rail.packing', icon: 'i-lucide-backpack' },
   { label: 'tabs.outfit', href: '#outfit', desc: 'landing.rail.outfit', icon: 'i-lucide-shirt' },
   { label: 'landing.rail.sharingLabel', href: '#anggota', desc: 'landing.rail.sharing', icon: 'i-lucide-users' },
+  { label: 'landing.guides.label', href: '#panduan', desc: 'landing.guides.desc', icon: 'i-lucide-compass' },
 ]
 const stories = [
   { k: 's1', who: 'Dimas P.', ini: 'DP' },
@@ -155,29 +156,15 @@ function nav(i: number) { paused = true; go(i) }
       <img src="/img/teal-hills.svg" alt="" class="block w-screen ml-[calc(50%-50vw)] mt-[26px] mb-[-2px] pointer-events-none">
     </div>
 
-    <!-- guides teaser -->
-    <section v-if="guides.length" class="max-w-[1200px] mx-auto px-6 pt-[18px] pb-[6px]">
-      <div class="flex items-end justify-between gap-3 mb-4">
-        <div>
-          <div class="eyebrow text-teal-700">Kelana Guides</div>
-          <h2 class="font-display text-[clamp(24px,4vw,34px)] font-700 mt-1 leading-tight">Panduan destinasi yang dikurasi</h2>
-        </div>
-        <NuxtLink :to="localePath('/guides')" class="text-[13.5px] font-700 text-teal-700 hover:text-teal-800 flex items-center gap-1 shrink-0">Lihat semua <i class="i-lucide-arrow-right text-[15px]" /></NuxtLink>
-      </div>
-      <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr))">
-        <GuideDestinationCard v-for="d in guides" :key="d.id" :destination="d" />
-      </div>
-    </section>
-
     <!-- feature rail -->
-    <div id="fitur" class="bg-sand-100 px-6 pt-[34px] pb-[54px] scroll-mt-[80px]">
+    <div id="fitur" class="bg-sand-100 px-6 pt-[60px] pb-[72px] scroll-mt-[80px]">
       <div class="max-w-[1200px] mx-auto">
         <div class="max-w-[560px]">
           <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.rail.eyebrow') }}</div>
           <div class="text-[clamp(25px,3vw,34px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px]">{{ $t('landing.rail.title') }}</div>
         </div>
-        <div class="flex flex-wrap gap-3 mt-6">
-          <a v-for="r in rail" :key="r.href" :href="r.href" class="flex-[1_1_172px] min-w-[160px] bg-white border border-sand-line rounded-card p-[15px] flex flex-col gap-2 hover:border-brand-amber transition-colors">
+        <div class="flex flex-wrap gap-4 mt-8">
+          <a v-for="r in rail" :key="r.href" :href="r.href" class="flex-[1_1_140px] min-w-[140px] bg-white border border-sand-line rounded-card p-[18px] flex flex-col gap-2 hover:border-brand-amber transition-colors">
             <div class="w-[34px] h-[34px] rounded-[11px] bg-teal-100 text-teal-700 flex items-center justify-center"><i :class="r.icon" class="text-[18px]" /></div>
             <div class="text-[14.5px] font-700">{{ $t(r.label) }}</div>
             <div class="text-[12.5px] leading-[1.5] text-ink-2">{{ $t(r.desc) }}</div>
@@ -187,9 +174,9 @@ function nav(i: number) { paused = true; go(i) }
     </div>
 
     <!-- feature detail -->
-    <div class="max-w-[1200px] mx-auto px-6 pt-[60px] pb-[10px] flex flex-col gap-5">
+    <div class="max-w-[1200px] mx-auto px-6 pt-[72px] pb-5 flex flex-col gap-8">
       <!-- hari -->
-      <div id="hari" class="bg-white border border-sand-line rounded-hero p-[22px] flex flex-wrap gap-[26px] items-center scroll-mt-[90px]">
+      <div id="hari" class="bg-white border border-sand-line rounded-hero p-[22px] md:p-8 flex flex-wrap gap-[26px] md:gap-8 items-center scroll-mt-[90px]">
         <div class="flex-1 basis-[300px] min-w-[280px] max-w-[430px]">
           <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.hari.tag') }}</span>
           <div class="text-[27px] font-800 tracking-[-.025em] leading-[1.16] mt-[13px]">{{ $t('landing.hari.title') }}</div>
@@ -218,7 +205,7 @@ function nav(i: number) { paused = true; go(i) }
       </div>
 
       <!-- anggaran -->
-      <div id="anggaran" class="bg-white border border-sand-line rounded-hero p-[22px] flex flex-wrap-reverse gap-[26px] items-center scroll-mt-[90px]">
+      <div id="anggaran" class="bg-white border border-sand-line rounded-hero p-[22px] md:p-8 flex flex-wrap-reverse gap-[26px] md:gap-8 items-center scroll-mt-[90px]">
         <div class="flex-1 basis-[320px] min-w-[300px] bg-paper border border-sand-line rounded-[20px] p-[17px] flex gap-[18px] flex-wrap items-center">
           <div class="w-[144px] h-[144px] shrink-0 rounded-full flex items-center justify-center" style="background:conic-gradient(#0E6E76 0% 34%,#2F6B54 34% 58%,#D98F3B 58% 74%,#8FC2BE 74% 92%,#EDE9DA 92% 100%)">
             <div class="w-[92px] h-[92px] rounded-full bg-paper flex flex-col items-center justify-center">
@@ -245,11 +232,27 @@ function nav(i: number) { paused = true; go(i) }
         </div>
       </div>
 
+      <!-- guides -->
+      <div id="panduan" class="bg-white border border-sand-line rounded-hero p-[22px] md:p-8 flex flex-wrap gap-[26px] md:gap-8 items-center scroll-mt-[90px]">
+        <div class="flex-1 basis-[300px] min-w-[280px] max-w-[430px]">
+          <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.guides.tag') }}</span>
+          <div class="text-[27px] font-800 tracking-[-.025em] leading-[1.16] mt-[13px]">{{ $t('landing.guides.title') }}</div>
+          <p class="text-[14.5px] leading-[1.65] text-ink-2 mt-[11px]">{{ $t('landing.guides.body') }}</p>
+          <div class="flex flex-col gap-2 mt-[14px] text-[14px] text-ink-2">
+            <div v-for="k in ['p1', 'p2', 'p3', 'p4']" :key="k" class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.guides.' + k) }}</div>
+          </div>
+          <NuxtLink :to="localePath('/guides')" class="text-[13.5px] font-700 text-teal-700 hover:text-teal-800 inline-flex items-center gap-1 mt-[18px]">{{ $t('landing.guides.cta') }} <i class="i-lucide-arrow-right text-[15px]" /></NuxtLink>
+        </div>
+        <div v-if="guides.length" class="flex-1 basis-[320px] min-w-[280px] grid gap-[18px]" style="grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))">
+          <GuideDestinationCard v-for="d in guides.slice(0, 2)" :key="d.id" :destination="d" />
+        </div>
+      </div>
+
       <!-- pengeluaran + barang -->
-      <div class="grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
+      <div class="grid gap-8" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
         <div id="pengeluaran" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-[90px]">
           <div class="h-[170px] bg-cover bg-center" style="background-image:url('/img/img-budget.jpg')" />
-          <div class="p-5 flex flex-col gap-[13px]">
+          <div class="p-[22px] md:p-7 flex flex-col gap-[13px]">
             <div>
               <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700 mb-3">{{ $t('landing.expenses.tag') }}</span>
               <div class="text-[21px] font-800 tracking-[-.02em]">{{ $t('landing.expenses.title') }}</div>
@@ -264,7 +267,7 @@ function nav(i: number) { paused = true; go(i) }
         </div>
         <div id="barang" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-[90px]">
           <div class="h-[170px] bg-cover bg-center" style="background-image:url('/img/img-items.webp')" />
-          <div class="p-5 flex flex-col gap-[13px]">
+          <div class="p-[22px] md:p-7 flex flex-col gap-[13px]">
             <div>
               <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700 mb-3">{{ $t('landing.packing.tag') }}</span>
               <div class="text-[21px] font-800 tracking-[-.02em]">{{ $t('landing.packing.title') }}</div>
@@ -280,8 +283,8 @@ function nav(i: number) { paused = true; go(i) }
       </div>
 
       <!-- outfit + anggota -->
-      <div class="grid gap-5" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
-        <div id="outfit" class="bg-white border border-sand-line rounded-hero p-[22px] flex flex-col gap-[15px] scroll-mt-[90px]">
+      <div class="grid gap-8" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
+        <div id="outfit" class="bg-white border border-sand-line rounded-hero p-[22px] md:p-7 flex flex-col gap-[15px] scroll-mt-[90px]">
           <div>
             <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.outfit.tag') }}</span>
             <div class="text-[21px] font-800 tracking-[-.02em] mt-3">{{ $t('landing.outfit.title') }}</div>
@@ -296,7 +299,7 @@ function nav(i: number) { paused = true; go(i) }
         </div>
         <div id="anggota" class="bg-ink rounded-hero overflow-hidden flex flex-col text-white relative scroll-mt-[90px]">
           <img src="/img/teal-palms.svg" alt="" class="absolute right-[-14px] bottom-[-10px] w-[150px] opacity-[.18] pointer-events-none">
-          <div class="p-[22px] flex flex-col gap-[15px] relative">
+          <div class="p-[22px] md:p-7 flex flex-col gap-[15px] relative">
             <div>
               <span class="inline-flex bg-white/15 text-teal-100 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.sharing.tag') }}</span>
               <div class="text-[21px] font-800 tracking-[-.02em] mt-3">{{ $t('landing.sharing.title') }}</div>
@@ -319,7 +322,7 @@ function nav(i: number) { paused = true; go(i) }
     </div>
 
     <!-- isi aplikasi collage -->
-    <div id="dalam" class="relative px-6 pt-16 pb-10 overflow-hidden scroll-mt-[80px]">
+    <div id="dalam" class="relative px-6 pt-20 pb-20 overflow-hidden scroll-mt-[80px]">
       <img src="/img/teal-cloud.svg" alt="" class="absolute left-[-60px] top-[60px] w-[220px] opacity-90 pointer-events-none">
       <div class="relative max-w-[1200px] mx-auto">
         <div class="flex flex-wrap gap-[18px] justify-between items-end">
@@ -387,14 +390,14 @@ function nav(i: number) { paused = true; go(i) }
     </div>
 
     <!-- cerita -->
-    <div id="cerita" class="bg-ink text-teal-100 px-6 py-[60px] scroll-mt-[80px]">
+    <div id="cerita" class="bg-ink text-teal-100 px-6 py-20 scroll-mt-[80px]">
       <div class="max-w-[1200px] mx-auto">
         <div class="max-w-[560px]">
           <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-deep">{{ $t('landing.stories.eyebrow') }}</div>
           <div class="text-[clamp(26px,3.2vw,36px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px] text-white">{{ $t('landing.stories.title') }}</div>
         </div>
-        <div class="grid gap-4 mt-[26px]" style="grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))">
-          <div v-for="s in stories" :key="s.who" class="bg-white/[.08] rounded-[22px] p-5 flex flex-col gap-[11px]">
+        <div class="grid gap-5 mt-8" style="grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))">
+          <div v-for="s in stories" :key="s.who" class="bg-white/[.08] rounded-[22px] p-6 flex flex-col gap-[11px]">
             <div class="flex gap-[3px] text-brand-amber"><i v-for="n in 5" :key="n" class="i-lucide-star text-[14px]" /></div>
             <div class="text-[14.5px] font-700 text-white">{{ $t('landing.stories.' + s.k + 'quote') }}</div>
             <div class="text-[13.5px] leading-[1.65] text-teal-deep">{{ $t('landing.stories.' + s.k + 'body') }}</div>
@@ -408,7 +411,7 @@ function nav(i: number) { paused = true; go(i) }
     </div>
 
     <!-- harga -->
-    <div id="harga" class="max-w-[1200px] mx-auto px-6 pt-16 pb-5 scroll-mt-[80px]">
+    <div id="harga" class="max-w-[1200px] mx-auto px-6 pt-20 pb-8 scroll-mt-[80px]">
       <div class="flex flex-wrap gap-[18px] justify-between items-end">
         <div class="max-w-[500px]">
           <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.pricing.eyebrow') }}</div>
@@ -416,13 +419,12 @@ function nav(i: number) { paused = true; go(i) }
         </div>
         <BillingPeriodSwitch v-model="period" />
       </div>
-      <BillingPlanCards class="mt-[26px]" :period="period" :busy="busy" @select="start($event, period)" />
-      <BillingGuideInfo class="mt-[22px]" />
-      <div class="text-[12.5px] text-ink-2 mt-[13px]">{{ $t('landing.pricing.fineprint') }}</div>
+      <BillingPlanCards class="mt-8" :period="period" :busy="busy" @select="start($event, period)" />
+      <div class="text-[12.5px] text-ink-2 mt-5">{{ $t('landing.pricing.fineprint') }}</div>
     </div>
 
     <!-- final cta -->
-    <div class="relative mt-14 overflow-hidden">
+    <div class="relative mt-16 overflow-hidden">
       <img src="/img/teal-hills.svg" alt="" class="block w-screen ml-[calc(50%-50vw)] mb-[-2px] pointer-events-none">
       <div class="bg-sand-100 px-6 pb-[34px] relative">
         <div class="max-w-[1200px] mx-auto flex flex-wrap gap-[26px] items-center justify-between">

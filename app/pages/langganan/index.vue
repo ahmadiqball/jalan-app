@@ -48,8 +48,6 @@ onMounted(() => {
 
     <BillingPlanCards :period="period" :current="sub.plan" :busy="busy" @select="start($event, period)" />
 
-    <BillingGuideInfo />
-
     <div class="text-[12.5px] text-ink-2 leading-[1.6]">{{ $t('billing.fineprint') }}</div>
   </div>
 </template>

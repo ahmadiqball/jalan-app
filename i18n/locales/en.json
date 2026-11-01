@@ -113,6 +113,18 @@
     }
   },
   "landing": {
+    "guides": {
+      "tag": "Kelana Guides",
+      "label": "Kelana Guides",
+      "desc": "Ready-to-use destination guides",
+      "title": "Destination guides that go straight into your plan",
+      "body": "Guides we put together to help you plan a trip, from when to go to the places worth visiting.",
+      "p1": "The best time to visit and the ideal trip length",
+      "p2": "Chosen places with price ranges, opening hours and maps",
+      "p3": "What to know before you arrive",
+      "p4": "Add places straight to your trip",
+      "cta": "See all guides"
+    },
     "metaTitle": "Kelana — plan it neatly, enjoy the journey",
     "nav": {
       "features": "Features",
@@ -337,20 +349,6 @@
     "pending": "Payment is still processing. Your plan activates automatically once received.",
     "failed": "Could not start payment. Please try again later.",
     "fineprint": "Prices in rupiah. When you upgrade, the new plan starts that day and the time left on the old plan is converted into extra days. When a plan ends, trips stay saved and become read-only.",
-    "guideInfo": {
-      "title": "What is Kelana Guides?",
-      "intro": "Destination guides we put together to help you plan a trip, from when to go to the places worth visiting.",
-      "cta": "Browse Kelana Guides",
-      "whenTitle": "Timing and length",
-      "when": "The best time to visit and the ideal trip length for each destination.",
-      "placesTitle": "Chosen places",
-      "places": "Places to eat, things to see and more, with price ranges, opening hours and maps.",
-      "tipsTitle": "Local tips",
-      "tips": "What to know before you arrive, so nothing catches you off guard.",
-      "planTitle": "Right into your plan",
-      "plan": "Add places from a guide straight to your trip.",
-      "access": "Kelana Lite opens public guides. Kelana Plus and Premium open every guide, and we keep them updated."
-    },
     "memberLimit": {
       "title": "This trip is full",
       "noPlanTitle": "Choose a plan first",
