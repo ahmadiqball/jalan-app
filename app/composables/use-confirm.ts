@@ -10,6 +10,8 @@ export interface ConfirmOptions {
   cancelLabel?: string
   /** red confirm button for irreversible/destructive actions */
   danger?: boolean
+  /** a notice with one button, nothing to decide */
+  hideCancel?: boolean
 }
 
 let resolver: ((v: boolean) => void) | null = null

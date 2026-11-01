@@ -337,6 +337,16 @@
     "pending": "Payment is still processing. Your plan activates automatically once received.",
     "failed": "Could not start payment. Please try again later.",
     "fineprint": "Prices in rupiah. When you upgrade, the new plan starts that day and the time left on the old plan is converted into extra days. When a plan ends, trips stay saved and become read-only.",
+    "memberLimit": {
+      "title": "This trip is full",
+      "noPlanTitle": "Choose a plan first",
+      "noPlan": "You need an active plan to add members to a trip.",
+      "current": "{plan} allows up to {n} members per trip.",
+      "upgrade": "Upgrade to {next} for up to {max} members.",
+      "top": "This is the highest member limit right now.",
+      "cta": "Upgrade plan",
+      "ok": "Got it"
+    },
     "switch": {
       "title": "Switch to {plan}?",
       "message": "Your {days} days left on {from} will be converted into {extra} extra days of {plan}, on top of the {period} you are buying. Your new plan runs until about {date}.",

@@ -79,12 +79,13 @@ function toggleParticipant(id: string) {
 /* add a participant right here — just a name (no invite). Real invitations go
  * through the shareable link on the Anggota tab. */
 const addingPerson = ref(false)
-const { sub, canAddMember, promptUpgrade } = useSubscription()
+const { canAddMember } = useSubscription()
+const { promptMemberLimit } = useMemberLimit()
 const newName = ref('')
 function addPerson() {
   const name = newName.value.trim()
   if (!name) return
-  if (!canAddMember(props.trip)) return promptUpgrade(`Paketmu maksimal ${sub.value.maxMembers} anggota per trip`)
+  if (!canAddMember(props.trip)) return promptMemberLimit()
   const id = trips.addMember(props.trip.id, { name, email: '', role: 'Bisa ubah', status: 'aktif' })
   // only extend an explicit subset; "everyone" (undefined) already covers them
   if (found.value?.act.participants) set('participants', [...found.value.act.participants, id])

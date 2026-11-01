@@ -13,7 +13,7 @@ const open = computed({
     <p v-if="current?.message" class="text-[14px] text-ink-2 leading-[1.55]">{{ current.message }}</p>
     <template #footer>
       <div class="flex justify-end gap-2">
-        <CoreButton variant="ghost" @click="resolve(false)">{{ current?.cancelLabel || t('confirm.cancel') }}</CoreButton>
+        <CoreButton v-if="!current?.hideCancel" variant="ghost" @click="resolve(false)">{{ current?.cancelLabel || t('confirm.cancel') }}</CoreButton>
         <CoreButton :variant="current?.danger ? 'danger' : 'primary'" @click="resolve(true)">
           {{ current?.confirmLabel || t('confirm.ok') }}
         </CoreButton>

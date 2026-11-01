@@ -59,9 +59,10 @@ function addManual() {
   flash('Ditambahkan ke anggota')
 }
 
-const { sub, canAddMember, promptUpgrade } = useSubscription()
+const { canAddMember } = useSubscription()
+const { promptMemberLimit } = useMemberLimit()
 function openInvite() {
-  if (!canAddMember(props.trip)) return promptUpgrade(`Paketmu maksimal ${sub.value.maxMembers} anggota per trip`)
+  if (!canAddMember(props.trip)) return promptMemberLimit()
   addOpen.value = true
 }
 
