@@ -71,6 +71,23 @@ export function addMonths(from: Date, months: number): Date {
   return d
 }
 
+const DAY_MS = 86400000
+
+/** Unused time on the current plan, converted to days of the new plan at their monthly prices. */
+export function switchCredit(sub: Pick<Subscription, 'plan' | 'expiresAt'>, plan: PlanId, now = new Date()) {
+  const left = (new Date(sub.expiresAt).getTime() - now.getTime()) / DAY_MS
+  if (sub.plan === plan || left <= 0) return { daysLeft: 0, extraDays: 0 }
+  return { daysLeft: Math.ceil(left), extraDays: Math.ceil(left * PLANS[sub.plan].prices['1m'] / PLANS[plan].prices['1m']) }
+}
+
+/** When a purchase ends: the same plan extends what's left, a new plan starts now plus its credit. */
+export function purchaseExpiry(sub: Pick<Subscription, 'plan' | 'expiresAt'> | null, plan: PlanId, period: BillingPeriod, now = new Date()): Date {
+  const months = PERIOD_MONTHS[period]
+  if (!sub) return addMonths(now, months)
+  if (sub.plan === plan) return addMonths(new Date(Math.max(new Date(sub.expiresAt).getTime(), now.getTime())), months)
+  return new Date(addMonths(now, months).getTime() + switchCredit(sub, plan, now).extraDays * DAY_MS)
+}
+
 export interface TripShape {
   id?: string
   status?: string

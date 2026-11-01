@@ -7,47 +7,18 @@ useHead({ title: () => t('billing.title') + ' · Kelana' })
 
 const route = useRoute()
 const session = useSessionStore()
-const { flash } = useToast()
-const { apiFetch } = useApi()
-const { sub, refresh } = useSubscription()
+const { sub } = useSubscription()
 
 const period = ref<BillingPeriod>('1m')
 const { busy, start } = useCheckout()
-const checking = ref(false)
 
 const planName = computed(() => (sub.value.plan ? PLANS[sub.value.plan].name : ''))
 const until = computed(() => (sub.value.expiresAt
   ? new Date(sub.value.expiresAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
   : ''))
 
-/** Back from Midtrans: the webhook activates the plan, usually within seconds. */
-async function awaitOrder(id: string) {
-  checking.value = true
-  try {
-    for (let i = 0; i < 6; i++) {
-      const { status } = await apiFetch<{ status: string }>(`/api/billing/orders/${encodeURIComponent(id)}`)
-      if (status === 'paid') {
-        await refresh()
-        flash(t('billing.paid'))
-        return
-      }
-      if (status === 'failed') {
-        flash(t('billing.notPaid'))
-        return
-      }
-      await new Promise((r) => setTimeout(r, 2000))
-    }
-    flash(t('billing.pending'))
-  } catch {
-    flash(t('billing.pending'))
-  } finally {
-    checking.value = false
-  }
-}
-
 onMounted(() => {
-  const { order_id: id, plan, period: chosen } = route.query
-  if (session.authed && typeof id === 'string') awaitOrder(id)
+  const { plan, period: chosen } = route.query
   // came from a plan card before logging in: pick up where they left off
   if (session.authed && isPlanId(plan) && isBillingPeriod(chosen)) {
     period.value = chosen
@@ -67,9 +38,6 @@ onMounted(() => {
       <BillingPeriodSwitch v-model="period" />
     </div>
 
-    <div v-if="checking" class="card p-[14px_18px] text-[13.5px] text-ink-2 flex items-center gap-2">
-      <i class="i-lucide-loader-circle animate-spin text-teal-600 text-[17px]" /> {{ $t('billing.checking') }}
-    </div>
     <!-- session comes from localStorage, so this can only render on the client -->
     <ClientOnly>
       <div v-if="sub.status === 'active'" class="card p-[14px_18px] text-[13.5px] text-ink-2">

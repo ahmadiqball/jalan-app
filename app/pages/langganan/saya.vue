@@ -6,6 +6,7 @@ useHead({ title: () => t('billing.mine.title') + ' · Kelana' })
 
 interface Order { id: string; plan: PlanId; period: BillingPeriod; amount: number; status: 'pending' | 'paid' | 'failed'; paymentType: string | null; createdAt: string; paidAt: string | null }
 
+const route = useRoute()
 const localePath = useLocalePath()
 const trips = useTripsStore()
 const session = useSessionStore()
@@ -18,6 +19,7 @@ const { sub, refresh } = useSubscription()
 const orders = ref<Order[]>([])
 const loading = ref(true)
 const cancelling = ref(false)
+const checking = ref(false)
 
 const plan = computed(() => (sub.value.plan ? PLANS[sub.value.plan] : null))
 const fmtDate = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '–')
@@ -34,7 +36,38 @@ async function load() {
     loading.value = false
   }
 }
-onMounted(load)
+
+/** Back from Midtrans: the order check activates the plan, usually within seconds. */
+async function awaitOrder(id: string) {
+  checking.value = true
+  try {
+    for (let i = 0; i < 6; i++) {
+      const { status } = await apiFetch<{ status: string }>(`/api/billing/orders/${encodeURIComponent(id)}`)
+      if (status === 'paid') {
+        await refresh()
+        flash(t('billing.paid'))
+        return
+      }
+      if (status === 'failed') {
+        flash(t('billing.notPaid'))
+        return
+      }
+      await new Promise((r) => setTimeout(r, 2000))
+    }
+    flash(t('billing.pending'))
+  } catch {
+    flash(t('billing.pending'))
+  } finally {
+    checking.value = false
+    navigateTo({ query: {} }, { replace: true })
+  }
+}
+
+onMounted(async () => {
+  const { order_id: id } = route.query
+  if (typeof id === 'string') await awaitOrder(id)
+  load()
+})
 
 async function cancel() {
   const ok = await confirm({
@@ -60,6 +93,10 @@ async function cancel() {
 <template>
   <div class="flex-1 w-full max-w-[860px] mx-auto p-[30px_16px_60px] md:p-[30px_32px_60px] flex flex-col gap-5 anim-rise">
     <div class="font-display text-[32px] font-600">{{ $t('billing.mine.title') }}</div>
+
+    <div v-if="checking" class="card p-[14px_18px] text-[13.5px] text-ink-2 flex items-center gap-2">
+      <i class="i-lucide-loader-circle animate-spin text-teal-600 text-[17px]" /> {{ $t('billing.checking') }}
+    </div>
 
     <!-- current plan -->
     <div v-if="plan" class="card p-[20px] flex flex-col gap-4">

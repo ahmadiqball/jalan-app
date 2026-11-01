@@ -330,7 +330,12 @@
     "notPaid": "Pembayaran tidak selesai",
     "pending": "Pembayaran masih diproses. Paketmu aktif otomatis setelah diterima.",
     "failed": "Pembayaran belum bisa dimulai. Coba lagi nanti.",
-    "fineprint": "Harga dalam rupiah. Saat naik paket, paket baru mulai hari itu dan sisa paket lama tidak terbawa. Saat paket berakhir, trip tetap tersimpan dan hanya bisa dibaca.",
+    "fineprint": "Harga dalam rupiah. Saat naik paket, paket baru mulai hari itu dan sisa paket lama dikonversi jadi hari tambahan. Saat paket berakhir, trip tetap tersimpan dan hanya bisa dibaca.",
+    "switch": {
+      "title": "Ganti ke {plan}?",
+      "message": "Sisa {days} hari {from} akan dikonversi jadi {extra} hari tambahan {plan}, ditambah {period} yang kamu beli. Paket barumu aktif sampai sekitar {date}.",
+      "confirm": "Lanjut bayar"
+    },
     "lockedTrip": "Trip ini hanya bisa dibaca karena di luar batas paket. Lihat paket",
     "mine": {
       "title": "Langganan saya",

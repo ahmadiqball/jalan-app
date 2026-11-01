@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { addMonths, PERIOD_MONTHS } from '../../shared/utils/plans'
+import { purchaseExpiry } from '../../shared/utils/plans'
 import type { BillingOrder, BillingRepository } from '../repositories/types'
 import type { MidtransTransaction } from './midtrans'
 
@@ -12,9 +12,7 @@ export async function applyTransaction(repo: BillingRepository, order: BillingOr
     if (await repo.markPaid(order.id, tx.payment_type)) {
       try {
         const sub = await repo.getSubscription(order.userId)
-        // same plan extends what's left; an upgrade starts now
-        const base = sub?.plan === order.plan && new Date(sub.expiresAt) > now ? new Date(sub.expiresAt) : now
-        await repo.saveSubscription(order.userId, { plan: order.plan, expiresAt: addMonths(base, PERIOD_MONTHS[order.period]).toISOString() })
+        await repo.saveSubscription(order.userId, { plan: order.plan, expiresAt: purchaseExpiry(sub, order.plan, order.period, now).toISOString() })
       } catch (e) {
         // back to pending so the next webhook retry or status check can finish it
         await repo.reopenOrder(order.id)

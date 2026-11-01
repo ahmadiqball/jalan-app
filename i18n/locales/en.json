@@ -330,7 +330,12 @@
     "notPaid": "Payment was not completed",
     "pending": "Payment is still processing. Your plan activates automatically once received.",
     "failed": "Could not start payment. Please try again later.",
-    "fineprint": "Prices in rupiah. When you upgrade, the new plan starts that day and time left on the old plan is not carried over. When a plan ends, trips stay saved and become read-only.",
+    "fineprint": "Prices in rupiah. When you upgrade, the new plan starts that day and the time left on the old plan is converted into extra days. When a plan ends, trips stay saved and become read-only.",
+    "switch": {
+      "title": "Switch to {plan}?",
+      "message": "Your {days} days left on {from} will be converted into {extra} extra days of {plan}, on top of the {period} you are buying. Your new plan runs until about {date}.",
+      "confirm": "Continue to payment"
+    },
     "lockedTrip": "This trip is read-only because it is outside the plan limits. See plans",
     "mine": {
       "title": "My subscription",

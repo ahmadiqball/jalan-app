@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const orderId = `KLN-${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 8)}`
   const amount = p.prices[period]
   await repo.createOrder({ id: orderId, userId: actor.id, plan, period, amount })
-  const finishUrl = `${getRequestURL(event).origin}/langganan`
+  const finishUrl = `${getRequestURL(event).origin}/langganan/saya`
   const redirectUrl = await createSnapPayment(event, { orderId, amount, itemName: `${p.name} ${PERIOD_LABELS[period]}`, finishUrl })
   return { redirectUrl, orderId }
 })
