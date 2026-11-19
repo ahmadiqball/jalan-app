@@ -5,7 +5,7 @@
   /* color */
   --ink: #10262b;
   --ink-2: #33474c;
-  --muted: #6c7c7d;
+  --muted: #5e6e6f; /* 5.3:1 on white, 5.1:1 on paper */
   --teal-700: #0a4f55;
   --teal-600: #0e6e76;
   --teal-100: #deeeec;

@@ -9,11 +9,14 @@ const filters = [
 </script>
 
 <template>
-  <div class="flex gap-[9px] text-[13px] font-600 flex-wrap">
+  <div role="group" :aria-label="$t('app.filter.label')" class="flex gap-[9px] text-[13px] font-600 flex-wrap">
     <button
       v-for="f in filters"
       :key="f.v"
+      type="button"
+      :aria-pressed="ui.homeFilter === f.v"
       :class="ui.homeFilter === f.v ? 'chip-active' : 'chip-idle'"
+      class="min-h-11"
       @click="ui.homeFilter = f.v"
     >
       {{ $t('app.filter.' + f.k) }}

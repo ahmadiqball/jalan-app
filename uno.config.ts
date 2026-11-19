@@ -30,7 +30,7 @@ export default defineConfig({
       // #B8521F keeps white button text at 4.9:1 (WCAG AA); #C85A28 was 4.25:1
       primary: { DEFAULT: '#B8521F', hover: '#9A4318' },
       ink: { DEFAULT: '#10262B', 2: '#33474C' },
-      muted: '#6C7C7D',
+      muted: '#5E6E6F',
       teal: {
         700: '#0A4F55',
         600: '#0E6E76',

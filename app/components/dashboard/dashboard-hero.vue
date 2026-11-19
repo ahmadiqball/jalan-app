@@ -9,7 +9,7 @@ const ui = useUiStore()
 const { t } = useI18n()
 const { budget, packing } = useDerived(() => props.trip)
 
-const typeLabel = computed(() => `${t('cat.' + matKey(props.trip.mat))} · ${t('app.hero.people', { n: props.trip.people })}`)
+const typeLabel = computed(() => `${t('cat.' + matKey(props.trip.mat))} · ${t('app.hero.people', { n: props.trip.people }, props.trip.people)}`)
 
 const dayCount = computed(() => (props.trip.days || []).length)
 const dayIdx = computed(() => Math.min(ui.dayIdx, Math.max(0, dayCount.value - 1)))
@@ -61,13 +61,13 @@ function open(tab: string) {
 
     <!-- content -->
     <div class="flex-1 min-w-0 p-[24px_26px] flex flex-col gap-4">
-      <div class="flex justify-between items-start gap-5">
-        <div>
-          <div class="flex gap-[9px] items-center">
+      <div class="flex justify-between items-start gap-x-5 gap-y-3 flex-wrap">
+        <div class="min-w-0">
+          <div class="flex gap-[9px] items-center flex-wrap">
             <CoreStatusPill status="live" />
             <span class="text-[13px] text-muted">{{ typeLabel }}</span>
           </div>
-          <div class="font-display text-[30px] font-600 mt-[9px]">{{ trip.name }}</div>
+          <h2 class="font-display text-[26px] sm:text-[30px] font-600 leading-[1.15] mt-[9px]">{{ trip.name }}</h2>
           <div class="text-[14px] text-ink-2 mt-1">{{ trip.place }} · {{ trip.dates }}</div>
         </div>
         <div
@@ -88,9 +88,17 @@ function open(tab: string) {
           </div>
           <span class="money text-[13px] text-muted">{{ pctCopy }}</span>
         </div>
-        <div class="h-[10px] rounded-pill bg-sand-100 overflow-hidden flex mt-[10px]">
-          <div style="background:#F0713A" :style="{ width: bars.a + '%' }" />
-          <div style="background:#C85A28" :style="{ width: bars.b + '%' }" />
+        <div
+          class="h-[10px] rounded-pill bg-sand-100 overflow-hidden flex mt-[10px]"
+          role="progressbar"
+          :aria-label="$t('app.hero.used')"
+          aria-valuemin="0"
+          :aria-valuemax="100"
+          :aria-valuenow="Math.min(100, Math.round(budget.pct))"
+          :aria-valuetext="`${rp(budget.spent)} / ${rp(budget.plan)} (${pctCopy})`"
+        >
+          <div class="bg-brand-orange transition-[width] duration-500" :style="{ width: bars.a + '%' }" />
+          <div class="bg-warn-fg transition-[width] duration-500" :style="{ width: bars.b + '%' }" />
         </div>
         <div class="text-[12.5px] text-muted mt-[6px]">{{ paceCopy }}</div>
       </div>
@@ -110,10 +118,11 @@ function open(tab: string) {
       <!-- next activity on its own line -->
       <div class="mt-auto border-t border-sand-line pt-4 flex items-center gap-3">
         <div class="w-[40px] h-[40px] shrink-0 rounded-full bg-warn-bg flex items-center justify-center text-warn-fg">
-          <i class="i-lucide-clock text-[19px]" />
+          <i class="i-lucide-clock text-[19px]" aria-hidden="true" />
         </div>
         <div class="flex-1 min-w-0">
-          <div class="text-[15px] font-600 truncate">{{ nextActCopy }}</div>
+          <div class="eyebrow">{{ $t('app.hero.nextUp') }}</div>
+          <div class="text-[15px] font-600 truncate mt-[2px]">{{ nextActCopy }}</div>
           <div class="text-[13px] text-muted mt-[1px] money">{{ nextActSub }}</div>
         </div>
       </div>
