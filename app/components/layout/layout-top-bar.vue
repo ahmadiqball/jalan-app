@@ -29,12 +29,12 @@ async function openNewTrip() {
       <CoreLogo :size="40" class="hidden sm:block" />
     </NuxtLink>
 
-    <nav class="hidden md:flex gap-1 text-[14px] font-600">
+    <nav class="hidden lg:flex gap-1 text-[14px] font-600">
       <NuxtLink
         v-for="n in nav"
         :key="n.to"
         :to="localePath(n.to)"
-        class="rounded-pill px-4 py-2 transition-colors"
+        class="rounded-pill px-4 py-2 whitespace-nowrap transition-colors"
         :class="isActive(n.to) ? 'bg-teal-100 text-teal-700' : 'text-ink-2 hover:bg-sand-100'"
       >
         {{ $t('nav.' + n.key) }}
@@ -43,13 +43,13 @@ async function openNewTrip() {
 
     <div class="ml-auto flex items-center gap-2 sm:gap-3">
       <div
-        class="hidden lg:flex items-center gap-2 w-[230px] bg-paper border border-sand-line2 rounded-pill px-4 py-[9px] text-[13.5px] text-muted"
+        class="hidden xl:flex items-center gap-2 w-[230px] bg-paper border border-sand-line2 rounded-pill px-4 py-[9px] text-[13.5px] text-muted"
       >
         <i class="i-lucide-search text-[15px]" />
         {{ $t('nav.search') }}
       </div>
       <!-- desktop-only controls; on mobile these live in the profile menu -->
-      <div class="hidden md:flex items-center gap-3">
+      <div class="hidden lg:flex items-center gap-3">
         <LayoutLangSwitch />
         <CoreButton variant="primary" class="!px-[18px] !py-[10px] !text-[14px]" @click="openNewTrip">
           <i class="i-lucide-plus" />

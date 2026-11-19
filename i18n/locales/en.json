@@ -58,50 +58,66 @@
     },
     "home": {
       "hello": "Hi, {name}",
-      "subLive": "One trip in progress and {n} plans waiting on dates.",
-      "subCount": "{n} trips saved.",
-      "next": "Next plans",
-      "count": "{n} trips",
+      "subLive": "One trip in progress, {n} more planned.",
+      "subCount": "{n} trip saved. | {n} trips saved.",
+      "next": "Upcoming plans",
+      "count": "{n} trip | {n} trips",
       "newTrip": "New trip",
-      "newTripHint": "Start blank or from Rute Kelana",
-      "loading": "Loading trips…"
+      "newTripHint": "Start blank or pick one from Rute Kelana",
+      "loading": "Loading trips…",
+      "subEmpty": "No trips saved yet.",
+      "subLiveOnly": "One trip in progress.",
+      "liveTitle": "In progress",
+      "emptyLive": "No trip in progress right now.",
+      "emptyPlan": "No plans yet. Create a new trip below.",
+      "helloAnon": "Hi"
     },
     "filter": {
       "all": "All",
       "live": "In progress",
-      "plan": "Planned"
+      "plan": "Planned",
+      "label": "Filter trips"
     },
     "hero": {
       "dayLabel": "Day {i} of {n}",
       "used": "Spent",
       "perPerson": "Per person",
       "packing": "Packing",
-      "overPace": "Over the plan already",
-      "okPace": "Still within the plan",
+      "overPace": "Over budget",
+      "okPace": "Within budget",
       "noAct": "No activities today yet",
       "logExpense": "Log expense",
       "openTrip": "Open trip",
-      "people": "{n} people"
+      "people": "{n} person | {n} people",
+      "nextUp": "Next up"
     },
     "card": {
-      "plan": "Plan",
+      "plan": "Budget",
       "noItems": "No items yet",
       "packing": "Packing {done}/{total}",
-      "activities": "{n} activities",
-      "notSet": "not set"
+      "activities": "{n} activity | {n} activities",
+      "notSet": "not set",
+      "noDates": "Dates not set",
+      "noBudget": "Not set",
+      "menu": "Trip actions"
     },
     "templates": {
       "startTitle": "Start from Rute Kelana",
-      "startSub": "A full plan with budget and packing. Change the dates, go.",
+      "startSub": "Complete trips with a budget and packing list. Just pick your dates.",
       "seeAll": "See all",
       "read": "Read the route",
       "use": "Create a similar trip",
-      "days": "{n} days",
+      "days": "{n} day | {n} days",
       "noDest": "No destination yet",
-      "used": "Trip created from the route — just set the dates",
+      "used": "Trip created from the route. Just set the dates.",
       "pageTitle": "Rute Kelana",
       "pageSub": "Complete trips we put together, with budget and packing list. Create a similar trip, then make it your own.",
-      "empty": "No routes yet."
+      "empty": "No routes yet.",
+      "perPerson": "± {price} / person",
+      "prev": "Previous route",
+      "next": "Next route",
+      "slide": "Route {n} of {total}",
+      "carousel": "Rute Kelana routes"
     },
     "header": {
       "people": "{n} people",

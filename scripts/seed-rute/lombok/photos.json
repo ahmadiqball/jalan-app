@@ -1,0 +1,42 @@
+{
+ "cover": {
+  "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Gili_Air_Island_from_Gili_Meno_Island%2C_Indonesia.jpg/1920px-Gili_Air_Island_from_Gili_Meno_Island%2C_Indonesia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "credit": "Vyacheslav Argenberg, CC BY 4.0, via Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Gili_Air_Island_from_Gili_Meno_Island,_Indonesia.jpg"
+ },
+ "sunset": {
+  "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Gili_Air_Sunset.jpg/1920px-Gili_Air_Sunset.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "credit": "Benedict Adam from Brighton, England, CC BY 2.0, via Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Gili_Air_Sunset.jpg"
+ },
+ "snorkel": {
+  "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Turtles_point_gili_meno.jpg/1920px-Turtles_point_gili_meno.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "credit": "Hello lombok information, CC BY-SA 4.0, via Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Turtles_point_gili_meno.jpg"
+ },
+ "tiukelep": {
+  "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Tiu_Kelep.jpg/1920px-Tiu_Kelep.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "credit": "Jordy Meow, CC BY 3.0, via Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Tiu_Kelep.jpg"
+ },
+ "sade": {
+  "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Penenun_dari_Desa_Sade.jpg/1920px-Penenun_dari_Desa_Sade.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "credit": "aainayyahm, CC BY-SA 4.0, via Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Penenun_dari_Desa_Sade.jpg"
+ },
+ "selong": {
+  "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Boats_in_selong_belanak.jpg/1920px-Boats_in_selong_belanak.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "credit": "Afifahdpl, CC BY-SA 4.0, via Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Boats_in_selong_belanak.jpg"
+ },
+ "aan": {
+  "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Tanjung_Aan_Beach.jpg/1920px-Tanjung_Aan_Beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "credit": "伊賀上野ニンニン, CC BY-SA 4.0, via Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Tanjung_Aan_Beach.jpg"
+ },
+ "merese": {
+  "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Biru_Bening_Tanjung_Aan.jpg/1920px-Biru_Bening_Tanjung_Aan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "credit": "Dhika Ayu Agustin Cahyani, CC BY-SA 4.0, via Wikimedia Commons",
+  "source": "https://commons.wikimedia.org/wiki/File:Biru_Bening_Tanjung_Aan.jpg"
+ }
+}

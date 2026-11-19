@@ -14,7 +14,7 @@ const { templates } = useTemplatesList()
         {{ $t('app.templates.pageSub') }}
       </p>
     </div>
-    <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))">
+    <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(440px,100%),1fr))">
       <RouteCard v-for="tp in templates" :key="tp.id" :route="tp" />
       <div v-if="!templates.length" class="text-muted text-[14px]">{{ $t('app.templates.empty') }}</div>
     </div>

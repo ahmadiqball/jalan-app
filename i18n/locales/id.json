@@ -58,41 +58,52 @@
     },
     "home": {
       "hello": "Halo, {name}",
-      "subLive": "Satu trip sedang jalan dan {n} rencana menunggu tanggal.",
+      "subLive": "Satu trip sedang jalan, {n} lainnya masih rencana.",
       "subCount": "{n} trip tersimpan.",
       "next": "Rencana berikutnya",
       "count": "{n} trip",
       "newTrip": "Trip baru",
       "newTripHint": "Mulai kosong atau ambil dari Rute Kelana",
-      "loading": "Memuat trip…"
+      "loading": "Memuat trip…",
+      "subEmpty": "Belum ada trip tersimpan.",
+      "subLiveOnly": "Satu trip sedang jalan.",
+      "liveTitle": "Sedang jalan",
+      "emptyLive": "Belum ada trip yang sedang jalan.",
+      "emptyPlan": "Belum ada rencana. Buat trip baru di bawah.",
+      "helloAnon": "Halo"
     },
     "filter": {
       "all": "Semua",
       "live": "Sedang jalan",
-      "plan": "Rencana"
+      "plan": "Rencana",
+      "label": "Saring trip"
     },
     "hero": {
       "dayLabel": "Hari {i} dari {n}",
       "used": "Terpakai",
       "perPerson": "Per orang",
       "packing": "Barang",
-      "overPace": "Sudah lewat rencana",
-      "okPace": "Masih di dalam rencana",
+      "overPace": "Sudah lewat anggaran",
+      "okPace": "Masih dalam anggaran",
       "noAct": "Belum ada aktivitas hari ini",
       "logExpense": "Catat pengeluaran",
       "openTrip": "Buka trip",
-      "people": "{n} orang"
+      "people": "{n} orang",
+      "nextUp": "Berikutnya"
     },
     "card": {
-      "plan": "Rencana",
+      "plan": "Anggaran",
       "noItems": "Belum ada barang",
       "packing": "Barang {done}/{total}",
       "activities": "{n} aktivitas",
-      "notSet": "belum diatur"
+      "notSet": "belum diatur",
+      "noDates": "Tanggal belum diatur",
+      "noBudget": "Belum diatur",
+      "menu": "Aksi trip"
     },
     "templates": {
       "startTitle": "Mulai dari Rute Kelana",
-      "startSub": "Rencana lengkap dengan anggaran dan barang. Ganti tanggal, langsung jalan.",
+      "startSub": "Trip lengkap dengan anggaran dan daftar barang. Tinggal pilih tanggalnya.",
       "seeAll": "Lihat semua",
       "read": "Baca rutenya",
       "use": "Buat trip serupa",
@@ -101,7 +112,12 @@
       "used": "Trip dibuat dari rute, tinggal atur tanggal",
       "pageTitle": "Rute Kelana",
       "pageSub": "Trip lengkap yang sudah kami susun, dengan anggaran dan daftar barang. Buat trip serupa, lalu ubah sesukamu.",
-      "empty": "Belum ada rute."
+      "empty": "Belum ada rute.",
+      "perPerson": "± {price} / orang",
+      "prev": "Rute sebelumnya",
+      "next": "Rute berikutnya",
+      "slide": "Rute {n} dari {total}",
+      "carousel": "Daftar Rute Kelana"
     },
     "header": {
       "people": "{n} orang",

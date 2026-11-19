@@ -67,7 +67,7 @@ async function logout() {
         <DropdownMenuSeparator class="h-px bg-sand-line my-[5px]" />
 
         <!-- mobile-only: primary nav + new trip (lives in the top bar on desktop) -->
-        <div class="md:hidden">
+        <div class="lg:hidden">
           <DropdownMenuItem
             class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[14px] font-700 text-white bg-primary cursor-pointer outline-none data-[highlighted]:bg-primary-hover mb-[2px]"
             @select="newTrip"
@@ -107,7 +107,7 @@ async function logout() {
           <i class="i-lucide-shield text-[15px] text-teal-600" /> {{ $t('menu.admin') }}
         </DropdownMenuItem>
         <!-- mobile-only: language -->
-        <div class="md:hidden px-[10px] py-[8px]">
+        <div class="lg:hidden px-[10px] py-[8px]">
           <div class="text-[11.5px] text-muted font-600 mb-[6px]">{{ $t('menu.language') }}</div>
           <div class="flex items-center gap-[3px] bg-sand-100 rounded-pill p-[3px]">
             <button
@@ -126,7 +126,7 @@ async function logout() {
             </button>
           </div>
         </div>
-        <DropdownMenuSeparator class="md:hidden h-px bg-sand-line my-[5px]" />
+        <DropdownMenuSeparator class="lg:hidden h-px bg-sand-line my-[5px]" />
 
         <DropdownMenuItem
           class="flex items-center gap-2 px-[10px] py-[9px] rounded-[9px] text-[13.5px] text-warn-fg cursor-pointer outline-none data-[highlighted]:bg-warn-bg"
