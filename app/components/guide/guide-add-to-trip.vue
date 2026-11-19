@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { placeTypeToCat, placeTypeLabel, placeTypeIcon } from '~/utils/guide'
+import { placeTypeToCat, placeTypeLabel, placeTypeIcon, parsePriceText } from '~/utils/guide'
 import { tone } from '~/utils/categories'
 
 const { place, close } = useAddToTrip()
@@ -17,8 +17,11 @@ const selectedTripId = ref('')
 const selectedDay = ref(0)
 const time = ref('')
 const note = ref('')
+const cost = ref(0)
 
 const selectedTrip = computed(() => trips.byId(selectedTripId.value))
+// warn (don't block) when this place is already on the chosen day
+const alreadyOnDay = computed(() => !!place.value && !!selectedTrip.value?.days[selectedDay.value]?.acts.some((a) => a.title === place.value!.name))
 const tripOptions = computed(() => editableTrips.value.map((t) => ({ value: t.id, label: t.name })))
 
 // reset the form each time the modal opens
@@ -28,7 +31,9 @@ watch(place, (p) => {
   selectedDay.value = 0
   time.value = ''
   note.value = ''
+  cost.value = parsePriceText(p.priceText)
 })
+watch(selectedTripId, () => { selectedDay.value = 0 })
 
 function confirm() {
   const p = place.value
@@ -38,7 +43,7 @@ function confirm() {
     title: p.name,
     cat: placeTypeToCat(p.type),
     place: p.area ? `${p.name}, ${p.area}` : p.name,
-    cost: 0,
+    cost: cost.value || 0,
     dur: 60,
     note: note.value.trim(),
   })
@@ -87,29 +92,37 @@ const loginLink = computed(() => localePath(`/masuk?next=${encodeURIComponent(ro
         </label>
 
         <!-- 2 · day -->
-        <div v-if="selectedTrip" class="flex flex-col gap-[7px]">
-          <span class="text-[12.5px] font-600 text-ink-2">2 · Pilih hari</span>
+        <fieldset v-if="selectedTrip" class="flex flex-col gap-[7px] border-0 p-0 m-0 min-w-0">
+          <legend class="text-[12.5px] font-600 text-ink-2 mb-[7px]">2 · Pilih hari</legend>
           <div class="flex flex-col gap-[6px] max-h-[220px] overflow-y-auto">
-            <button
+            <label
               v-for="(d, i) in selectedTrip.days"
               :key="i"
-              class="flex items-center gap-3 rounded-field border px-[13px] py-[10px] text-left transition-colors"
+              class="flex items-center gap-3 rounded-field border px-[13px] py-[10px] text-left transition-colors cursor-pointer focus-within:outline focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-teal-600"
               :class="selectedDay === i ? 'border-teal-600 bg-teal-100' : 'border-sand-line2 hover:border-teal-600'"
-              @click="selectedDay = i"
             >
-              <span class="w-[16px] h-[16px] rounded-full border-[2px] shrink-0 flex items-center justify-center" :class="selectedDay === i ? 'border-teal-600' : 'border-sand-line3'">
+              <input v-model="selectedDay" type="radio" name="add-to-trip-day" :value="i" class="sr-only">
+              <span aria-hidden="true" class="w-[16px] h-[16px] rounded-full border-[2px] shrink-0 flex items-center justify-center" :class="selectedDay === i ? 'border-teal-600' : 'border-sand-line3'">
                 <span v-if="selectedDay === i" class="w-[8px] h-[8px] rounded-full bg-teal-600" />
               </span>
               <span class="flex-1 min-w-0">
-                <span class="block money text-[11.5px] text-muted leading-none">{{ d.date }}</span>
+                <span class="block money text-[12px] text-muted leading-none">{{ d.date }}</span>
                 <span class="block text-[13.5px] font-600 truncate">{{ d.title && d.title !== 'Belum diberi nama' ? d.title : 'Hari ' + (i + 1) }}</span>
               </span>
-              <span class="text-[11.5px] text-muted shrink-0">{{ d.acts.length }} aktivitas</span>
-            </button>
+              <span class="text-[12px] text-muted shrink-0">{{ d.acts.length }} aktivitas</span>
+            </label>
           </div>
-        </div>
+          <p v-if="alreadyOnDay" class="text-[12.5px] text-warn-fg flex items-center gap-[6px]" role="status">
+            <i class="i-lucide-info text-[14px]" aria-hidden="true" /> Tempat ini sudah ada di hari tersebut.
+          </p>
+        </fieldset>
 
-        <!-- 3 · time + note -->
+        <!-- 3 · cost, time + note -->
+        <label class="flex flex-col gap-[7px]">
+          <span class="text-[12.5px] font-600 text-ink-2">Perkiraan biaya</span>
+          <CoreMoneyInput v-model="cost" input-class="field money !py-[9px]" />
+          <span v-if="place.priceText" class="text-[12px] text-muted">Dari harga kurasi: {{ place.priceText }}. Sesuaikan jika perlu.</span>
+        </label>
         <div class="grid grid-cols-2 gap-3 items-end">
           <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Jam (opsional)</span><CoreTimeInput v-model="time" /></label>
           <label class="flex flex-col gap-[7px]"><span class="text-[12.5px] font-600 text-ink-2">Catatan (opsional)</span><input v-model="note" placeholder="mis. request kamar" class="field !py-[9px]"></label>

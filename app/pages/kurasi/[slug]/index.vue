@@ -46,15 +46,39 @@ function onSaveGuide() {
   toggle('guide', guide.value.id)
 }
 
-const tab = ref<'ringkasan' | 'tempat' | 'peta' | 'tips'>('tempat')
+// tab + type filter live in the query string so Back from a place, refresh and shared links keep them
+const router = useRouter()
 const TABS = [
-  ['ringkasan', 'Ringkasan'],
   ['tempat', 'Rekomendasi Tempat'],
-  ['peta', 'Peta'],
+  ['ringkasan', 'Ringkasan'],
+  ['lokasi', 'Lokasi'],
   ['tips', 'Tips Perjalanan'],
 ] as const
+type TabKey = (typeof TABS)[number][0]
+const TAB_KEYS = TABS.map((t) => t[0]) as readonly TabKey[]
+function setQuery(key: string, value: string | undefined) {
+  router.replace({ query: { ...route.query, [key]: value } })
+}
+const tab = computed<TabKey>({
+  get: () => (TAB_KEYS.includes(route.query.tab as TabKey) ? (route.query.tab as TabKey) : 'tempat'),
+  set: (v) => setQuery('tab', v === 'tempat' ? undefined : v),
+})
+const typeFilter = computed<string>({
+  get: () => (typeof route.query.tipe === 'string' ? route.query.tipe : 'all'),
+  set: (v) => setQuery('tipe', v === 'all' ? undefined : v),
+})
 
-const typeFilter = ref('all')
+// roving arrow-key navigation between tabs (WAI-ARIA tabs pattern)
+function onTabKey(e: KeyboardEvent, i: number) {
+  const n = TABS.length
+  const next = e.key === 'ArrowRight' ? (i + 1) % n : e.key === 'ArrowLeft' ? (i - 1 + n) % n : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1
+  if (next < 0) return
+  e.preventDefault()
+  const k = TABS[next]![0]
+  tab.value = k
+  document.getElementById(`tab-${k}`)?.focus()
+}
+
 const places = computed(() => guide.value?.places ?? [])
 const presentTypes = computed(() => PLACE_TYPES.filter((t) => places.value.some((p) => p.type === t.id)))
 const featuredCount = computed(() => places.value.filter((p) => p.featured).length)
@@ -63,7 +87,7 @@ const shownPlaces = computed(() => {
   if (typeFilter.value === 'featured') return places.value.filter((p) => p.featured)
   return places.value.filter((p) => p.type === typeFilter.value)
 })
-const placesWithLocation = computed(() => places.value.filter((p) => p.gmapsPlaceId || p.area || p.name))
+const typeCount = (id: string) => places.value.filter((p) => p.type === id).length
 
 const facts = computed(() => {
   const g = guide.value
@@ -109,7 +133,7 @@ const facts = computed(() => {
             </div>
           </div>
           <div class="md:flex-1 md:min-w-0 flex justify-center md:justify-end pb-4 md:pb-0">
-            <img v-if="guide.heroImage" :src="guide.heroImage" :alt="guide.name" style="mix-blend-mode:multiply" class="w-full max-w-[680px] h-auto object-contain select-none pointer-events-none">
+            <img v-if="guide.heroImage" :src="guide.heroImage" alt="" style="mix-blend-mode:multiply" class="w-full max-w-[680px] h-auto object-contain select-none pointer-events-none">
             <div v-else class="w-full max-w-[460px] h-[180px] md:h-[240px] rounded-card bg-sand-100 flex items-center justify-center text-muted"><i class="i-lucide-image text-[28px]" /></div>
           </div>
         </div>
@@ -117,18 +141,25 @@ const facts = computed(() => {
 
       <!-- tabs -->
       <div class="border-b border-sand-line sticky top-[68px] bg-paper z-20">
-        <div class="max-w-[1000px] mx-auto px-[20px] md:px-[32px] flex gap-[2px] overflow-x-auto">
+        <div class="max-w-[1000px] mx-auto px-[20px] md:px-[32px] flex gap-[2px] overflow-x-auto" role="tablist" aria-label="Bagian destinasi">
           <button
-            v-for="[k, label] in TABS"
+            v-for="([k, label], i) in TABS"
+            :id="`tab-${k}`"
             :key="k"
+            type="button"
+            role="tab"
+            :aria-selected="tab === k"
+            aria-controls="kurasi-panel"
+            :tabindex="tab === k ? 0 : -1"
             class="px-4 pt-[13px] pb-[13px] text-[14px] whitespace-nowrap border-b-[2.5px] transition-colors"
             :class="tab === k ? 'border-teal-600 text-ink font-700' : 'border-transparent text-muted font-500 hover:text-ink-2'"
             @click="tab = k"
+            @keydown="onTabKey($event, i)"
           >{{ label }}</button>
         </div>
       </div>
 
-      <div class="max-w-[1000px] mx-auto p-[26px_20px_64px] md:p-[30px_32px_72px]">
+      <div id="kurasi-panel" role="tabpanel" :aria-labelledby="`tab-${tab}`" class="max-w-[1000px] mx-auto p-[26px_20px_64px] md:p-[30px_32px_72px]">
         <!-- Ringkasan -->
         <div v-if="tab === 'ringkasan'" class="flex flex-col gap-5 anim-rise-fast">
           <div>
@@ -158,16 +189,18 @@ const facts = computed(() => {
 
         <!-- Rekomendasi Tempat -->
         <div v-else-if="tab === 'tempat'" class="flex flex-col gap-4 anim-rise-fast">
-          <div class="flex gap-2 flex-wrap">
-            <button class="rounded-pill px-[13px] py-[7px] text-[12.5px] font-600 border transition-colors" :class="typeFilter === 'all' ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'" @click="typeFilter = 'all'">Semua ({{ places.length }})</button>
-            <button v-if="featuredCount" class="rounded-pill px-[13px] py-[7px] text-[12.5px] font-600 border transition-colors flex items-center gap-[6px]" :class="typeFilter === 'featured' ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'" @click="typeFilter = 'featured'"><i class="i-lucide-sparkles text-[14px]" /> Direkomendasikan ({{ featuredCount }})</button>
+          <div class="flex gap-2 flex-wrap" role="group" aria-label="Filter jenis tempat">
+            <button type="button" :aria-pressed="typeFilter === 'all'" class="rounded-pill px-[13px] py-[7px] text-[13px] font-600 border transition-colors" :class="typeFilter === 'all' ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'" @click="typeFilter = 'all'">Semua ({{ places.length }})</button>
+            <button v-if="featuredCount" type="button" :aria-pressed="typeFilter === 'featured'" class="rounded-pill px-[13px] py-[7px] text-[13px] font-600 border transition-colors flex items-center gap-[6px]" :class="typeFilter === 'featured' ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'" @click="typeFilter = 'featured'"><i class="i-lucide-sparkles text-[14px]" aria-hidden="true" /> Direkomendasikan ({{ featuredCount }})</button>
             <button
               v-for="t in presentTypes"
               :key="t.id"
-              class="rounded-pill px-[13px] py-[7px] text-[12.5px] font-600 border transition-colors flex items-center gap-[6px]"
+              type="button"
+              :aria-pressed="typeFilter === t.id"
+              class="rounded-pill px-[13px] py-[7px] text-[13px] font-600 border transition-colors flex items-center gap-[6px]"
               :class="typeFilter === t.id ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'"
               @click="typeFilter = t.id"
-            ><i :class="t.icon" class="text-[14px]" /> {{ t.label }} ({{ places.filter((p) => p.type === t.id).length }})</button>
+            ><i :class="t.icon" class="text-[14px]" aria-hidden="true" /> {{ t.label }} ({{ typeCount(t.id) }})</button>
           </div>
           <div v-if="shownPlaces.length" class="grid gap-[16px]" style="grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr))">
             <GuidePlaceCard v-for="p in shownPlaces" :key="p.id" :place="p" :slug="guide.slug" />
@@ -175,14 +208,15 @@ const facts = computed(() => {
           <div v-else class="card p-10 text-center text-muted text-[14px]">Belum ada tempat di kategori ini.</div>
         </div>
 
-        <!-- Peta -->
-        <div v-else-if="tab === 'peta'" class="flex flex-col gap-3 anim-rise-fast">
-          <p class="text-[13.5px] text-muted">Buka tiap tempat langsung di Google Maps.</p>
+        <!-- Lokasi: a list of Google Maps links, not an embedded map -->
+        <div v-else-if="tab === 'lokasi'" class="flex flex-col gap-3 anim-rise-fast">
+          <p class="text-[14px] text-muted">Buka tiap tempat langsung di Google Maps.</p>
           <div class="card divide-y divide-sand-100">
-            <a v-for="p in placesWithLocation" :key="p.id" :href="searchUrl({ name: p.name, placeId: p.gmapsPlaceId }, guide.name)" target="_blank" rel="noopener" class="flex items-center gap-3 p-[13px_16px] hover:bg-sand-100 transition-colors">
-              <i class="i-lucide-map-pin text-[16px] text-teal-700 shrink-0" />
+            <a v-for="p in places" :key="p.id" :href="searchUrl({ name: p.name, placeId: p.gmapsPlaceId }, guide.name)" target="_blank" rel="noopener" class="flex items-center gap-3 p-[13px_16px] hover:bg-sand-100 transition-colors">
+              <i class="i-lucide-map-pin text-[16px] text-teal-700 shrink-0" aria-hidden="true" />
               <div class="flex-1 min-w-0"><div class="text-[14px] font-600 truncate">{{ p.name }}</div><div v-if="p.area" class="text-[12px] text-muted truncate">{{ p.area }}</div></div>
-              <i class="i-lucide-external-link text-[15px] text-muted shrink-0" />
+              <i class="i-lucide-external-link text-[15px] text-muted shrink-0" aria-hidden="true" />
+              <span class="sr-only">(buka di Google Maps, tab baru)</span>
             </a>
           </div>
         </div>

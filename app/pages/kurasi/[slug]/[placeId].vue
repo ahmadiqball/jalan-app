@@ -19,6 +19,19 @@ useHead(() => ({ title: (place.value?.name ?? 'Tempat') + ' · Kurasi Kelana' })
 const gallery = computed(() => (place.value?.gallery ?? []).slice(0, 5))
 const mainImg = ref(0)
 watch(() => place.value?.id, () => { mainImg.value = 0 })
+function go(step: number) {
+  const n = gallery.value.length
+  if (n > 1) mainImg.value = (mainImg.value + step + n) % n
+}
+// horizontal swipe on touch screens
+let touchX: number | null = null
+function onTouchStart(e: TouchEvent) { touchX = e.touches[0]?.clientX ?? null }
+function onTouchEnd(e: TouchEvent) {
+  if (touchX === null) return
+  const dx = (e.changedTouches[0]?.clientX ?? touchX) - touchX
+  touchX = null
+  if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1)
+}
 const mapHref = computed(() => (place.value ? searchUrl({ name: place.value.name, placeId: place.value.gmapsPlaceId }, place.value.destination.name) : '#'))
 
 const saved = computed(() => (place.value ? isSaved('place', place.value.id) : false))
@@ -41,18 +54,42 @@ function onSave() {
       Tempat tidak ditemukan. <NuxtLink :to="localePath('/kurasi')" class="text-teal-600 font-600">Kembali ke Kurasi Kelana</NuxtLink>
     </div>
 
-    <div v-else class="max-w-[1000px] mx-auto p-[20px_20px_64px] md:p-[26px_32px_72px] flex flex-col gap-5">
+    <div v-else class="max-w-[1000px] mx-auto p-[20px_20px_112px] md:p-[26px_32px_72px] flex flex-col gap-5">
       <NuxtLink :to="localePath(`/kurasi/${place.destination.slug}`)" class="inline-flex items-center gap-1 text-[13px] font-600 text-muted hover:text-teal-700 w-fit"><i class="i-lucide-chevron-left text-[16px]" /> Kembali ke {{ place.destination.name }}</NuxtLink>
 
       <!-- gallery carousel (max 5) -->
-      <div v-if="gallery.length" class="relative rounded-card overflow-hidden h-[240px] md:h-[380px] bg-sand-100">
-        <div class="w-full h-full bg-cover bg-center" :style="{ backgroundImage: `url('${gallery[Math.min(mainImg, gallery.length - 1)]}')` }" />
+      <div
+        v-if="gallery.length"
+        class="relative rounded-card overflow-hidden h-[240px] md:h-[380px] bg-sand-100"
+        role="region"
+        aria-roledescription="carousel"
+        :aria-label="`Foto ${place.name}`"
+        @touchstart.passive="onTouchStart"
+        @touchend="onTouchEnd"
+      >
+        <img
+          :src="gallery[Math.min(mainImg, gallery.length - 1)]"
+          :alt="gallery.length > 1 ? `${place.name}, foto ${mainImg + 1} dari ${gallery.length}` : place.name"
+          class="w-full h-full object-cover select-none"
+          draggable="false"
+        >
         <template v-if="gallery.length > 1">
-          <button type="button" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-ink-2 hover:bg-white" @click="mainImg = (mainImg - 1 + gallery.length) % gallery.length"><i class="i-lucide-chevron-left text-[20px]" /></button>
-          <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-ink-2 hover:bg-white" @click="mainImg = (mainImg + 1) % gallery.length"><i class="i-lucide-chevron-right text-[20px]" /></button>
-          <div class="absolute top-3 right-3 rounded-pill bg-black/45 text-white text-[11.5px] font-700 px-[9px] py-[3px] money">{{ (mainImg % gallery.length) + 1 }}/{{ gallery.length }}</div>
-          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-[6px]">
-            <button v-for="(g, i) in gallery" :key="i" type="button" class="h-[7px] rounded-full transition-all" :class="i === mainImg ? 'bg-white w-[20px]' : 'bg-white/60 w-[7px]'" @click="mainImg = i" />
+          <button type="button" aria-label="Foto sebelumnya" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow flex items-center justify-center text-ink-2 hover:bg-white" @click="go(-1)"><i class="i-lucide-chevron-left text-[20px]" aria-hidden="true" /></button>
+          <button type="button" aria-label="Foto berikutnya" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow flex items-center justify-center text-ink-2 hover:bg-white" @click="go(1)"><i class="i-lucide-chevron-right text-[20px]" aria-hidden="true" /></button>
+          <div class="absolute top-3 right-3 rounded-pill bg-black/55 text-white text-[12px] font-700 px-[9px] py-[3px] money" aria-hidden="true">{{ mainImg + 1 }}/{{ gallery.length }}</div>
+          <!-- dots: 7px visual, 24px hit area -->
+          <div class="absolute bottom-1 left-1/2 -translate-x-1/2 flex">
+            <button
+              v-for="n in gallery.length"
+              :key="n"
+              type="button"
+              class="h-[24px] min-w-[24px] px-[3px] flex items-center justify-center"
+              :aria-label="`Foto ${n}`"
+              :aria-current="n - 1 === mainImg ? 'true' : undefined"
+              @click="mainImg = n - 1"
+            >
+              <span class="block h-[7px] rounded-full transition-all" :class="n - 1 === mainImg ? 'bg-white w-[20px]' : 'bg-white/60 w-[7px]'" />
+            </button>
           </div>
         </template>
       </div>
@@ -89,11 +126,11 @@ function onSave() {
           <!-- tentang -->
           <div v-if="place.longDesc || place.shortDesc">
             <div class="font-display text-[19px] font-600 mb-2">Tentang</div>
-            <p class="text-[14px] text-ink-2 leading-[1.6]">{{ place.longDesc || place.shortDesc }}</p>
+            <p class="text-[15px] md:text-[14.5px] text-ink-2 leading-[1.6] max-w-[68ch]">{{ place.longDesc || place.shortDesc }}</p>
           </div>
           <!-- good to know -->
           <div v-if="place.goodToKnow?.length" class="card p-[16px_18px]">
-            <div class="flex items-center gap-2 mb-2"><i class="i-lucide-lightbulb text-warn-fg text-[17px]" /><div class="font-display text-[16px] font-600">Good to Know</div></div>
+            <div class="flex items-center gap-2 mb-2"><i class="i-lucide-lightbulb text-warn-fg text-[17px]" /><div class="font-display text-[16px] font-600">Perlu diketahui</div></div>
             <div class="flex flex-col gap-[9px] mt-1">
               <div v-for="(g, i) in place.goodToKnow" :key="i" class="flex items-start gap-[10px] text-[13.5px] text-ink-2"><i class="i-lucide-check-circle-2 text-teal-600 text-[16px] shrink-0 mt-[1px]" /> <span>{{ g }}</span></div>
             </div>
@@ -114,6 +151,15 @@ function onSave() {
           <a :href="mapHref" target="_blank" rel="noopener" class="mt-3 block"><CoreButton variant="ghost" block class="!py-[11px] !text-[13.5px]"><i class="i-lucide-map text-[15px]" /> Lihat di Maps</CoreButton></a>
           <a v-if="place.url" :href="place.url" target="_blank" rel="noopener" class="mt-2 block"><CoreButton variant="ghost" block class="!py-[11px] !text-[13.5px]"><i class="i-lucide-external-link text-[15px]" /> Situs</CoreButton></a>
         </div>
+      </div>
+
+      <!-- mobile: keep the main action in thumb reach once the header buttons scroll away -->
+      <div class="md:hidden fixed inset-x-0 bottom-0 z-30 bg-white border-t border-sand-line px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] flex items-center gap-3">
+        <div class="flex-1 min-w-0">
+          <div class="text-[14px] font-600 truncate">{{ place.name }}</div>
+          <div v-if="place.priceText" class="money text-[12px] text-muted truncate">{{ place.priceText }}</div>
+        </div>
+        <CoreButton variant="primary" class="!px-[16px] !py-[11px] !text-[14px] shrink-0" @click="addToTrip(place)"><i class="i-lucide-plus text-[15px]" /> Tambah ke trip</CoreButton>
       </div>
     </div>
   </div>

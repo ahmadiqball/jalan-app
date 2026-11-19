@@ -34,7 +34,7 @@ const shown = computed(() => {
           </p>
         </div>
         <div class="md:flex-1 md:min-w-0 flex justify-center md:justify-end pb-4 md:pb-0">
-          <img src="/img/guides-hero.webp" alt="Kurasi Kelana" style="mix-blend-mode:multiply" class="w-full max-w-[720px] h-auto object-contain select-none pointer-events-none">
+          <img src="/img/guides-hero.webp" alt="" style="mix-blend-mode:multiply" class="w-full max-w-[720px] h-auto object-contain select-none pointer-events-none">
         </div>
       </div>
     </div>
@@ -42,18 +42,21 @@ const shown = computed(() => {
     <div class="max-w-[1100px] mx-auto p-[20px_20px_64px] md:p-[26px_32px_72px] flex flex-col gap-6">
       <!-- region filter + search -->
       <div class="flex items-center gap-3 flex-wrap">
-        <div class="flex gap-2 flex-wrap flex-1 min-w-0">
+        <div class="flex gap-2 flex-wrap flex-1 min-w-0" role="group" aria-label="Filter region">
           <button
             v-for="r in regions"
             :key="r"
+            type="button"
+            :aria-pressed="region === r"
             class="rounded-pill px-[14px] py-[8px] text-[13px] font-600 border transition-colors"
             :class="region === r ? 'border-teal-600 bg-teal-100 text-teal-700' : 'border-sand-line text-muted hover:border-teal-600'"
             @click="region = r"
           >{{ r }}</button>
         </div>
         <div class="relative w-full sm:w-[260px] shrink-0">
-          <i class="i-lucide-search absolute left-[13px] top-1/2 -translate-y-1/2 text-[16px] text-muted" />
-          <input v-model="q" placeholder="Cari destinasi atau tempat…" class="field !pl-[38px] !py-[10px] bg-white w-full">
+          <label for="kurasi-search" class="sr-only">Cari destinasi</label>
+          <i class="i-lucide-search absolute left-[13px] top-1/2 -translate-y-1/2 text-[16px] text-muted" aria-hidden="true" />
+          <input id="kurasi-search" v-model="q" type="search" placeholder="Cari destinasi atau region…" class="field !pl-[38px] !py-[10px] bg-white w-full">
         </div>
       </div>
 
