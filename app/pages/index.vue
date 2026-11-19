@@ -13,11 +13,17 @@ const { busy, start } = useCheckout()
 const { data: guidesData } = await useFetch('/api/guides', { key: 'landing-guides' })
 const guides = computed(() => (guidesData.value || []).slice(0, 4))
 
+const anchors = [
+  { href: '#fitur', label: 'landing.nav.features' },
+  { href: '#dalam', label: 'landing.nav.inside' },
+  { href: '#cerita', label: 'landing.nav.stories' },
+  { href: '#harga', label: 'landing.nav.pricing' },
+]
 const places = [
-  { name: 'Sumba Timur', photo: '/img/photo-sumba.jpg', tag: 'sumba', days: 4, people: 3, price: 'Rp 3,1jt' },
-  { name: 'Ubud & Tegallalang', photo: '/img/photo-ubud.jpg', tag: 'ubud', days: 3, people: 2, price: 'Rp 1,85jt' },
-  { name: 'Bromo Sunrise', photo: '/img/photo-bromo.jpg', tag: 'bromo', days: 5, people: 4, price: 'Rp 4,6jt' },
-  { name: 'Bali Selatan', photo: '/img/photo-kota.jpg', tag: 'bali', days: 4, people: 2, price: 'Rp 2,7jt' },
+  { name: 'Sumba Timur', photo: '/img/photo-sumba.jpg', w: 1200, h: 798, tag: 'sumba', days: 4, people: 3, price: 'Rp 3,1jt' },
+  { name: 'Ubud & Tegallalang', photo: '/img/photo-ubud.jpg', w: 1200, h: 900, tag: 'ubud', days: 3, people: 2, price: 'Rp 1,85jt' },
+  { name: 'Bromo Sunrise', photo: '/img/photo-bromo.jpg', w: 1000, h: 521, tag: 'bromo', days: 5, people: 4, price: 'Rp 4,6jt' },
+  { name: 'Bali Selatan', photo: '/img/photo-kota.jpg', w: 1200, h: 800, tag: 'bali', days: 4, people: 2, price: 'Rp 2,7jt' },
 ]
 const rail = [
   { label: 'tabs.days', href: '#hari', desc: 'landing.rail.days', icon: 'i-lucide-calendar-days' },
@@ -28,6 +34,26 @@ const rail = [
   { label: 'landing.rail.sharingLabel', href: '#anggota', desc: 'landing.rail.sharing', icon: 'i-lucide-users' },
   { label: 'landing.guides.label', href: '#panduan', desc: 'landing.guides.desc', icon: 'i-lucide-compass' },
 ]
+const budgetCats = [
+  { k: 'cat1', color: 'var(--teal-600)', v: '1,4jt' },
+  { k: 'cat2', color: 'var(--brand-green)', v: '780rb' },
+  { k: 'cat3', color: 'var(--brand-amber)', v: '450rb' },
+  { k: 'cat4', color: 'var(--teal-soft-2)', v: '900rb' },
+]
+const expenseRows = [
+  { k: 'row1', icon: 'i-lucide-car', v: '700rb' },
+  { k: 'row2', icon: 'i-lucide-coffee', v: '48rb' },
+  { k: 'row3', icon: 'i-lucide-square-parking', v: '20rb' },
+]
+const outfitRows = [
+  { icon: 'i-lucide-shirt', k: 'top' },
+  { icon: 'i-lucide-rectangle-vertical', k: 'bottom' },
+  { icon: 'i-lucide-footprints', k: 'shoes' },
+]
+const members = [
+  { ini: 'DP', name: 'Dimas Prayoga', k: 'm1' },
+  { ini: 'AL', name: 'Ayu Larasati', k: 'm2' },
+]
 const stories = [
   { k: 's1', who: 'Dimas P.', ini: 'DP' },
   { k: 's2', who: 'Ayu L.', ini: 'AL' },
@@ -36,426 +62,537 @@ const stories = [
 
 const period = ref<BillingPeriod>('1m')
 
-// destination carousel
+// mobile menu
+const menuOpen = ref(false)
+function onKey(e: KeyboardEvent) { if (e.key === 'Escape') menuOpen.value = false }
+
+// destination carousel: autoplay stops on hover, focus, off-screen, hidden tab,
+// reduced motion, or as soon as the visitor takes control
 const railEl = ref<HTMLElement | null>(null)
 const slide = ref(0)
+const playing = ref(true)
+const hovering = ref(false)
+const focused = ref(false)
+const onScreen = ref(true)
+const pageVisible = ref(true)
+const reduceMotion = ref(false)
+const autoplaying = computed(() => playing.value && !hovering.value && !focused.value && onScreen.value && pageVisible.value)
 let timer: ReturnType<typeof setInterval> | undefined
-let paused = false
+let scrollT: ReturnType<typeof setTimeout> | undefined
+let io: IntersectionObserver | undefined
+
+function cardOffsets() {
+  const track = railEl.value?.firstElementChild as HTMLElement | undefined
+  if (!track) return []
+  return Array.from(track.children).map(c => (c as HTMLElement).offsetLeft - track.offsetLeft)
+}
 function go(i: number) {
   slide.value = ((i % places.length) + places.length) % places.length
-  const track = railEl.value?.firstElementChild as HTMLElement | undefined
-  const card = track?.children[slide.value] as HTMLElement | undefined
-  if (track && card && railEl.value) railEl.value.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' })
+  const left = cardOffsets()[slide.value]
+  if (railEl.value && left !== undefined) railEl.value.scrollTo({ left, behavior: reduceMotion.value ? 'auto' : 'smooth' })
 }
+function nav(i: number) { playing.value = false; go(i) }
+// keep the counter and dots in sync when the rail is swiped or scrolled by hand
+function onRailScroll() {
+  clearTimeout(scrollT)
+  scrollT = setTimeout(() => {
+    const el = railEl.value
+    if (!el) return
+    const offs = cardOffsets()
+    const max = el.scrollWidth - el.clientWidth
+    // the last cards can't reach the left edge; keep the chosen slide there
+    if (el.scrollLeft >= max - 2 && (offs[slide.value] ?? 0) >= max - 2) return
+    let best = 0
+    offs.forEach((o, i) => { if (Math.abs(o - el.scrollLeft) < Math.abs((offs[best] ?? 0) - el.scrollLeft)) best = i })
+    slide.value = best
+  }, 120)
+}
+function onFocusOut(e: FocusEvent) {
+  const root = e.currentTarget as HTMLElement
+  if (!root.contains(e.relatedTarget as Node | null)) focused.value = false
+}
+function onVisibility() { pageVisible.value = !document.hidden }
+
 onMounted(() => {
-  timer = setInterval(() => { if (!paused) go(slide.value + 1) }, 5000)
+  reduceMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (reduceMotion.value) playing.value = false
+  document.addEventListener('visibilitychange', onVisibility)
+  window.addEventListener('keydown', onKey)
+  if (railEl.value) {
+    io = new IntersectionObserver(([entry]) => { onScreen.value = !!entry?.isIntersecting })
+    io.observe(railEl.value)
+  }
+  timer = setInterval(() => { if (autoplaying.value) go(slide.value + 1) }, 5000)
 })
-onBeforeUnmount(() => clearInterval(timer))
-function nav(i: number) { paused = true; go(i) }
+onBeforeUnmount(() => {
+  clearInterval(timer)
+  clearTimeout(scrollT)
+  io?.disconnect()
+  document.removeEventListener('visibilitychange', onVisibility)
+  window.removeEventListener('keydown', onKey)
+})
 </script>
 
 <template>
   <div class="min-h-screen overflow-x-clip">
-    <!-- sticky nav -->
-    <div class="sticky top-0 z-[60] bg-paper/95 backdrop-blur border-b border-sand-line">
-      <div class="max-w-[1200px] mx-auto px-4 md:px-6 py-[13px] flex gap-3 md:gap-[18px] items-center">
+    <!-- header -->
+    <header class="sticky top-0 z-[60] bg-paper/95 backdrop-blur border-b border-sand-line">
+      <div class="max-w-[1200px] mx-auto px-4 md:px-6 h-16 flex gap-3 md:gap-5 items-center">
         <CoreLogo :size="28" :text-size="19" variant="ink" :weight="800" class="shrink-0" />
-        <nav class="flex-1 hidden md:flex gap-6 items-center justify-center text-[14px] font-600 text-ink-2">
-          <a href="#fitur" class="hover:text-brand-amber">{{ $t('landing.nav.features') }}</a>
-          <a href="#dalam" class="hover:text-brand-amber">{{ $t('landing.nav.inside') }}</a>
-          <a href="#cerita" class="hover:text-brand-amber">{{ $t('landing.nav.stories') }}</a>
-          <a href="#harga" class="hover:text-brand-amber">{{ $t('landing.nav.pricing') }}</a>
-          <NuxtLink :to="localePath('/guides')" class="hover:text-brand-amber">Guides</NuxtLink>
+        <nav :aria-label="$t('landing.nav.menu')" class="flex-1 hidden md:flex gap-6 items-center justify-center text-[14px] font-500">
+          <a v-for="a in anchors" :key="a.href" :href="a.href" class="text-ink-2 hover:text-ink transition-colors">{{ $t(a.label) }}</a>
+          <NuxtLink :to="localePath('/guides')" class="text-ink-2 hover:text-ink transition-colors">{{ $t('landing.nav.guides') }}</NuxtLink>
         </nav>
-        <div class="ml-auto md:ml-0 flex gap-2 sm:gap-[10px] items-center shrink-0">
+        <div class="ml-auto md:ml-0 flex gap-2 sm:gap-3 items-center shrink-0">
           <LayoutLangSwitch />
-          <NuxtLink :to="appHref" class="text-[13.5px] font-700 text-ink px-1 hidden sm:block">{{ $t('landing.nav.signin') }}</NuxtLink>
-          <NuxtLink :to="appHref" class="bg-primary text-white rounded-pill px-[14px] sm:px-[19px] py-[10px] sm:py-[11px] text-[13px] sm:text-[13.5px] font-700 whitespace-nowrap hover:bg-primary-hover">{{ $t('landing.nav.tryFree') }}</NuxtLink>
+          <NuxtLink :to="appHref" class="text-[14px] font-600 text-ink hover:text-teal-700 px-1 hidden sm:block transition-colors">{{ $t('landing.nav.signin') }}</NuxtLink>
+          <NuxtLink :to="appHref" class="bg-primary hover:bg-primary-hover text-white hover:text-white rounded-pill h-10 px-4 sm:px-5 inline-flex items-center text-[14px] font-600 whitespace-nowrap transition-colors">{{ $t('landing.nav.tryFree') }}</NuxtLink>
+          <button
+            type="button"
+            class="md:hidden w-11 h-11 -mr-2 rounded-full flex items-center justify-center text-ink hover:bg-sand-100 transition-colors"
+            :aria-label="$t('landing.nav.menu')"
+            :aria-expanded="menuOpen"
+            aria-controls="landing-menu"
+            @click="menuOpen = !menuOpen"
+          >
+            <i :class="menuOpen ? 'i-lucide-x' : 'i-lucide-menu'" class="text-[20px]" aria-hidden="true" />
+          </button>
         </div>
       </div>
-    </div>
+      <nav v-show="menuOpen" id="landing-menu" :aria-label="$t('landing.nav.menu')" class="md:hidden border-t border-sand-line bg-paper px-4 py-2">
+        <ul class="flex flex-col">
+          <li v-for="a in anchors" :key="a.href">
+            <a :href="a.href" class="flex items-center h-12 text-[15px] font-500 text-ink hover:text-teal-700" @click="menuOpen = false">{{ $t(a.label) }}</a>
+          </li>
+          <li><NuxtLink :to="localePath('/guides')" class="flex items-center h-12 text-[15px] font-500 text-ink hover:text-teal-700" @click="menuOpen = false">{{ $t('landing.nav.guides') }}</NuxtLink></li>
+          <li class="border-t border-sand-line mt-2 pt-2"><NuxtLink :to="appHref" class="flex items-center h-12 text-[15px] font-600 text-ink hover:text-teal-700">{{ $t('landing.nav.signin') }}</NuxtLink></li>
+        </ul>
+      </nav>
+    </header>
 
-    <!-- hero -->
-    <div class="relative overflow-hidden">
-      <img src="/img/teal-cloud.svg" alt="" class="absolute right-[-40px] top-[20px] w-[260px] opacity-90 pointer-events-none z-0">
-      <img src="/img/teal-plane.svg" alt="" class="absolute left-[-24px] top-[470px] w-[200px] opacity-75 pointer-events-none z-0 hidden md:block">
-      <div class="absolute right-[-120px] top-[60px] w-[520px] h-[520px] rounded-full bg-sand-100 opacity-90 z-0" />
+    <main>
+      <!-- hero -->
+      <section class="relative overflow-hidden">
+        <img src="/img/teal-cloud.svg" alt="" aria-hidden="true" class="absolute right-[-40px] top-5 w-[260px] opacity-90 pointer-events-none z-0">
+        <img src="/img/teal-plane.svg" alt="" aria-hidden="true" class="absolute left-[-24px] top-[472px] w-[200px] opacity-75 pointer-events-none z-0 hidden md:block">
 
-      <div class="relative z-[2] max-w-[1200px] mx-auto px-6 pt-14 pb-8 flex flex-wrap gap-9 items-center">
-        <div class="flex-1 basis-[420px] min-w-[300px] max-w-[560px] anim-rise">
-          <div class="inline-flex gap-2 items-center bg-white border border-sand-line rounded-pill px-[14px] py-[7px] text-[12.5px] font-700 text-ink-2">
-            <span class="w-[6px] h-[6px] rounded-full bg-teal-600" /> {{ $t('landing.hero.badge') }}
+        <div class="relative z-[2] max-w-[1200px] mx-auto px-6 pt-14 pb-8 flex flex-wrap gap-10 items-center">
+          <div class="flex-1 basis-[420px] min-w-[300px] max-w-[560px] anim-rise">
+            <p class="flex gap-2 items-center text-[13px] font-600 text-teal-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-teal-600" aria-hidden="true" /> {{ $t('landing.hero.badge') }}
+            </p>
+            <h1 class="font-display text-[clamp(40px,5.2vw,64px)] font-600 tracking-[-.03em] leading-[1.02] mt-4 [text-wrap:balance]">
+              {{ $t('landing.hero.title1') }}<br><span class="text-teal-700">{{ $t('landing.hero.title2') }}</span>
+            </h1>
+            <p class="text-[17px] leading-[1.6] text-ink-2 mt-5 max-w-[470px]">
+              {{ $t('landing.hero.blurb') }}
+            </p>
+            <div class="flex gap-3 flex-wrap mt-8">
+              <NuxtLink :to="appHref" class="bg-primary hover:bg-primary-hover text-white hover:text-white rounded-pill h-12 px-6 inline-flex items-center text-[15px] font-600 shadow-[0_18px_30px_-18px_rgba(16,38,43,.32)] transition-colors">{{ $t('landing.hero.tryFree') }}</NuxtLink>
+              <a href="#dalam" class="bg-white border border-sand-line hover:border-sand-line3 text-ink hover:text-ink rounded-pill h-12 px-6 inline-flex items-center text-[15px] font-600 transition-colors">{{ $t('landing.hero.seeInside') }}</a>
+            </div>
+            <dl class="flex gap-5 flex-wrap mt-8">
+              <div class="flex flex-col-reverse"><dt class="text-[13px] text-ink-2 mt-1">{{ $t('landing.hero.stat1') }}</dt><dd class="text-[20px] font-600 tabular-nums">12.400</dd></div>
+              <div class="w-px bg-sand-line" aria-hidden="true" />
+              <div class="flex flex-col-reverse"><dt class="text-[13px] text-ink-2 mt-1">{{ $t('landing.hero.stat2') }}</dt><dd class="text-[20px] font-600 tabular-nums">Rp 0</dd></div>
+              <div class="w-px bg-sand-line" aria-hidden="true" />
+              <div class="flex flex-col-reverse"><dt class="text-[13px] text-ink-2 mt-1">{{ $t('landing.hero.stat3') }}</dt><dd class="text-[20px] font-600 tabular-nums">4,9</dd></div>
+            </dl>
           </div>
-          <h1 class="text-[clamp(38px,5vw,60px)] font-800 tracking-[-.035em] leading-[1.03] mt-5 [text-wrap:balance]">
-            {{ $t('landing.hero.title1') }}<br><span class="text-teal-700">{{ $t('landing.hero.title2') }}</span>
-          </h1>
-          <p class="text-[17px] leading-[1.62] text-ink-2 mt-[18px] max-w-[470px] [text-wrap:pretty]">
-            {{ $t('landing.hero.blurb') }}
-          </p>
-          <div class="flex gap-3 flex-wrap mt-[26px]">
-            <NuxtLink :to="appHref" class="bg-primary text-white rounded-pill px-[26px] py-[15px] text-[15px] font-700 shadow-[0_18px_30px_-18px_rgba(16,38,43,.32)] hover:bg-primary-hover">{{ $t('landing.hero.tryFree') }}</NuxtLink>
-            <a href="#dalam" class="bg-white border border-sand-line text-ink rounded-pill px-[22px] py-[14px] text-[14.5px] font-700">{{ $t('landing.hero.seeInside') }}</a>
-          </div>
-          <div class="flex gap-5 flex-wrap mt-7">
-            <div><div class="text-[20px] font-600">12.400</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat1') }}</div></div>
-            <div class="w-px bg-sand-line" />
-            <div><div class="text-[20px] font-600">Rp 0</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat2') }}</div></div>
-            <div class="w-px bg-sand-line" />
-            <div><div class="text-[20px] font-600">4,9</div><div class="text-[12px] text-ink-2 mt-[2px]">{{ $t('landing.hero.stat3') }}</div></div>
+
+          <!-- hero collage -->
+          <div class="flex-1 basis-[440px] min-w-[300px] relative h-[520px] hidden sm:block">
+            <div class="absolute right-[2%] top-0 w-[63%] h-[74%] rounded-[24px] overflow-hidden rotate-[-2.5deg] shadow-[0_40px_70px_-34px_rgba(16,38,43,.55)] bg-sand-100">
+              <img src="/img/photo-sumba.jpg" alt="" width="1200" height="798" fetchpriority="high" class="absolute inset-0 w-full h-full object-cover object-[center_56%]">
+              <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(16,38,43,0) 50%,rgba(16,38,43,.7) 100%)" />
+              <div class="absolute left-4 top-4 bg-paper/95 rounded-[12px] px-3 py-2">
+                <div class="text-[12px] font-600 text-teal-700">{{ $t('landing.hero.collageDay') }}</div>
+                <div class="text-[14px] font-600 mt-0.5">{{ $t('landing.hero.collageAct') }}</div>
+              </div>
+            </div>
+            <div class="absolute left-0 bottom-3 w-[56%] bg-white border border-sand-line rounded-[20px] p-2 rotate-[2deg] shadow-[0_34px_60px_-34px_rgba(16,38,43,.5)]">
+              <img src="/img/screen-hari.png" :alt="$t('landing.inside.cap2')" width="1254" height="823" class="w-full h-auto block rounded-[12px] bg-sand-100">
+            </div>
+            <div class="absolute right-0 bottom-11 w-[27%] aspect-square rounded-[16px] overflow-hidden rotate-[6deg] shadow-[0_26px_44px_-26px_rgba(16,38,43,.5)] bg-sand-100">
+              <img src="/img/photo-bromo.jpg" alt="" width="1000" height="521" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute left-[14%] top-2 bg-ink text-teal-100 rounded-pill px-4 py-2 text-[13px] font-600 tabular-nums rotate-[-3deg] shadow-[0_14px_26px_-16px_rgba(16,38,43,.6)]">{{ $t('landing.hero.collageToday') }}</div>
           </div>
         </div>
 
-        <!-- hero collage -->
-        <div class="flex-1 basis-[440px] min-w-[300px] relative h-[520px] hidden sm:block">
-          <div class="absolute right-[2%] top-0 w-[63%] h-[74%] rounded-[24px] overflow-hidden rotate-[-2.5deg] shadow-[0_40px_70px_-34px_rgba(16,38,43,.55)] bg-cover" style="background-image:url('/img/photo-sumba.jpg');background-position:center 56%">
-            <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(16,38,43,0) 52%,rgba(16,38,43,.72) 100%)" />
-            <div class="absolute left-[14px] top-[14px] bg-paper/95 rounded-[14px] px-3 py-2">
-              <div class="text-[10px] font-700 tracking-[.1em] uppercase text-teal-700">{{ $t('landing.hero.collageDay') }}</div>
-              <div class="text-[14px] font-800 tracking-[-.02em] mt-[1px]">{{ $t('landing.hero.collageAct') }}</div>
+        <!-- destination carousel -->
+        <section
+          class="relative z-[2] max-w-[1200px] mx-auto px-6 pt-2"
+          aria-roledescription="carousel"
+          aria-labelledby="carousel-heading"
+          @mouseenter="hovering = true"
+          @mouseleave="hovering = false"
+          @focusin="focused = true"
+          @focusout="onFocusOut"
+        >
+          <div class="flex gap-3 items-center justify-between flex-wrap pb-3">
+            <div class="flex gap-3 items-baseline">
+              <h2 id="carousel-heading" class="text-[14px] font-600 text-teal-700">{{ $t('landing.carousel.heading') }}</h2>
+              <p class="text-[13px] text-ink-2 tabular-nums" :aria-live="autoplaying ? 'off' : 'polite'">{{ $t('landing.carousel.position', { n: slide + 1, total: places.length }) }}</p>
+            </div>
+            <div class="flex gap-1 items-center">
+              <button type="button" class="w-11 h-11 rounded-full bg-white border border-sand-line flex items-center justify-center text-ink hover:border-sand-line3 transition-colors" :aria-label="playing ? $t('landing.carousel.pause') : $t('landing.carousel.play')" @click="playing = !playing">
+                <i :class="playing ? 'i-lucide-pause' : 'i-lucide-play'" class="text-[16px]" aria-hidden="true" />
+              </button>
+              <button type="button" class="w-11 h-11 rounded-full bg-white border border-sand-line flex items-center justify-center text-ink hover:border-sand-line3 transition-colors" :aria-label="$t('landing.carousel.prev')" @click="nav(slide - 1)">
+                <i class="i-lucide-chevron-left text-[16px]" aria-hidden="true" />
+              </button>
+              <button type="button" class="w-11 h-11 rounded-full bg-white border border-sand-line flex items-center justify-center text-ink hover:border-sand-line3 transition-colors" :aria-label="$t('landing.carousel.next')" @click="nav(slide + 1)">
+                <i class="i-lucide-chevron-right text-[16px]" aria-hidden="true" />
+              </button>
             </div>
           </div>
-          <div class="absolute left-0 bottom-[10px] w-[56%] bg-white border border-sand-line rounded-[22px] p-[9px] rotate-[2deg] shadow-[0_34px_60px_-34px_rgba(16,38,43,.5)]">
-            <div class="rounded-[16px] overflow-hidden bg-sand-100"><img src="/img/screen-hari.png" alt="" class="w-full block"></div>
-          </div>
-          <div class="absolute right-0 bottom-[44px] w-[27%] aspect-square rounded-[18px] overflow-hidden rotate-[6deg] shadow-[0_26px_44px_-26px_rgba(16,38,43,.5)] bg-cover bg-center" style="background-image:url('/img/photo-bromo.jpg')" />
-          <div class="absolute left-[14%] top-[6px] bg-ink text-teal-100 rounded-pill px-[14px] py-2 text-[12px] font-600 rotate-[-3deg] shadow-[0_14px_26px_-16px_rgba(16,38,43,.6)]">{{ $t('landing.hero.collageToday') }}</div>
-        </div>
-      </div>
-
-      <!-- destination carousel -->
-      <div class="relative z-[2] max-w-[1200px] mx-auto px-6 pt-[6px]">
-        <div class="flex gap-3 items-baseline justify-between flex-wrap px-[2px] pb-3">
-          <div class="flex gap-[10px] items-center">
-            <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.carousel.heading') }}</div>
-            <div class="text-[12px] text-ink-2">{{ slide + 1 }} / {{ places.length }}</div>
-          </div>
-          <div class="flex gap-2 items-center">
-            <button class="w-[34px] h-[34px] rounded-full bg-white border border-sand-line flex items-center justify-center hover:border-brand-amber" @click="nav(slide - 1)"><i class="i-lucide-chevron-left text-[16px]" /></button>
-            <button class="w-[34px] h-[34px] rounded-full bg-white border border-sand-line flex items-center justify-center hover:border-brand-amber" @click="nav(slide + 1)"><i class="i-lucide-chevron-right text-[16px]" /></button>
-          </div>
-        </div>
-        <div ref="railEl" class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-[22px]" style="scroll-snap-type:x proximity">
-          <div class="flex gap-[14px] w-max">
-            <div v-for="pl in places" :key="pl.name" class="flex-[0_0_300px] h-[230px] rounded-[20px] overflow-hidden relative bg-cover" style="scroll-snap-align:start;background-position:center 58%" :style="{ backgroundImage: `url('${pl.photo}')` }">
-              <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(16,38,43,0) 42%,rgba(16,38,43,.84) 100%)" />
-              <div class="absolute left-[14px] top-[14px] bg-paper/95 text-ink-2 rounded-pill px-[11px] py-[5px] text-[11px] font-700">{{ $t('landing.places.' + pl.tag) }}</div>
-              <div class="absolute left-[14px] right-[14px] bottom-[13px] text-white">
-                <div class="text-[17px] font-800 tracking-[-.02em]">{{ pl.name }}</div>
-                <div class="flex gap-[10px] items-center justify-between mt-1">
-                  <span class="text-[12.5px] text-teal-deep">{{ pl.days }} {{ $t('landing.units.days') }} · {{ pl.people }} {{ $t('landing.units.people') }}</span>
-                  <span class="text-[12.5px] font-600">{{ pl.price }}</span>
+          <div
+            ref="railEl"
+            class="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-[20px] snap-x snap-proximity"
+            @scroll.passive="onRailScroll"
+            @pointerdown="playing = false"
+          >
+            <div class="flex gap-4 w-max">
+              <div
+                v-for="(pl, i) in places"
+                :key="pl.name"
+                role="group"
+                aria-roledescription="slide"
+                :aria-label="$t('landing.carousel.position', { n: i + 1, total: places.length })"
+                class="flex-[0_0_300px] h-[232px] rounded-[20px] overflow-hidden relative bg-sand-100 snap-start"
+              >
+                <img :src="pl.photo" alt="" :width="pl.w" :height="pl.h" :loading="i === 0 ? 'eager' : 'lazy'" class="absolute inset-0 w-full h-full object-cover object-[center_58%]">
+                <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(16,38,43,0) 40%,rgba(16,38,43,.85) 100%)" />
+                <div class="absolute left-4 top-4 bg-paper/95 text-ink-2 rounded-pill px-3 py-1 text-[12px] font-600">{{ $t('landing.places.' + pl.tag) }}</div>
+                <div class="absolute left-4 right-4 bottom-4 text-white">
+                  <h3 class="font-display text-[18px] font-600">{{ pl.name }}</h3>
+                  <div class="flex gap-3 items-center justify-between mt-1 text-[13px] tabular-nums">
+                    <span class="text-teal-deep">{{ pl.days }} {{ $t('landing.units.days') }} · {{ pl.people }} {{ $t('landing.units.people') }}</span>
+                    <span class="font-600">{{ pl.price }}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="flex gap-[7px] justify-center mt-[13px]">
-          <button v-for="(p, i) in places" :key="i" class="h-[7px] rounded-pill transition-all" :style="{ width: (i === slide ? 26 : 7) + 'px', background: i === slide ? '#0E6E76' : '#C8E2DE' }" @click="nav(i)" />
-        </div>
-      </div>
-      <img src="/img/teal-hills.svg" alt="" class="block w-screen ml-[calc(50%-50vw)] mt-[26px] mb-[-2px] pointer-events-none">
-    </div>
-
-    <!-- feature rail -->
-    <div id="fitur" class="bg-sand-100 px-6 pt-[60px] pb-[72px] scroll-mt-[80px]">
-      <div class="max-w-[1200px] mx-auto">
-        <div class="max-w-[560px]">
-          <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.rail.eyebrow') }}</div>
-          <div class="text-[clamp(25px,3vw,34px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px]">{{ $t('landing.rail.title') }}</div>
-        </div>
-        <div class="flex flex-wrap gap-4 mt-8">
-          <a v-for="r in rail" :key="r.href" :href="r.href" class="flex-[1_1_140px] min-w-[140px] bg-white border border-sand-line rounded-card p-[18px] flex flex-col gap-2 hover:border-brand-amber transition-colors">
-            <div class="w-[34px] h-[34px] rounded-[11px] bg-teal-100 text-teal-700 flex items-center justify-center"><i :class="r.icon" class="text-[18px]" /></div>
-            <div class="text-[14.5px] font-700">{{ $t(r.label) }}</div>
-            <div class="text-[12.5px] leading-[1.5] text-ink-2">{{ $t(r.desc) }}</div>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- feature detail -->
-    <div class="max-w-[1200px] mx-auto px-6 pt-[72px] pb-5 flex flex-col gap-8">
-      <!-- hari -->
-      <div id="hari" class="bg-white border border-sand-line rounded-hero p-[22px] md:p-8 flex flex-wrap gap-[26px] md:gap-8 items-center scroll-mt-[90px]">
-        <div class="flex-1 basis-[300px] min-w-[280px] max-w-[430px]">
-          <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.hari.tag') }}</span>
-          <div class="text-[27px] font-800 tracking-[-.025em] leading-[1.16] mt-[13px]">{{ $t('landing.hari.title') }}</div>
-          <p class="text-[14.5px] leading-[1.65] text-ink-2 mt-[11px]">{{ $t('landing.hari.body') }}</p>
-          <div class="flex flex-col gap-2 mt-[14px] text-[14px] text-ink-2">
-            <div class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.hari.p1') }}</div>
-            <div class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.hari.p2') }}</div>
+          <div class="flex justify-center mt-1">
+            <button
+              v-for="(p, i) in places"
+              :key="p.name"
+              type="button"
+              class="h-11 px-1.5 flex items-center"
+              :aria-label="$t('landing.carousel.goTo', { n: i + 1, name: p.name })"
+              :aria-current="i === slide ? 'true' : undefined"
+              @click="nav(i)"
+            >
+              <span class="block h-2 rounded-pill transition-colors" :class="i === slide ? 'w-6 bg-teal-600' : 'w-2 bg-teal-soft hover:bg-teal-soft2'" />
+            </button>
           </div>
-        </div>
-        <div class="flex-1 basis-[320px] min-w-[300px] bg-paper border border-sand-line rounded-[20px] p-[15px] flex flex-col gap-[9px]">
-          <div class="flex justify-between items-baseline"><div class="text-[15px] font-700">{{ $t('landing.hari.demoDate') }}</div><div class="text-[13px] font-600 text-teal-700">Rp 745.000</div></div>
-          <div class="bg-white border border-sand-line rounded-[15px] p-[11px_13px] flex gap-[11px] items-center">
-            <div class="w-[36px] h-[36px] rounded-[11px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0"><i class="i-lucide-ticket text-[17px]" /></div>
-            <div class="w-[44px] shrink-0 text-[12.5px] font-600 text-ink-2">05.30</div>
-            <div class="flex-1 min-w-0"><div class="text-[13.5px] font-600">{{ $t('landing.hari.demoAct1') }}</div><div class="text-[11.5px] text-ink-2 mt-[1px]">{{ $t('landing.hari.demoAct1sub') }}</div></div>
-            <div class="text-[13px] font-600 whitespace-nowrap">150rb</div>
-          </div>
-          <div class="bg-white border border-sand-line rounded-[15px] p-[11px_13px] flex gap-[11px] items-center">
-            <div class="w-[36px] h-[36px] rounded-[11px] bg-sand-100 text-ink-2 flex items-center justify-center shrink-0"><i class="i-lucide-utensils text-[17px]" /></div>
-            <div class="w-[44px] shrink-0 text-[12.5px] font-600 text-ink-2">12.30</div>
-            <div class="flex-1 min-w-0"><div class="text-[13.5px] font-600">{{ $t('landing.hari.demoAct2') }}</div><div class="text-[11.5px] text-ink-2 mt-[1px]">{{ $t('landing.hari.demoAct2sub') }}</div></div>
-            <div class="text-[13px] font-600 whitespace-nowrap">185rb</div>
-          </div>
-          <div class="bg-teal-100 rounded-[13px] p-[10px_12px] text-[12.5px] text-teal-700 flex gap-[9px] items-center"><span class="font-700">↳</span> {{ $t('landing.hari.demoNote') }}</div>
-        </div>
-      </div>
+        </section>
+        <img src="/img/teal-hills.svg" alt="" aria-hidden="true" class="block w-screen ml-[calc(50%-50vw)] mt-6 mb-[-2px] pointer-events-none">
+      </section>
 
-      <!-- anggaran -->
-      <div id="anggaran" class="bg-white border border-sand-line rounded-hero p-[22px] md:p-8 flex flex-wrap-reverse gap-[26px] md:gap-8 items-center scroll-mt-[90px]">
-        <div class="flex-1 basis-[320px] min-w-[300px] bg-paper border border-sand-line rounded-[20px] p-[17px] flex gap-[18px] flex-wrap items-center">
-          <div class="w-[144px] h-[144px] shrink-0 rounded-full flex items-center justify-center" style="background:conic-gradient(#0E6E76 0% 34%,#2F6B54 34% 58%,#D98F3B 58% 74%,#8FC2BE 74% 92%,#EDE9DA 92% 100%)">
-            <div class="w-[92px] h-[92px] rounded-full bg-paper flex flex-col items-center justify-center">
-              <div class="text-[18px] font-600">Rp 2,4jt</div>
-              <div class="text-[10.5px] text-ink-2 mt-[2px]">{{ $t('landing.anggaran.of') }} Rp 3,1jt</div>
+      <!-- feature rail -->
+      <section id="fitur" class="bg-sand-100 px-6 pt-16 pb-20 scroll-mt-20" aria-labelledby="fitur-title">
+        <div class="max-w-[1200px] mx-auto">
+          <div class="max-w-[560px]">
+            <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.rail.eyebrow') }}</p>
+            <h2 id="fitur-title" class="font-display text-[clamp(28px,3.2vw,40px)] font-600 tracking-[-.025em] leading-[1.12] mt-2">{{ $t('landing.rail.title') }}</h2>
+          </div>
+          <ul class="flex flex-wrap gap-4 mt-8">
+            <li v-for="r in rail" :key="r.href" class="flex-[1_1_144px] min-w-[144px] flex">
+              <a :href="r.href" class="flex-1 bg-white border border-sand-line rounded-card p-5 flex flex-col gap-2 text-ink hover:text-ink hover:border-sand-line3 transition-colors">
+                <span class="w-9 h-9 rounded-[10px] bg-teal-100 text-teal-700 flex items-center justify-center mb-1"><i :class="r.icon" class="text-[18px]" aria-hidden="true" /></span>
+                <span class="text-[15px] font-600">{{ $t(r.label) }}</span>
+                <span class="text-[13px] leading-[1.5] text-ink-2">{{ $t(r.desc) }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- feature detail -->
+      <div class="max-w-[1200px] mx-auto px-6 pt-20 pb-4 flex flex-col gap-8">
+        <!-- hari -->
+        <section id="hari" class="bg-white border border-sand-line rounded-hero p-6 md:p-8 flex flex-wrap gap-6 md:gap-8 items-center scroll-mt-24" aria-labelledby="hari-title">
+          <div class="flex-1 basis-[300px] min-w-[280px] max-w-[440px]">
+            <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.hari.tag') }}</p>
+            <h3 id="hari-title" class="font-display text-[28px] font-600 tracking-[-.02em] leading-[1.15] mt-2">{{ $t('landing.hari.title') }}</h3>
+            <p class="text-[15px] leading-[1.65] text-ink-2 mt-3">{{ $t('landing.hari.body') }}</p>
+            <ul class="flex flex-col gap-2 mt-4 text-[14px] text-ink-2">
+              <li v-for="k in ['p1', 'p2']" :key="k" class="flex gap-2"><i class="i-lucide-corner-down-right text-[16px] text-teal-700 shrink-0 mt-0.5" aria-hidden="true" /> {{ $t('landing.hari.' + k) }}</li>
+            </ul>
+          </div>
+          <div class="flex-1 basis-[320px] min-w-[280px] bg-paper border border-sand-line rounded-[20px] p-4 flex flex-col gap-2">
+            <div class="flex justify-between items-baseline px-1 pb-1"><div class="text-[15px] font-600">{{ $t('landing.hari.demoDate') }}</div><div class="text-[13px] font-600 text-teal-700 tabular-nums">Rp 745.000</div></div>
+            <div class="bg-white border border-sand-line rounded-[12px] px-3 py-3 flex gap-3 items-center">
+              <div class="w-9 h-9 rounded-[10px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0"><i class="i-lucide-ticket text-[16px]" aria-hidden="true" /></div>
+              <div class="w-11 shrink-0 text-[13px] font-600 text-ink-2 tabular-nums">05.30</div>
+              <div class="flex-1 min-w-0"><div class="text-[14px] font-600">{{ $t('landing.hari.demoAct1') }}</div><div class="text-[12px] text-ink-2 mt-0.5">{{ $t('landing.hari.demoAct1sub') }}</div></div>
+              <div class="text-[13px] font-600 whitespace-nowrap tabular-nums">150rb</div>
+            </div>
+            <div class="bg-white border border-sand-line rounded-[12px] px-3 py-3 flex gap-3 items-center">
+              <div class="w-9 h-9 rounded-[10px] bg-sand-100 text-ink-2 flex items-center justify-center shrink-0"><i class="i-lucide-utensils text-[16px]" aria-hidden="true" /></div>
+              <div class="w-11 shrink-0 text-[13px] font-600 text-ink-2 tabular-nums">12.30</div>
+              <div class="flex-1 min-w-0"><div class="text-[14px] font-600">{{ $t('landing.hari.demoAct2') }}</div><div class="text-[12px] text-ink-2 mt-0.5">{{ $t('landing.hari.demoAct2sub') }}</div></div>
+              <div class="text-[13px] font-600 whitespace-nowrap tabular-nums">185rb</div>
+            </div>
+            <div class="bg-teal-100 rounded-[12px] px-3 py-2 text-[13px] text-teal-700 flex gap-2 items-center"><i class="i-lucide-corner-down-right text-[16px] shrink-0" aria-hidden="true" /> {{ $t('landing.hari.demoNote') }}</div>
+          </div>
+        </section>
+
+        <!-- anggaran -->
+        <section id="anggaran" class="bg-white border border-sand-line rounded-hero p-6 md:p-8 flex flex-wrap-reverse gap-6 md:gap-8 items-center scroll-mt-24" aria-labelledby="anggaran-title">
+          <div class="flex-1 basis-[320px] min-w-[280px] bg-paper border border-sand-line rounded-[20px] p-4 flex gap-5 flex-wrap items-center">
+            <div class="w-36 h-36 shrink-0 rounded-full flex items-center justify-center" style="background:conic-gradient(var(--teal-600) 0% 34%,var(--brand-green) 34% 58%,var(--brand-amber) 58% 74%,var(--teal-soft-2) 74% 92%,var(--sand-line) 92% 100%)" role="img" :aria-label="`Rp 2,4jt ${$t('landing.anggaran.of')} Rp 3,1jt`">
+              <div class="w-24 h-24 rounded-full bg-paper flex flex-col items-center justify-center">
+                <div class="text-[18px] font-600 tabular-nums">Rp 2,4jt</div>
+                <div class="text-[12px] text-ink-2 mt-0.5 tabular-nums">{{ $t('landing.anggaran.of') }} Rp 3,1jt</div>
+              </div>
+            </div>
+            <div class="flex-1 min-w-[160px] flex flex-col gap-2">
+              <div v-for="c in budgetCats" :key="c.k" class="flex justify-between text-[13px]">
+                <span class="flex gap-2 items-center"><span class="w-2.5 h-2.5 rounded-[3px]" :style="{ background: c.color }" aria-hidden="true" />{{ $t('landing.anggaran.' + c.k) }}</span>
+                <span class="font-600 tabular-nums">{{ c.v }}</span>
+              </div>
+              <div class="bg-teal-100 text-teal-700 rounded-[10px] px-3 py-2 text-[13px] font-600 mt-1">{{ $t('landing.anggaran.versionNote') }}</div>
             </div>
           </div>
-          <div class="flex-1 min-w-[160px] flex flex-col gap-[9px]">
-            <div v-for="[c, col, v] in [[$t('landing.anggaran.cat1'), '#0E6E76', '1,4jt'], [$t('landing.anggaran.cat2'), '#2F6B54', '780rb'], [$t('landing.anggaran.cat3'), '#D98F3B', '450rb'], [$t('landing.anggaran.cat4'), '#8FC2BE', '900rb']]" :key="c" class="flex justify-between text-[12.5px]">
-              <span class="flex gap-[7px] items-center"><span class="w-[9px] h-[9px] rounded-[3px]" :style="{ background: col }" />{{ c }}</span>
-              <span class="font-600">{{ v }}</span>
+          <div class="flex-1 basis-[300px] min-w-[280px] max-w-[440px]">
+            <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.anggaran.tag') }}</p>
+            <h3 id="anggaran-title" class="font-display text-[28px] font-600 tracking-[-.02em] leading-[1.15] mt-2">{{ $t('landing.anggaran.title') }}</h3>
+            <p class="text-[15px] leading-[1.65] text-ink-2 mt-3">{{ $t('landing.anggaran.body') }}</p>
+            <ul class="flex flex-col gap-2 mt-4 text-[14px] text-ink-2">
+              <li v-for="k in ['p1', 'p2']" :key="k" class="flex gap-2"><i class="i-lucide-corner-down-right text-[16px] text-teal-700 shrink-0 mt-0.5" aria-hidden="true" /> {{ $t('landing.anggaran.' + k) }}</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- guides -->
+        <section id="panduan" class="bg-white border border-sand-line rounded-hero p-6 md:p-8 flex flex-wrap gap-6 md:gap-8 items-center scroll-mt-24" aria-labelledby="panduan-title">
+          <div class="flex-1 basis-[300px] min-w-[280px] max-w-[440px]">
+            <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.guides.tag') }}</p>
+            <h3 id="panduan-title" class="font-display text-[28px] font-600 tracking-[-.02em] leading-[1.15] mt-2">{{ $t('landing.guides.title') }}</h3>
+            <p class="text-[15px] leading-[1.65] text-ink-2 mt-3">{{ $t('landing.guides.body') }}</p>
+            <ul class="flex flex-col gap-2 mt-4 text-[14px] text-ink-2">
+              <li v-for="k in ['p1', 'p2', 'p3', 'p4']" :key="k" class="flex gap-2"><i class="i-lucide-corner-down-right text-[16px] text-teal-700 shrink-0 mt-0.5" aria-hidden="true" /> {{ $t('landing.guides.' + k) }}</li>
+            </ul>
+            <NuxtLink :to="localePath('/guides')" class="text-[14px] font-600 text-teal-700 hover:text-ink inline-flex items-center gap-1 mt-5 transition-colors">{{ $t('landing.guides.cta') }} <i class="i-lucide-arrow-right text-[16px]" aria-hidden="true" /></NuxtLink>
+          </div>
+          <div v-if="guides.length" class="flex-1 basis-[320px] min-w-[280px] grid gap-4" style="grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))">
+            <GuideDestinationCard v-for="d in guides.slice(0, 2)" :key="d.id" :destination="d" />
+          </div>
+        </section>
+
+        <!-- pengeluaran + barang -->
+        <div class="grid gap-8" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
+          <section id="pengeluaran" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-24" aria-labelledby="pengeluaran-title">
+            <img src="/img/img-budget.jpg" alt="" width="1000" height="667" loading="lazy" class="h-44 w-full object-cover bg-sand-100">
+            <div class="p-6 md:p-7 flex flex-col gap-4">
+              <div>
+                <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.expenses.tag') }}</p>
+                <h3 id="pengeluaran-title" class="font-display text-[22px] font-600 tracking-[-.015em] mt-2">{{ $t('landing.expenses.title') }}</h3>
+                <p class="text-[14px] leading-[1.65] text-ink-2 mt-2">{{ $t('landing.expenses.body') }}</p>
+              </div>
+              <ul class="bg-paper border border-sand-line rounded-card p-4 flex flex-col gap-3">
+                <li v-for="r in expenseRows" :key="r.k" class="flex gap-3 items-center text-[14px]">
+                  <i :class="r.icon" class="text-[16px] text-ink-2 shrink-0" aria-hidden="true" /><span class="flex-1">{{ $t('landing.expenses.' + r.k) }}</span><span class="font-600 whitespace-nowrap tabular-nums">{{ r.v }}</span>
+                </li>
+              </ul>
             </div>
-            <div class="bg-teal-100 text-teal-700 rounded-[11px] p-[9px_11px] text-[12px] font-700">{{ $t('landing.anggaran.versionNote') }}</div>
-          </div>
+          </section>
+          <section id="barang" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-24" aria-labelledby="barang-title">
+            <img src="/img/img-items.webp" alt="" loading="lazy" class="h-44 w-full object-cover bg-sand-100">
+            <div class="p-6 md:p-7 flex flex-col gap-4">
+              <div>
+                <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.packing.tag') }}</p>
+                <h3 id="barang-title" class="font-display text-[22px] font-600 tracking-[-.015em] mt-2">{{ $t('landing.packing.title') }}</h3>
+                <p class="text-[14px] leading-[1.65] text-ink-2 mt-2">{{ $t('landing.packing.body') }}</p>
+              </div>
+              <ul class="bg-paper border border-sand-line rounded-card p-4 flex flex-col gap-3 text-[14px]">
+                <li class="flex gap-2 items-center"><span class="w-4 h-4 rounded-[5px] bg-teal-700 flex items-center justify-center shrink-0" aria-hidden="true"><i class="i-lucide-check text-white text-[10px]" /></span><s class="text-ink-2">{{ $t('landing.packing.item1') }}</s></li>
+                <li class="flex gap-2 items-center"><span class="w-4 h-4 rounded-[5px] border-[1.5px] border-teal-600 shrink-0" aria-hidden="true" />{{ $t('landing.packing.item2') }} <span class="bg-warn-bg text-peach-fg rounded-pill px-2 py-0.5 text-[12px] font-600">{{ $t('landing.packing.must') }}</span></li>
+                <li class="flex gap-2 items-center"><span class="w-4 h-4 rounded-[5px] border-[1.5px] border-teal-600 shrink-0" aria-hidden="true" />{{ $t('landing.packing.item3') }}</li>
+              </ul>
+            </div>
+          </section>
         </div>
-        <div class="flex-1 basis-[300px] min-w-[280px] max-w-[430px]">
-          <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.anggaran.tag') }}</span>
-          <div class="text-[27px] font-800 tracking-[-.025em] leading-[1.16] mt-[13px]">{{ $t('landing.anggaran.title') }}</div>
-          <p class="text-[14.5px] leading-[1.65] text-ink-2 mt-[11px]">{{ $t('landing.anggaran.body') }}</p>
-          <div class="flex flex-col gap-2 mt-[14px] text-[14px] text-ink-2">
-            <div class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.anggaran.p1') }}</div>
-            <div class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.anggaran.p2') }}</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- guides -->
-      <div id="panduan" class="bg-white border border-sand-line rounded-hero p-[22px] md:p-8 flex flex-wrap gap-[26px] md:gap-8 items-center scroll-mt-[90px]">
-        <div class="flex-1 basis-[300px] min-w-[280px] max-w-[430px]">
-          <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.guides.tag') }}</span>
-          <div class="text-[27px] font-800 tracking-[-.025em] leading-[1.16] mt-[13px]">{{ $t('landing.guides.title') }}</div>
-          <p class="text-[14.5px] leading-[1.65] text-ink-2 mt-[11px]">{{ $t('landing.guides.body') }}</p>
-          <div class="flex flex-col gap-2 mt-[14px] text-[14px] text-ink-2">
-            <div v-for="k in ['p1', 'p2', 'p3', 'p4']" :key="k" class="flex gap-[9px]"><span class="text-teal-700 font-700">↳</span> {{ $t('landing.guides.' + k) }}</div>
-          </div>
-          <NuxtLink :to="localePath('/guides')" class="text-[13.5px] font-700 text-teal-700 hover:text-teal-800 inline-flex items-center gap-1 mt-[18px]">{{ $t('landing.guides.cta') }} <i class="i-lucide-arrow-right text-[15px]" /></NuxtLink>
-        </div>
-        <div v-if="guides.length" class="flex-1 basis-[320px] min-w-[280px] grid gap-[18px]" style="grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))">
-          <GuideDestinationCard v-for="d in guides.slice(0, 2)" :key="d.id" :destination="d" />
-        </div>
-      </div>
-
-      <!-- pengeluaran + barang -->
-      <div class="grid gap-8" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
-        <div id="pengeluaran" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-[90px]">
-          <div class="h-[170px] bg-cover bg-center" style="background-image:url('/img/img-budget.jpg')" />
-          <div class="p-[22px] md:p-7 flex flex-col gap-[13px]">
+        <!-- outfit + anggota -->
+        <div class="grid gap-8" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
+          <section id="outfit" class="bg-white border border-sand-line rounded-hero p-6 md:p-7 flex flex-col gap-4 scroll-mt-24" aria-labelledby="outfit-title">
             <div>
-              <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700 mb-3">{{ $t('landing.expenses.tag') }}</span>
-              <div class="text-[21px] font-800 tracking-[-.02em]">{{ $t('landing.expenses.title') }}</div>
-              <p class="text-[14px] leading-[1.65] text-ink-2 mt-2">{{ $t('landing.expenses.body') }}</p>
+              <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.outfit.tag') }}</p>
+              <h3 id="outfit-title" class="font-display text-[22px] font-600 tracking-[-.015em] mt-2">{{ $t('landing.outfit.title') }}</h3>
+              <p class="text-[14px] leading-[1.65] text-ink-2 mt-2">{{ $t('landing.outfit.body') }}</p>
             </div>
-            <div class="bg-paper border border-sand-line rounded-card p-[13px] flex flex-col gap-2">
-              <div v-for="[m, tx, v] in [['↳', $t('landing.expenses.row1'), '700rb'], ['□', $t('landing.expenses.row2'), '48rb'], ['□', $t('landing.expenses.row3'), '20rb']]" :key="tx" class="flex gap-[10px] items-center text-[13px]">
-                <span class="font-700" :class="m === '↳' ? 'text-teal-700' : 'text-ink-2'">{{ m }}</span><span class="flex-1">{{ tx }}</span><span class="font-600 whitespace-nowrap">{{ v }}</span>
+            <dl class="bg-paper border border-sand-line rounded-card p-4 flex flex-col gap-3">
+              <div v-for="o in outfitRows" :key="o.k" class="flex gap-3 items-center">
+                <div class="w-8 h-8 rounded-[10px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0" aria-hidden="true"><i :class="o.icon" class="text-[16px]" /></div>
+                <div class="flex-1 min-w-0"><dt class="text-[12px] text-ink-2">{{ $t('landing.outfit.' + o.k) }}</dt><dd class="text-[14px]">{{ $t('landing.outfit.' + o.k + 'Val') }}</dd></div>
+              </div>
+            </dl>
+          </section>
+          <section id="anggota" class="bg-ink rounded-hero overflow-hidden flex flex-col text-white relative scroll-mt-24" aria-labelledby="anggota-title">
+            <img src="/img/teal-palms.svg" alt="" aria-hidden="true" class="absolute right-[-14px] bottom-[-10px] w-[150px] opacity-[.18] pointer-events-none">
+            <div class="p-6 md:p-7 flex flex-col gap-4 relative">
+              <div>
+                <p class="text-[14px] font-600 text-teal-deep">{{ $t('landing.sharing.tag') }}</p>
+                <h3 id="anggota-title" class="font-display text-[22px] font-600 tracking-[-.015em] mt-2">{{ $t('landing.sharing.title') }}</h3>
+                <p class="text-[14px] leading-[1.65] text-teal-deep mt-2">{{ $t('landing.sharing.body') }}</p>
+              </div>
+              <div class="bg-white/10 rounded-card p-4 flex flex-col gap-3">
+                <div class="flex gap-3 items-center">
+                  <div class="flex-1 min-w-0 bg-black/25 rounded-[10px] px-3 py-2 text-[13px] text-teal-deep truncate">kelana.id/t/sumba-4h</div>
+                  <div class="bg-primary text-white rounded-pill px-4 py-2 text-[13px] font-600 whitespace-nowrap" aria-hidden="true">{{ $t('landing.sharing.copy') }}</div>
+                </div>
+                <div v-for="m in members" :key="m.ini" class="flex gap-3 items-center">
+                  <div class="w-8 h-8 rounded-full bg-teal-deep text-ink flex items-center justify-center text-[12px] font-600 shrink-0" aria-hidden="true">{{ m.ini }}</div>
+                  <div class="flex-1 min-w-0"><div class="text-[14px] font-600">{{ m.name }}</div><div class="text-[12px] text-teal-deep">{{ $t('landing.sharing.' + m.k + 'sub') }}</div></div>
+                  <div class="bg-white/20 rounded-pill px-3 py-1 text-[12px] font-600 whitespace-nowrap">{{ $t('landing.sharing.' + m.k + 'role') }}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- isi aplikasi collage -->
+      <section id="dalam" class="relative px-6 py-20 overflow-hidden scroll-mt-20" aria-labelledby="dalam-title">
+        <img src="/img/teal-cloud.svg" alt="" aria-hidden="true" class="absolute left-[-60px] top-16 w-[220px] opacity-90 pointer-events-none">
+        <div class="relative max-w-[1200px] mx-auto">
+          <div class="flex flex-wrap gap-5 justify-between items-end">
+            <div class="max-w-[520px]">
+              <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.inside.eyebrow') }}</p>
+              <h2 id="dalam-title" class="font-display text-[clamp(28px,3.2vw,40px)] font-600 tracking-[-.025em] leading-[1.12] mt-2">{{ $t('landing.inside.title') }}</h2>
+              <p class="text-[15px] leading-[1.6] text-ink-2 mt-3">{{ $t('landing.inside.body') }}</p>
+            </div>
+            <NuxtLink :to="appHref" class="bg-ink hover:bg-ink-2 text-white hover:text-white rounded-pill h-12 px-6 inline-flex items-center text-[15px] font-600 whitespace-nowrap transition-colors">{{ $t('landing.inside.tryLive') }}</NuxtLink>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start mt-8">
+            <!-- col 1 -->
+            <div class="flex flex-col gap-5 lg:mt-4">
+              <figure class="bg-white border border-sand-line rounded-[18px] p-2 rotate-[-2deg] shadow-lift">
+                <img src="/img/screen-beranda.png" alt="" width="782" height="615" loading="lazy" class="w-full h-auto block rounded-[10px] bg-sand-100">
+                <figcaption class="text-[12px] font-600 text-ink-2 px-1 pt-2">{{ $t('landing.inside.cap1') }}</figcaption>
+              </figure>
+              <div class="bg-teal-100 rounded-[18px] p-4 rotate-[1.4deg]">
+                <div class="text-[12px] font-600 text-teal-700">{{ $t('landing.inside.note1') }}</div>
+                <div class="text-[15px] font-600 leading-[1.4] mt-2">{{ $t('landing.inside.note1body') }}</div>
+              </div>
+              <img src="/img/photo-bromo.jpg" alt="" width="1000" height="521" loading="lazy" class="h-32 w-full object-cover rounded-[18px] rotate-[-1.4deg] shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)] bg-sand-100">
+            </div>
+            <!-- col 2 -->
+            <div class="flex flex-col gap-5">
+              <img src="/img/photo-kota.jpg" alt="" width="1200" height="800" loading="lazy" class="h-36 w-full object-cover rounded-[18px] rotate-[2deg] shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)] bg-sand-100">
+              <figure class="bg-white border border-sand-line rounded-[18px] p-2 rotate-[-1.2deg] shadow-lift">
+                <img src="/img/screen-hari.png" alt="" width="1254" height="823" loading="lazy" class="w-full h-auto block rounded-[10px] bg-sand-100">
+                <figcaption class="text-[12px] font-600 text-ink-2 px-1 pt-2">{{ $t('landing.inside.cap2') }}</figcaption>
+              </figure>
+              <figure class="bg-white border border-sand-line rounded-[18px] p-2 rotate-[2.4deg] shadow-lift">
+                <img src="/img/screen-anggota.png" alt="" width="1252" height="756" loading="lazy" class="w-full h-auto block rounded-[10px] bg-sand-100">
+                <figcaption class="text-[12px] font-600 text-ink-2 px-1 pt-2">{{ $t('landing.inside.cap3') }}</figcaption>
+              </figure>
+            </div>
+            <!-- col 3 -->
+            <div class="flex flex-col gap-5 lg:mt-8">
+              <figure class="bg-white border border-sand-line rounded-[18px] p-2 rotate-[1.8deg] shadow-lift">
+                <img src="/img/screen-anggaran.png" alt="" width="779" height="739" loading="lazy" class="w-full h-auto block rounded-[10px] bg-sand-100">
+                <figcaption class="text-[12px] font-600 text-ink-2 px-1 pt-2">{{ $t('landing.inside.cap4') }}</figcaption>
+              </figure>
+              <div class="bg-ink text-teal-100 rounded-[18px] p-4 rotate-[-2.2deg]">
+                <div class="text-[20px] font-600 tabular-nums">Rp 685.000</div>
+                <div class="text-[13px] text-teal-deep mt-1">{{ $t('landing.inside.note2sub') }}</div>
+              </div>
+              <img src="/img/photo-sumba.jpg" alt="" width="1200" height="798" loading="lazy" class="h-28 w-full object-cover rounded-[18px] rotate-[1.2deg] shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)] bg-sand-100">
+            </div>
+            <!-- col 4 -->
+            <div class="flex flex-col gap-5 lg:mt-2">
+              <figure class="bg-white border border-sand-line rounded-[18px] p-2 rotate-[2.2deg] shadow-lift">
+                <img src="/img/screen-outfit.png" alt="" width="1251" height="760" loading="lazy" class="w-full h-auto block rounded-[10px] bg-sand-100">
+                <figcaption class="text-[12px] font-600 text-ink-2 px-1 pt-2">{{ $t('landing.inside.cap5') }}</figcaption>
+              </figure>
+              <figure class="bg-white border border-sand-line rounded-[18px] p-2 rotate-[-1.8deg] shadow-lift">
+                <img src="/img/screen-ringkasan.png" alt="" width="1254" height="821" loading="lazy" class="w-full h-auto block rounded-[10px] bg-sand-100">
+                <figcaption class="text-[12px] font-600 text-ink-2 px-1 pt-2">{{ $t('landing.inside.cap6') }}</figcaption>
+              </figure>
+              <div class="bg-peach-bg rounded-[18px] p-4 rotate-[1.6deg]">
+                <div class="text-[12px] font-600 text-peach-fg">{{ $t('landing.inside.note3label') }}</div>
+                <div class="text-[15px] font-600 leading-[1.4] mt-2">{{ $t('landing.inside.note3body') }}</div>
               </div>
             </div>
           </div>
         </div>
-        <div id="barang" class="bg-white border border-sand-line rounded-hero overflow-hidden flex flex-col scroll-mt-[90px]">
-          <div class="h-[170px] bg-cover bg-center" style="background-image:url('/img/img-items.webp')" />
-          <div class="p-[22px] md:p-7 flex flex-col gap-[13px]">
-            <div>
-              <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700 mb-3">{{ $t('landing.packing.tag') }}</span>
-              <div class="text-[21px] font-800 tracking-[-.02em]">{{ $t('landing.packing.title') }}</div>
-              <p class="text-[14px] leading-[1.65] text-ink-2 mt-2">{{ $t('landing.packing.body') }}</p>
-            </div>
-            <div class="bg-paper border border-sand-line rounded-card p-[13px] flex flex-col gap-[10px] text-[12.5px]">
-              <div class="flex gap-[9px] items-center"><span class="w-[16px] h-[16px] rounded-[5px] bg-teal-700 flex items-center justify-center shrink-0"><i class="i-lucide-check text-white text-[10px]" /></span><span class="text-ink-2 line-through">{{ $t('landing.packing.item1') }}</span></div>
-              <div class="flex gap-[9px] items-center"><span class="w-[16px] h-[16px] rounded-[5px] border-[1.6px] border-teal-600 shrink-0" />{{ $t('landing.packing.item2') }} <span class="bg-warn-bg text-[#8F2C16] rounded-pill px-2 py-[2px] text-[10.5px] font-700">{{ $t('landing.packing.must') }}</span></div>
-              <div class="flex gap-[9px] items-center"><span class="w-[16px] h-[16px] rounded-[5px] border-[1.6px] border-teal-deep shrink-0" />{{ $t('landing.packing.item3') }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 
-      <!-- outfit + anggota -->
-      <div class="grid gap-8" style="grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))">
-        <div id="outfit" class="bg-white border border-sand-line rounded-hero p-[22px] md:p-7 flex flex-col gap-[15px] scroll-mt-[90px]">
-          <div>
-            <span class="inline-flex bg-teal-100 text-teal-700 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.outfit.tag') }}</span>
-            <div class="text-[21px] font-800 tracking-[-.02em] mt-3">{{ $t('landing.outfit.title') }}</div>
-            <p class="text-[14px] leading-[1.65] text-ink-2 mt-2">{{ $t('landing.outfit.body') }}</p>
+      <!-- cerita -->
+      <section id="cerita" class="bg-ink text-teal-100 px-6 py-20 scroll-mt-20" aria-labelledby="cerita-title">
+        <div class="max-w-[1200px] mx-auto">
+          <div class="max-w-[560px]">
+            <p class="text-[14px] font-600 text-teal-deep">{{ $t('landing.stories.eyebrow') }}</p>
+            <h2 id="cerita-title" class="font-display text-[clamp(28px,3.2vw,40px)] font-600 tracking-[-.025em] leading-[1.12] mt-2 text-white">{{ $t('landing.stories.title') }}</h2>
           </div>
-          <div class="bg-paper border border-sand-line rounded-card p-[14px] flex flex-col gap-[11px]">
-            <div v-for="[icon, label, val] in [['i-lucide-shirt', $t('landing.outfit.top'), $t('landing.outfit.topVal')], ['i-lucide-rectangle-vertical', $t('landing.outfit.bottom'), $t('landing.outfit.bottomVal')], ['i-lucide-footprints', $t('landing.outfit.shoes'), $t('landing.outfit.shoesVal')]]" :key="label" class="flex gap-[10px] items-center">
-              <div class="w-[30px] h-[30px] rounded-[10px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0"><i :class="icon" class="text-[16px]" /></div>
-              <div class="flex-1 min-w-0"><div class="text-[10px] font-700 tracking-[.07em] uppercase text-ink-2">{{ label }}</div><div class="text-[13px]">{{ val }}</div></div>
-            </div>
+          <div class="grid gap-5 mt-8" style="grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))">
+            <figure v-for="s in stories" :key="s.who" class="bg-white/[.08] rounded-[20px] p-6 flex flex-col gap-3">
+              <blockquote class="flex flex-col gap-3">
+                <p class="font-display text-[18px] font-600 leading-[1.3] text-white">{{ $t('landing.stories.' + s.k + 'quote') }}</p>
+                <p class="text-[14px] leading-[1.65] text-teal-deep">{{ $t('landing.stories.' + s.k + 'body') }}</p>
+              </blockquote>
+              <figcaption class="flex gap-3 items-center mt-auto pt-2">
+                <div class="w-8 h-8 rounded-full bg-teal-100 text-ink flex items-center justify-center text-[12px] font-600" aria-hidden="true">{{ s.ini }}</div>
+                <div><div class="text-[14px] font-600 text-white">{{ s.who }}</div><div class="text-[12px] text-teal-soft2">{{ $t('landing.stories.' + s.k + 'trip') }}</div></div>
+              </figcaption>
+            </figure>
           </div>
         </div>
-        <div id="anggota" class="bg-ink rounded-hero overflow-hidden flex flex-col text-white relative scroll-mt-[90px]">
-          <img src="/img/teal-palms.svg" alt="" class="absolute right-[-14px] bottom-[-10px] w-[150px] opacity-[.18] pointer-events-none">
-          <div class="p-[22px] md:p-7 flex flex-col gap-[15px] relative">
-            <div>
-              <span class="inline-flex bg-white/15 text-teal-100 rounded-pill px-[13px] py-[6px] text-[12px] font-700">{{ $t('landing.sharing.tag') }}</span>
-              <div class="text-[21px] font-800 tracking-[-.02em] mt-3">{{ $t('landing.sharing.title') }}</div>
-              <p class="text-[14px] leading-[1.65] text-teal-deep mt-2">{{ $t('landing.sharing.body') }}</p>
-            </div>
-            <div class="bg-white/10 rounded-card p-[13px] flex flex-col gap-[10px]">
-              <div class="flex gap-[10px] items-center">
-                <div class="flex-1 min-w-0 bg-black/25 rounded-[11px] px-[11px] py-[9px] text-[12px] text-teal-deep truncate">kelana.id/t/sumba-4h</div>
-                <div class="bg-primary text-white rounded-pill px-[14px] py-2 text-[12px] font-700 whitespace-nowrap">{{ $t('landing.sharing.copy') }}</div>
+      </section>
+
+      <!-- harga -->
+      <section id="harga" class="max-w-[1200px] mx-auto px-6 pt-20 pb-8 scroll-mt-20" aria-labelledby="harga-title">
+        <div class="flex flex-wrap gap-5 justify-between items-end">
+          <div class="max-w-[500px]">
+            <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.pricing.eyebrow') }}</p>
+            <h2 id="harga-title" class="font-display text-[clamp(28px,3.2vw,40px)] font-600 tracking-[-.025em] leading-[1.12] mt-2">{{ $t('landing.pricing.title') }}</h2>
+          </div>
+          <BillingPeriodSwitch v-model="period" />
+        </div>
+        <BillingPlanCards class="mt-8" :period="period" :busy="busy" @select="start($event, period)" />
+        <p class="text-[13px] text-ink-2 mt-5">{{ $t('landing.pricing.fineprint') }}</p>
+      </section>
+
+      <!-- final cta -->
+      <section class="relative mt-16 overflow-hidden" aria-labelledby="cta-title">
+        <img src="/img/teal-hills.svg" alt="" aria-hidden="true" class="block w-screen ml-[calc(50%-50vw)] mb-[-2px] pointer-events-none">
+        <div class="bg-sand-100 px-6 pb-8 relative">
+          <div class="max-w-[1200px] mx-auto flex flex-wrap gap-6 items-center justify-between">
+            <div class="flex-1 basis-[380px] min-w-[280px] pt-8 pb-10">
+              <p class="text-[14px] font-600 text-teal-700">{{ $t('landing.finalCta.eyebrow') }}</p>
+              <h2 id="cta-title" class="font-display text-[clamp(30px,3.6vw,44px)] font-600 tracking-[-.025em] leading-[1.08] mt-2">{{ $t('landing.finalCta.title') }}</h2>
+              <p class="text-[15px] leading-[1.6] text-ink-2 mt-3 max-w-[420px]">{{ $t('landing.finalCta.body') }}</p>
+              <div class="flex gap-3 flex-wrap mt-6">
+                <NuxtLink :to="appHref" class="bg-primary hover:bg-primary-hover text-white hover:text-white rounded-pill h-12 px-6 inline-flex items-center text-[15px] font-600 transition-colors">{{ $t('landing.finalCta.tryFree') }}</NuxtLink>
+                <a href="#harga" class="bg-white border border-sand-line hover:border-sand-line3 text-ink hover:text-ink rounded-pill h-12 px-6 inline-flex items-center text-[15px] font-600 transition-colors">{{ $t('landing.finalCta.seePricing') }}</a>
               </div>
-              <div v-for="m in [['DP', 'Dimas Prayoga', $t('landing.sharing.m1sub'), $t('landing.sharing.m1role')], ['AL', 'Ayu Larasati', $t('landing.sharing.m2sub'), $t('landing.sharing.m2role')]]" :key="m[0]" class="flex gap-[10px] items-center">
-                <div class="w-[32px] h-[32px] rounded-full bg-teal-deep text-ink flex items-center justify-center text-[12px] font-700 shrink-0">{{ m[0] }}</div>
-                <div class="flex-1 min-w-0"><div class="text-[13px] font-600">{{ m[1] }}</div><div class="text-[11px] text-teal-deep">{{ m[2] }}</div></div>
-                <div class="bg-white/20 rounded-pill px-[10px] py-[5px] text-[11px] font-700 whitespace-nowrap">{{ m[3] }}</div>
-              </div>
+            </div>
+            <div class="flex-[0_1_380px] min-w-[260px] relative h-[280px] hidden sm:block" aria-hidden="true">
+              <img src="/img/photo-ubud.jpg" alt="" width="1200" height="900" loading="lazy" class="absolute right-[6%] top-2 w-[66%] h-[74%] object-cover rounded-[20px] rotate-[2deg] shadow-[0_30px_54px_-34px_rgba(16,38,43,.5)] bg-sand-line">
+              <img src="/img/photo-sumba.jpg" alt="" width="1200" height="798" loading="lazy" class="absolute left-0 bottom-0 w-[44%] aspect-square object-cover rounded-[16px] rotate-[-4deg] shadow-[0_24px_42px_-28px_rgba(16,38,43,.5)] bg-sand-line">
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- isi aplikasi collage -->
-    <div id="dalam" class="relative px-6 pt-20 pb-20 overflow-hidden scroll-mt-[80px]">
-      <img src="/img/teal-cloud.svg" alt="" class="absolute left-[-60px] top-[60px] w-[220px] opacity-90 pointer-events-none">
-      <div class="relative max-w-[1200px] mx-auto">
-        <div class="flex flex-wrap gap-[18px] justify-between items-end">
-          <div class="max-w-[520px]">
-            <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.inside.eyebrow') }}</div>
-            <div class="text-[clamp(26px,3.2vw,36px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px]">{{ $t('landing.inside.title') }}</div>
-            <p class="text-[14.5px] leading-[1.6] text-ink-2 mt-[10px]">{{ $t('landing.inside.body') }}</p>
-          </div>
-          <NuxtLink :to="appHref" class="bg-ink text-white rounded-pill px-5 py-3 text-[14px] font-700 whitespace-nowrap">{{ $t('landing.inside.tryLive') }}</NuxtLink>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[18px] items-start mt-[34px]">
-          <!-- col 1 -->
-          <div class="flex flex-col gap-[18px] lg:mt-4">
-            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[-2deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
-              <img src="/img/screen-beranda.png" alt="" class="w-full block rounded-[12px]">
-              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap1') }}</div>
-            </div>
-            <div class="bg-teal-100 rounded-[18px] p-[15px] rotate-[1.4deg]">
-              <div class="text-[11px] font-600 text-teal-700">{{ $t('landing.inside.note1') }}</div>
-              <div class="text-[14.5px] font-700 leading-[1.35] mt-[6px]">{{ $t('landing.inside.note1body') }}</div>
-            </div>
-            <div class="h-[130px] rounded-[18px] overflow-hidden rotate-[-1.4deg] bg-cover bg-center shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)]" style="background-image:url('/img/photo-bromo.jpg')" />
-          </div>
-          <!-- col 2 -->
-          <div class="flex flex-col gap-[18px]">
-            <div class="h-[150px] rounded-[18px] overflow-hidden rotate-[2deg] bg-cover bg-center shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)]" style="background-image:url('/img/photo-kota.jpg')" />
-            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[-1.2deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
-              <img src="/img/screen-hari.png" alt="" class="w-full block rounded-[12px]">
-              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap2') }}</div>
-            </div>
-            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[2.4deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
-              <img src="/img/screen-anggota.png" alt="" class="w-full block rounded-[12px]">
-              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap3') }}</div>
-            </div>
-          </div>
-          <!-- col 3 -->
-          <div class="flex flex-col gap-[18px] lg:mt-9">
-            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[1.8deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
-              <img src="/img/screen-anggaran.png" alt="" class="w-full block rounded-[12px]">
-              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap4') }}</div>
-            </div>
-            <div class="bg-ink text-teal-100 rounded-[18px] p-4 rotate-[-2.2deg]">
-              <div class="text-[20px] font-600">Rp 685.000</div>
-              <div class="text-[12px] text-teal-deep mt-[5px]">{{ $t('landing.inside.note2sub') }}</div>
-            </div>
-            <div class="h-[120px] rounded-[18px] overflow-hidden rotate-[1.2deg] bg-cover bg-center shadow-[0_24px_42px_-30px_rgba(16,38,43,.5)]" style="background-image:url('/img/photo-sumba.jpg')" />
-          </div>
-          <!-- col 4 -->
-          <div class="flex flex-col gap-[18px] lg:mt-2">
-            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[2.2deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
-              <img src="/img/screen-outfit.png" alt="" class="w-full block rounded-[12px]">
-              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap5') }}</div>
-            </div>
-            <div class="bg-white border border-sand-line rounded-[18px] p-[7px] rotate-[-1.8deg] shadow-[0_24px_44px_-32px_rgba(16,38,43,.55)]">
-              <img src="/img/screen-ringkasan.png" alt="" class="w-full block rounded-[12px]">
-              <div class="text-[11.5px] font-700 text-ink-2 px-[3px] pt-2 pb-[1px]">{{ $t('landing.inside.cap6') }}</div>
-            </div>
-            <div class="bg-peach-bg rounded-[18px] p-[15px] rotate-[1.6deg]">
-              <div class="text-[11px] font-600 text-peach-fg">{{ $t('landing.inside.note3label') }}</div>
-              <div class="text-[14.5px] font-700 leading-[1.35] mt-[6px]">{{ $t('landing.inside.note3body') }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- cerita -->
-    <div id="cerita" class="bg-ink text-teal-100 px-6 py-20 scroll-mt-[80px]">
-      <div class="max-w-[1200px] mx-auto">
-        <div class="max-w-[560px]">
-          <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-deep">{{ $t('landing.stories.eyebrow') }}</div>
-          <div class="text-[clamp(26px,3.2vw,36px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px] text-white">{{ $t('landing.stories.title') }}</div>
-        </div>
-        <div class="grid gap-5 mt-8" style="grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))">
-          <div v-for="s in stories" :key="s.who" class="bg-white/[.08] rounded-[22px] p-6 flex flex-col gap-[11px]">
-            <div class="flex gap-[3px] text-brand-amber"><i v-for="n in 5" :key="n" class="i-lucide-star text-[14px]" /></div>
-            <div class="text-[14.5px] font-700 text-white">{{ $t('landing.stories.' + s.k + 'quote') }}</div>
-            <div class="text-[13.5px] leading-[1.65] text-teal-deep">{{ $t('landing.stories.' + s.k + 'body') }}</div>
-            <div class="flex gap-[10px] items-center mt-auto">
-              <div class="w-[32px] h-[32px] rounded-full bg-teal-100 text-ink flex items-center justify-center text-[12px] font-700">{{ s.ini }}</div>
-              <div><div class="text-[13px] font-600 text-white">{{ s.who }}</div><div class="text-[11.5px] text-[#8FC2BE]">{{ $t('landing.stories.' + s.k + 'trip') }}</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- harga -->
-    <div id="harga" class="max-w-[1200px] mx-auto px-6 pt-20 pb-8 scroll-mt-[80px]">
-      <div class="flex flex-wrap gap-[18px] justify-between items-end">
-        <div class="max-w-[500px]">
-          <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.pricing.eyebrow') }}</div>
-          <div class="text-[clamp(26px,3.2vw,38px)] font-800 tracking-[-.03em] leading-[1.14] mt-[10px]">{{ $t('landing.pricing.title') }}</div>
-        </div>
-        <BillingPeriodSwitch v-model="period" />
-      </div>
-      <BillingPlanCards class="mt-8" :period="period" :busy="busy" @select="start($event, period)" />
-      <div class="text-[12.5px] text-ink-2 mt-5">{{ $t('landing.pricing.fineprint') }}</div>
-    </div>
-
-    <!-- final cta -->
-    <div class="relative mt-16 overflow-hidden">
-      <img src="/img/teal-hills.svg" alt="" class="block w-screen ml-[calc(50%-50vw)] mb-[-2px] pointer-events-none">
-      <div class="bg-sand-100 px-6 pb-[34px] relative">
-        <div class="max-w-[1200px] mx-auto flex flex-wrap gap-[26px] items-center justify-between">
-          <div class="flex-1 basis-[380px] min-w-[280px] pt-[30px] pb-10">
-            <div class="text-[12px] font-700 tracking-[.12em] uppercase text-teal-700">{{ $t('landing.finalCta.eyebrow') }}</div>
-            <div class="text-[clamp(28px,3.4vw,40px)] font-800 tracking-[-.03em] leading-[1.08] mt-[11px]">{{ $t('landing.finalCta.title') }}</div>
-            <p class="text-[15px] leading-[1.6] text-ink-2 mt-[11px] max-w-[420px]">{{ $t('landing.finalCta.body') }}</p>
-            <div class="flex gap-3 flex-wrap mt-5">
-              <NuxtLink :to="appHref" class="bg-primary text-white rounded-pill px-[26px] py-[15px] text-[15px] font-700 hover:bg-primary-hover">{{ $t('landing.finalCta.tryFree') }}</NuxtLink>
-              <a href="#harga" class="bg-white text-ink rounded-pill px-6 py-[15px] text-[14.5px] font-700">{{ $t('landing.finalCta.seePricing') }}</a>
-            </div>
-          </div>
-          <div class="flex-[0_1_380px] min-w-[260px] relative h-[280px] hidden sm:block">
-            <div class="absolute right-[6%] top-[10px] w-[66%] h-[74%] rounded-[22px] overflow-hidden rotate-[2deg] shadow-[0_30px_54px_-34px_rgba(16,38,43,.5)] bg-cover bg-center" style="background-image:url('/img/photo-ubud.jpg')" />
-            <div class="absolute left-0 bottom-0 w-[44%] aspect-square rounded-[18px] overflow-hidden rotate-[-4deg] shadow-[0_24px_42px_-28px_rgba(16,38,43,.5)] bg-cover bg-center" style="background-image:url('/img/photo-sumba.jpg')" />
-          </div>
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
 
     <!-- footer -->
-    <footer class="bg-ink text-teal-deep px-6 py-[30px]">
-      <div class="max-w-[1200px] mx-auto flex flex-wrap gap-[18px] justify-between items-center">
+    <footer class="bg-ink text-teal-deep px-6 py-8">
+      <div class="max-w-[1200px] mx-auto flex flex-wrap gap-5 justify-between items-center">
         <CoreLogo :size="26" :text-size="16" variant="light" :weight="800" />
-        <div class="flex gap-5 flex-wrap text-[13px]">
-          <a href="#fitur" class="text-teal-deep hover:text-white">{{ $t('landing.nav.features') }}</a>
-          <a href="#dalam" class="text-teal-deep hover:text-white">{{ $t('landing.nav.inside') }}</a>
-          <a href="#harga" class="text-teal-deep hover:text-white">{{ $t('landing.nav.pricing') }}</a>
-          <NuxtLink :to="appHref" class="text-teal-deep hover:text-white">{{ $t('landing.footer.openApp') }}</NuxtLink>
-        </div>
-        <div class="text-[12.5px] text-[#8FC2BE]">{{ $t('landing.footer.madeIn') }}</div>
+        <nav :aria-label="$t('landing.nav.menu')" class="flex gap-x-5 gap-y-2 flex-wrap text-[14px]">
+          <a v-for="a in anchors" :key="a.href" :href="a.href" class="text-teal-deep hover:text-white transition-colors">{{ $t(a.label) }}</a>
+          <NuxtLink :to="localePath('/guides')" class="text-teal-deep hover:text-white transition-colors">{{ $t('landing.nav.guides') }}</NuxtLink>
+          <NuxtLink :to="appHref" class="text-teal-deep hover:text-white transition-colors">{{ $t('landing.footer.openApp') }}</NuxtLink>
+        </nav>
+        <p class="text-[13px] text-teal-soft2">{{ $t('landing.footer.madeIn') }}</p>
       </div>
     </footer>
   </div>

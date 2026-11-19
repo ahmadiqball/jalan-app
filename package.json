@@ -30,6 +30,7 @@
     "@unocss/nuxt": "^66.8.1",
     "playwright-core": "^1.64.1",
     "typescript": "^5.9.3",
+    "unocss": "66.8.1",
     "vue-tsc": "^3.3.11"
   }
 }

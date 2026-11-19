@@ -4,6 +4,12 @@ export default defineConfig({
   presets: [
     presetWind3(),
     presetIcons({
+      // Explicit loaders: the auto node-loader fails to resolve @iconify-json/*
+      // in this checkout ("failed to load icon"), which left every icon blank.
+      collections: {
+        'lucide': () => import('@iconify-json/lucide').then(m => m.icons),
+        'circle-flags': () => import('@iconify-json/circle-flags').then(m => m.icons),
+      },
       scale: 1.1,
       extraProperties: { display: 'inline-block', 'vertical-align': 'middle' },
     }),
@@ -21,7 +27,8 @@ export default defineConfig({
   theme: {
     colors: {
       // primary action = terracotta (HTML source of truth, not teal)
-      primary: { DEFAULT: '#C85A28', hover: '#AE4C22' },
+      // #B8521F keeps white button text at 4.9:1 (WCAG AA); #C85A28 was 4.25:1
+      primary: { DEFAULT: '#B8521F', hover: '#9A4318' },
       ink: { DEFAULT: '#10262B', 2: '#33474C' },
       muted: '#6C7C7D',
       teal: {
@@ -29,12 +36,13 @@ export default defineConfig({
         600: '#0E6E76',
         100: '#DEEEEC',
         deep: '#CFE3E1',
-        soft: '#C8E2DE',
-        soft2: '#8FC2BE',
+        // nested so `teal-soft2` resolves: Uno reads it as soft → 2
+        soft: { DEFAULT: '#C8E2DE', 2: '#8FC2BE' },
       },
       paper: '#FBFAF5',
-      sand: { 100: '#F1EEE1', line: '#EDE9DA', line2: '#E4DECB', line3: '#D8D0BB' },
-      warn: { bg: '#FCE3D3', fg: '#C85A28', fg2: '#8A6314' },
+      // nested so `sand-line2` / `sand-line3` resolve (flat `line2` keys never matched)
+      sand: { 100: '#F1EEE1', line: { DEFAULT: '#EDE9DA', 2: '#E4DECB', 3: '#D8D0BB' } },
+      warn: { bg: '#FCE3D3', fg: { DEFAULT: '#C85A28', 2: '#8A6314' } },
       brand: { orange: '#F0713A', green: '#2F6B54', amber: '#D98F3B' },
       peach: { bg: '#F6E2CE', fg: '#9C4718' },
     },

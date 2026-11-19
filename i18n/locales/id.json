@@ -131,6 +131,8 @@
       "inside": "Isi aplikasi",
       "stories": "Cerita",
       "pricing": "Harga",
+      "guides": "Panduan",
+      "menu": "Menu",
       "signin": "Masuk",
       "tryFree": "Mulai sekarang"
     },
@@ -140,8 +142,8 @@
     },
     "hero": {
       "badge": "Perencana jalan-jalan buatan Indonesia",
-      "title1": "Rapikan rencananya.",
-      "title2": "Nikmatin jalannya.",
+      "title1": "Rapikan rencananya",
+      "title2": "Nikmatin jalannya",
       "blurb": "Itinerary, budget, pengeluaran, packing, sampai outfit. Semua tersusun dalam satu trip, siap dibuka bareng teman, bahkan saat sinyal nggak ada.",
       "tryFree": "Mulai sekarang",
       "seeInside": "Lihat isi aplikasi",
@@ -153,7 +155,13 @@
       "collageToday": "Rp 745.000 hari ini"
     },
     "carousel": {
-      "heading": "Tujuan yang sedang ramai"
+      "heading": "Tujuan yang sedang ramai",
+      "prev": "Destinasi sebelumnya",
+      "next": "Destinasi berikutnya",
+      "pause": "Hentikan putar otomatis",
+      "play": "Putar otomatis",
+      "goTo": "Ke destinasi {n}: {name}",
+      "position": "{n} dari {total}"
     },
     "places": {
       "sumba": "Pantai & bukit",
@@ -163,7 +171,7 @@
     },
     "rail": {
       "eyebrow": "Isinya apa saja",
-      "title": "Semua kebutuhan trip, dalam satu tempat.",
+      "title": "Semua kebutuhan trip, dalam satu tempat",
       "days": "Aktivitas per jam, lengkap dengan durasi dan tempat",
       "budget": "Beberapa versi rencana, sisa uang per kategori",
       "expenses": "Catat di jalan, tetap jalan tanpa sinyal",
@@ -242,7 +250,7 @@
       "body": "Layar asli dari aplikasi: rencana harian, anggaran per kategori, dan outfit per hari.",
       "tryLive": "Coba versi hidup",
       "cap1": "Beranda · trip yang sedang jalan",
-      "note1": "HARI 3 · TANGGEDU",
+      "note1": "Hari 3 · Tanggedu",
       "note1body": "\"Bawa kaos ganti, jalannya basah sampai pinggang.\"",
       "cap2": "Hari · aktivitas per jam",
       "cap3": "Anggota · biaya dibagi otomatis",
@@ -250,7 +258,7 @@
       "note2sub": "sisa anggaran di hari terakhir — cukup untuk oleh-oleh",
       "cap5": "Outfit · per hari atau per aktivitas",
       "cap6": "Ringkasan · yang dilihat pertama",
-      "note3label": "BARANG BAWAAN",
+      "note3label": "Barang bawaan",
       "note3body": "3 dari 8 dicentang — 2 wajib belum masuk tas"
     },
     "stories": {

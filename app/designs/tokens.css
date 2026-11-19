@@ -20,10 +20,11 @@
   --warn-bg: #fce3d3;
   --warn-fg: #c85a28;
   --warn-fg-2: #8a6314;
-  --primary: #c85a28; /* terracotta = primary action */
-  --primary-hover: #ae4c22;
+  --primary: #b8521f; /* terracotta = primary action; 4.9:1 with white text */
+  --primary-hover: #9a4318;
   --brand-orange: #f0713a;
   --brand-green: #2f6b54;
+  --brand-amber: #d98f3b;
   --peach-bg: #f6e2ce;
   --peach-fg: #9c4718;
   --scrim: rgba(16, 38, 43, 0.34);
