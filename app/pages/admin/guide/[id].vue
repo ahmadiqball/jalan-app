@@ -2,17 +2,19 @@
 import type { Destination, GuideDetail, Place } from '~/types/guide'
 import { PLACE_TYPES } from '~/utils/guide'
 
-useHead({ title: 'Atur panduan · Kelana' })
+useHead({ title: 'Atur destinasi · Kelana' })
 const route = useRoute()
 const { flash } = useToast()
 const { confirm } = useConfirm()
 const { getDestination, saveDestination, savePlace, deletePlace } = useGuidesAdmin()
-const { templates } = useTemplatesList()
+const { templates } = useAdminTemplatesList()
 const id = route.params.id as string
 
+// drafts are listed too (labelled) so a destination can be linked ahead of launch;
+// the public page only shows the button once the route is live
 const templateOptions = computed(() => [
   { value: '', label: '— Tidak ada —' },
-  ...templates.value.map((t) => ({ value: t.id, label: t.name })),
+  ...templates.value.map((t) => ({ value: t.id, label: t.published === false ? `${t.name} (Draf)` : t.name })),
 ])
 
 
@@ -41,7 +43,7 @@ onMounted(async () => {
     aliasesStr.value = csv(d.aliases)
     tipsStr.value = linesOf(d.tips)
   } catch {
-    flash('Tidak bisa memuat panduan')
+    flash('Tidak bisa memuat destinasi')
     navigateTo('/admin')
     return
   } finally {
@@ -63,9 +65,9 @@ async function saveDest() {
     }
     const saved = await saveDestination(payload)
     Object.assign(dest, saved)
-    flash('Panduan disimpan')
+    flash('Destinasi disimpan')
   } catch {
-    flash('Gagal menyimpan panduan')
+    flash('Gagal menyimpan destinasi')
   } finally {
     savingDest.value = false
   }
@@ -106,7 +108,7 @@ async function onSavePlace(p: Place) {
   }
 }
 async function onRemovePlace(p: Place) {
-  const ok = await confirm({ title: 'Hapus tempat?', message: `"${p.name}" akan dihapus dari panduan.`, confirmLabel: 'Hapus', danger: true })
+  const ok = await confirm({ title: 'Hapus tempat?', message: `"${p.name}" akan dihapus dari destinasi ini.`, confirmLabel: 'Hapus', danger: true })
   if (!ok) return
   try {
     await deletePlace(p.id)
@@ -135,10 +137,10 @@ async function onRemovePlace(p: Place) {
     <template v-else>
       <!-- destination form -->
       <div class="flex items-center justify-between gap-3 flex-wrap">
-        <div class="font-display text-[26px] font-600">{{ dest.name || 'Panduan' }}</div>
+        <div class="font-display text-[26px] font-600">{{ dest.name || 'Destinasi' }}</div>
         <div class="flex items-center gap-3">
-          <a :href="`/guides/${dest.slug}`" target="_blank" rel="noopener" class="text-[13px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1"><i class="i-lucide-external-link text-[14px]" /> Pratinjau</a>
-          <CoreButton variant="primary" :disabled="savingDest" @click="saveDest">{{ savingDest ? 'Menyimpan…' : 'Simpan panduan' }}</CoreButton>
+          <a :href="`/kurasi/${dest.slug}`" target="_blank" rel="noopener" class="text-[13px] font-600 text-teal-600 hover:text-teal-700 flex items-center gap-1"><i class="i-lucide-external-link text-[14px]" /> Pratinjau</a>
+          <CoreButton variant="primary" :disabled="savingDest" @click="saveDest">{{ savingDest ? 'Menyimpan…' : 'Simpan destinasi' }}</CoreButton>
         </div>
       </div>
 
@@ -149,8 +151,8 @@ async function onRemovePlace(p: Place) {
           <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Region</span><input v-model="dest.region" class="field !py-[9px]" placeholder="Indonesia"></label>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <AdminImageField label="Gambar hero (seni / ilustrasi)" hint="Tampil besar & menyatu dengan halaman panduan. Pakai ilustrasi/seni." :model-value="dest.heroImage || ''" @update:model-value="dest.heroImage = $event" />
-          <AdminImageField label="Gambar kartu (foto)" hint="Tampil di kartu daftar Guides. Sebaiknya foto landscape." :model-value="dest.cardImage || ''" @update:model-value="dest.cardImage = $event" />
+          <AdminImageField label="Gambar hero (seni / ilustrasi)" hint="Tampil besar & menyatu dengan halaman destinasi. Pakai ilustrasi/seni." :model-value="dest.heroImage || ''" @update:model-value="dest.heroImage = $event" />
+          <AdminImageField label="Gambar kartu (foto)" hint="Tampil di kartu daftar Kurasi Kelana. Sebaiknya foto landscape." :model-value="dest.cardImage || ''" @update:model-value="dest.cardImage = $event" />
         </div>
         <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Ringkasan</span><textarea v-model="dest.summary" rows="3" class="field !py-[9px] resize-none" placeholder="Sekilas tentang destinasi…" /></label>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -163,11 +165,11 @@ async function onRemovePlace(p: Place) {
           <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Alias untuk cocokkan trip (koma)</span><input v-model="aliasesStr" class="field !py-[9px]" placeholder="bali, ubud, kuta, seminyak"></label>
         </div>
         <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Tips perjalanan (satu per baris)</span><textarea v-model="tipsStr" rows="3" class="field !py-[9px] resize-none" /></label>
-        <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Itinerary template — dipakai saat "Gunakan panduan untuk trip saya"</span><CoreSelect :model-value="dest.itineraryTemplateId || ''" :options="templateOptions" @update:model-value="dest.itineraryTemplateId = $event || undefined" /></label>
+        <label class="flex flex-col gap-1"><span class="text-[11.5px] text-muted font-600">Rute Kelana terkait (muncul sebagai tombol "Buat trip dari rute")</span><CoreSelect :model-value="dest.itineraryTemplateId || ''" :options="templateOptions" @update:model-value="dest.itineraryTemplateId = $event || undefined" /></label>
         <div class="flex flex-wrap items-center gap-5 pt-1">
           <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.published" @update:model-value="dest.published = $event" /> Tayangkan (publik)</label>
-          <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.featured" @update:model-value="dest.featured = $event" /> Unggulan di beranda Guides</label>
-          <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.isPublic" @update:model-value="dest.isPublic = $event" /> Panduan publik (tanpa paket)</label>
+          <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.featured" @update:model-value="dest.featured = $event" /> Unggulan di halaman Kurasi Kelana</label>
+          <label class="flex items-center gap-2 text-[13.5px] text-ink-2 cursor-pointer"><CoreCheckbox :model-value="!!dest.isPublic" @update:model-value="dest.isPublic = $event" /> Destinasi publik (tanpa paket)</label>
         </div>
       </div>
 

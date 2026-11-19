@@ -187,6 +187,18 @@ async function removeCurrentDay() {
         </div>
       </div>
 
+      <!-- Rute Kelana: the day's story, shown under the day on the route's story page -->
+      <label v-if="template && day" class="bg-teal-100/60 rounded-card p-[14px_16px] flex flex-col gap-[6px]">
+        <span class="text-[12px] text-teal-700 font-600 flex items-center gap-[6px]"><i class="i-lucide-book-open text-[14px]" aria-hidden="true" /> Cerita hari ini</span>
+        <textarea
+          :value="day.story || ''"
+          rows="2"
+          placeholder="Kenapa hari ini disusun begini? mis. Sengaja santai setelah perjalanan panjang: pagi ke air terjun sebelum panas, sore istirahat."
+          class="field resize-none bg-white"
+          @input="trips.setDayStory(trip.id, dayIdx, ($event.target as HTMLTextAreaElement).value)"
+        />
+      </label>
+
       <template v-if="sortedActs.length">
         <div class="flex flex-col gap-2">
           <template v-for="(it, i) in timeline" :key="i">

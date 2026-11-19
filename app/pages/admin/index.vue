@@ -38,9 +38,9 @@ async function seedExamples() {
   try {
     const r = await apiFetch<{ destinations: number; places: number }>('/api/admin/guides/seed', { method: 'POST' })
     await loadDestinations()
-    flash(`Contoh panduan diisi — ${r.destinations} destinasi, ${r.places} tempat`)
+    flash(`Contoh destinasi diisi — ${r.destinations} destinasi, ${r.places} tempat`)
   } catch {
-    flash('Gagal mengisi contoh panduan')
+    flash('Gagal mengisi contoh destinasi')
   } finally {
     seeding.value = false
   }
@@ -48,22 +48,22 @@ async function seedExamples() {
 async function newGuide() {
   const id = 'dest-' + rid()
   try {
-    await saveDestination({ id, slug: 'panduan-' + rid(), name: 'Panduan baru', region: '', published: false } as Destination)
+    await saveDestination({ id, slug: 'destinasi-' + rid(), name: 'Destinasi baru', region: '', published: false } as Destination)
     navigateTo(`/admin/guide/${id}`)
-  } catch { flash('Gagal membuat panduan') }
+  } catch { flash('Gagal membuat destinasi') }
 }
 async function removeGuide(id: string, name: string) {
   const ok = await confirm({
-    title: 'Hapus panduan?',
-    message: `Panduan "${name || 'ini'}" beserta semua tempatnya akan dihapus permanen.`,
-    confirmLabel: 'Hapus panduan',
+    title: 'Hapus destinasi?',
+    message: `Destinasi "${name || 'ini'}" beserta semua tempatnya akan dihapus permanen.`,
+    confirmLabel: 'Hapus destinasi',
     danger: true,
   })
   if (!ok) return
   try {
     await deleteDestination(id)
     destinations.value = destinations.value.filter((d) => d.id !== id)
-    flash('Panduan dihapus')
+    flash('Destinasi dihapus')
   } catch { flash('Gagal menghapus') }
 }
 
@@ -125,13 +125,13 @@ async function removeTemplate(id: string, name: string) {
     <template v-else-if="allowed">
       <div>
         <div class="font-display text-[32px] font-600">Kelola aplikasi & konten</div>
-        <div class="text-[14px] text-ink-2 mt-[4px]">Dashboard admin untuk mengatur template kurasi, rekomendasi barang, dan panduan destinasi yang tampil untuk semua pengguna. Pembuatan trip ada di beranda.</div>
+        <div class="text-[14px] text-ink-2 mt-[4px]">Dashboard admin untuk mengatur Rute Kelana, rekomendasi barang, dan Kurasi Kelana yang tampil untuk semua pengguna. Pembuatan trip ada di beranda.</div>
       </div>
 
       <!-- menu -->
       <div class="flex gap-1 border-b border-sand-line">
         <button
-          v-for="m in [['templates', 'Template'], ['recs', 'Rekomendasi barang'], ['guides', 'Panduan']] as const"
+          v-for="m in [['templates', 'Rute Kelana'], ['recs', 'Rekomendasi barang'], ['guides', 'Kurasi Kelana']] as const"
           :key="m[0]"
           class="px-4 pt-[10px] pb-[12px] text-[14px] border-b-[2.5px] transition-colors"
           :class="menu === m[0] ? 'border-teal-600 text-ink font-700' : 'border-transparent text-muted font-500 hover:text-ink-2'"
@@ -144,31 +144,32 @@ async function removeTemplate(id: string, name: string) {
       <!-- TEMPLATES: grid of trip-shaped templates -->
       <template v-if="menu === 'templates'">
         <div class="flex items-center justify-between gap-3 flex-wrap">
-          <div class="text-[13.5px] text-ink-2">Tiap template dibuat seperti trip biasa — atur hari, anggaran, dan barang. Pengguna tinggal “pakai”.</div>
-          <CoreButton variant="primary" @click="newTemplate">+ Template baru</CoreButton>
+          <div class="text-[13.5px] text-ink-2 max-w-[560px]">Tiap rute dibuat seperti trip biasa, dengan hari, anggaran, dan barang. Rute baru berstatus Draf dan baru terlihat pengguna setelah ditayangkan.</div>
+          <CoreButton variant="primary" @click="newTemplate">+ Rute baru</CoreButton>
         </div>
         <ClientOnly>
           <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))">
             <div v-for="tp in list" :key="tp.id" class="bg-white border border-sand-line rounded-[20px] overflow-hidden flex flex-col group">
               <div class="h-[92px] bg-cover bg-center relative" :style="tp.cover ? { backgroundImage: `url('${tp.cover}')` } : {}">
                 <CoreCover v-if="!tp.cover" :mat="tp.mat" :photo-size="0" />
+                <AdminPublishBadge :published="tp.published !== false" class="absolute top-2 left-2" />
                 <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-muted hover:text-warn-fg shadow" title="Hapus" @click.stop="removeTemplate(tp.id, tp.name)"><i class="i-lucide-trash-2 text-[14px]" /></button>
               </div>
               <NuxtLink :to="`/admin/template/${tp.id}`" class="p-[14px_16px] flex flex-col gap-[9px] flex-1 hover:bg-sand-100 transition-colors">
                 <div>
-                  <div class="font-display text-[17px] font-600">{{ tp.name || 'Template baru' }}</div>
+                  <div class="font-display text-[17px] font-600">{{ tp.name || 'Rute baru' }}</div>
                   <div class="text-[12.5px] text-muted mt-[2px]">{{ tp.place || 'Belum ada destinasi' }}</div>
                 </div>
                 <div class="flex gap-[6px] text-[12px] font-600 flex-wrap">
                   <span class="bg-paper rounded-pill px-[10px] py-[5px] text-ink-2 money">{{ tp.days.length }} hari</span>
                   <span class="bg-paper rounded-pill px-[10px] py-[5px] text-ink-2 money">{{ rp(templateTotal(tp)) }}</span>
                 </div>
-                <div class="mt-auto text-[12.5px] font-600 text-teal-600 flex items-center gap-1">Atur template <i class="i-lucide-arrow-up-right text-[14px]" /></div>
+                <div class="mt-auto text-[12.5px] font-600 text-teal-600 flex items-center gap-1">Atur rute <i class="i-lucide-arrow-up-right text-[14px]" /></div>
               </NuxtLink>
             </div>
             <button class="border border-dashed border-sand-line3 rounded-[20px] min-h-[200px] flex flex-col items-center justify-center gap-2 text-muted hover:border-teal-600 hover:text-teal-700" @click="newTemplate">
               <i class="i-lucide-plus text-[24px]" />
-              <span class="text-[13px] font-600">Template baru</span>
+              <span class="text-[13px] font-600">Rute baru</span>
             </button>
           </div>
           <template #fallback><SkeletonCards :count="4" /></template>
@@ -190,30 +191,30 @@ async function removeTemplate(id: string, name: string) {
       <!-- GUIDES (destinations + places catalog) -->
       <template v-else>
         <div class="flex items-center justify-between gap-3 flex-wrap">
-          <div class="text-[13.5px] text-ink-2 max-w-[560px]">Panduan destinasi dengan rekomendasi tempat (hotel, makan, aktivitas, hidden gem) yang tampil publik di <span class="money">/guides</span>.</div>
+          <div class="text-[13.5px] text-ink-2 max-w-[560px]">Destinasi dengan rekomendasi tempat (hotel, makan, aktivitas, hidden gem) yang tampil di <span class="money">/kurasi</span>.</div>
           <div class="flex items-center gap-2 shrink-0 flex-wrap">
             <CoreButton v-if="!destinations.length" variant="ghost" :disabled="seeding" @click="seedExamples">{{ seeding ? 'Mengisi…' : 'Isi contoh (Bali & Banda Neira)' }}</CoreButton>
-            <CoreButton variant="primary" @click="newGuide">+ Panduan baru</CoreButton>
+            <CoreButton variant="primary" @click="newGuide">+ Destinasi baru</CoreButton>
           </div>
         </div>
         <ClientOnly>
           <div class="grid gap-[18px]" style="grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))">
             <div v-for="d in destinations" :key="d.id" class="bg-white border border-sand-line rounded-[20px] overflow-hidden flex flex-col group">
               <div class="h-[92px] bg-cover bg-center relative" :style="{ backgroundColor: '#DEEEEC', backgroundImage: d.heroImage ? `url('${d.heroImage}')` : undefined }">
-                <span class="absolute top-2 left-2 rounded-pill px-[9px] py-[3px] text-[11px] font-700" :class="d.published ? 'bg-teal-100 text-teal-700' : 'bg-sand-100 text-muted'">{{ d.published ? 'Tayang' : 'Draf' }}</span>
+                <AdminPublishBadge :published="!!d.published" class="absolute top-2 left-2" />
                 <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center text-muted hover:text-warn-fg shadow" title="Hapus" @click.stop="removeGuide(d.id, d.name)"><i class="i-lucide-trash-2 text-[14px]" /></button>
               </div>
               <NuxtLink :to="`/admin/guide/${d.id}`" class="p-[14px_16px] flex flex-col gap-[7px] flex-1 hover:bg-sand-100 transition-colors">
                 <div>
-                  <div class="font-display text-[17px] font-600">{{ d.name || 'Panduan baru' }}</div>
+                  <div class="font-display text-[17px] font-600">{{ d.name || 'Destinasi baru' }}</div>
                   <div class="text-[12.5px] text-muted mt-[2px]">{{ d.region || 'Belum ada region' }}</div>
                 </div>
-                <div class="mt-auto text-[12.5px] font-600 text-teal-600 flex items-center gap-1">Atur panduan <i class="i-lucide-arrow-up-right text-[14px]" /></div>
+                <div class="mt-auto text-[12.5px] font-600 text-teal-600 flex items-center gap-1">Atur destinasi <i class="i-lucide-arrow-up-right text-[14px]" /></div>
               </NuxtLink>
             </div>
             <button class="border border-dashed border-sand-line3 rounded-[20px] min-h-[160px] flex flex-col items-center justify-center gap-2 text-muted hover:border-teal-600 hover:text-teal-700" @click="newGuide">
               <i class="i-lucide-plus text-[24px]" />
-              <span class="text-[13px] font-600">Panduan baru</span>
+              <span class="text-[13px] font-600">Destinasi baru</span>
             </button>
           </div>
           <template #fallback><SkeletonCards :count="4" /></template>

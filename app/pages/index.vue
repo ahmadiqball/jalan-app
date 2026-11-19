@@ -141,7 +141,7 @@ onBeforeUnmount(() => {
         <CoreLogo :size="28" :text-size="19" variant="ink" :weight="800" class="shrink-0" />
         <nav :aria-label="$t('landing.nav.menu')" class="flex-1 hidden md:flex gap-6 items-center justify-center text-[14px] font-500">
           <a v-for="a in anchors" :key="a.href" :href="a.href" class="text-ink-2 hover:text-ink transition-colors">{{ $t(a.label) }}</a>
-          <NuxtLink :to="localePath('/guides')" class="text-ink-2 hover:text-ink transition-colors">{{ $t('landing.nav.guides') }}</NuxtLink>
+          <NuxtLink :to="localePath('/kurasi')" class="text-ink-2 hover:text-ink transition-colors">{{ $t('landing.nav.guides') }}</NuxtLink>
         </nav>
         <div class="ml-auto md:ml-0 flex gap-2 sm:gap-3 items-center shrink-0">
           <LayoutLangSwitch />
@@ -164,7 +164,7 @@ onBeforeUnmount(() => {
           <li v-for="a in anchors" :key="a.href">
             <a :href="a.href" class="flex items-center h-12 text-[15px] font-500 text-ink hover:text-teal-700" @click="menuOpen = false">{{ $t(a.label) }}</a>
           </li>
-          <li><NuxtLink :to="localePath('/guides')" class="flex items-center h-12 text-[15px] font-500 text-ink hover:text-teal-700" @click="menuOpen = false">{{ $t('landing.nav.guides') }}</NuxtLink></li>
+          <li><NuxtLink :to="localePath('/kurasi')" class="flex items-center h-12 text-[15px] font-500 text-ink hover:text-teal-700" @click="menuOpen = false">{{ $t('landing.nav.guides') }}</NuxtLink></li>
           <li class="border-t border-sand-line mt-2 pt-2"><NuxtLink :to="appHref" class="flex items-center h-12 text-[15px] font-600 text-ink hover:text-teal-700">{{ $t('landing.nav.signin') }}</NuxtLink></li>
         </ul>
       </nav>
@@ -377,7 +377,7 @@ onBeforeUnmount(() => {
             <ul class="flex flex-col gap-2 mt-4 text-[14px] text-ink-2">
               <li v-for="k in ['p1', 'p2', 'p3', 'p4']" :key="k" class="flex gap-2"><i class="i-lucide-corner-down-right text-[16px] text-teal-700 shrink-0 mt-0.5" aria-hidden="true" /> {{ $t('landing.guides.' + k) }}</li>
             </ul>
-            <NuxtLink :to="localePath('/guides')" class="text-[14px] font-600 text-teal-700 hover:text-ink inline-flex items-center gap-1 mt-5 transition-colors">{{ $t('landing.guides.cta') }} <i class="i-lucide-arrow-right text-[16px]" aria-hidden="true" /></NuxtLink>
+            <NuxtLink :to="localePath('/kurasi')" class="text-[14px] font-600 text-teal-700 hover:text-ink inline-flex items-center gap-1 mt-5 transition-colors">{{ $t('landing.guides.cta') }} <i class="i-lucide-arrow-right text-[16px]" aria-hidden="true" /></NuxtLink>
           </div>
           <div v-if="guides.length" class="flex-1 basis-[320px] min-w-[280px] grid gap-4" style="grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))">
             <GuideDestinationCard v-for="d in guides.slice(0, 2)" :key="d.id" :destination="d" />
@@ -589,7 +589,7 @@ onBeforeUnmount(() => {
         <CoreLogo :size="26" :text-size="16" variant="light" :weight="800" />
         <nav :aria-label="$t('landing.nav.menu')" class="flex gap-x-5 gap-y-2 flex-wrap text-[14px]">
           <a v-for="a in anchors" :key="a.href" :href="a.href" class="text-teal-deep hover:text-white transition-colors">{{ $t(a.label) }}</a>
-          <NuxtLink :to="localePath('/guides')" class="text-teal-deep hover:text-white transition-colors">{{ $t('landing.nav.guides') }}</NuxtLink>
+          <NuxtLink :to="localePath('/kurasi')" class="text-teal-deep hover:text-white transition-colors">{{ $t('landing.nav.guides') }}</NuxtLink>
           <NuxtLink :to="appHref" class="text-teal-deep hover:text-white transition-colors">{{ $t('landing.footer.openApp') }}</NuxtLink>
         </nav>
         <p class="text-[13px] text-teal-soft2">{{ $t('landing.footer.madeIn') }}</p>

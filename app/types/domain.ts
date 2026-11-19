@@ -45,6 +45,19 @@ export interface Activity {
   placeId?: string
   cost: number
   note: string
+  /** Rute Kelana: "Ada apa di sana", what the place is like; copied like `why` */
+  what?: string
+  /** Rute Kelana: a photograph of the place (public URL); copied like `why` */
+  photo?: string
+  /** who took `photo` and under which licence, e.g. "Jane Doe, CC BY-SA 4.0" */
+  photoCredit?: string
+  /** the photo's source page (licence attribution link) */
+  photoSource?: string
+  /** Rute Kelana: the curator's reason for this stop ("Kenapa ke sini");
+   *  copied into trips made from the route, read-only there */
+  why?: string
+  /** Rute Kelana: the curator's tip for this stop; copied like `why` */
+  tip?: string
   /** member ids who join this activity; undefined = everyone */
   participants?: string[]
   /** true once the cost has actually been spent — only then is it an expense.
@@ -61,6 +74,8 @@ export interface Day {
   /** long label e.g. "Senin, 14 September" */
   long: string
   title: string
+  /** Rute Kelana: "Cerita hari ini", why the day is shaped this way */
+  story?: string
   /** free-text legacy outfit note (kept for parity; outfitSets is canonical) */
   outfit: string
   acts: Activity[]
@@ -119,6 +134,25 @@ export interface Member {
   status: MemberStatus
 }
 
+/** Story-page content of a Rute Kelana route (curator-written). */
+export interface RouteStory {
+  /** URL part of /rute/<slug>; falls back to the route id */
+  slug?: string
+  /** "Kenapa rute ini": 2–3 sentences from the curator */
+  intro?: string
+  /** "Kenapa susunannya begini": why the order/pacing is optimal, one point each */
+  reasons?: string[]
+  /** who the route suits, e.g. "Pasangan, teman" */
+  goodFor?: string
+  /** e.g. "Mei–Sep" */
+  bestTime?: string
+  /** what the budget leaves out, e.g. "Belum termasuk tiket pesawat." */
+  budgetNote?: string
+  /** credit + source page for the route's cover photo */
+  coverCredit?: string
+  coverSource?: string
+}
+
 export interface Trip {
   id: string
   name: string
@@ -151,6 +185,10 @@ export interface Trip {
   /** manual guide-destination override when the trip's place text can't be
    *  auto-matched to a Guides destination (used by in-trip recommendations) */
   region?: string
+  /** Rute Kelana only: visible to users. Missing = published (legacy rows). */
+  published?: boolean
+  /** Rute Kelana only: the story page's content */
+  story?: RouteStory
   days: Day[]
   activeBudget: string
   budgets: Budget[]

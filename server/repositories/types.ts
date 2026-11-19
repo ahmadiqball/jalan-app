@@ -62,7 +62,10 @@ export interface ContentRepository {
 
 /** Starter templates, one row per template (data = a full trip document). */
 export interface TemplateRepository {
+  /** published routes only (public catalog) */
   list(): Promise<TemplateTrip[]>
+  /** every route incl. drafts, with `published` on each document (admin) */
+  listAll(): Promise<TemplateTrip[]>
   get(id: string): Promise<TemplateTrip | null>
   upsert(tpl: TemplateTrip): Promise<TemplateTrip>
   remove(id: string): Promise<boolean>

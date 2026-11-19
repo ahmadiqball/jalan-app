@@ -22,8 +22,8 @@ const switchLocalePath = useSwitchLocalePath()
 // mobile nav (on desktop these live in the top bar)
 const nav = [
   { key: 'home', to: '/beranda' },
-  { key: 'guides', to: '/guides' },
-  { key: 'templates', to: '/template' },
+  { key: 'guides', to: '/kurasi' },
+  { key: 'templates', to: '/rute' },
   { key: 'archive', to: '/arsip' },
 ]
 const isActive = (to: string) => {

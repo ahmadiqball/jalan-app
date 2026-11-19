@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
   await requireGuides(event)
   const repo = useRepositories(event)
   const destination = await repo.destinations.getBySlug(getRouterParam(event, 'slug')!)
-  if (!destination || !destination.published) throw createError({ statusCode: 404, statusMessage: 'Panduan tidak ditemukan' })
+  if (!destination || !destination.published) throw createError({ statusCode: 404, statusMessage: 'Destinasi tidak ditemukan' })
   const places = await repo.places.listByDestination(destination.id)
   return { ...destination, places }
 })

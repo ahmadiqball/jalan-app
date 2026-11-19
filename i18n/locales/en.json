@@ -1,8 +1,8 @@
 {
   "nav": {
     "home": "Home",
-    "guides": "Guides",
-    "templates": "Templates",
+    "guides": "Kurasi Kelana",
+    "templates": "Rute Kelana",
     "archive": "Archive",
     "newTrip": "New trip",
     "search": "Search trips or places"
@@ -37,7 +37,7 @@
     "live": "In progress",
     "plan": "Planned",
     "draft": "Draft",
-    "template": "Template"
+    "template": "Route"
   },
   "cat": {
     "pantai": "Beach",
@@ -63,7 +63,7 @@
       "next": "Next plans",
       "count": "{n} trips",
       "newTrip": "New trip",
-      "newTripHint": "Start blank or pick a curated template",
+      "newTripHint": "Start blank or from Rute Kelana",
       "loading": "Loading trips…"
     },
     "filter": {
@@ -91,16 +91,17 @@
       "notSet": "not set"
     },
     "templates": {
-      "startTitle": "Start from a template",
+      "startTitle": "Start from Rute Kelana",
       "startSub": "A full plan with budget and packing. Change the dates, go.",
       "seeAll": "See all",
-      "use": "Use template",
+      "read": "Read the route",
+      "use": "Create a similar trip",
       "days": "{n} days",
       "noDest": "No destination yet",
-      "used": "Template applied — just set the dates",
-      "pageTitle": "Curated templates",
-      "pageSub": "A full plan with budget and packing list. Change the dates, go.",
-      "empty": "No templates yet."
+      "used": "Trip created from the route — just set the dates",
+      "pageTitle": "Rute Kelana",
+      "pageSub": "Complete trips we put together, with budget and packing list. Create a similar trip, then make it your own.",
+      "empty": "No routes yet."
     },
     "header": {
       "people": "{n} people",
@@ -114,16 +115,16 @@
   },
   "landing": {
     "guides": {
-      "tag": "Kelana Guides",
-      "label": "Kelana Guides",
-      "desc": "Ready-to-use destination guides",
+      "tag": "Kurasi Kelana",
+      "label": "Kurasi Kelana",
+      "desc": "Hand-picked places per destination",
       "title": "Destination guides that go straight into your plan",
-      "body": "Guides we put together to help you plan a trip, from when to go to the places worth visiting.",
+      "body": "Places we hand-picked to help you plan a trip, from when to go to the places worth visiting.",
       "p1": "The best time to visit and the ideal trip length",
       "p2": "Chosen places with price ranges, opening hours and maps",
       "p3": "What to know before you arrive",
       "p4": "Add places straight to your trip",
-      "cta": "See all guides"
+      "cta": "Explore Kurasi Kelana"
     },
     "metaTitle": "Kelana — plan it neatly, enjoy the journey",
     "nav": {
@@ -131,7 +132,7 @@
       "inside": "Inside the app",
       "stories": "Stories",
       "pricing": "Pricing",
-      "guides": "Guides",
+      "guides": "Kurasi Kelana",
       "menu": "Menu",
       "signin": "Sign in",
       "tryFree": "Get started"
@@ -304,8 +305,8 @@
     "delExpMsg": "\"{title}\" ({amount}) will be removed from the expense log.",
     "delPlannedExpMsg": "\"{title}\" ({amount}) will be removed from expenses and go back to the not-yet-recorded list. The activity stays.",
     "delExpCta": "Delete",
-    "delTplTitle": "Delete template?",
-    "delTplMsg": "The \"{name}\" template will be permanently deleted. Trips already created from it are unaffected.",
+    "delTplTitle": "Delete route?",
+    "delTplMsg": "The \"{name}\" route will be permanently deleted. Trips already created from it are unaffected.",
     "delTplCta": "Delete",
     "newSplitTitle": "Start a new split?",
     "newSplitMsg": "The current split will be unlinked from this trip (the old bill stays in PetePete). Syncing starts from scratch.",
@@ -345,8 +346,8 @@
       "tools": "Schedule, packing, outfits and expenses",
       "versionOne": "1 budget version",
       "versions": "Unlimited budget versions",
-      "publicGuides": "Public guides",
-      "guides": "All Kelana Guides, always updated",
+      "publicGuides": "Public Kurasi Kelana destinations",
+      "guides": "All of Kurasi Kelana, always updated",
       "newsletter": "Email newsletter"
     },
     "currentUntil": "You are on {plan}, active until {date}.",

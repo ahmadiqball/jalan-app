@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')!
   const repo = useRepositories(event)
   const destination = await repo.destinations.getById(id)
-  if (!destination) throw createError({ statusCode: 404, statusMessage: 'Panduan tidak ditemukan' })
+  if (!destination) throw createError({ statusCode: 404, statusMessage: 'Destinasi tidak ditemukan' })
   const places = await repo.places.listByDestination(id)
   return { ...destination, places }
 })

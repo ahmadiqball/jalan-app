@@ -10,7 +10,7 @@ const { open } = useAddToTrip()
 
 <template>
   <div class="card overflow-hidden flex flex-col group">
-    <NuxtLink :to="localePath(`/guides/${slug}/${place.id}`)" class="block">
+    <NuxtLink :to="localePath(`/kurasi/${slug}/${place.id}`)" class="block">
       <div
         class="h-[150px] bg-cover bg-center flex items-center justify-center relative"
         :style="place.gallery && place.gallery[0] ? { backgroundImage: `url('${place.gallery[0]}')` } : { background: tone(placeTypeToCat(place.type))[0] }"
@@ -26,7 +26,7 @@ const { open } = useAddToTrip()
     </NuxtLink>
     <div class="p-[14px_16px] flex flex-col gap-[8px] flex-1">
       <div class="flex items-start justify-between gap-2">
-        <NuxtLink :to="localePath(`/guides/${slug}/${place.id}`)" class="font-display text-[16.5px] font-600 leading-tight hover:text-teal-700">{{ place.name }}</NuxtLink>
+        <NuxtLink :to="localePath(`/kurasi/${slug}/${place.id}`)" class="font-display text-[16.5px] font-600 leading-tight hover:text-teal-700">{{ place.name }}</NuxtLink>
       </div>
       <div class="flex items-center gap-2 text-[12px] text-muted flex-wrap">
         <span class="inline-flex items-center gap-1 rounded-pill bg-paper px-[9px] py-[3px] font-600"><i :class="placeTypeIcon(place.type)" class="text-[12px]" /> {{ placeTypeLabel(place.type) }}</span>

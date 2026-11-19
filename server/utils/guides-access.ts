@@ -4,5 +4,5 @@ import type { H3Event } from 'h3'
 export async function requireGuides(event: H3Event) {
   const actor = await requireActor(event)
   const ent = await entitlementFor(event, actor.id, actor)
-  if (!ent.guides) throw planError('Panduan ini butuh Kelana Plus atau Premium')
+  if (!ent.guides) throw planError('Kurasi Kelana butuh Kelana Plus atau Premium')
 }

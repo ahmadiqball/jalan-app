@@ -15,6 +15,13 @@ export default defineNuxtConfig({
     '/api/guides/**': { cache: { maxAge: 120, swr: true } },
     '/api/places/**': { cache: { maxAge: 120, swr: true } },
     '/api/templates': { cache: { maxAge: 120, swr: true } },
+    // renamed sections: keep old links working
+    '/guides': { redirect: { to: '/kurasi', statusCode: 301 } },
+    '/guides/**': { redirect: { to: '/kurasi/**', statusCode: 301 } },
+    '/template': { redirect: { to: '/rute', statusCode: 301 } },
+    '/en/guides': { redirect: { to: '/en/kurasi', statusCode: 301 } },
+    '/en/guides/**': { redirect: { to: '/en/kurasi/**', statusCode: 301 } },
+    '/en/template': { redirect: { to: '/en/rute', statusCode: 301 } },
   },
 
   modules: [

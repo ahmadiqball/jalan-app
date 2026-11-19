@@ -6,7 +6,7 @@ const localePath = useLocalePath()
 </script>
 
 <template>
-  <NuxtLink :to="localePath(`/guides/${destination.slug}`)" class="card overflow-hidden flex flex-col group hover:shadow-lift transition-shadow">
+  <NuxtLink :to="localePath(`/kurasi/${destination.slug}`)" class="card overflow-hidden flex flex-col group hover:shadow-lift transition-shadow">
     <div
       class="h-[158px] bg-cover bg-center relative shrink-0"
       :style="{ backgroundImage: (destination.cardImage || destination.heroImage) ? `url('${destination.cardImage || destination.heroImage}')` : undefined, backgroundColor: '#DEEEEC' }"

@@ -15,7 +15,7 @@ const slug = computed(() => route.params.slug as string)
 onMounted(refreshSaved)
 
 const { data: guide, error, status } = useGuideResource<GuideDetail>(() => `/api/guides/${slug.value}`, () => `/api/member/guides/${slug.value}`, `guide-${slug.value}`)
-useHead(() => ({ title: (guide.value?.name ?? 'Panduan') + ' · Kelana Guides' }))
+useHead(() => ({ title: (guide.value?.name ?? 'Destinasi') + ' · Kurasi Kelana' }))
 
 // "Gunakan panduan" — clone the linked itinerary template into a new trip, or
 // start a trip seeded with the destination when none is linked. Auth-gated.
@@ -32,7 +32,7 @@ async function useTemplate() {
   try {
     const owner = { name: session.name, email: session.email }
     const id = trips.cloneTrip(tpl, { owner })
-    flash('Trip dibuat dari template')
+    flash('Trip dibuat dari rute')
     await navigateTo(localePath(`/trip/${id}/days`))
   } finally {
     usingTemplate.value = false
@@ -88,7 +88,7 @@ const facts = computed(() => {
       </div>
     </div>
     <div v-else-if="error || !guide" class="max-w-[700px] mx-auto p-16 text-center text-muted">
-      Panduan tidak ditemukan. <NuxtLink :to="localePath('/guides')" class="text-teal-600 font-600">Kembali ke Guides</NuxtLink>
+      Destinasi tidak ditemukan. <NuxtLink :to="localePath('/kurasi')" class="text-teal-600 font-600">Kembali ke Kurasi Kelana</NuxtLink>
     </div>
 
     <template v-else>
@@ -96,12 +96,12 @@ const facts = computed(() => {
       <div class="bg-paper overflow-x-clip">
         <div class="max-w-[1160px] mx-auto px-[20px] md:px-[32px] flex flex-col md:flex-row md:items-center">
           <div class="relative z-[2] md:w-[40%] md:shrink-0 pt-[24px] pb-3 md:py-[64px]">
-            <NuxtLink :to="localePath('/guides')" class="inline-flex items-center gap-1 text-[12.5px] font-600 text-muted mb-3 hover:text-teal-700"><i class="i-lucide-chevron-left text-[15px]" /> Semua panduan</NuxtLink>
+            <NuxtLink :to="localePath('/kurasi')" class="inline-flex items-center gap-1 text-[12.5px] font-600 text-muted mb-3 hover:text-teal-700"><i class="i-lucide-chevron-left text-[15px]" /> Semua destinasi</NuxtLink>
             <h1 class="font-display text-[clamp(34px,7vw,56px)] font-800 text-ink leading-[1.0]">{{ guide.name }}</h1>
             <div class="text-[13.5px] text-ink-2 mt-2">{{ guide.region }} · {{ places.length }} rekomendasi tempat</div>
             <div class="flex gap-2 mt-5 flex-wrap">
               <CoreButton v-if="linkedTemplate" variant="primary" class="!px-[16px] !py-[11px] !text-[13.5px]" :disabled="usingTemplate" @click="useTemplate">
-                <i class="i-lucide-wand-sparkles text-[15px]" /> {{ usingTemplate ? 'Membuat…' : 'Pakai template perjalanan' }}
+                <i class="i-lucide-wand-sparkles text-[15px]" /> {{ usingTemplate ? 'Membuat…' : 'Buat trip dari rute' }}
               </CoreButton>
               <CoreButton variant="ghost" class="!px-[15px] !py-[11px] !text-[13.5px]" @click="onSaveGuide">
                 <i :class="savedGuide ? 'i-lucide-bookmark-check text-teal-700' : 'i-lucide-bookmark'" class="text-[15px]" /> {{ savedGuide ? 'Tersimpan' : 'Simpan' }}
@@ -146,12 +146,12 @@ const facts = computed(() => {
           <div v-if="linkedTemplate" class="card p-[16px_18px] flex items-center gap-4 flex-wrap">
             <span class="w-[42px] h-[42px] rounded-[12px] bg-teal-100 text-teal-700 flex items-center justify-center shrink-0"><i class="i-lucide-map text-[20px]" /></span>
             <div class="flex-1 min-w-[180px]">
-              <div class="text-[12px] text-muted font-600">Template perjalanan</div>
+              <div class="text-[12px] text-muted font-600">Rute Kelana</div>
               <div class="font-display text-[18px] font-600 mt-[1px]">{{ linkedTemplate.name }}</div>
               <div class="text-[12.5px] text-muted mt-[1px] money">{{ linkedTemplate.days.length }} hari · siap pakai</div>
             </div>
             <CoreButton variant="primary" class="!px-[16px] !py-[10px] !text-[13.5px] shrink-0" :disabled="usingTemplate" @click="useTemplate">
-              <i class="i-lucide-wand-sparkles text-[15px]" /> {{ usingTemplate ? 'Membuat…' : 'Pakai template' }}
+              <i class="i-lucide-wand-sparkles text-[15px]" /> {{ usingTemplate ? 'Membuat…' : 'Buat trip serupa' }}
             </CoreButton>
           </div>
         </div>
@@ -195,7 +195,7 @@ const facts = computed(() => {
               <i class="i-lucide-lightbulb text-[16px] text-warn-fg shrink-0 mt-[2px]" /> <span>{{ t }}</span>
             </div>
           </div>
-          <div v-else class="card p-8 text-center text-muted text-[14px]">Belum ada tips untuk panduan ini.</div>
+          <div v-else class="card p-8 text-center text-muted text-[14px]">Belum ada tips untuk destinasi ini.</div>
         </div>
       </div>
     </template>

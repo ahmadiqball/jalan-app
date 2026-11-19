@@ -1,8 +1,8 @@
 {
   "nav": {
     "home": "Beranda",
-    "guides": "Guides",
-    "templates": "Template",
+    "guides": "Kurasi Kelana",
+    "templates": "Rute Kelana",
     "archive": "Arsip",
     "newTrip": "Trip baru",
     "search": "Cari trip atau tempat"
@@ -37,7 +37,7 @@
     "live": "Sedang jalan",
     "plan": "Rencana",
     "draft": "Draf",
-    "template": "Template"
+    "template": "Rute"
   },
   "cat": {
     "pantai": "Pantai",
@@ -63,7 +63,7 @@
       "next": "Rencana berikutnya",
       "count": "{n} trip",
       "newTrip": "Trip baru",
-      "newTripHint": "Mulai kosong atau ambil dari template kurasi",
+      "newTripHint": "Mulai kosong atau ambil dari Rute Kelana",
       "loading": "Memuat trip…"
     },
     "filter": {
@@ -91,16 +91,17 @@
       "notSet": "belum diatur"
     },
     "templates": {
-      "startTitle": "Mulai dari template",
+      "startTitle": "Mulai dari Rute Kelana",
       "startSub": "Rencana lengkap dengan anggaran dan barang. Ganti tanggal, langsung jalan.",
       "seeAll": "Lihat semua",
-      "use": "Pakai template",
+      "read": "Baca rutenya",
+      "use": "Buat trip serupa",
       "days": "{n} hari",
       "noDest": "Belum ada destinasi",
-      "used": "Template dipakai, tinggal atur tanggal",
-      "pageTitle": "Template kurasi",
-      "pageSub": "Rencana lengkap dengan anggaran dan daftar barang. Ganti tanggal, langsung jalan.",
-      "empty": "Belum ada template."
+      "used": "Trip dibuat dari rute, tinggal atur tanggal",
+      "pageTitle": "Rute Kelana",
+      "pageSub": "Trip lengkap yang sudah kami susun, dengan anggaran dan daftar barang. Buat trip serupa, lalu ubah sesukamu.",
+      "empty": "Belum ada rute."
     },
     "header": {
       "people": "{n} orang",
@@ -114,16 +115,16 @@
   },
   "landing": {
     "guides": {
-      "tag": "Kelana Guides",
-      "label": "Kelana Guides",
-      "desc": "Panduan destinasi siap pakai",
+      "tag": "Kurasi Kelana",
+      "label": "Kurasi Kelana",
+      "desc": "Tempat pilihan per destinasi",
       "title": "Panduan destinasi, langsung masuk ke rencana",
-      "body": "Panduan yang kami susun untuk membantumu merencanakan trip, dari kapan sebaiknya berangkat sampai tempat yang layak dikunjungi.",
+      "body": "Kurasi yang kami susun untuk membantumu merencanakan trip, dari kapan sebaiknya berangkat sampai tempat yang layak dikunjungi.",
       "p1": "Waktu terbaik berkunjung dan lama trip yang ideal",
       "p2": "Tempat pilihan dengan kisaran harga, jam buka, dan peta",
       "p3": "Hal yang perlu kamu tahu sebelum datang",
       "p4": "Tambahkan tempat langsung ke trip kamu",
-      "cta": "Lihat semua panduan"
+      "cta": "Lihat Kurasi Kelana"
     },
     "metaTitle": "Kelana — rapikan rencananya, nikmatin jalannya",
     "nav": {
@@ -131,7 +132,7 @@
       "inside": "Isi aplikasi",
       "stories": "Cerita",
       "pricing": "Harga",
-      "guides": "Panduan",
+      "guides": "Kurasi Kelana",
       "menu": "Menu",
       "signin": "Masuk",
       "tryFree": "Mulai sekarang"
@@ -304,8 +305,8 @@
     "delExpMsg": "\"{title}\" ({amount}) akan dihapus dari catatan pengeluaran.",
     "delPlannedExpMsg": "\"{title}\" ({amount}) akan dihapus dari pengeluaran dan kembali ke daftar rencana belum dicatat. Aktivitasnya tetap ada.",
     "delExpCta": "Hapus",
-    "delTplTitle": "Hapus template?",
-    "delTplMsg": "Template \"{name}\" akan dihapus permanen. Trip yang sudah pakai template ini tidak terpengaruh.",
+    "delTplTitle": "Hapus rute?",
+    "delTplMsg": "Rute \"{name}\" akan dihapus permanen. Trip yang sudah dibuat dari rute ini tidak terpengaruh.",
     "delTplCta": "Hapus",
     "newSplitTitle": "Buat split baru?",
     "newSplitMsg": "Split yang sekarang akan dilepas dari trip ini (bill lama tetap ada di PetePete). Sinkronisasi dimulai dari nol.",
@@ -345,8 +346,8 @@
       "tools": "Jadwal, barang, outfit, dan pengeluaran",
       "versionOne": "1 versi anggaran",
       "versions": "Versi anggaran tanpa batas",
-      "publicGuides": "Panduan publik",
-      "guides": "Semua Kelana Guides, selalu diperbarui",
+      "publicGuides": "Kurasi Kelana versi publik",
+      "guides": "Semua Kurasi Kelana, selalu diperbarui",
       "newsletter": "Newsletter email"
     },
     "currentUntil": "Paketmu {plan}, aktif sampai {date}.",

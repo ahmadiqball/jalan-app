@@ -58,6 +58,10 @@ export const useTripsStore = defineStore(
     function setDayTitle(tripId: string, dayIdx: number, title: string) {
       patchTrip(tripId, (t) => { const d = t.days[dayIdx]; if (d) d.title = title; return t })
     }
+    /** Rute Kelana: the day's story paragraph */
+    function setDayStory(tripId: string, dayIdx: number, story: string) {
+      patchTrip(tripId, (t) => { const d = t.days[dayIdx]; if (d) d.story = story; return t })
+    }
     /** Remove a day (and its activities), keeping at least one. Re-derives the
      *  remaining days' date labels so they stay in order. */
     function removeDay(tripId: string, dayIdx: number) {
@@ -262,6 +266,7 @@ export const useTripsStore = defineStore(
         cover: input.cover || '',
         dates: input.dates || '',
         status: input.status ?? 'draft',
+        ...(input.published !== undefined ? { published: input.published } : {}),
         people: input.people ?? 2,
         plan: input.plan ?? allocTotal,
         startIso: input.startIso,
@@ -288,7 +293,7 @@ export const useTripsStore = defineStore(
     /* ---- templates (admin-authored trip documents) ---- */
     /** blank template trip, edited via the normal trip tabs */
     function addTemplate(): string {
-      return createTrip({ name: 'Template baru', place: '', status: 'template', len: 3, members: [] })
+      return createTrip({ name: 'Rute baru', place: '', status: 'template', len: 3, members: [], published: false })
     }
     function deleteTemplate(id: string) {
       trips.value = trips.value.filter((t) => t.id !== id)
@@ -314,6 +319,8 @@ export const useTripsStore = defineStore(
         ...src,
         id,
         status: 'draft',
+        published: undefined, // route-only fields, not part of a user trip
+        story: undefined,
         dates: '',
         startIso: undefined,
         splitBillId: undefined,
@@ -362,7 +369,7 @@ export const useTripsStore = defineStore(
 
     return {
       trips, seq, byId, liveTrip, userTrips, templateTrips, patchTrip, nextId,
-      setActivityField, addActivity, deleteActivity, setDayTitle, removeDay,
+      setActivityField, addActivity, deleteActivity, setDayTitle, setDayStory, removeDay,
       setActiveBudget, setAlloc, addCategory, deleteCategory, setCatIcon, addBudgetVersion,
       addManual, deleteManual, updateManual,
       togglePackItem, addPackItem,

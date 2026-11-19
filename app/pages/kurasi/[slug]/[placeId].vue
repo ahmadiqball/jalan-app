@@ -14,7 +14,7 @@ const placeId = computed(() => route.params.placeId as string)
 onMounted(refreshSaved)
 
 const { data: place, error, status } = useGuideResource<PlaceDetail>(() => `/api/places/${placeId.value}`, () => `/api/member/places/${placeId.value}`, `place-${placeId.value}`)
-useHead(() => ({ title: (place.value?.name ?? 'Tempat') + ' · Kelana Guides' }))
+useHead(() => ({ title: (place.value?.name ?? 'Tempat') + ' · Kurasi Kelana' }))
 
 const gallery = computed(() => (place.value?.gallery ?? []).slice(0, 5))
 const mainImg = ref(0)
@@ -38,11 +38,11 @@ function onSave() {
       <SkeletonRows :count="3" />
     </div>
     <div v-else-if="error || !place" class="max-w-[700px] mx-auto p-16 text-center text-muted">
-      Tempat tidak ditemukan. <NuxtLink :to="localePath('/guides')" class="text-teal-600 font-600">Kembali ke Guides</NuxtLink>
+      Tempat tidak ditemukan. <NuxtLink :to="localePath('/kurasi')" class="text-teal-600 font-600">Kembali ke Kurasi Kelana</NuxtLink>
     </div>
 
     <div v-else class="max-w-[1000px] mx-auto p-[20px_20px_64px] md:p-[26px_32px_72px] flex flex-col gap-5">
-      <NuxtLink :to="localePath(`/guides/${place.destination.slug}`)" class="inline-flex items-center gap-1 text-[13px] font-600 text-muted hover:text-teal-700 w-fit"><i class="i-lucide-chevron-left text-[16px]" /> Kembali ke {{ place.destination.name }}</NuxtLink>
+      <NuxtLink :to="localePath(`/kurasi/${place.destination.slug}`)" class="inline-flex items-center gap-1 text-[13px] font-600 text-muted hover:text-teal-700 w-fit"><i class="i-lucide-chevron-left text-[16px]" /> Kembali ke {{ place.destination.name }}</NuxtLink>
 
       <!-- gallery carousel (max 5) -->
       <div v-if="gallery.length" class="relative rounded-card overflow-hidden h-[240px] md:h-[380px] bg-sand-100">

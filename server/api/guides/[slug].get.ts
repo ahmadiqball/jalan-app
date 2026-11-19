@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const repo = useRepositories(event)
   const destination = await repo.destinations.getBySlug(slug)
   if (!destination || !destination.published || !destination.isPublic) {
-    throw createError({ statusCode: 404, statusMessage: 'Panduan tidak ditemukan' })
+    throw createError({ statusCode: 404, statusMessage: 'Destinasi tidak ditemukan' })
   }
   const places = await repo.places.listByDestination(destination.id)
   return { ...destination, places }

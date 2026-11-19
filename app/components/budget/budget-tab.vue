@@ -100,7 +100,7 @@ const versionOptions = computed(() =>
           v-model="activeName"
           class="font-display text-[19px] font-600 bg-white border border-sand-line2 rounded-[10px] px-[10px] py-[6px] outline-none focus:border-teal-600"
         >
-        <span class="rounded-pill px-[10px] py-[4px] text-[11px] font-700 bg-teal-100 text-teal-700">Anggaran template</span>
+        <span class="rounded-pill px-[10px] py-[4px] text-[11px] font-700 bg-teal-100 text-teal-700">Anggaran rute</span>
       </div>
       <div class="money text-[22px] font-600">{{ rp(budget.allocTotal) }} <span class="text-muted text-[13px] font-500">total rencana</span></div>
     </div>

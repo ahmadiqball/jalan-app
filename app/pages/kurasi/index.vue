@@ -2,7 +2,7 @@
 import type { Destination } from '~/types/guide'
 
 definePageMeta({ public: true })
-useHead({ title: 'Kelana Guides' })
+useHead({ title: 'Kurasi Kelana' })
 
 const { data, status } = useGuideResource<Destination[]>(() => '/api/guides', () => '/api/member/guides', 'guides-list')
 const destinations = computed(() => data.value ?? [])
@@ -28,13 +28,13 @@ const shown = computed(() => {
     <div class="bg-paper overflow-x-clip">
       <div class="max-w-[1240px] mx-auto px-[20px] md:px-[32px] flex flex-col md:flex-row md:items-center">
         <div class="relative z-[2] md:w-[40%] md:shrink-0 py-[36px] md:py-[76px]">
-          <h1 class="font-display text-[clamp(40px,8vw,68px)] font-700 text-ink leading-[0.96]">Kelana Guides</h1>
+          <h1 class="font-display text-[clamp(40px,8vw,68px)] font-700 text-ink leading-[0.96]">Kurasi Kelana</h1>
           <p class="text-[15.5px] md:text-[18px] text-ink-2 mt-4 max-w-[42ch] leading-snug">
-            Panduan destinasi yang dikurasi dengan teliti, untuk perjalanan yang lebih mudah dan berkesan.
+            Tempat dan aktivitas pilihan di tiap destinasi. Pilih yang kamu suka, lalu masukkan ke tripmu.
           </p>
         </div>
         <div class="md:flex-1 md:min-w-0 flex justify-center md:justify-end pb-4 md:pb-0">
-          <img src="/img/guides-hero.webp" alt="Kelana Guides" style="mix-blend-mode:multiply" class="w-full max-w-[720px] h-auto object-contain select-none pointer-events-none">
+          <img src="/img/guides-hero.webp" alt="Kurasi Kelana" style="mix-blend-mode:multiply" class="w-full max-w-[720px] h-auto object-contain select-none pointer-events-none">
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@ const shown = computed(() => {
         <GuideDestinationCard v-for="d in shown" :key="d.id" :destination="d" />
       </div>
       <div v-else class="card p-10 text-center text-muted text-[14px]">
-        {{ destinations.length ? 'Belum ada panduan yang cocok.' : 'Panduan akan segera hadir.' }}
+        {{ destinations.length ? 'Belum ada destinasi yang cocok.' : 'Destinasi akan segera hadir.' }}
       </div>
     </div>
   </div>

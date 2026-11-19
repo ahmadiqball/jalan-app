@@ -240,6 +240,35 @@ async function del() {
         <textarea :value="found.act.note" rows="3" placeholder="Tambah catatan…" class="field resize-none" @input="set('note', ($event.target as HTMLTextAreaElement).value)" />
       </label>
 
+      <!-- Rute Kelana: curator's reason + tip. Editable on a route (admin), read-only on a trip made from one -->
+      <div v-if="trip.status === 'template'" class="bg-teal-100/60 rounded-card p-[14px_16px] flex flex-col gap-3">
+        <div class="text-[12px] text-teal-700 font-600 flex items-center gap-[6px]"><i class="i-lucide-book-open text-[14px]" aria-hidden="true" /> Tampil di halaman cerita rute</div>
+        <AdminImageField :model-value="found.act.photo || ''" label="Foto tempat (opsional)" box-class="h-[150px]" @update:model-value="set('photo', $event)" />
+        <div v-if="found.act.photo" class="grid gap-2 sm:grid-cols-2 -mt-1">
+          <input :value="found.act.photoCredit || ''" class="field !py-[8px] !text-[12.5px] bg-white" placeholder="Kredit foto, mis. Nama, CC BY-SA 4.0" @input="set('photoCredit', ($event.target as HTMLInputElement).value)">
+          <input :value="found.act.photoSource || ''" class="field !py-[8px] !text-[12.5px] bg-white money" placeholder="Link sumber foto (opsional)" @input="set('photoSource', ($event.target as HTMLInputElement).value)">
+        </div>
+        <label class="flex flex-col gap-[6px]">
+          <span class="eyebrow">Ada apa di sana</span>
+          <textarea :value="found.act.what || ''" rows="3" placeholder="mis. Pantai pasir merah muda, airnya jernih sampai karang di bawahnya kelihatan." class="field resize-none bg-white" @input="set('what', ($event.target as HTMLTextAreaElement).value)" />
+        </label>
+        <label class="flex flex-col gap-[6px]">
+          <span class="eyebrow">Kenapa ke sini</span>
+          <textarea :value="found.act.why || ''" rows="3" placeholder="mis. Sunrise di sini paling sepi sebelum jam 6, sebelum rombongan tur datang." class="field resize-none bg-white" @input="set('why', ($event.target as HTMLTextAreaElement).value)" />
+        </label>
+        <label class="flex flex-col gap-[6px]">
+          <span class="eyebrow">Tips</span>
+          <textarea :value="found.act.tip || ''" rows="2" placeholder="mis. Bawa jaket, suhunya bisa 8°C." class="field resize-none bg-white" @input="set('tip', ($event.target as HTMLTextAreaElement).value)" />
+        </label>
+      </div>
+      <div v-else-if="found.act.what || found.act.why || found.act.tip || found.act.photo" class="bg-teal-100/60 rounded-card p-[14px_16px] flex flex-col gap-2">
+        <div class="text-[12px] text-teal-700 font-600 flex items-center gap-[6px]"><i class="i-lucide-route text-[14px]" aria-hidden="true" /> Dari Rute Kelana</div>
+        <img v-if="found.act.photo" :src="found.act.photo" :alt="found.act.place || found.act.title" class="w-full h-[140px] object-cover rounded-[12px]">
+        <p v-if="found.act.what" class="text-[13.5px] text-ink-2 leading-[1.55]">{{ found.act.what }}</p>
+        <p v-if="found.act.why" class="text-[13.5px] text-ink-2 leading-[1.55]">{{ found.act.why }}</p>
+        <p v-if="found.act.tip" class="text-[13px] text-ink-2 flex gap-2"><i class="i-lucide-lightbulb text-[15px] text-warn-fg2 shrink-0 mt-[2px]" aria-hidden="true" /><span>{{ found.act.tip }}</span></p>
+      </div>
+
       <!-- outfit (editable) -->
       <div class="bg-paper rounded-card p-[14px_16px]">
         <div class="flex items-center justify-between mb-2">
